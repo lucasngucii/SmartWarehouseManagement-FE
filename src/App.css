@@ -1,38 +1,58 @@
-.App {
-  text-align: center;
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+
+:root {
+    /* Màu nền - sáng hơn */
+    --background-color: #FFFFFF;
+    /* Màu nền khu vực nổi bật - sáng hơn */
+    --header-footer-background-color: #ECF0F1;
+    /* Màu chữ chính - giữ nguyên */
+    --primary-text-color: #333333;
+    /* Màu chữ phụ - sáng hơn */
+    --secondary-text-color: #A4A4A4;
+    /* Màu nhấn - sáng hơn */
+    --accent-color: #F39C12;
+    /* Màu đường viền - sáng hơn */
+    --border-color: #E0E0E0;
+    /* Màu nền nút bấm chính - sáng hơn */
+    --primary-button-background-color: #3498DB;
+    /* Màu chữ trên nút bấm chính - giữ nguyên */
+    --primary-button-text-color: #FFFFFF;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+body {
+    background-color: var(--background-color);
+    color: var(--primary-text-color);
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+.app {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: var(--background-color);
 }
 
-.App-link {
-  color: #61dafb;
+.sidebar {
+    position: fixed;
+    left: 0;
+    width: 250px;
+    height: 100%;
+    background-color: var(--header-footer-background-color);
+    transition: all 0.5s;
+    color: var(--primary-text-color);
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.container {
+    width: calc(100% - 250px);
+    height: 100%;
+    transition: all 0.5s;
+    background-color: var(--background-color);
+    color: var(--primary-text-color);
 }
