@@ -1,0 +1,13 @@
+@import "../../Root.css";
+
+/*container dashboard*/
+.container-dashboard {
+    width: calc(100% - 250px);
+    height: 100%;
+    min-height: 100vh;
+    padding: 20px;
+    margin-left: 250px;
+    background-color: var(--background-color);
+    color: var(--primary-text-color);
+    transition: background-color 0.5s, color 0.5s;
+}

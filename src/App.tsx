@@ -1,6 +1,6 @@
 import React from 'react';
 import './App.css';
-import {Sidebar} from "./compoments/Sidebar";
+import {Sidebar} from "./compoments/Sidebar/Sidebar";
 import {Outlet} from "react-router-dom";
 
 function App() {

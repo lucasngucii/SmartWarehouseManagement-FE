@@ -1,0 +1,20 @@
+:root {
+    /* Màu nền */
+    --background-color: #FFFFFF;
+    /* Màu nền khu vực nổi bật */
+    --header-footer-background-color: #ECF0F1;
+    /* Màu chữ chính */
+    --primary-text-color: #333333;
+    /* Màu chữ phụ */
+    --secondary-text-color: #A4A4A4;
+    /* Màu nhấn */
+    --accent-color: #F39C12;
+    /* Màu đường viền */
+    --border-color: #E0E0E0;
+    /* Màu nền nút bấm chính */
+    --primary-button-background-color: #3498DB;
+    /* Màu chữ trên nút bấm chính */
+    --primary-button-text-color: #FFFFFF;
+    /* Màu liên kết */
+    --link-color: #3498DB;
+}

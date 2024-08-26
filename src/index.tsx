@@ -7,11 +7,16 @@ import {
 } from "react-router-dom";
 import App from './App';
 import reportWebVitals from './reportWebVitals';
-import {Dashboard} from "./compoments/Dashboard";
+import {Dashboard} from "./compoments/Dashboard/Dashboard";
+import {Login} from "./compoments/Login/Login";
 
 const router = createBrowserRouter([
     {
         path: "/",
+        element: <Login />,
+    },
+    {
+        path: "/dashboard",
         element: <App />,
         children: [
             {
@@ -19,7 +24,7 @@ const router = createBrowserRouter([
                 element: <Dashboard />,
             }
         ]
-    },
+    }
 ]);
 
 const root = ReactDOM.createRoot(

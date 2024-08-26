@@ -1,4 +1,6 @@
 import React from "react";
+import "./Sidebar.css";
+import {NavLink} from "react-router-dom";
 
 interface SidebarLogoProps {
     logo: string
@@ -34,12 +36,18 @@ interface SidebarItemProps {
 }
 
 const SidebarItem: React.FC<SidebarItemProps> = ({href, icon, title}) => {
+
     return (
         <li>
-            <a href={href}>
+            <NavLink
+                to={href}
+                className={({isActive, isPending}) =>
+                    isActive ? "active" : isPending ? "pending" : ""
+                }
+            >
                 {icon}
                 <span>{title}</span>
-            </a>
+            </NavLink>
         </li>
     )
 }
@@ -68,10 +76,10 @@ export const Sidebar: React.FC = () => {
         <div className={"sidebar"}>
             <SidebarLogo logo={logo}/>
             <SidebarNav>
-                <SidebarItem href={"#dashboard"} icon={<i className="fas fa-tachometer-alt"></i>} title={"Dashboard"}/>
-                <SidebarItem href={"#inventory"} icon={<i className="fas fa-warehouse"></i>} title={"inventory"}/>
-                <SidebarItem href={"#orders"} icon={<i className="fas fa-shopping-cart"></i>} title={"orders"}/>
-                <SidebarItem href={"#settings"} icon={<i className="fas fa-cog"></i>} title={"Settings"}/>
+                <SidebarItem href={"/dashboard"} icon={<i className="fas fa-tachometer-alt"></i>} title={"Dashboard"}/>
+                <SidebarItem href={"/a"} icon={<i className="fas fa-warehouse"></i>} title={"inventory"}/>
+                <SidebarItem href={"/b"} icon={<i className="fas fa-shopping-cart"></i>} title={"orders"}/>
+                <SidebarItem href={"/c"} icon={<i className="fas fa-cog"></i>} title={"Settings"}/>
             </SidebarNav>
             <SidebarUser avatar={logo} name={"Thiên Phú"}/>
         </div>

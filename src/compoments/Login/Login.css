@@ -1,0 +1,75 @@
+@import "../../Root.css";
+
+.login-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background-color: #ECF0F1;
+    padding: 20px;
+}
+
+.login-box {
+    width: 450px;
+    padding: 30px;
+    background-color: #FFFFFF;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.login-box h1 {
+    font-size: 2.5em;
+    margin-bottom: 20px;
+    color: var(--primary-text-color);
+    text-align: center;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+    font-size: 1.1em;
+    margin-bottom: 5px;
+    color: var(--primary-text-color);
+}
+
+.form-group input {
+    width: 100%;
+    padding: 15px;
+    border-radius: 5px;
+    border: 1px solid var(--border-color);
+    font-size: 1em;
+    box-sizing: border-box;
+}
+
+.form-error {
+    color: #E74C3C;
+    font-size: 0.9em;
+    margin-top: 5px;
+    display: block;
+}
+
+.input-help-text {
+    color: #7F8C8D;
+    font-size: 0.9em;
+    margin-top: 5px;
+    display: block;
+}
+
+.login-box button {
+    width: 100%;
+    padding: 10px;
+    background-color: var(--primary-button-background-color);
+    color: var(--primary-button-text-color);
+    font-size: 1.3em;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.login-box button:hover {
+    background-color: var(--accent-color);
+}
