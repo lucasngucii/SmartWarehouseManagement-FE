@@ -9,6 +9,7 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 import {Dashboard} from "./compoments/Dashboard/Dashboard";
 import {Login} from "./compoments/Login/Login";
+import {ManagementGroup} from "./compoments/User/ManagementGroup/ManagementGroup";
 import {ManagementUser} from "./compoments/User/ManagementUser/ManagementUser";
 
 const router = createBrowserRouter([
@@ -30,7 +31,7 @@ const router = createBrowserRouter([
             },
             {
                 path: "management-group",
-                element: <ManagementUser />,
+                element: <ManagementGroup />,
             }
         ]
     }

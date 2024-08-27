@@ -79,7 +79,7 @@ const SidebarItem: React.FC<SidebarItemProps> = ({href, icon, lable, subItems}) 
         <li className={"sidebar-item"}>
             <span
                 onClick={handleToggle}
-                className={`sidebar-link ${isOpen ? "focus" : ""}`}
+                className={`sidebar-link ${isOpen ? "focus " : ""} ${subItems && isSubItemActive(subItems) ? "active" : ""}`}
             >
                 <div className={"sidebar-icon"}>
                     {icon}

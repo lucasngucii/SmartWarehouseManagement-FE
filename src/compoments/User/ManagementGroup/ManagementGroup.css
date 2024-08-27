@@ -1,0 +1,67 @@
+@import "../../../Root.css";
+
+.container-management-group {
+    width: calc(100% - 250px);
+    height: 100vh;
+    padding: 20px;
+    margin-left: 250px;
+    background-color: var(--background-color);
+    color: var(--primary-text-color);
+}
+
+.permissions-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+}
+
+.permissions-table th, .permissions-table td {
+    border: 1px solid var(--border-color);
+    padding: 12px;
+    text-align: left;
+}
+
+/* Ensure the STT column is narrower */
+.permissions-table th:first-child,
+.permissions-table td:first-child {
+    width: 5%; /* Adjust width for STT column */
+}
+
+.permissions-table th:nth-child(2),
+.permissions-table td:nth-child(2) {
+    width: 50%; /* Adjust width for Permission Name column */
+}
+
+.permissions-table th {
+    background-color: var(--header-footer-background-color);
+    color: var(--primary-text-color);
+}
+
+.permissions-table td {
+    color: var(--secondary-text-color);
+}
+
+.edit-button {
+    background-color: var(--primary-button-background-color);
+    color: var(--primary-button-text-color);
+    border: none;
+    padding: 8px 16px;
+    cursor: pointer;
+}
+
+.edit-button:hover {
+    background-color: var(--accent-color);
+}
+
+.add-permission-button {
+    background-color: var(--primary-button-background-color);
+    color: var(--primary-button-text-color);
+    padding: 10px 20px;
+    border: none;
+    cursor: pointer;
+}
+
+.add-permission-button:hover {
+    background-color: var(--accent-color);
+}
+
