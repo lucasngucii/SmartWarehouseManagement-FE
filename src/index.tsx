@@ -9,19 +9,28 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 import {Dashboard} from "./compoments/Dashboard/Dashboard";
 import {Login} from "./compoments/Login/Login";
+import {ManagementUser} from "./compoments/User/ManagementUser/ManagementUser";
 
 const router = createBrowserRouter([
     {
-        path: "/",
+        path: "/login",
         element: <Login />,
     },
     {
-        path: "/dashboard",
+        path: "/",
         element: <App />,
         children: [
             {
                 index: true,
                 element: <Dashboard />,
+            },
+            {
+                path: "management-user",
+                element: <ManagementUser />,
+            },
+            {
+                path: "management-group",
+                element: <ManagementUser />,
             }
         ]
     }

@@ -7,7 +7,7 @@ export const Login: React.FC = () => {
     const navigate = useNavigate();
 
     const moveDashboard = () => {
-        navigate("/dashboard");
+        navigate("/");
     }
 
     return (
