@@ -1,7 +1,6 @@
 @import "../../../Root.css";
 
 .container-user-management {
-    width: calc(100% - 250px);
     height: 100vh;
     padding: 20px;
     margin-left: 250px;
@@ -12,7 +11,7 @@
 .user-table {
     width: 100%;
     border-collapse: collapse;
-    margin-bottom: 20px;
+    margin: 20px 0;
 }
 
 .user-table th, .user-table td {
@@ -21,15 +20,14 @@
     text-align: left;
 }
 
-/* Ensure the STT column is narrower */
 .user-table th:first-child,
 .user-table td:first-child {
-    width: 5%; /* Adjust width for STT column */
+    width: 5%;
 }
 
 .user-table th:nth-child(2),
 .user-table td:nth-child(2) {
-    width: 25%; /* Adjust width for Username column */
+    width: 25%;
 }
 
 .user-table th {
@@ -45,6 +43,7 @@
     border: none;
     padding: 8px 16px;
     cursor: pointer;
+    border-radius: 4px;
     margin-right: 8px;
 }
 
@@ -58,12 +57,12 @@
 }
 
 .delete-button {
-    background-color: #E74C3C; /* Red color for delete */
+    background-color: #E74C3C;
     color: #FFFFFF;
 }
 
 .delete-button:hover {
-    background-color: #C0392B; /* Darker red on hover */
+    background-color: #C0392B;
 }
 
 .add-user-button {
@@ -72,9 +71,90 @@
     padding: 10px 20px;
     border: none;
     cursor: pointer;
+    border-radius: 4px;
 }
 
 .add-user-button:hover {
     background-color: var(--accent-color);
+}
+
+/*add user*/
+.add-user-modal {
+    position: relative;
+    background-color: #ffffff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: 600px;
+    margin: 0 auto;
+}
+
+.add-user-modal-title {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 20px;
+    color: #333333;
+    text-align: center;
+}
+
+.add-user-modal-form {
+    display: flex;
+    flex-direction: column;
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+.form-group-label {
+    font-size: 14px;
+    margin-bottom: 5px;
+    color: #333333;
+    display: block;
+}
+
+.form-group-input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #e0e0e0;
+    border-radius: 4px;
+    font-size: 14px;
+    color: #333333;
+}
+
+.form-group-input:focus {
+    border-color: #3498db;
+    outline: none;
+    box-shadow: 0 0 5px rgba(52, 152, 219, 0.5);
+}
+
+.add-user-modal-submit {
+    padding: 10px 15px;
+    background-color: #3498db;
+    color: #ffffff;
+    border: none;
+    border-radius: 4px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.add-user-modal-submit:hover {
+    background-color: #2980b9;
+}
+
+.add-user-modal-close {
+    position: absolute;
+    top: 15px;
+    right: 25px;
+    background: none;
+    border: none;
+    font-size: 20px;
+    cursor: pointer;
+    color: #333333;
+}
+
+.add-user-modal-close:hover {
+    color: #ff0000;
 }
 

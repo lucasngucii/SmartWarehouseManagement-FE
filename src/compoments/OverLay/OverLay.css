@@ -1,0 +1,14 @@
+.container-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: calc(100% - 250px);
+  height: 100%;
+  margin-left: 250px;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 100;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: auto;
+}
