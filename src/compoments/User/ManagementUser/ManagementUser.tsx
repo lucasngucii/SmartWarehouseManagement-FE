@@ -10,26 +10,44 @@ interface OptionType {
 
 interface AddUserComponentProps {
     hideOverlay: () => void;
+    userId?: string | null;
 }
 
-const AddUserComponent: React.FC<AddUserComponentProps> = ({hideOverlay}) => {
+const AddUserComponent: React.FC<AddUserComponentProps> = ({hideOverlay, userId}) => {
 
-    const [selectedOption, setSelectedOption] = React.useState<OptionType | null>(null);
-    const options: OptionType[] = [
+    const optionsGroup: OptionType[] = [
         {value: "Admin", label: "Admin"},
         {value: "Staff", label: "Staff"},
         {value: "Customer", label: "Customer"},
     ];
-    const handleSelectChange = (newValue: SingleValue<OptionType> | MultiValue<OptionType>) => {
-        setSelectedOption(newValue as OptionType);
+    const [selectedOptionGroup, setSelectedOptionGroup] = React.useState<OptionType | null>(null);
+    const handleSelectChangeGroup = (newValue: SingleValue<OptionType> | MultiValue<OptionType>) => {
+        setSelectedOptionGroup(newValue as OptionType);
     };
+
+    const optionsStatus: OptionType[] = [
+        {value: "Active", label: "Active"},
+        {value: "Disable", label: "Disable"},
+    ];
+    const [selectedOptionStatus, setSelectedOptionStatus] = React.useState<OptionType | null>(null);
+    const handleSelectChangeStatus = (newValue: SingleValue<OptionType> | MultiValue<OptionType>) => {
+        setSelectedOptionStatus(newValue as OptionType);
+    };
+
+    const handleSubmit = () => {
+        if (userId) {
+            console.log("Update user");
+            return;
+        }
+        console.log("Add user");
+    }
 
     return (
         <div className="add-user-modal">
             <button onClick={hideOverlay} className="add-user-modal-close">
                 <i className="fas fa-times"></i>
             </button>
-            <h2 className="add-user-modal-title">New User</h2>
+            <h2 className="add-user-modal-title">{userId ? "Update User" : "Add User"}</h2>
             <form className="add-user-modal-form">
                 <div className="form-group">
                     <label htmlFor="username" className="form-group-label">Username</label>
@@ -59,16 +77,34 @@ const AddUserComponent: React.FC<AddUserComponentProps> = ({hideOverlay}) => {
                         styles={{
                             control: (base) => ({
                                 ...base,
-                                height: "50px",
                                 width: "100%",
+                                height: "45px",
                                 borderRadius: "4px",
-                                padding: "0 10px",
                                 border: "1px solid #d1d1d1",
+                                fontSize: "14px",
                             }),
                         }}
-                        value={selectedOption as OptionType}
-                        onChange={handleSelectChange}
-                        options={options}
+                        value={selectedOptionGroup as OptionType}
+                        onChange={handleSelectChangeGroup}
+                        options={optionsGroup}
+                    />
+                </div>
+                <div className="form-group">
+                    <label htmlFor="confirm-password" className="form-group-label">Status</label>
+                    <Select
+                        styles={{
+                            control: (base) => ({
+                                ...base,
+                                width: "100%",
+                                height: "45px",
+                                borderRadius: "4px",
+                                border: "1px solid #d1d1d1",
+                                fontSize: "14px",
+                            }),
+                        }}
+                        value={selectedOptionStatus as OptionType}
+                        onChange={handleSelectChangeStatus}
+                        options={optionsStatus}
                     />
                 </div>
                 <div className="form-group">
@@ -83,7 +119,7 @@ const AddUserComponent: React.FC<AddUserComponentProps> = ({hideOverlay}) => {
                     />
                 </div>
                 <div className="form-group">
-                    <label htmlFor="phone" className="form-group-label">Phone Nunber</label>
+                    <label htmlFor="phone" className="form-group-label">Phone Number</label>
                     <input
                         type="text"
                         id="phone"
@@ -94,7 +130,9 @@ const AddUserComponent: React.FC<AddUserComponentProps> = ({hideOverlay}) => {
                     />
                 </div>
                 <div className="form-group">
-                    <label htmlFor="password" className="form-group__label">Password</label>
+                    <label htmlFor="password"
+                           className="form-group-label">{userId ? "New Password" : "Password"}</label>
+                    <p className={"form-group-label-second"}>{userId ? "** Leave blank if you don't want to change password" : ""}</p>
                     <input
                         type="password"
                         id="password"
@@ -115,7 +153,12 @@ const AddUserComponent: React.FC<AddUserComponentProps> = ({hideOverlay}) => {
                         placeholder={"Confirm Password"}
                     />
                 </div>
-                <button type="submit" className="add-user-modal-submit">Add User</button>
+                <input
+                    type="submit"
+                    className="add-user-modal-submit"
+                    onClick={handleSubmit}
+                    value={userId ? "Update User" : "Add User"}
+                />
             </form>
         </div>
     );
@@ -124,6 +167,7 @@ const AddUserComponent: React.FC<AddUserComponentProps> = ({hideOverlay}) => {
 export const ManagementUser: React.FC = () => {
 
     const [showOverlay, setShowOverlay] = React.useState(false);
+    const [userId, setUserId] = React.useState<string | null>(null);
 
     const handleShowOverlay = () => {
         setShowOverlay(true);
@@ -131,6 +175,7 @@ export const ManagementUser: React.FC = () => {
 
     const handleHideOverlay = () => {
         setShowOverlay(false);
+        setUserId(null);
     }
 
     return (
@@ -142,7 +187,10 @@ export const ManagementUser: React.FC = () => {
                 <tr>
                     <th>#</th>
                     <th>Username</th>
+                    <th>FullName</th>
+                    <th>Group</th>
                     <th>Email</th>
+                    <th>Phone</th>
                     <th>Status</th>
                     <th>Actions</th>
                 </tr>
@@ -150,21 +198,43 @@ export const ManagementUser: React.FC = () => {
                 <tbody>
                 <tr>
                     <td>1</td>
+                    <td>lecongkhanh124</td>
                     <td>john_doe</td>
+                    <td>Admin</td>
                     <td>john@example.com</td>
+                    <td>0321547895</td>
                     <td>Active</td>
                     <td>
-                        <button className="edit-button">Edit</button>
+                        <button
+                            onClick={() => {
+                                setUserId("1")
+                                handleShowOverlay()
+                            }}
+                            className="edit-button"
+                        >
+                            Edit
+                        </button>
                         <button className="delete-button">Delete</button>
                     </td>
                 </tr>
                 <tr>
                     <td>2</td>
-                    <td>jane_smith</td>
-                    <td>jane@example.com</td>
-                    <td>Inactive</td>
+                    <td>tadsabc123</td>
+                    <td>john_doe</td>
+                    <td>Staff</td>
+                    <td>abc@example.com</td>
+                    <td>0321547895</td>
+                    <td>Active</td>
                     <td>
-                        <button className="edit-button">Edit</button>
+                        <button
+                            onClick={() => {
+                                setUserId("1")
+                                handleShowOverlay()
+                            }}
+                            className="edit-button"
+                        >
+                            Edit
+                        </button>
                         <button className="delete-button">Delete</button>
                     </td>
                 </tr>
@@ -173,7 +243,7 @@ export const ManagementUser: React.FC = () => {
             <button onClick={handleShowOverlay} className="add-user-button">Add User</button>
             {showOverlay && (
                 <OverLay>
-                    <AddUserComponent hideOverlay={handleHideOverlay}/>
+                    <AddUserComponent hideOverlay={handleHideOverlay} userId={userId}/>
                 </OverLay>
             )}
         </div>
