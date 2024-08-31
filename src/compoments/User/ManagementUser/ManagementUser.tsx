@@ -10,7 +10,7 @@ interface OptionType {
 
 interface AddUserComponentProps {
     hideOverlay: () => void;
-    userId?: string | null;
+    userId?: number | null;
 }
 
 const AddUserComponent: React.FC<AddUserComponentProps> = ({hideOverlay, userId}) => {
@@ -167,7 +167,7 @@ const AddUserComponent: React.FC<AddUserComponentProps> = ({hideOverlay, userId}
 export const ManagementUser: React.FC = () => {
 
     const [showOverlay, setShowOverlay] = React.useState(false);
-    const [userId, setUserId] = React.useState<string | null>(null);
+    const [userId, setUserId] = React.useState<number | null>(null);
 
     const handleShowOverlay = () => {
         setShowOverlay(true);
@@ -207,7 +207,7 @@ export const ManagementUser: React.FC = () => {
                     <td>
                         <button
                             onClick={() => {
-                                setUserId("1")
+                                setUserId(1)
                                 handleShowOverlay()
                             }}
                             className="edit-button"
@@ -228,7 +228,7 @@ export const ManagementUser: React.FC = () => {
                     <td>
                         <button
                             onClick={() => {
-                                setUserId("1")
+                                setUserId(2)
                                 handleShowOverlay()
                             }}
                             className="edit-button"

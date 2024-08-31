@@ -10,9 +10,10 @@ interface OptionType {
 
 interface AddGroupComponentProps {
     hideOverlay: () => void;
+    groupId?: number | null;
 }
 
-const AddGroupComponent: React.FC<AddGroupComponentProps> = ({hideOverlay}) => {
+const AddGroupComponent: React.FC<AddGroupComponentProps> = ({hideOverlay, groupId}) => {
     const [groupName, setGroupName] = React.useState<string>('');
     const [selectedOption, setSelectedOption] = React.useState<OptionType[] | null>(null);
 
@@ -32,10 +33,18 @@ const AddGroupComponent: React.FC<AddGroupComponentProps> = ({hideOverlay}) => {
         }
     };
 
+    const handleSubmit = () => {
+        if(groupId) {
+            console.log("Update Group");
+            return;
+        }
+        console.log("Add Group");
+    }
+
     return (
         <div className="add-group-container"
              style={{width: "100%", height: "100%", backgroundColor: "#ffffff", padding: "20px"}}>
-            <h2 className="add-group-title">Add Group</h2>
+            <h2 className="add-group-title">{groupId ? "Update Group" : "Add Group"}</h2>
             <form>
                 <div className="group-input-container">
                     <label className="group-name-label">Group Name</label>
@@ -82,7 +91,12 @@ const AddGroupComponent: React.FC<AddGroupComponentProps> = ({hideOverlay}) => {
                 </table>
             </form>
             <button className="cancel-button" onClick={hideOverlay}>Cancel</button>
-            <button className="add-group-button">Add</button>
+            <button
+                className="add-group-button"
+                onChange={handleSubmit}
+            >
+                {groupId ? "Update" : "Add"}
+            </button>
         </div>
     );
 };
@@ -90,6 +104,7 @@ const AddGroupComponent: React.FC<AddGroupComponentProps> = ({hideOverlay}) => {
 export const ManagementGroup: React.FC = () => {
 
     const [showOverlay, setShowOverlay] = React.useState(false);
+    const [groupId, setGroupId] = React.useState<number | null>(null);
 
     const handleShowOverlay = () => {
         setShowOverlay(true);
@@ -97,6 +112,7 @@ export const ManagementGroup: React.FC = () => {
 
     const handleHideOverlay = () => {
         setShowOverlay(false);
+        setGroupId(null);
     }
 
     return (
@@ -118,7 +134,15 @@ export const ManagementGroup: React.FC = () => {
                     <td>View Dashboard</td>
                     <td>Active</td>
                     <td>
-                        <button className="edit-button">Edit</button>
+                        <button
+                            className="edit-button"
+                            onClick={() => {
+                                setGroupId(1);
+                                handleShowOverlay();
+                            }}
+                        >
+                            Edit
+                        </button>
                     </td>
                 </tr>
                 <tr>
@@ -126,7 +150,15 @@ export const ManagementGroup: React.FC = () => {
                     <td>Edit User</td>
                     <td>Inactive</td>
                     <td>
-                        <button className="edit-button">Edit</button>
+                        <button
+                            className="edit-button"
+                            onClick={() => {
+                                setGroupId(2);
+                                handleShowOverlay();
+                            }}
+                        >
+                            Edit
+                        </button>
                     </td>
                 </tr>
                 </tbody>
@@ -134,7 +166,7 @@ export const ManagementGroup: React.FC = () => {
             <button className="add-group-button" onClick={handleShowOverlay}>Add Group</button>
             {showOverlay && (
                 <OverLay>
-                    <AddGroupComponent hideOverlay={handleHideOverlay} />
+                    <AddGroupComponent hideOverlay={handleHideOverlay} groupId={groupId}/>
                 </OverLay>
             )}
         </div>
