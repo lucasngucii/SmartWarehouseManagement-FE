@@ -11,6 +11,9 @@ import {Dashboard} from "./compoments/Dashboard/Dashboard";
 import {Login} from "./compoments/Login/Login";
 import {ManagementGroup} from "./compoments/User/ManagementGroup/ManagementGroup";
 import {ManagementUser} from "./compoments/User/ManagementUser/ManagementUser";
+import {SKU} from "./compoments/Product/SKU/SKU";
+import {SublierManagement} from "./compoments/Product/Sublier/SublierManagement";
+import {Attribute} from "./compoments/Product/Attribute/Attribute";
 
 const router = createBrowserRouter([
     {
@@ -32,7 +35,19 @@ const router = createBrowserRouter([
             {
                 path: "management-group",
                 element: <ManagementGroup />,
-            }
+            },
+            {
+                path: "management-sku",
+                element: <SKU />,
+            },
+            {
+                path: "management-sublier",
+                element: <SublierManagement />,
+            },
+            {
+                path: "management-attribute",
+                element: <Attribute />,
+            },
         ]
     }
 ]);

@@ -1,7 +1,8 @@
 import React from 'react';
 import './ManagementGroup.css';
-import Select, { SingleValue, MultiValue } from 'react-select';
-import { OverLay } from "../../OverLay/OverLay";
+import Select, {SingleValue, MultiValue} from 'react-select';
+import {OverLay} from "../../OverLay/OverLay";
+import {Group} from "../../../interface/Group";
 
 interface OptionType {
     value: string;
@@ -14,27 +15,38 @@ interface AddGroupComponentProps {
 }
 
 const AddGroupComponent: React.FC<AddGroupComponentProps> = ({hideOverlay, groupId}) => {
-    const [groupName, setGroupName] = React.useState<string>('');
-    const [selectedOption, setSelectedOption] = React.useState<OptionType[] | null>(null);
 
     const options: OptionType[] = [
-        { value: "view", label: "View" },
-        { value: "edit", label: "Edit" },
-        { value: "delete", label: "Delete" },
+        {value: "view", label: "View"},
+        {value: "edit", label: "Edit"},
+        {value: "delete", label: "Delete"},
     ];
+    const [groupName, setGroupName] = React.useState<string>("");
+    const [selectedOptionUser, setSelectedOptionUser] = React.useState<OptionType[] | null>(null);
+    const [selectedOptionProduct, setSelectedOptionProduct] = React.useState<OptionType[] | null>(null);
 
-    const handleSelectChange = (
+    const handleSelectChangeUser = (
         newValue: SingleValue<OptionType> | MultiValue<OptionType>
     ) => {
         if (Array.isArray(newValue)) {
-            setSelectedOption(newValue as OptionType[]);
+            setSelectedOptionUser(newValue as OptionType[]);
         } else {
-            setSelectedOption(newValue as OptionType ? [newValue] as OptionType[] : []);
+            setSelectedOptionUser(newValue as OptionType ? [newValue] as OptionType[] : []);
+        }
+    };
+
+    const handleSelectChangeProduct = (
+        newValue: SingleValue<OptionType> | MultiValue<OptionType> | null
+    ) => {
+        if (Array.isArray(newValue)) {
+            setSelectedOptionProduct(newValue as OptionType[]);
+        } else {
+            setSelectedOptionProduct(newValue as OptionType ? [newValue] as OptionType[] : []);
         }
     };
 
     const handleSubmit = () => {
-        if(groupId) {
+        if (groupId) {
             console.log("Update Group");
             return;
         }
@@ -42,8 +54,7 @@ const AddGroupComponent: React.FC<AddGroupComponentProps> = ({hideOverlay, group
     }
 
     return (
-        <div className="add-group-container"
-             style={{width: "100%", height: "100%", backgroundColor: "#ffffff", padding: "20px"}}>
+        <div className="add-group-container">
             <h2 className="add-group-title">{groupId ? "Update Group" : "Add Group"}</h2>
             <form>
                 <div className="group-input-container">
@@ -51,6 +62,7 @@ const AddGroupComponent: React.FC<AddGroupComponentProps> = ({hideOverlay, group
                     <input
                         className="group-name-input"
                         type="text"
+                        name={"groupName"}
                         value={groupName}
                         placeholder={"Enter Group Name"}
                         onChange={(e) => setGroupName(e.target.value)}
@@ -69,8 +81,8 @@ const AddGroupComponent: React.FC<AddGroupComponentProps> = ({hideOverlay, group
                         <td>Example Function 1</td>
                         <td>
                             <Select
-                                value={selectedOption as OptionType[]}
-                                onChange={handleSelectChange}
+                                value={selectedOptionUser as OptionType[]}
+                                onChange={handleSelectChangeUser}
                                 options={options}
                                 isMulti={true}
                             />
@@ -80,8 +92,8 @@ const AddGroupComponent: React.FC<AddGroupComponentProps> = ({hideOverlay, group
                         <td>Example Function 2</td>
                         <td>
                             <Select
-                                value={selectedOption as OptionType[]}
-                                onChange={handleSelectChange}
+                                value={selectedOptionProduct as OptionType[]}
+                                onChange={handleSelectChangeProduct}
                                 options={options}
                                 isMulti={true}
                             />
@@ -103,6 +115,18 @@ const AddGroupComponent: React.FC<AddGroupComponentProps> = ({hideOverlay, group
 
 export const ManagementGroup: React.FC = () => {
 
+    const [groups, setGroups] = React.useState<Group[]>([
+        {
+            id: 1,
+            name: "View Dashboard",
+            status: true,
+        },
+        {
+            id: 2,
+            name: "Edit User",
+            status: false,
+        }
+    ]);
     const [showOverlay, setShowOverlay] = React.useState(false);
     const [groupId, setGroupId] = React.useState<number | null>(null);
 
@@ -114,6 +138,29 @@ export const ManagementGroup: React.FC = () => {
         setShowOverlay(false);
         setGroupId(null);
     }
+
+    const listGroups = groups.map((group) => {
+            return (
+                <tr key={group.id}>
+                    <td>{group.id}</td>
+                    <td>{group.name}</td>
+                    <td>{group.status ? "Active" : "InActive"}</td>
+                    <td>
+                        <button
+                            className="edit-button"
+                            onClick={() => {
+                                setGroupId(group.id);
+                                handleShowOverlay();
+                            }}
+                        >
+                            Edit
+                        </button>
+                    </td>
+                </tr>
+            )
+        }
+    );
+
 
     return (
         <div className="container-management-groups">
@@ -129,38 +176,7 @@ export const ManagementGroup: React.FC = () => {
                 </tr>
                 </thead>
                 <tbody>
-                <tr>
-                    <td>1</td>
-                    <td>View Dashboard</td>
-                    <td>Active</td>
-                    <td>
-                        <button
-                            className="edit-button"
-                            onClick={() => {
-                                setGroupId(1);
-                                handleShowOverlay();
-                            }}
-                        >
-                            Edit
-                        </button>
-                    </td>
-                </tr>
-                <tr>
-                    <td>2</td>
-                    <td>Edit User</td>
-                    <td>Inactive</td>
-                    <td>
-                        <button
-                            className="edit-button"
-                            onClick={() => {
-                                setGroupId(2);
-                                handleShowOverlay();
-                            }}
-                        >
-                            Edit
-                        </button>
-                    </td>
-                </tr>
+                    {listGroups}
                 </tbody>
             </table>
             <button className="add-group-button" onClick={handleShowOverlay}>Add Group</button>

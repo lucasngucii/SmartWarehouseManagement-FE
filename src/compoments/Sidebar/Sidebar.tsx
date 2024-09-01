@@ -144,6 +144,18 @@ export const Sidebar: React.FC = () => {
                     lable={"Inventory"}
                 />
                 <SidebarItem
+                    href={"/a"}
+                    icon={<i className="fas fa-box"></i>}
+                    lable={"Product"}
+                    subItems={
+                        [
+                            {href: "/management-sku", lable: "Manage SKU"},
+                            {href: "/management-sublier", lable: "Manage Subliers"},
+                            {href: "/management-attribute", lable: "Manage Attributes"},
+                        ]
+                    }
+                />
+                <SidebarItem
                     href={"/b"}
                     icon={<i className="fas fa-shopping-cart"></i>}
                     lable={"Orders"}

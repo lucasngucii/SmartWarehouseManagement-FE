@@ -2,6 +2,7 @@ import React from "react";
 import "./ManagementUser.css";
 import {OverLay} from "../../OverLay/OverLay";
 import Select, {MultiValue, SingleValue} from "react-select";
+import {User} from "../../../interface/User";
 
 interface OptionType {
     value: string;
@@ -166,6 +167,26 @@ const AddUserComponent: React.FC<AddUserComponentProps> = ({hideOverlay, userId}
 
 export const ManagementUser: React.FC = () => {
 
+    const [users, setUsers] = React.useState<User[]>([
+        {
+            id: 1,
+            username: "lecongkhanh124",
+            fullName: "john_doe",
+            group: "Admin",
+            email: "john@example.com",
+            phoneNumber: "0321547895",
+            status: true,
+        },
+        {
+            id: 2,
+            username: "tadsabc123",
+            fullName: "john_doe",
+            group: "Staff",
+            email: "abc@example.com",
+            phoneNumber: "0321547895",
+            status: true,
+        },
+    ]);
     const [showOverlay, setShowOverlay] = React.useState(false);
     const [userId, setUserId] = React.useState<number | null>(null);
 
@@ -177,6 +198,33 @@ export const ManagementUser: React.FC = () => {
         setShowOverlay(false);
         setUserId(null);
     }
+
+    const listUser = users.map((user, index) => {
+            return (
+                <tr>
+                    <td>{index + 1}</td>
+                    <td>{user.username}</td>
+                    <td>{user.fullName}</td>
+                    <td>{user.group}</td>
+                    <td>{user.email}</td>
+                    <td>{user.phoneNumber}</td>
+                    <td>{user.status ? "Active" : "InActive"}</td>
+                    <td>
+                        <button
+                            onClick={() => {
+                                setUserId(user.id)
+                                handleShowOverlay()
+                            }}
+                            className="edit-button"
+                        >
+                            Edit
+                        </button>
+                        <button className="delete-button">Delete</button>
+                    </td>
+                </tr>
+            )
+        }
+    );
 
     return (
         <div className="container-user-management">
@@ -196,48 +244,7 @@ export const ManagementUser: React.FC = () => {
                 </tr>
                 </thead>
                 <tbody>
-                <tr>
-                    <td>1</td>
-                    <td>lecongkhanh124</td>
-                    <td>john_doe</td>
-                    <td>Admin</td>
-                    <td>john@example.com</td>
-                    <td>0321547895</td>
-                    <td>Active</td>
-                    <td>
-                        <button
-                            onClick={() => {
-                                setUserId(1)
-                                handleShowOverlay()
-                            }}
-                            className="edit-button"
-                        >
-                            Edit
-                        </button>
-                        <button className="delete-button">Delete</button>
-                    </td>
-                </tr>
-                <tr>
-                    <td>2</td>
-                    <td>tadsabc123</td>
-                    <td>john_doe</td>
-                    <td>Staff</td>
-                    <td>abc@example.com</td>
-                    <td>0321547895</td>
-                    <td>Active</td>
-                    <td>
-                        <button
-                            onClick={() => {
-                                setUserId(2)
-                                handleShowOverlay()
-                            }}
-                            className="edit-button"
-                        >
-                            Edit
-                        </button>
-                        <button className="delete-button">Delete</button>
-                    </td>
-                </tr>
+                {listUser}
                 </tbody>
             </table>
             <button onClick={handleShowOverlay} className="add-user-button">Add User</button>
