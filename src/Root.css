@@ -1,20 +1,35 @@
 :root {
     /* Màu nền */
     --background-color: #FFFFFF;
+
     /* Màu nền khu vực nổi bật */
     --header-footer-background-color: #ECF0F1;
+
     /* Màu chữ chính */
     --primary-text-color: #333333;
+
     /* Màu chữ phụ */
     --secondary-text-color: #A4A4A4;
+
     /* Màu nhấn */
     --accent-color: #F39C12;
+
     /* Màu đường viền */
     --border-color: #E0E0E0;
-    /* Màu nền nút bấm chính */
-    --primary-button-background-color: #3498DB;
-    /* Màu chữ trên nút bấm chính */
-    --primary-button-text-color: #FFFFFF;
+
     /* Màu liên kết */
     --link-color: #3498DB;
+
+    /*table*/
+    --table-header-background-color: #ECF0F1;
+
+    /*button*/
+    --primary-button-background-color: #3498DB;
+    --primary-button-text-color: #FFFFFF;
+    --button-edit-background-color: #3498DB;
+    --button-delete-background-color: #E74C3C;
+
+    /*button hover*/
+    --button-edit-background-color-hover: #F39C12;
+    --button-delete-background-color-hover: #C0392B;
 }

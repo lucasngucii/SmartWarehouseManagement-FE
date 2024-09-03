@@ -22,6 +22,106 @@ body {
     background-color: var(--background-color);
 }
 
+/*container*/
+
+.container-right {
+    position: relative;
+    width: calc(100% - 250px);
+    height: 100vh;
+    padding: 20px;
+    margin-left: 250px;
+    background-color: var(--background-color);
+    color: var(--primary-text-color);
+}
+
+
+/*table*/
+
+.table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+table.id-column th:first-child {
+    width: 5%;
+}
+
+.table th {
+    background-color: var(--table-header-background-color);
+}
+
+.table td {
+    background-color: var(--background-color);
+}
+
+.table th,
+.table td {
+    border: 1px solid var(--border-color);
+    padding: 12px;
+    text-align: left;
+    color: var(--primary-text-color);
+}
+
+/*button*/
+
+.cancel-button,
+.add-button,
+.delete-button,
+.edit-button {
+    border: none;
+    padding: 8px 16px;
+    cursor: pointer;
+    border-radius: 4px;
+    margin-right: 8px;
+    color: var(--primary-button-text-color);
+}
+
+.cancel-button {
+    background-color: #E0E0E0;
+    color: #333333;
+}
+
+.add-button{
+    margin: 20px 0;
+}
+
+.add-button,
+.edit-button {
+    background-color: var(--button-edit-background-color);
+}
+
+.cancel-button:hover {
+    background-color: #BDC3C7;
+}
+
+.add-button:hover,
+.edit-button:hover {
+    background-color: var(--button-edit-background-color-hover);
+}
+
+.delete-button {
+    background-color: var(--button-delete-background-color);
+}
+
+.delete-button:hover {
+    background-color: var(--button-delete-background-color-hover);
+}
+
+/*label*/
+.primary-label {
+    color: #333333;
+    font-size: 24px;
+    text-wrap: nowrap;
+}
+
+/*description*/
+.primary-description {
+    color: #333333;
+    font-size: 16px;
+    text-wrap: nowrap;
+}
+
+
 
 
 

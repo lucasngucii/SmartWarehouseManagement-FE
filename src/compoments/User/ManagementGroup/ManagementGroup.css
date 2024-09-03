@@ -1,76 +1,5 @@
 @import "../../../Root.css";
 
-.container-management-groups {
-    position: relative;
-    width: calc(100% - 250px);
-    height: 100vh;
-    padding: 20px;
-    margin-left: 250px;
-    background-color: var(--background-color);
-    color: var(--primary-text-color);
-}
-
-.container-management-groups h2,
-.container-management-groups .group-description {
-    text-wrap: nowrap;
-}
-
-.groups-table {
-    width: 100%;
-    border-collapse: collapse;
-}
-
-.groups-table th, .groups-table td {
-    border: 1px solid var(--border-color);
-    padding: 12px;
-    text-align: left;
-}
-
-.groups-table th:first-child,
-.groups-table td:first-child {
-    width: 5%;
-}
-
-.groups-table th:nth-child(2),
-.groups-table td:nth-child(2) {
-    width: 50%;
-}
-
-.groups-table th {
-    background-color: var(--header-footer-background-color);
-    color: var(--primary-text-color);
-}
-
-.groups-table td {
-    color: var(--primary-text-color);
-}
-
-.edit-button {
-    background-color: var(--primary-button-background-color);
-    color: var(--primary-button-text-color);
-    border: none;
-    padding: 8px 16px;
-    cursor: pointer;
-}
-
-.edit-button:hover {
-    background-color: var(--accent-color);
-}
-
-.add-group-button {
-    background-color: var(--primary-button-background-color);
-    color: var(--primary-button-text-color);
-    padding: 10px 20px;
-    border: none;
-    cursor: pointer;
-    text-wrap: nowrap;
-    margin: 20px 0;
-}
-
-.add-group-button:hover {
-    background-color: var(--accent-color);
-}
-
 /*add group*/
 .add-group-container {
     width: 100%;
@@ -111,47 +40,6 @@
 
 .group-name-input:focus {
     border-color: #3498db;
-}
-
-.cancel-button {
-    background-color: #ecf0f1;
-    color: #333333;
-    border: none;
-    cursor: pointer;
-    border-radius: 4px;
-    margin-right: 10px;
-    transition: background-color 0.3s ease;
-}
-
-.cancel-button:hover {
-    background-color: #dcdde1;
-}
-
-.add-group-button {
-    background-color: #3498db;
-    color: #ffffff;
-    border: none;
-    padding: 10px 20px;
-    cursor: pointer;
-    border-radius: 4px;
-    transition: background-color 0.3s ease;
-}
-
-.add-group-button:hover {
-    background-color: var(--accent-color);
-}
-
-.cancel-button {
-    background-color: #E0E0E0;
-    color: #333333;
-    border: none;
-    padding: 10px 20px;
-    cursor: pointer;
-    border-radius: 4px;
-}
-
-.cancel-button:hover {
-    background-color: #BDC3C7;
 }
 
 /* Table for function names and access scope */

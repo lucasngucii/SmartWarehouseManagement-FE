@@ -227,11 +227,11 @@ export const ManagementUser: React.FC = () => {
     );
 
     return (
-        <div className="container-user-management">
-            <h2>User Account Management</h2>
-            <p>Manage user accounts and their status</p>
-            <button onClick={handleShowOverlay} className="add-user-button">Add User</button>
-            <table className="user-table">
+        <div className="container-right">
+            <h2 className={"primary-label"}>User Account Management</h2>
+            <p className={"primary-description"}>Manage user accounts and their status</p>
+            <button onClick={handleShowOverlay} className="add-button">Add User</button>
+            <table className="table id-column">
                 <thead>
                 <tr>
                     <th>#</th>

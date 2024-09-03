@@ -77,7 +77,7 @@ export const SublierManagement: React.FC = () => {
                     <td>{supplier.id}</td>
                     <td>{supplier.name}</td>
                     <td>
-                        <button className="supplier-management-action-button-edit"
+                        <button className="edit-button"
                                 onClick={() => {
                                     setShowOverlay(true);
                                     setSublierId(supplier.id);
@@ -85,7 +85,7 @@ export const SublierManagement: React.FC = () => {
                         >
                             Edit
                         </button>
-                        <button className="supplier-management-action-button-delete"
+                        <button className="delete-button"
                                 onClick={() => handleDelete(supplier.id)}>Delete
                         </button>
                     </td>
@@ -95,11 +95,11 @@ export const SublierManagement: React.FC = () => {
     );
 
     return (
-        <div className="supplier-management-container">
-            <h1 className="supplier-management-title">Sublier Management</h1>
-            <p className="supplier-management-description">Manage your suppliers here</p>
-            <button onClick={handleAdd} className="supplier-management-add-button">Add Supplier</button>
-            <table className="supplier-management-table">
+        <div className="container-right">
+            <h1 className="primary-label">Sublier Management</h1>
+            <p className="primary-description">Manage your suppliers here</p>
+            <button onClick={handleAdd} className="add-button">Add Supplier</button>
+            <table className="table id-column">
                 <thead>
                 <tr>
                     <th>#</th>

@@ -69,7 +69,7 @@ const AddGroupComponent: React.FC<AddGroupComponentProps> = ({hideOverlay, group
                     />
                 </div>
 
-                <table className="function-access-table">
+                <table className="table">
                     <thead>
                     <tr>
                         <th>Function Name</th>
@@ -104,7 +104,7 @@ const AddGroupComponent: React.FC<AddGroupComponentProps> = ({hideOverlay, group
             </form>
             <button className="cancel-button" onClick={hideOverlay}>Cancel</button>
             <button
-                className="add-group-button"
+                className="add-button"
                 onChange={handleSubmit}
             >
                 {groupId ? "Update" : "Add"}
@@ -163,11 +163,11 @@ export const ManagementGroup: React.FC = () => {
 
 
     return (
-        <div className="container-management-groups">
-            <h2>Group Management</h2>
-            <p className={"group-description"}>Here you can manage the permissions of the group</p>
-            <button className="add-group-button" onClick={handleShowOverlay}>Add Group</button>
-            <table className="groups-table">
+        <div className="container-right">
+            <h2 className={"primary-label"}>Group Management</h2>
+            <p className={"primary-description"}>Here you can manage the permissions of the group</p>
+            <button className="add-button" onClick={handleShowOverlay}>Add Group</button>
+            <table className="table id-column">
                 <thead>
                 <tr>
                     <th>#</th>

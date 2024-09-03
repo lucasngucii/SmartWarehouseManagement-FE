@@ -1,13 +1,129 @@
 import React from "react";
 import "./SKU.css";
+import {OverLay} from "../../OverLay/OverLay";
+
+interface SKUFormProps {
+    closeShowOverlay: () => void;
+}
+
+const SKUForm: React.FC<SKUFormProps> = ({closeShowOverlay}) => {
+
+    const [skuData, setSkuData] = React.useState({
+        skucode: "",
+        productType: "",
+        color: "",
+        size: "",
+        material: "",
+        brand: "",
+        dimension: ""
+    });
+
+    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const { name, value } = e.target;
+        setSkuData(prevState => ({
+            ...prevState,
+            [name]: value
+        }));
+    }
+
+    const handleSubmit = (e: React.FormEvent) => {
+        e.preventDefault();
+        console.log("SKU Data Submitted:", skuData);
+    }
+
+    return (
+        <OverLay>
+            <div className={"container-sku-form"}>
+                <button onClick={closeShowOverlay} className="modal-close">
+                    <i className="fas fa-times"></i>
+                </button>
+                <h1 className={"sku-form-title"}>New SKU</h1>
+                <form onSubmit={handleSubmit} className="sku-form">
+                    <label>
+                        Product Type:
+                        <input
+                            type="text"
+                            name="productType"
+                            value={skuData.productType}
+                            onChange={handleInputChange}
+                            required
+                        />
+                    </label>
+                    <label>
+                        Color:
+                        <input
+                            type="text"
+                            name="color"
+                            value={skuData.color}
+                            onChange={handleInputChange}
+                            required
+                        />
+                    </label>
+                    <label>
+                        Size:
+                        <input
+                            type="text"
+                            name="size"
+                            value={skuData.size}
+                            onChange={handleInputChange}
+                            required
+                        />
+                    </label>
+                    <label>
+                        Material:
+                        <input
+                            type="text"
+                            name="material"
+                            value={skuData.material}
+                            onChange={handleInputChange}
+                            required
+                        />
+                    </label>
+                    <label>
+                        Brand:
+                        <input
+                            type="text"
+                            name="brand"
+                            value={skuData.brand}
+                            onChange={handleInputChange}
+                            required
+                        />
+                    </label>
+                    <label>
+                        Dimension:
+                        <input
+                            type="text"
+                            name="dimension"
+                            value={skuData.dimension}
+                            onChange={handleInputChange}
+                            required
+                        />
+                    </label>
+                    <button type="submit" className="submit-button">Submit</button>
+                </form>
+            </div>
+        </OverLay>
+    )
+}
 
 export const SKU: React.FC = () => {
+
+    const [showOverlay, setShowOverlay] = React.useState(false);
+
+    const openShowOverlay = () => {
+        setShowOverlay(true);
+    }
+
+    const closeShowOverlay = () => {
+        setShowOverlay(false);
+    }
+
     return (
-        <div className="sku-management-container">
-            <h1 className="sku-management-title">SKU Management</h1>
-            <p className="sku-management-description">Manage your SKU codes here</p>
-            <button className="add-sku-button">Add SKU</button>
-            <table className="sku-management-table">
+        <div className="container-right">
+            <h1 className="primary-label">SKU Management</h1>
+            <p className="primary-description">Manage your SKU codes here</p>
+            <button onClick={openShowOverlay} className="add-button">Add SKU</button>
+            <table className="table">
                 <thead>
                 <tr>
                     <th>SKU Code</th>
@@ -49,6 +165,10 @@ export const SKU: React.FC = () => {
                 </tr>
                 </tbody>
             </table>
+            {
+                showOverlay &&
+                <SKUForm closeShowOverlay={closeShowOverlay}/>
+            }
         </div>
 
     );
