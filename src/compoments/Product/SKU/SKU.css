@@ -1,0 +1,72 @@
+@import "../../../Root.css";
+
+.sku-management-container {
+    position: relative;
+    width: calc(100% - 250px);
+    height: 100vh;
+    padding: 20px;
+    margin-left: 250px;
+    background-color: var(--background-color);
+    color: var(--primary-text-color);
+}
+
+.sku-management-title {
+    font-size: 24px;
+    color: var(--primary-text-color);
+}
+
+.sku-management-description{
+    font-size: 16px;
+}
+
+.add-sku-button{
+    padding: 10px 20px;
+    border: none;
+    cursor: pointer;
+    background-color: var(--primary-button-background-color);
+    color: var(--primary-button-text-color);
+    border-radius: 4px;
+    margin: 20px 0;
+}
+
+.add-sku-button:hover {
+    background-color: var(--accent-color);
+}
+
+.sku-management-table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: var(--header-footer-background-color);
+}
+
+.sku-management-table th, .sku-management-table td {
+    padding: 10px;
+    border: 1px solid var(--border-color);
+    text-align: left;
+    color: var(--primary-text-color);
+}
+
+.sku-management-table th {
+    background-color: var(--header-footer-background-color);
+}
+
+.sku-management-table td {
+    background-color: var(--background-color);
+}
+
+.edit-button, .delete-button {
+    padding: 10px 20px;
+    border: none;
+    cursor: pointer;
+    margin-right: 5px;
+}
+
+.edit-button {
+    background-color: var(--primary-button-background-color);
+    color: var(--primary-button-text-color);
+}
+
+.delete-button {
+    background-color: #E74C3C;
+    color: var(--primary-button-text-color);
+}

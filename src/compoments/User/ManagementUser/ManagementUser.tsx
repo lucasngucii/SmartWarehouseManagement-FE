@@ -201,7 +201,7 @@ export const ManagementUser: React.FC = () => {
 
     const listUser = users.map((user, index) => {
             return (
-                <tr>
+                <tr key={user.id}>
                     <td>{index + 1}</td>
                     <td>{user.username}</td>
                     <td>{user.fullName}</td>
@@ -230,6 +230,7 @@ export const ManagementUser: React.FC = () => {
         <div className="container-user-management">
             <h2>User Account Management</h2>
             <p>Manage user accounts and their status</p>
+            <button onClick={handleShowOverlay} className="add-user-button">Add User</button>
             <table className="user-table">
                 <thead>
                 <tr>
@@ -247,7 +248,6 @@ export const ManagementUser: React.FC = () => {
                 {listUser}
                 </tbody>
             </table>
-            <button onClick={handleShowOverlay} className="add-user-button">Add User</button>
             {showOverlay && (
                 <OverLay>
                     <AddUserComponent hideOverlay={handleHideOverlay} userId={userId}/>

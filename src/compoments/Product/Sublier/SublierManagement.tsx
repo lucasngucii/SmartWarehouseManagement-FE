@@ -98,6 +98,7 @@ export const SublierManagement: React.FC = () => {
         <div className="supplier-management-container">
             <h1 className="supplier-management-title">Sublier Management</h1>
             <p className="supplier-management-description">Manage your suppliers here</p>
+            <button onClick={handleAdd} className="supplier-management-add-button">Add Supplier</button>
             <table className="supplier-management-table">
                 <thead>
                 <tr>
@@ -110,7 +111,6 @@ export const SublierManagement: React.FC = () => {
                 {sublierList}
                 </tbody>
             </table>
-            <button onClick={handleAdd} className="supplier-management-add-button">Add Supplier</button>
             {
                 showOverlay && <OverLay>
                     <FormSublier handleClose={handleClose} supplierId={sublierId}/>

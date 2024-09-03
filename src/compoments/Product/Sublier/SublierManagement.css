@@ -17,13 +17,16 @@
 .supplier-management-description{
     color: #333333;
     font-size: 16px;
-    margin-bottom: 20px;
 }
 
 .supplier-management-table {
     width: 100%;
     border-collapse: collapse;
     margin-bottom: 20px;
+}
+
+.supplier-management-table th:first-child{
+    width: 5%;
 }
 
 .supplier-management-table th {
@@ -38,7 +41,7 @@
     padding: 10px;
     border: 1px solid #E0E0E0;
     text-align: left;
-    color: var(--secondary-text-color);
+    color: var(--primary-text-color);
 }
 
 .supplier-management-add-button{
@@ -46,12 +49,13 @@
     padding: 10px 16px;
     cursor: pointer;
     border-radius: 4px;
+    margin: 20px 0;
 }
 
 .supplier-management-action-button-delete,
 .supplier-management-action-button-edit {
     border: none;
-    padding: 8px 16px;
+    padding: 10px 20px;
     cursor: pointer;
     border-radius: 4px;
     margin-right: 8px;
@@ -116,6 +120,12 @@
     border: 1px solid #E0E0E0;
     border-radius: 4px;
     font-size: 14px;
+}
+
+.supplier-management-overlay-input:focus {
+    border-color: #3498db;
+    outline: none;
+    box-shadow: 0 0 5px rgba(52, 152, 219, 0.5);
 }
 
 .supplier-management-overlay-add-button {

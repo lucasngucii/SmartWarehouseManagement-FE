@@ -166,6 +166,7 @@ export const ManagementGroup: React.FC = () => {
         <div className="container-management-groups">
             <h2>Group Management</h2>
             <p className={"group-description"}>Here you can manage the permissions of the group</p>
+            <button className="add-group-button" onClick={handleShowOverlay}>Add Group</button>
             <table className="groups-table">
                 <thead>
                 <tr>
@@ -176,10 +177,9 @@ export const ManagementGroup: React.FC = () => {
                 </tr>
                 </thead>
                 <tbody>
-                    {listGroups}
+                {listGroups}
                 </tbody>
             </table>
-            <button className="add-group-button" onClick={handleShowOverlay}>Add Group</button>
             {showOverlay && (
                 <OverLay>
                     <AddGroupComponent hideOverlay={handleHideOverlay} groupId={groupId}/>

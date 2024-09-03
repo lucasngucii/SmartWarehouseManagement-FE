@@ -11,7 +11,6 @@
 .user-table {
     width: 100%;
     border-collapse: collapse;
-    margin: 20px 0;
 }
 
 .user-table th, .user-table td {
@@ -36,7 +35,7 @@
 }
 
 .user-table td {
-    color: var(--secondary-text-color);
+    color: var(--primary-text-color);
 }
 
 .edit-button, .delete-button {
@@ -72,6 +71,7 @@
     border: none;
     cursor: pointer;
     border-radius: 4px;
+    margin: 20px 0;
 }
 
 .add-user-button:hover {
