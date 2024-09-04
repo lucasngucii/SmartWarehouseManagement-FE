@@ -55,12 +55,12 @@ const AddGroupComponent: React.FC<AddGroupComponentProps> = ({hideOverlay, group
 
     return (
         <div className="add-group-container">
-            <h2 className="add-group-title">{groupId ? "Update Group" : "Add Group"}</h2>
-            <form>
-                <div className="group-input-container">
-                    <label className="group-name-label">Group Name</label>
+            <h2 className="primary-label">{groupId ? "Update Group" : "Add Group"}</h2>
+            <form className={"form"}>
+                <div className="form-input-container">
+                    <label className="form-group-label">Group Name</label>
                     <input
-                        className="group-name-input"
+                        className="form-input"
                         type="text"
                         name={"groupName"}
                         value={groupName}

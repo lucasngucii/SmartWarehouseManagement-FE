@@ -1,105 +1,208 @@
 import React from "react";
 import "./SKU.css";
 import {OverLay} from "../../OverLay/OverLay";
+import Select, {ActionMeta, MultiValue, SingleValue} from "react-select";
+
+interface OptionType {
+    value: string;
+    label: string;
+}
 
 interface SKUFormProps {
     closeShowOverlay: () => void;
+    SKUId: number | null;
 }
 
-const SKUForm: React.FC<SKUFormProps> = ({closeShowOverlay}) => {
+interface SKUFormData {
+    productType?: OptionType | null;
+    color?: OptionType | null;
+    size?: OptionType | null;
+    material?: OptionType | null;
+    brand?: OptionType | null;
+    dimension?: Dimension;
+}
 
-    const [skuData, setSkuData] = React.useState({
-        skucode: "",
-        productType: "",
-        color: "",
-        size: "",
-        material: "",
-        brand: "",
-        dimension: ""
-    });
+interface ListSKu {
+    skuCode: string;
+    productType: string;
+    color: string;
+    size: string;
+    material: string;
+    brand: string;
+    dimension: string;
+}
 
-    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const { name, value } = e.target;
-        setSkuData(prevState => ({
-            ...prevState,
-            [name]: value
-        }));
+interface Dimension {
+    length: number;
+    width: number;
+    height: number;
+}
+
+const SKUForm: React.FC<SKUFormProps> = ({closeShowOverlay, SKUId}) => {
+
+    const listOptions = {
+        productType: [
+            {value: "Electronics", label: "Electronics"},
+            {value: "Clothing", label: "Clothing"},
+            {value: "Furniture", label: "Furniture"},
+        ],
+        color: [
+            {value: "Black", label: "Black"},
+            {value: "Red", label: "Red"},
+            {value: "Blue", label: "Blue"},
+        ],
+        size: [
+            {value: "Large", label: "Large"},
+            {value: "Medium", label: "Medium"},
+            {value: "Small", label: "Small"},
+        ],
+        material: [
+            {value: "Plastic", label: "Plastic"},
+            {value: "Cotton", label: "Cotton"},
+            {value: "Wood", label: "Wood"},
+        ],
+        brand: [
+            {value: "BrandA", label: "BrandA"},
+            {value: "BrandB", label: "BrandB"},
+            {value: "BrandC", label: "BrandC"},
+        ],
     }
-
+    const [formData, setFormData] = React.useState<SKUFormData>();
+    const handleSelectChangeGroup = (newValue: SingleValue<OptionType> | MultiValue<OptionType>, actionMeta: ActionMeta<OptionType>) => {
+        setFormData((prevFormData) => ({
+            ...prevFormData,
+            [actionMeta.name as string]: newValue
+        }));
+    };
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-        console.log("SKU Data Submitted:", skuData);
+        console.log("SKU Data Submitted:", formData);
     }
 
     return (
         <OverLay>
             <div className={"container-sku-form"}>
-                <button onClick={closeShowOverlay} className="modal-close">
+                <button onClick={closeShowOverlay} className="button-close">
                     <i className="fas fa-times"></i>
                 </button>
-                <h1 className={"sku-form-title"}>New SKU</h1>
-                <form onSubmit={handleSubmit} className="sku-form">
-                    <label>
-                        Product Type:
-                        <input
-                            type="text"
-                            name="productType"
-                            value={skuData.productType}
-                            onChange={handleInputChange}
-                            required
+                <h1 className={"primary-label form-lable"}>{SKUId ? "Update SKU" : "New SKU"}</h1>
+                <form onSubmit={handleSubmit} className="form">
+                    <div className={"form-input-container"}>
+                        <label htmlFor={"productType"}>Product Type:</label>
+                        <Select
+                            styles={{
+                                control: (base) => ({
+                                    ...base,
+                                    width: "100%",
+                                    height: "45px",
+                                    borderRadius: "4px",
+                                    border: "1px solid #d1d1d1",
+                                    fontSize: "14px",
+                                }),
+                            }}
+                            value={formData?.productType}
+                            onChange={(valueSelect, actionMeta) => handleSelectChangeGroup(valueSelect, {
+                                ...actionMeta,
+                                name: "productType"
+                            })}
+                            options={listOptions.productType}
                         />
-                    </label>
-                    <label>
-                        Color:
-                        <input
-                            type="text"
-                            name="color"
-                            value={skuData.color}
-                            onChange={handleInputChange}
-                            required
+                    </div>
+                    <div className={"form-input-container"}>
+                        <label htmlFor={"color"}>Color:</label>
+                        <Select
+                            styles={{
+                                control: (base) => ({
+                                    ...base,
+                                    width: "100%",
+                                    height: "45px",
+                                    borderRadius: "4px",
+                                    border: "1px solid #d1d1d1",
+                                    fontSize: "14px",
+                                }),
+                            }}
+                            value={formData?.color}
+                            onChange={(valueSelect, actionMeta) => handleSelectChangeGroup(valueSelect, {
+                                ...actionMeta,
+                                name: "color"
+                            })}
+                            options={listOptions.color}
                         />
-                    </label>
-                    <label>
-                        Size:
-                        <input
-                            type="text"
-                            name="size"
-                            value={skuData.size}
-                            onChange={handleInputChange}
-                            required
+                    </div>
+                    <div className={"form-input-container"}>
+                        <label htmlFor={"color"}>Size:</label>
+                        <Select
+                            styles={{
+                                control: (base) => ({
+                                    ...base,
+                                    width: "100%",
+                                    height: "45px",
+                                    borderRadius: "4px",
+                                    border: "1px solid #d1d1d1",
+                                    fontSize: "14px",
+                                }),
+                            }}
+                            value={formData?.size}
+                            onChange={(valueSelect, actionMeta) => handleSelectChangeGroup(valueSelect, {
+                                ...actionMeta,
+                                name: "size"
+                            })}
+                            options={listOptions.size}
                         />
-                    </label>
-                    <label>
-                        Material:
-                        <input
-                            type="text"
-                            name="material"
-                            value={skuData.material}
-                            onChange={handleInputChange}
-                            required
+                    </div>
+                    <div className={"form-input-container"}>
+                        <label htmlFor={"color"}>Material:</label>
+                        <Select
+                            styles={{
+                                control: (base) => ({
+                                    ...base,
+                                    width: "100%",
+                                    height: "45px",
+                                    borderRadius: "4px",
+                                    border: "1px solid #d1d1d1",
+                                    fontSize: "14px",
+                                }),
+                            }}
+                            value={formData?.material}
+                            onChange={(valueSelect, actionMeta) => handleSelectChangeGroup(valueSelect, {
+                                ...actionMeta,
+                                name: "material"
+                            })}
+                            options={listOptions.material}
                         />
-                    </label>
-                    <label>
-                        Brand:
-                        <input
-                            type="text"
-                            name="brand"
-                            value={skuData.brand}
-                            onChange={handleInputChange}
-                            required
+                    </div>
+                    <div className={"form-input-container"}>
+                        <label htmlFor={"color"}>Brand:</label>
+                        <Select
+                            styles={{
+                                control: (base) => ({
+                                    ...base,
+                                    width: "100%",
+                                    height: "45px",
+                                    borderRadius: "4px",
+                                    border: "1px solid #d1d1d1",
+                                    fontSize: "14px",
+                                }),
+                            }}
+                            value={formData?.brand}
+                            onChange={(valueSelect, actionMeta) => handleSelectChangeGroup(valueSelect, {
+                                ...actionMeta,
+                                name: "brand"
+                            })}
+                            options={listOptions.brand}
                         />
-                    </label>
-                    <label>
-                        Dimension:
-                        <input
-                            type="text"
-                            name="dimension"
-                            value={skuData.dimension}
-                            onChange={handleInputChange}
-                            required
-                        />
-                    </label>
-                    <button type="submit" className="submit-button">Submit</button>
+                    </div>
+                    <div className={"form-input-container"}>
+                        <label htmlFor={"color"}>Dimension:</label>
+                        <div className={"dimension-container"}>
+                            <input type="number" placeholder="Length" className="dimension-input"/>
+                            <span>x</span>
+                            <input type="number" placeholder="Width" className="dimension-input"/>
+                            <span>x</span>
+                            <input type="number" placeholder="Height" className="dimension-input"/>
+                        </div>
+                    </div>
+                    <button type="submit" className="form-input-submit">{SKUId ? "Update SKU" : "Add SKU"}</button>
                 </form>
             </div>
         </OverLay>
@@ -108,15 +211,55 @@ const SKUForm: React.FC<SKUFormProps> = ({closeShowOverlay}) => {
 
 export const SKU: React.FC = () => {
 
+    const [skuData, setSkuData] = React.useState<ListSKu[]>([
+        {
+            skuCode: "SKU1234",
+            productType: "Electronics",
+            color: "Black",
+            size: "Large",
+            material: "Plastic",
+            brand: "BrandA",
+            dimension: "10x5x3 cm",
+        },
+        {
+            skuCode: "SKU5678",
+            productType: "Clothing",
+            color: "Red",
+            size: "Medium",
+            material: "Cotton",
+            brand: "BrandB",
+            dimension: "20x15x5 cm",
+        }
+    ]);
     const [showOverlay, setShowOverlay] = React.useState(false);
-
+    const [skuId, setSkuId] = React.useState<number | null>(null);
     const openShowOverlay = () => {
         setShowOverlay(true);
     }
-
     const closeShowOverlay = () => {
         setShowOverlay(false);
+        setSkuId(null);
     }
+    const listSku = skuData.map((sku) => {
+        return (
+            <tr key={sku.skuCode}>
+                <td>{sku.skuCode}</td>
+                <td>{sku.productType}</td>
+                <td>{sku.color}</td>
+                <td>{sku.size}</td>
+                <td>{sku.material}</td>
+                <td>{sku.brand}</td>
+                <td>{sku.dimension}</td>
+                <td>
+                    <button onClick={() => {
+                        setSkuId(1);
+                        openShowOverlay();
+                    }} className="edit-button">Edit</button>
+                    <button className="delete-button">Delete</button>
+                </td>
+            </tr>
+        )
+    })
 
     return (
         <div className="container-right">
@@ -137,37 +280,12 @@ export const SKU: React.FC = () => {
                 </tr>
                 </thead>
                 <tbody>
-                <tr>
-                    <td>SKU1234</td>
-                    <td>Electronics</td>
-                    <td>Black</td>
-                    <td>Large</td>
-                    <td>Plastic</td>
-                    <td>BrandA</td>
-                    <td>10x5x3 cm</td>
-                    <td>
-                        <button className="edit-button">Edit</button>
-                        <button className="delete-button">Delete</button>
-                    </td>
-                </tr>
-                <tr>
-                    <td>SKU5678</td>
-                    <td>Clothing</td>
-                    <td>Red</td>
-                    <td>Medium</td>
-                    <td>Cotton</td>
-                    <td>BrandB</td>
-                    <td>20x15x5 cm</td>
-                    <td>
-                        <button className="edit-button">Edit</button>
-                        <button className="delete-button">Delete</button>
-                    </td>
-                </tr>
+                {listSku}
                 </tbody>
             </table>
             {
                 showOverlay &&
-                <SKUForm closeShowOverlay={closeShowOverlay}/>
+                <SKUForm closeShowOverlay={closeShowOverlay} SKUId={skuId}/>
             }
         </div>
 

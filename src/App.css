@@ -81,7 +81,7 @@ table.id-column th:first-child {
     color: #333333;
 }
 
-.add-button{
+.add-button {
     margin: 20px 0;
 }
 
@@ -108,6 +108,12 @@ table.id-column th:first-child {
 }
 
 /*label*/
+.primary-label.form-lable {
+    text-align: center;
+    font-weight: bolder;
+    margin-bottom: 15px;
+}
+
 .primary-label {
     color: #333333;
     font-size: 24px;
@@ -119,6 +125,66 @@ table.id-column th:first-child {
     color: #333333;
     font-size: 16px;
     text-wrap: nowrap;
+}
+
+/*input*/
+.form .form-input {
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+    color: #333333;
+    border: 1px solid #e0e0e0;
+    border-radius: 4px;
+    outline: none;
+    transition: border-color 0.3s ease;
+}
+
+.form .form-input:focus {
+    border-color: #3498db;
+}
+
+.form .form-input-lable {
+    font-size: 16px;
+    margin-bottom: 5px;
+    color: #333333;
+    display: block;
+    text-align: left;
+}
+
+.form .form-input-container {
+    margin-bottom: 20px;
+}
+
+.form .form-input-submit {
+    padding: 10px 15px;
+    background-color: #3498db;
+    color: #ffffff;
+    border: none;
+    border-radius: 4px;
+    font-size: 16px;
+    cursor: pointer;
+    width: 100%;
+    transition: background-color 0.3s ease;
+}
+
+.form .form-input-submit:hover {
+    background-color: #2980b9;
+}
+
+/*button close*/
+.button-close{
+    position: absolute;
+    top: 15px;
+    right: 25px;
+    background: none;
+    border: none;
+    font-size: 20px;
+    cursor: pointer;
+    color: #333333;
+}
+
+.button-close:hover {
+    color: #ff0000;
 }
 
 

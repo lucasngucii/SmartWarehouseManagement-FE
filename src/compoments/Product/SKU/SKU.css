@@ -7,57 +7,29 @@
     padding: 20px;
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    width: 520px;
+    width: 480px;
     margin: 0 auto;
 }
 
-.container-sku-form .modal-close{
-    position: absolute;
-    top: 15px;
-    right: 25px;
-    background: none;
-    border: none;
-    font-size: 20px;
-    cursor: pointer;
-    color: #333333;
-}
-
-.container-sku-form .modal-close:hover{
-    color: #ff0000;
-}
-
-.sku-form {
+.dimension-container{
     display: flex;
-    flex-direction: column;
-    gap: 10px;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 20px;
 }
 
-.sku-form-title{
-    font-size: 24px;
-    color: var(--primary-text-color);
-    text-align: center;
-}
-
-.sku-form label {
-    display: flex;
-    flex-direction: column;
-}
-
-.sku-form input {
-    padding: 8px;
-    border: 1px solid var(--border-color);
-    border-radius: 4px;
-}
-
-.submit-button {
-    background-color: var(--primary-button-background-color);
-    color: var(--primary-button-text-color);
+.dimension-container .dimension-input{
+    width: 100px;
     padding: 10px;
-    border: none;
+    font-size: 14px;
+    color: #333333;
+    border: 1px solid #e0e0e0;
     border-radius: 4px;
-    cursor: pointer;
+    outline: none;
+    transition: border-color 0.3s ease;
 }
 
-.submit-button:hover {
-    background-color: #2980B9;
+.dimension-container .dimension-input:focus{
+    border-color: #3498db;
+    border-width: 2px;
 }

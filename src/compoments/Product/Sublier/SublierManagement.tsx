@@ -26,24 +26,29 @@ const FormSublier: React.FC<FormSupplierProps> = ({supplierId, handleClose}) => 
 
     return (
         <div className="supplier-management-overlay">
-            <button onClick={handleClose} className="modal-close">
+            <button onClick={handleClose} className="button-close">
                 <i className="fas fa-times"></i>
             </button>
-            <h1 className="supplier-management-overlay-title">{supplierId ? "Update Sublier" : "Add Sublier"}</h1>
-            <input
-                type="text"
-                placeholder="Supplier name"
-                className="supplier-management-overlay-input"
-                required
-                value={supplierName}
-                onChange={(e) => setSupplierName(e.target.value)}
-            />
-            <button
-                onClick={supplierId ? handleUpdate : handleAdd}
-                className="supplier-management-overlay-add-button"
-            >
-                {supplierId ? "Update" : "Add"}
-            </button>
+            <p className="primary-label form-lable">{supplierId ? "Update Sublier" : "New Sublier"}</p>
+            <form className={"form"}>
+                <div className={"form-input-container"}>
+                    <input
+                        id={"supplier-name"}
+                        type="text"
+                        placeholder="Supplier name"
+                        className="form-input"
+                        required
+                        value={supplierName}
+                        onChange={(e) => setSupplierName(e.target.value)}
+                    />
+                </div>
+                <button
+                    onClick={supplierId ? handleUpdate : handleAdd}
+                    className="form-input-submit"
+                >
+                    {supplierId ? "Update" : "Add"}
+                </button>
+            </form>
         </div>
     )
 }

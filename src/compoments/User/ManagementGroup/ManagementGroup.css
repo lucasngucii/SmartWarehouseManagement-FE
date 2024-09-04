@@ -9,39 +9,6 @@
     border: 1px solid #e0e0e0;
 }
 
-.add-group-title {
-    font-size: 24px;
-    color: #333333;
-    margin-bottom: 20px;
-}
-
-.group-input-container {
-    margin-bottom: 20px;
-}
-
-.group-name-label {
-    display: block;
-    font-size: 16px;
-    font-weight: bolder;
-    color: #333333;
-    margin-bottom: 8px;
-}
-
-.group-name-input {
-    width: 100%;
-    padding: 10px;
-    font-size: 16px;
-    color: #333333;
-    border: 1px solid #e0e0e0;
-    border-radius: 4px;
-    outline: none;
-    transition: border-color 0.3s ease;
-}
-
-.group-name-input:focus {
-    border-color: #3498db;
-}
-
 /* Table for function names and access scope */
 .function-access-table {
     width: 100%;
