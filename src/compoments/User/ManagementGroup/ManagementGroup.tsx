@@ -104,7 +104,7 @@ const AddGroupComponent: React.FC<AddGroupComponentProps> = ({hideOverlay, group
             </form>
             <button className="cancel-button" onClick={hideOverlay}>Cancel</button>
             <button
-                className="add-button"
+                className="add-button margin-top-button"
                 onChange={handleSubmit}
             >
                 {groupId ? "Update" : "Add"}
@@ -166,7 +166,7 @@ export const ManagementGroup: React.FC = () => {
         <div className="container-right">
             <h2 className={"primary-label"}>Group Management</h2>
             <p className={"primary-description"}>Here you can manage the permissions of the group</p>
-            <button className="add-button" onClick={handleShowOverlay}>Add Group</button>
+            <button className="add-button margin-top-button" onClick={handleShowOverlay}>Add Group</button>
             <table className="table id-column">
                 <thead>
                 <tr>

@@ -265,7 +265,7 @@ export const SKU: React.FC = () => {
         <div className="container-right">
             <h1 className="primary-label">SKU Management</h1>
             <p className="primary-description">Manage your SKU codes here</p>
-            <button onClick={openShowOverlay} className="add-button">Add SKU</button>
+            <button onClick={openShowOverlay} className="add-button margin-top-button">Add SKU</button>
             <table className="table">
                 <thead>
                 <tr>

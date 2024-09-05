@@ -81,7 +81,7 @@ table.id-column th:first-child {
     color: #333333;
 }
 
-.add-button {
+.add-button.margin-top-button {
     margin: 20px 0;
 }
 

@@ -103,7 +103,7 @@ export const SublierManagement: React.FC = () => {
         <div className="container-right">
             <h1 className="primary-label">Sublier Management</h1>
             <p className="primary-description">Manage your suppliers here</p>
-            <button onClick={handleAdd} className="add-button">Add Supplier</button>
+            <button onClick={handleAdd} className="add-button margin-top-button">Add Supplier</button>
             <table className="table id-column">
                 <thead>
                 <tr>
