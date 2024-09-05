@@ -2,6 +2,57 @@ import React from "react";
 import {OverLay} from "../../OverLay/OverLay";
 import "./Attribute.css";
 
+interface EditAttributeValueProps {
+    hideOverlay: (e: React.MouseEvent<HTMLButtonElement>) => void;
+}
+
+const EditAttributeValue: React.FC<EditAttributeValueProps> = ({hideOverlay}) => {
+    return (
+        <div className="edit-attribute-value">
+            <h1 className={"primary-label"}>Edit Attribute Value</h1>
+            <form className={"form"}>
+                <div className={"form-input-container"}>
+                    <input
+                        type={"text"}
+                        className={"form-input"}
+                        placeholder={"Enter your attribute value"}
+                    />
+                </div>
+                <div className={"form-input-container"}>
+                    <button onClick={hideOverlay} className="cancel-button">Cancel</button>
+                    <button className="add-button">Save</button>
+                </div>
+            </form>
+        </div>
+    );
+}
+
+interface AddAttributeProps {
+    hideOverlay: () => void;
+}
+
+const AddAttribute: React.FC<AddAttributeProps> = ({hideOverlay}) => {
+    return (
+        <div className="add-attribute-container">
+            <h1 className={"primary-label"}>New Attribute</h1>
+            <form className={"form"}>
+                <div className={"form-input-container"}>
+                    <input
+                        type={"text"}
+                        className={"form-input"}
+                        placeholder={"Enter your attribute name"}
+                    />
+                </div>
+                <div className={"form-input-container"}>
+                    <button onClick={hideOverlay} className="cancel-button">Cancel</button>
+                    <button className="add-button">Create</button>
+                </div>
+            </form>
+        </div>
+    );
+}
+
+
 interface AttributeDetailManagementProps {
     handleCancelEditAttribute: () => void;
 }
@@ -9,6 +60,7 @@ interface AttributeDetailManagementProps {
 const AttributeDetailManagement: React.FC<AttributeDetailManagementProps> = ({handleCancelEditAttribute}) => {
 
     const [showEditAttributeName, setShowEditAttributeName] = React.useState(false);
+    const [showEditAttributeValue, setShowEditAttributeValue] = React.useState(false);
 
     const handleEditAttributeName = (e: React.MouseEvent<HTMLButtonElement>) => {
         e.preventDefault();
@@ -18,6 +70,15 @@ const AttributeDetailManagement: React.FC<AttributeDetailManagementProps> = ({ha
     const handleCancelEditAttributeName = (e: React.MouseEvent<HTMLButtonElement>) => {
         e.preventDefault();
         setShowEditAttributeName(false);
+    }
+
+    const handleCancelEditAttributeValue = (e: React.MouseEvent<HTMLButtonElement>) => {
+        e.preventDefault();
+        setShowEditAttributeValue(false);
+    }
+
+    const handleEditAttributeValue = () => {
+        setShowEditAttributeValue(true);
     }
 
     return (
@@ -58,14 +119,14 @@ const AttributeDetailManagement: React.FC<AttributeDetailManagementProps> = ({ha
                 <tr>
                     <td>Red</td>
                     <td>
-                        <button className="edit-button">Edit</button>
+                        <button onClick={handleEditAttributeValue} className="edit-button">Edit</button>
                         <button className="delete-button">Delete</button>
                     </td>
                 </tr>
                 <tr>
                     <td>Blue</td>
                     <td>
-                        <button className="edit-button">Edit</button>
+                        <button onClick={handleEditAttributeValue} className="edit-button">Edit</button>
                         <button className="delete-button">Delete</button>
                     </td>
                 </tr>
@@ -73,6 +134,11 @@ const AttributeDetailManagement: React.FC<AttributeDetailManagementProps> = ({ha
             </table>
             <button onClick={handleCancelEditAttribute} className="cancel-button">Cancel</button>
             <button className="add-button margin-top-button">Add Value</button>
+            {
+                showEditAttributeValue && <OverLay>
+                    <EditAttributeValue hideOverlay={handleCancelEditAttributeValue}/>
+                </OverLay>
+            }
         </div>
     );
 };
@@ -80,7 +146,8 @@ const AttributeDetailManagement: React.FC<AttributeDetailManagementProps> = ({ha
 
 export const Attribute: React.FC = () => {
 
-    const [showEditForm, setShowEditForm] = React.useState(true);
+    const [showEditForm, setShowEditForm] = React.useState(false);
+    const [showAddAttribute, setShowAddAttribute] = React.useState(false);
 
     const handleEdit = () => {
         setShowEditForm(true);
@@ -90,11 +157,19 @@ export const Attribute: React.FC = () => {
         setShowEditForm(false);
     }
 
+    const handleAddAttribute = () => {
+        setShowAddAttribute(true);
+    }
+
+    const handleCancelAddAttribute = () => {
+        setShowAddAttribute(false);
+    }
+
     return (
         <div className={"container-right"}>
             <h1 className={"primary-label"}>Attribute Management</h1>
             <p className={"primary-description"}>Add, edit, or delete attributes</p>
-            <button onClick={handleEdit} className="add-button margin-top-button">Add Attribute</button>
+            <button onClick={handleAddAttribute} className="add-button margin-top-button">Add Attribute</button>
             <table className={"table"}>
                 <thead>
                 <tr>
@@ -108,7 +183,7 @@ export const Attribute: React.FC = () => {
                     <td>Color</td>
                     <td>15</td>
                     <td>
-                        <button className={"edit-button"}>Edit</button>
+                        <button onClick={handleEdit} className={"edit-button"}>Edit</button>
                         <button className={"delete-button"}>Delete</button>
                     </td>
                 </tr>
@@ -116,7 +191,7 @@ export const Attribute: React.FC = () => {
                     <td>Size</td>
                     <td>15</td>
                     <td>
-                        <button className={"edit-button"}>Edit</button>
+                        <button onClick={handleEdit} className={"edit-button"}>Edit</button>
                         <button className={"delete-button"}>Delete</button>
                     </td>
                 </tr>
@@ -125,6 +200,11 @@ export const Attribute: React.FC = () => {
             {
                 showEditForm && <OverLay>
                     <AttributeDetailManagement handleCancelEditAttribute={handleCancelEdit}/>
+                </OverLay>
+            }
+            {
+                showAddAttribute && <OverLay>
+                    <AddAttribute hideOverlay={handleCancelAddAttribute}/>
                 </OverLay>
             }
         </div>
