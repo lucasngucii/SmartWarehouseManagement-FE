@@ -1,0 +1,9 @@
+@import "../../../Root.css";
+
+.modal-product-detail {
+    position: relative;
+    background-color: var(--primary-background-color);
+    padding: 20px;
+    border-radius: 8px;
+    width: 580px;
+}

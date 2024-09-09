@@ -64,6 +64,7 @@ table.id-column th:first-child {
 
 /*button*/
 
+.view-button,
 .cancel-button,
 .add-button,
 .delete-button,
@@ -107,6 +108,14 @@ table.id-column th:first-child {
     background-color: var(--button-delete-background-color-hover);
 }
 
+.view-button {
+    background-color: var(--button-view-background-color);
+}
+
+.view-button:hover {
+    background-color: var(--button-view-background-color-hover);
+}
+
 /*label*/
 .primary-label.form-lable {
     text-align: center;
@@ -125,6 +134,10 @@ table.id-column th:first-child {
     color: #333333;
     font-size: 16px;
     text-wrap: nowrap;
+}
+
+.primary-description.margin-bottom-15 {
+    margin-bottom: 15px;
 }
 
 /*input*/
@@ -172,7 +185,7 @@ table.id-column th:first-child {
 }
 
 /*button close*/
-.button-close{
+.button-close {
     position: absolute;
     top: 15px;
     right: 25px;
@@ -186,8 +199,3 @@ table.id-column th:first-child {
 .button-close:hover {
     color: #ff0000;
 }
-
-
-
-
-

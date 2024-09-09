@@ -1,6 +1,6 @@
 :root {
     /* Màu nền */
-    --background-color: #FFFFFF;
+    --primary-background-color: #FFFFFF;
 
     /* Màu nền khu vực nổi bật */
     --header-footer-background-color: #ECF0F1;
@@ -28,8 +28,10 @@
     --primary-button-text-color: #FFFFFF;
     --button-edit-background-color: #3498DB;
     --button-delete-background-color: #E74C3C;
+    --button-view-background-color: #2ecc71;
 
     /*button hover*/
     --button-edit-background-color-hover: #F39C12;
     --button-delete-background-color-hover: #C0392B;
+    --button-view-background-color-hover: #27ae60;
 }

@@ -7,13 +7,13 @@ import {
 } from "react-router-dom";
 import App from './App';
 import reportWebVitals from './reportWebVitals';
-import {Dashboard} from "./compoments/Dashboard/Dashboard";
-import {Login} from "./compoments/Login/Login";
-import {ManagementGroup} from "./compoments/User/ManagementGroup/ManagementGroup";
-import {ManagementUser} from "./compoments/User/ManagementUser/ManagementUser";
-import {SKU} from "./compoments/Product/SKU/SKU";
-import {SublierManagement} from "./compoments/Product/Sublier/SublierManagement";
-import {Attribute} from "./compoments/Product/Attribute/Attribute";
+import { Dashboard } from "./compoments/Dashboard/Dashboard";
+import { Login } from "./compoments/Login/Login";
+import { UserManagement } from "./compoments/User/UserManagement/./UserManagement";
+import { SKUManagement } from "./compoments/Product/SKUManagement/SKUManagement";
+import { SublierManagement } from "./compoments/Product/SublierManagenent/SublierManagement";
+import { AttributeManagement } from "./compoments/Product/AttributeManagement/AttributeManagement";
+import { ProductManagement } from './compoments/Product/ProductManagement/ProductManagement';
 
 const router = createBrowserRouter([
     {
@@ -30,15 +30,11 @@ const router = createBrowserRouter([
             },
             {
                 path: "management-user",
-                element: <ManagementUser />,
-            },
-            {
-                path: "management-group",
-                element: <ManagementGroup />,
+                element: <UserManagement />,
             },
             {
                 path: "management-sku",
-                element: <SKU />,
+                element: <SKUManagement />,
             },
             {
                 path: "management-sublier",
@@ -46,14 +42,18 @@ const router = createBrowserRouter([
             },
             {
                 path: "management-attribute",
-                element: <Attribute />,
+                element: <AttributeManagement />,
             },
+            {
+                path: "product-management",
+                element: <ProductManagement />,
+            }
         ]
     }
 ]);
 
 const root = ReactDOM.createRoot(
-  document.getElementById('root') as HTMLElement
+    document.getElementById('root') as HTMLElement
 );
 root.render(
     <React.StrictMode>

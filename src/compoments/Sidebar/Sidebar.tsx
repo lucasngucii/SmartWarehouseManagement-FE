@@ -1,15 +1,15 @@
 import React from "react";
 import "./Sidebar.css";
-import {NavLink, useLocation} from "react-router-dom";
+import { NavLink, useLocation } from "react-router-dom";
 
 interface SidebarLogoProps {
     logo: string
 }
 
-const SidebarLogo: React.FC<SidebarLogoProps> = ({logo}) => {
+const SidebarLogo: React.FC<SidebarLogoProps> = ({ logo }) => {
     return (
         <div className="sidebar-logo">
-            <img src={logo} alt="Logo"/>
+            <img src={logo} alt="Logo" />
             <h1>My Website</h1>
         </div>
     )
@@ -19,7 +19,7 @@ interface SidebarNavProps {
     children: React.ReactNode
 }
 
-const SidebarNav: React.FC<SidebarNavProps> = ({children}) => {
+const SidebarNav: React.FC<SidebarNavProps> = ({ children }) => {
     return (
         <ul className={"sidebar-menu"}>
             {children}
@@ -34,7 +34,7 @@ interface SidebarItemProps {
     subItems?: { href: string, lable: string }[]
 }
 
-const SidebarItem: React.FC<SidebarItemProps> = ({href, icon, lable, subItems}) => {
+const SidebarItem: React.FC<SidebarItemProps> = ({ href, icon, lable, subItems }) => {
 
     const location = useLocation();
     const [isOpen, setIsOpen] = React.useState(false);
@@ -53,7 +53,7 @@ const SidebarItem: React.FC<SidebarItemProps> = ({href, icon, lable, subItems}) 
     }
 
     const isSubItemActive = (subItems: { href: string, lable: string }[]) => {
-        return subItems.some(subItem => locationPath.includes(subItem.href+""));
+        return subItems.some(subItem => locationPath.includes(subItem.href + ""));
     }
 
     if (!subItems && href) {
@@ -62,7 +62,7 @@ const SidebarItem: React.FC<SidebarItemProps> = ({href, icon, lable, subItems}) 
                 <NavLink
                     to={href}
                     onClick={handleToggle}
-                    className={({isActive, isPending}) =>
+                    className={({ isActive, isPending }) =>
                         `sidebar-link ${isActive ? "active" : ""}`
                     }
                 >
@@ -96,9 +96,9 @@ const SidebarItem: React.FC<SidebarItemProps> = ({href, icon, lable, subItems}) 
                     {subItems.map((subItem, index) => (
                         <li key={index} className="sidebar-subitem">
                             <NavLink to={subItem.href}
-                                     className={({isActive, isPending}) =>
-                                         `sidebar-sublink ${isActive ? "active" : ""}`
-                            }>
+                                className={({ isActive, isPending }) =>
+                                    `sidebar-sublink ${isActive ? "active" : ""}`
+                                }>
                                 {subItem.lable}
                             </NavLink>
                         </li>
@@ -114,10 +114,10 @@ interface SidebarUserProps {
     name: string
 }
 
-const SidebarUser: React.FC<SidebarUserProps> = ({avatar, name}) => {
+const SidebarUser: React.FC<SidebarUserProps> = ({ avatar, name }) => {
     return (
         <div className="sidebar-user">
-            <img src={avatar} alt="ManagementUser Avatar"/>
+            <img src={avatar} alt="UserManagement Avatar" />
             <div className="user-info">
                 <p>{name}</p>
                 <a href="#logout">Logout</a>
@@ -131,7 +131,7 @@ export const Sidebar: React.FC = () => {
 
     return (
         <div className={"sidebar"}>
-            <SidebarLogo logo={logo}/>
+            <SidebarLogo logo={logo} />
             <SidebarNav>
                 <SidebarItem
                     href={"/"}
@@ -142,16 +142,24 @@ export const Sidebar: React.FC = () => {
                     href={"/a"}
                     icon={<i className="fas fa-warehouse"></i>}
                     lable={"Inventory"}
+                    subItems={
+                        [
+                            { href: "/management-inventory", lable: "Manage Inventory" },
+                            { href: "/management-location", lable: "Manage Location" },
+                            { href: "/stock-entry", lable: "Stock Entry" },
+                        ]
+                    }
                 />
                 <SidebarItem
                     href={"/a"}
                     icon={<i className="fas fa-box"></i>}
-                    lable={"Product"}
+                    lable={"Products"}
                     subItems={
                         [
-                            {href: "/management-sku", lable: "Manage SKU"},
-                            {href: "/management-sublier", lable: "Manage Subliers"},
-                            {href: "/management-attribute", lable: "Manage Attributes"},
+                            { href: "/product-management", lable: "Manage Product" },
+                            { href: "/management-sku", lable: "Manage SKU" },
+                            { href: "/management-sublier", lable: "Manage Subliers" },
+                            { href: "/management-attribute", lable: "Manage Attributes" },
                         ]
                     }
                 />
@@ -161,14 +169,9 @@ export const Sidebar: React.FC = () => {
                     lable={"Orders"}
                 />
                 <SidebarItem
+                    href={"/management-user"}
                     icon={<i className="fas fa-user"></i>}
                     lable={"Users"}
-                    subItems={
-                        [
-                            {href: "/management-user", lable: "Manage Users"},
-                            {href: "/management-group", lable: "Manage Groups"},
-                        ]
-                    }
                 />
                 <SidebarItem
                     href={"/c"}
@@ -176,7 +179,7 @@ export const Sidebar: React.FC = () => {
                     lable={"Settings"}
                 />
             </SidebarNav>
-            <SidebarUser avatar={logo} name={"Thiên Phú"}/>
+            <SidebarUser avatar={logo} name={"Thiên Phú"} />
         </div>
     )
 }

@@ -9,6 +9,7 @@
     background-color: var(--header-footer-background-color);
     transition: all 0.5s;
     color: var(--primary-text-color);
+    overflow-y: auto;
 }
 
 /*sidebar logo*/
@@ -57,12 +58,12 @@
 
 .sidebar-menu .sidebar-item .sidebar-link.active,
 .sidebar-menu .sidebar-item .sidebar-link:hover {
-    background-color: var(--background-color);
+    background-color: var(--primary-background-color);
     color: var(--accent-color);
 }
 
-.sidebar-menu .sidebar-item .sidebar-link.focus{
-    background-color: var(--background-color);
+.sidebar-menu .sidebar-item .sidebar-link.focus {
+    background-color: var(--primary-background-color);
     color: var(--primary-text-color);
 }
 
@@ -96,11 +97,11 @@
     display: none;
     padding-left: 20px;
     list-style-type: none;
-    background-color: var(--background-color);
+    background-color: var(--primary-background-color);
     transition: all 0.5s;
 }
 
-.sidebar-menu .sidebar-submenu.show-submenu{
+.sidebar-menu .sidebar-submenu.show-submenu {
     display: block;
 }
 
@@ -110,11 +111,12 @@
     border-top: 1px solid var(--border-color);
 }
 
-.sidebar-menu .sidebar-submenu .sidebar-sublink{
+.sidebar-menu .sidebar-submenu .sidebar-sublink {
     text-decoration: none;
     padding-left: 12px;
     color: var(--primary-text-color);
 }
+
 .sidebar-menu .sidebar-submenu .sidebar-sublink.active,
 .sidebar-menu .sidebar-submenu .sidebar-sublink:hover {
     color: var(--accent-color);
