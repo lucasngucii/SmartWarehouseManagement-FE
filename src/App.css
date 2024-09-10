@@ -140,6 +140,20 @@ table.id-column th:first-child {
     margin-bottom: 15px;
 }
 
+.primary-message-error {
+    color: #ff0000;
+    font-size: 16px;
+    text-wrap: nowrap;
+}
+
+.primary-message-error.margin-bottom-15 {
+    margin-bottom: 15px;
+}
+
+.primary-message-error.text-center {
+    text-align: center;
+}
+
 /*input*/
 .form .form-input {
     width: 100%;
