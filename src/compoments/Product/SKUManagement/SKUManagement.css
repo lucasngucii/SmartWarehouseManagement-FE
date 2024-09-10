@@ -1,7 +1,5 @@
-@import "../../../Root.css";
-
 /*sku form*/
-.container-sku-form{
+.container-sku-form {
     position: relative;
     background-color: #ffffff;
     padding: 20px;
@@ -11,14 +9,14 @@
     margin: 0 auto;
 }
 
-.dimension-container{
+.dimension-container {
     display: flex;
     align-items: center;
     justify-content: space-between;
     margin-bottom: 20px;
 }
 
-.dimension-container .dimension-input{
+.dimension-container .dimension-input {
     width: 100px;
     padding: 10px;
     font-size: 14px;
@@ -29,7 +27,7 @@
     transition: border-color 0.3s ease;
 }
 
-.dimension-container .dimension-input:focus{
+.dimension-container .dimension-input:focus {
     border-color: #3498db;
     border-width: 2px;
 }

@@ -1,6 +1,8 @@
 import React from "react";
 import { OverLay } from "../../OverLay/OverLay";
 import "./AttributeManagement.css";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faTimes } from '@fortawesome/free-solid-svg-icons';
 
 interface EditAttributeValueProps {
     hideOverlay: (e: React.MouseEvent<HTMLButtonElement>) => void;
@@ -38,7 +40,7 @@ const AddAttribute: React.FC<AddAttributeProps> = ({ hideOverlay }) => {
         <OverLay>
             <div className="add-attribute-container">
                 <button onClick={hideOverlay} className="button-close">
-                    <i className="fas fa-times"></i>
+                    <FontAwesomeIcon icon={faTimes} />
                 </button>
                 <h1 className={"primary-label form-lable"}>NEW ATTRIBUTE</h1>
                 <form className={"form"}>
@@ -170,37 +172,53 @@ export const AttributeManagement: React.FC = () => {
     }
 
     return (
-        <div className={"container-right"}>
-            <h1 className={"primary-label"}>Attribute Management</h1>
-            <p className={"primary-description"}>Add, edit, or delete attributes</p>
-            <button onClick={handleAddAttribute} className="add-button margin-top-button">Add Attribute</button>
-            <table className={"table"}>
-                <thead>
-                    <tr>
-                        <th>Attribute Name</th>
-                        <th>Total Value</th>
-                        <th>Action</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>Color</td>
-                        <td>15</td>
-                        <td>
-                            <button onClick={handleEdit} className={"edit-button"}>Edit</button>
-                            <button className={"delete-button"}>Delete</button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>Size</td>
-                        <td>15</td>
-                        <td>
-                            <button onClick={handleEdit} className={"edit-button"}>Edit</button>
-                            <button className={"delete-button"}>Delete</button>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
+        <div>
+            <div className="content-header-container">
+                <div className="content-header-left">
+                    <h2 className={"primary-label"}>Attribute Management</h2>
+                    <p className={"primary-description"}>Add, edit, or delete attributes</p>
+                </div>
+                <div className="content-header-right">
+                    <form className="form-search">
+                        <input
+                            type="search"
+                            className="form-input"
+                            placeholder={"Search user"}
+                        />
+                        <button className="form-input-submit">Search</button>
+                    </form>
+                    <button onClick={handleAddAttribute} className="add-button margin-top-button">Add Attribute</button>
+                </div>
+            </div>
+            <div className="table-container">
+                <table className={"table"}>
+                    <thead>
+                        <tr>
+                            <th>Attribute Name</th>
+                            <th>Total Value</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Color</td>
+                            <td>15</td>
+                            <td>
+                                <button onClick={handleEdit} className={"edit-button"}>Edit</button>
+                                <button className={"delete-button"}>Delete</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Size</td>
+                            <td>15</td>
+                            <td>
+                                <button onClick={handleEdit} className={"edit-button"}>Edit</button>
+                                <button className={"delete-button"}>Delete</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
             {
                 showEditForm && <AttributeDetailManagement handleCancelEditAttribute={handleCancelEdit} />
             }

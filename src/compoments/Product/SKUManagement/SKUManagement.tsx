@@ -51,26 +51,28 @@ export const SKUManagement: React.FC = () => {
     })
 
     return (
-        <div className="container-right">
+        <div>
             <h1 className="primary-label">SKU Management</h1>
             <p className="primary-description margin-bottom-15">Manage your SKU codes here</p>
-            <table className="table">
-                <thead>
-                    <tr>
-                        <th>SKU Code</th>
-                        <th>Product Type</th>
-                        <th>Color</th>
-                        <th>Size</th>
-                        <th>Material</th>
-                        <th>Brand</th>
-                        <th>Dimension</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {listSku}
-                </tbody>
-            </table>
+            <div className="table-container">
+                <table className="table">
+                    <thead>
+                        <tr>
+                            <th>SKU Code</th>
+                            <th>Product Type</th>
+                            <th>Color</th>
+                            <th>Size</th>
+                            <th>Material</th>
+                            <th>Brand</th>
+                            <th>Dimension</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {listSku}
+                    </tbody>
+                </table>
+            </div>
         </div>
 
     );

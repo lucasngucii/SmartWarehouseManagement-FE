@@ -1,6 +1,9 @@
 import React from "react";
 import "./Sidebar.css";
 import { NavLink, useLocation } from "react-router-dom";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faTachometerAlt, faWarehouse, faBox, faShoppingCart, faUser, faChevronUp } from '@fortawesome/free-solid-svg-icons';
+
 
 interface SidebarLogoProps {
     logo: string
@@ -87,7 +90,7 @@ const SidebarItem: React.FC<SidebarItemProps> = ({ href, icon, lable, subItems }
                 <span>{lable}</span>
                 {subItems && (
                     <div className={`sidebar-toggle-icon ${isOpen ? "rotate" : ""}`}>
-                        <i className="fa-solid fa-chevron-up"></i>
+                        <FontAwesomeIcon icon={faChevronUp} />
                     </div>
                 )}
             </span>
@@ -109,23 +112,6 @@ const SidebarItem: React.FC<SidebarItemProps> = ({ href, icon, lable, subItems }
     )
 }
 
-interface SidebarUserProps {
-    avatar: string
-    name: string
-}
-
-const SidebarUser: React.FC<SidebarUserProps> = ({ avatar, name }) => {
-    return (
-        <div className="sidebar-user">
-            <img src={avatar} alt="UserManagement Avatar" />
-            <div className="user-info">
-                <p>{name}</p>
-                <a href="#logout">Logout</a>
-            </div>
-        </div>
-    )
-}
-
 export const Sidebar: React.FC = () => {
     const logo = "https://img.freepik.com/free-vector/bird-colorful-logo-gradient-vector_343694-1365.jpg?t=st=1724652251~exp";
 
@@ -135,24 +121,20 @@ export const Sidebar: React.FC = () => {
             <SidebarNav>
                 <SidebarItem
                     href={"/"}
-                    icon={<i className="fas fa-tachometer-alt"></i>}
+                    icon={<FontAwesomeIcon icon={faTachometerAlt} />}
                     lable={"Dashboard"}
                 />
                 <SidebarItem
-                    href={"/a"}
-                    icon={<i className="fas fa-warehouse"></i>}
+                    icon={<FontAwesomeIcon icon={faWarehouse} />}
                     lable={"Inventory"}
                     subItems={
                         [
-                            { href: "/management-inventory", lable: "Manage Inventory" },
-                            { href: "/management-location", lable: "Manage Location" },
                             { href: "/stock-entry", lable: "Stock Entry" },
                         ]
                     }
                 />
                 <SidebarItem
-                    href={"/a"}
-                    icon={<i className="fas fa-box"></i>}
+                    icon={<FontAwesomeIcon icon={faBox} />}
                     lable={"Products"}
                     subItems={
                         [
@@ -164,22 +146,11 @@ export const Sidebar: React.FC = () => {
                     }
                 />
                 <SidebarItem
-                    href={"/b"}
-                    icon={<i className="fas fa-shopping-cart"></i>}
-                    lable={"Orders"}
-                />
-                <SidebarItem
                     href={"/management-user"}
-                    icon={<i className="fas fa-user"></i>}
+                    icon={<FontAwesomeIcon icon={faUser} />}
                     lable={"Users"}
                 />
-                <SidebarItem
-                    href={"/c"}
-                    icon={<i className="fas fa-cog"></i>}
-                    lable={"Settings"}
-                />
             </SidebarNav>
-            <SidebarUser avatar={logo} name={"Thiên Phú"} />
         </div>
     )
 }

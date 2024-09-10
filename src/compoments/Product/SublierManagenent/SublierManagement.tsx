@@ -1,6 +1,8 @@
 import React from 'react';
 import './SublierManagement.css';
 import { OverLay } from "../../OverLay/OverLay";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faTimes } from '@fortawesome/free-solid-svg-icons';
 
 interface Supplier {
     id: number;
@@ -29,7 +31,7 @@ const FormSublier: React.FC<FormSupplierProps> = ({ supplierId, handleClose }) =
         <OverLay>
             <div className="supplier-management-overlay">
                 <button onClick={handleClose} className="button-close">
-                    <i className="fas fa-times"></i>
+                    <FontAwesomeIcon icon={faTimes} />
                 </button>
                 <p className="primary-label form-lable">{supplierId ? "UPDATE SUPLIER" : "NEW SUBLIER"}</p>
                 <form className={"form"}>
@@ -117,23 +119,39 @@ export const SublierManagement: React.FC = () => {
     );
 
     return (
-        <div className="container-right">
-            <h1 className="primary-label">Sublier Management</h1>
-            <p className="primary-description">Manage your suppliers here</p>
-            <button onClick={handleAdd} className="add-button margin-top-button">Add Supplier</button>
-            <table className="table id-column">
-                <thead>
-                    <tr>
-                        <th>#</th>
-                        <th>Name</th>
-                        <th>Contact Info</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {sublierList}
-                </tbody>
-            </table>
+        <div>
+            <div className="content-header-container">
+                <div className="content-header-left">
+                    <h2 className="primary-label">Sublier Management</h2>
+                    <p className="primary-description">Manage your suppliers here</p>
+                </div>
+                <div className="content-header-right">
+                    <form className="form-search">
+                        <input
+                            type="search"
+                            className="form-input"
+                            placeholder={"Search user"}
+                        />
+                        <button className="form-input-submit">Search</button>
+                    </form>
+                    <button onClick={handleAdd} className="add-button margin-top-button">Add Supplier</button>
+                </div>
+            </div>
+            <div className="table-container">
+                <table className="table id-column">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Name</th>
+                            <th>Contact Info</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {sublierList}
+                    </tbody>
+                </table>
+            </div>
             {
                 showOverlay && <FormSublier handleClose={handleClose} supplierId={sublierId} />
             }

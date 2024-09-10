@@ -1,6 +1,4 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
-@import "~@fortawesome/fontawesome-free/css/all.min.css";
-@import "../src/Root.css";
 
 * {
     margin: 0;
@@ -10,8 +8,8 @@
 }
 
 body {
-    background-color: var(--background-color);
-    color: var(--primary-text-color);
+    background-color: #ffffff;
+    color: #333333;
 }
 
 .app {
@@ -19,101 +17,239 @@ body {
     justify-content: center;
     align-items: center;
     height: 100vh;
-    background-color: var(--background-color);
+    background-color: #ffffff;
 }
 
-/*container*/
-
-.container-right {
+/* content global */
+.main-content {
     position: relative;
     width: calc(100% - 250px);
     height: 100vh;
     padding: 20px;
     margin-left: 250px;
-    background-color: var(--background-color);
-    color: var(--primary-text-color);
+    background-color: #ffffff;
+    color: #333333;
 }
 
+/* content header from container by tag  */
+.content-header-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: end;
+    margin-bottom: 20px;
+}
 
-/*table*/
+.content-header-right {
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+    gap: 20px;
+}
 
+.form-search {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+}
+
+.form-search .form-input {
+    width: 100%;
+    padding: 12px 20px;
+    font-size: 16px;
+    color: #333333;
+    border: 1px solid #e0e0e0;
+    border-radius: 4px;
+    outline: none;
+    transition: border-color 0.3s ease;
+}
+
+.form-search .form-input:focus {
+    border-color: #3498db;
+}
+
+/* CSS cho nút ở phần content-header-right */
+.content-header-right .add-button {
+    padding: 12px 20px;
+    background: linear-gradient(135deg, #3498db 50%, #2980b9 50%);
+    color: #ffffff;
+    border: none;
+    border-radius: 6px;
+    font-size: 16px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 0.3s ease, transform 0.2s ease;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.content-header-right .add-button:hover {
+    background: linear-gradient(135deg, #2980b9 50%, #1f6f9f 50%);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+}
+
+.content-header-right .add-button:active {
+    background: linear-gradient(135deg, #1f6f9f 50%, #174a6b 50%);
+    transform: translateY(0);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* CSS cho nút trong form-search */
+.form-search .form-input-submit {
+    padding: 12px 20px;
+    background: linear-gradient(135deg, #27ae60 50%, #1e8449 50%);
+    color: #ffffff;
+    border: none;
+    border-radius: 6px;
+    font-size: 16px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 0.3s ease, transform 0.2s ease;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.form-search .form-input-submit:hover {
+    background: linear-gradient(135deg, #1e8449 50%, #186a3b 50%);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+}
+
+.form-search .form-input-submit:active {
+    background: linear-gradient(135deg, #186a3b 50%, #145a32 50%);
+    transform: translateY(0);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Table container styles */
+.table-container {
+    overflow-x: auto;
+}
+
+/* Table styles */
 .table {
     width: 100%;
-    border-collapse: collapse;
+    border-collapse: separate;
+    border-spacing: 0;
 }
 
-table.id-column th:first-child {
+/* Header styles */
+.table th {
+    background-color: #f0f0f0;
+    color: #333;
+    font-weight: bold;
+    padding: 15px 20px;
+    border-bottom: 2px solid #ddd;
+    text-align: left;
+}
+
+/* Column width for the first column */
+.table.id-column th:first-child {
     width: 5%;
 }
 
-.table th {
-    background-color: var(--table-header-background-color);
-}
-
+/* Cell styles */
 .table td {
-    background-color: var(--background-color);
-}
-
-.table th,
-.table td {
-    border: 1px solid var(--border-color);
-    padding: 12px;
+    background-color: #ffffff;
+    color: #333;
+    padding: 15px 20px;
+    border-bottom: 1px solid #ddd;
     text-align: left;
-    color: var(--primary-text-color);
 }
 
-/*button*/
+/* Hover effect for rows */
+.table tr:hover {
+    background-color: #f9f9f9;
+}
 
+/* Alternating row colors for better readability */
+.table tr:nth-child(even) td {
+    background-color: #f2f2f2;
+}
+
+.table tr:nth-child(odd) td {
+    background-color: #ffffff;
+}
+
+/* Last row border */
+.table tr:last-child td {
+    border-bottom: 2px solid #ddd;
+}
+
+/* Responsive table styling */
+@media (max-width: 768px) {
+    .table {
+        font-size: 14px;
+    }
+
+    .table th,
+    .table td {
+        padding: 10px;
+    }
+}
+
+/* Global Button Styles */
 .view-button,
 .cancel-button,
-.add-button,
 .delete-button,
 .edit-button {
     border: none;
-    padding: 8px 16px;
+    padding: 10px 18px;
     cursor: pointer;
-    border-radius: 4px;
+    border-radius: 6px;
     margin-right: 8px;
     color: var(--primary-button-text-color);
+    font-size: 15px;
+    font-weight: 500;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
+/* Cancel Button */
 .cancel-button {
     background-color: #E0E0E0;
     color: #333333;
 }
 
-.add-button.margin-top-button {
-    margin: 20px 0;
-}
-
-.add-button,
-.edit-button {
-    background-color: var(--button-edit-background-color);
-}
-
 .cancel-button:hover {
     background-color: #BDC3C7;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
 }
 
-.add-button:hover,
+/* Edit Button */
+.edit-button {
+    background-color: #3498DB;
+    color: #ffffff;
+}
+
 .edit-button:hover {
-    background-color: var(--button-edit-background-color-hover);
+    background-color: #2980B9;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
 }
 
+/* Delete Button */
 .delete-button {
-    background-color: var(--button-delete-background-color);
+    background-color: #E74C3C;
+    color: #ffffff;
 }
 
 .delete-button:hover {
-    background-color: var(--button-delete-background-color-hover);
+    background-color: #C0392B;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
 }
 
+/* View Button */
 .view-button {
-    background-color: var(--button-view-background-color);
+    background-color: #8E44AD;
+    color: #ffffff;
 }
 
 .view-button:hover {
-    background-color: var(--button-view-background-color-hover);
+    background-color: #7D3C98;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
 }
 
 /*label*/
@@ -128,6 +264,7 @@ table.id-column th:first-child {
     font-size: 24px;
     text-wrap: nowrap;
 }
+
 
 /*description*/
 .primary-description {
@@ -152,6 +289,7 @@ table.id-column th:first-child {
 .primary-message-error.text-center {
     text-align: center;
 }
+
 
 /*input*/
 .form .form-input {
@@ -182,19 +320,31 @@ table.id-column th:first-child {
 }
 
 .form .form-input-submit {
-    padding: 10px 15px;
+    padding: 12px 18px;
     background-color: #3498db;
+    background-image: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
     color: #ffffff;
     border: none;
-    border-radius: 4px;
+    border-radius: 6px;
     font-size: 16px;
+    font-weight: 500;
     cursor: pointer;
     width: 100%;
-    transition: background-color 0.3s ease;
+    transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
 }
 
 .form .form-input-submit:hover {
     background-color: #2980b9;
+    background-image: linear-gradient(135deg, #2980b9 0%, #2471a3 100%);
+    transform: translateY(-2px);
+    box-shadow: 0px 6px 8px rgba(0, 0, 0, 0.15);
+}
+
+.form .form-input-submit:active {
+    background-color: #2471a3;
+    transform: translateY(0);
+    box-shadow: 0px 3px 5px rgba(0, 0, 0, 0.1);
 }
 
 /*button close*/
@@ -210,5 +360,5 @@ table.id-column th:first-child {
 }
 
 .button-close:hover {
-    color: #ff0000;
+    color: #555555;
 }

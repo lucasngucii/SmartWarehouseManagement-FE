@@ -3,6 +3,8 @@ import { OverLay } from '../../OverLay/OverLay'
 import { Product } from '../../../interface/Product'
 import './ProductManagement.css'
 import Select, { ActionMeta, MultiValue, SingleValue } from "react-select";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faTimes } from '@fortawesome/free-solid-svg-icons';
 
 interface OptionType {
     value: string;
@@ -64,7 +66,7 @@ const OverLayProductManagement: React.FC<OverLayProductManagementProps> = ({ han
         <OverLay>
             <div className='modal-product-detail'>
                 <button onClick={handleClose} className="button-close">
-                    <i className="fas fa-times"></i>
+                    <FontAwesomeIcon icon={faTimes} />
                 </button>
                 <p className='primary-label form-lable'>NEW PRODUCT</p>
                 <form className='form'>
@@ -242,26 +244,42 @@ export const ProductManagement: React.FC = () => {
     })
 
     return (
-        <div className='container-right'>
-            <h1 className='primary-label'>Product Management</h1>
-            <p className='primary-description'>Manage your products here</p>
-            <button onClick={handleAddProduct} className='add-button margin-top-button'>Add Product</button>
-            <table className='table id-column'>
-                <thead>
-                    <tr>
-                        <th>#</th>
-                        <th>Product Name</th>
-                        <th>SKU</th>
-                        <th>Price</th>
-                        <th>Category</th>
-                        <th>Supplier</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {renderProducts}
-                </tbody>
-            </table>
+        <div>
+            <div className="content-header-container">
+                <div className="content-header-left">
+                    <h2 className='primary-label'>Product Management</h2>
+                    <p className='primary-description'>Manage your products here</p>
+                </div>
+                <div className="content-header-right">
+                    <form className="form-search">
+                        <input
+                            type="search"
+                            className="form-input"
+                            placeholder={"Search user"}
+                        />
+                        <button className="form-input-submit">Search</button>
+                    </form>
+                    <button onClick={handleAddProduct} className='add-button margin-top-button'>Add Product</button>
+                </div>
+            </div>
+            <div className="table-container">
+                <table className='table id-column'>
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Product Name</th>
+                            <th>SKU</th>
+                            <th>Price</th>
+                            <th>Category</th>
+                            <th>Supplier</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {renderProducts}
+                    </tbody>
+                </table>
+            </div>
             {showOverLay && <OverLayProductManagement handleClose={handleClose} />}
         </div>
     )

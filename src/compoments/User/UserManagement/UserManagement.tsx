@@ -3,6 +3,8 @@ import "./UserManagement.css";
 import { OverLay } from "../../OverLay/OverLay";
 import Select, { MultiValue, SingleValue } from "react-select";
 import { User } from "../../../interface/User";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faTimes } from "@fortawesome/free-solid-svg-icons";
 
 interface OptionType {
     value: string;
@@ -47,7 +49,7 @@ const AddUserComponent: React.FC<AddUserComponentProps> = ({ hideOverlay, userId
         <OverLay>
             <div className="add-user-modal">
                 <button onClick={hideOverlay} className="button-close">
-                    <i className="fas fa-times"></i>
+                    <FontAwesomeIcon icon={faTimes} />
                 </button>
                 <p className="primary-label form-lable">{userId ? "Update User" : "New User"}</p>
                 <form className="form">
@@ -228,27 +230,43 @@ export const UserManagement: React.FC = () => {
     );
 
     return (
-        <div className="container-right">
-            <h2 className={"primary-label"}>User Account Management</h2>
-            <p className={"primary-description"}>Manage user accounts and their status</p>
-            <button onClick={handleShowOverlay} className="add-button margin-top-button">Add User</button>
-            <table className="table id-column">
-                <thead>
-                    <tr>
-                        <th>#</th>
-                        <th>Username</th>
-                        <th>FullName</th>
-                        <th>Group</th>
-                        <th>Email</th>
-                        <th>Phone</th>
-                        <th>Status</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {listUser}
-                </tbody>
-            </table>
+        <div>
+            <div className="content-header-container">
+                <div className="content-header-left">
+                    <h2 className={"primary-label"}>User Account Management</h2>
+                    <p className={"primary-description"}>Manage user accounts and their status</p>
+                </div>
+                <div className="content-header-right">
+                    <form className="form-search">
+                        <input
+                            type="search"
+                            className="form-input"
+                            placeholder={"Search user"}
+                        />
+                        <button className="form-input-submit">Search</button>
+                    </form>
+                    <button onClick={handleShowOverlay} className="add-button">Add User</button>
+                </div>
+            </div>
+            <div className="table-container">
+                <table className="table id-column">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Username</th>
+                            <th>FullName</th>
+                            <th>Group</th>
+                            <th>Email</th>
+                            <th>Phone</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {listUser}
+                    </tbody>
+                </table>
+            </div>
             {showOverlay && <AddUserComponent hideOverlay={handleHideOverlay} userId={userId} />}
         </div>
     );

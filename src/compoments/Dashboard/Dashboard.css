@@ -1,11 +1,6 @@
-@import "../../Root.css";
-
 /*container dashboard*/
 .container-dashboard {
-    width: calc(100% - 250px);
     height: 100vh;
     padding: 20px;
-    margin-left: 250px;
-    background-color: var(--background-color);
-    color: var(--primary-text-color);
+    background-color: #ECF0F1;
 }
