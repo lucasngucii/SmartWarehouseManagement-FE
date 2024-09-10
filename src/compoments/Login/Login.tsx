@@ -99,16 +99,27 @@ export const Login: React.FC = () => {
 
     const handleSubmit = async () => {
         setLoading(true);
+
+        if (!navigator.onLine) {
+            setGlobalError("No internet connection");
+            setLoading(false);
+            return;
+        }
+
         await LoginAPI(formData).then((response) => {
-            if (response.success) {
+            if (response.data) {
                 localStorage.setItem("token", response.data.token);
                 localStorage.setItem("role", response.data.role);
-                navigate("/home");
+                navigate("/");
             } else {
                 console.error(response.message);
             }
         }).catch((error) => {
-            setGlobalError("Invalid username or password");
+            if (error.message === "Network Error" || error.code === 'ERR_NETWORK') {
+                setGlobalError("Network issue detected. Please check your internet connection.");
+            } else {
+                setGlobalError("Invalid username or password");
+            }
             console.error(error.message);
         }).finally(() => {
             setLoading(false);

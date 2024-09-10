@@ -17,5 +17,5 @@ interface LoginResponse {
 
 export const LoginAPI = async (loginRequest: LoginRequest): Promise<LoginResponse> => {
     const HOST = process.env.REACT_APP_HOST_BE;
-    return axios.post(`${HOST}/auth/login`, loginRequest);
+    return (await axios.post(`${HOST}/auth/login`, loginRequest)).data;
 }
