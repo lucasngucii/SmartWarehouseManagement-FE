@@ -4,7 +4,7 @@ import { OverLay } from "../../OverLay/OverLay";
 import Select, { MultiValue, SingleValue } from "react-select";
 import { User } from "../../../interface/User";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faTimes } from "@fortawesome/free-solid-svg-icons";
+import { faSearch, faTimes } from "@fortawesome/free-solid-svg-icons";
 
 interface OptionType {
     value: string;
@@ -243,7 +243,9 @@ export const UserManagement: React.FC = () => {
                             className="form-input"
                             placeholder={"Search user"}
                         />
-                        <button className="form-input-submit">Search</button>
+                        <button className="form-input-submit">
+                            <FontAwesomeIcon icon={faSearch} />
+                        </button>
                     </form>
                     <button onClick={handleShowOverlay} className="add-button">Add User</button>
                 </div>

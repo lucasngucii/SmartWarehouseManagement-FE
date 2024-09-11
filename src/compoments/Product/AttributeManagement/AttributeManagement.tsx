@@ -2,17 +2,21 @@ import React from "react";
 import { OverLay } from "../../OverLay/OverLay";
 import "./AttributeManagement.css";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faTimes } from '@fortawesome/free-solid-svg-icons';
+import { faPencilAlt, faSearch, faTimes } from '@fortawesome/free-solid-svg-icons';
 
 interface EditAttributeValueProps {
     hideOverlay: (e: React.MouseEvent<HTMLButtonElement>) => void;
+    attributeDetailId: number;
 }
 
-const EditAttributeValue: React.FC<EditAttributeValueProps> = ({ hideOverlay }) => {
+const EditAttributeValue: React.FC<EditAttributeValueProps> = ({ hideOverlay, attributeDetailId }) => {
     return (
         <OverLay>
             <div className="edit-attribute-value">
-                <h1 className={"primary-label"}>Edit Attribute Value</h1>
+                <button onClick={hideOverlay} className="button-close">
+                    <FontAwesomeIcon icon={faTimes} />
+                </button>
+                <h1 className={"primary-label form-lable"}>{`${attributeDetailId ? "Edit" : "Add"} Attribute Value`}</h1>
                 <form className={"form"}>
                     <div className={"form-input-container"}>
                         <input
@@ -21,10 +25,7 @@ const EditAttributeValue: React.FC<EditAttributeValueProps> = ({ hideOverlay }) 
                             placeholder={"Enter your attribute value"}
                         />
                     </div>
-                    <div className={"form-input-container"}>
-                        <button onClick={hideOverlay} className="cancel-button">Cancel</button>
-                        <button className="add-button">Save</button>
-                    </div>
+                    <button className="form-input-submit">Save</button>
                 </form>
             </div>
         </OverLay>
@@ -67,6 +68,7 @@ const AttributeDetailManagement: React.FC<AttributeDetailManagementProps> = ({ h
 
     const [showEditAttributeName, setShowEditAttributeName] = React.useState(false);
     const [showEditAttributeValue, setShowEditAttributeValue] = React.useState(false);
+    const [attributeDetailId, setAttributeDetailId] = React.useState(0);
 
     const handleEditAttributeName = (e: React.MouseEvent<HTMLButtonElement>) => {
         e.preventDefault();
@@ -78,24 +80,28 @@ const AttributeDetailManagement: React.FC<AttributeDetailManagementProps> = ({ h
         setShowEditAttributeName(false);
     }
 
-    const handleCancelEditAttributeValue = (e: React.MouseEvent<HTMLButtonElement>) => {
-        e.preventDefault();
+    const handleCancelEditAttributeValue = () => {
+        setAttributeDetailId(0)
         setShowEditAttributeValue(false);
     }
 
-    const handleEditAttributeValue = () => {
+    const handleEditAttributeValue = (attributeId: number) => {
+        setAttributeDetailId(attributeId);
+        setShowEditAttributeValue(true);
+    }
+
+    const handleAddAttributeValue = () => {
         setShowEditAttributeValue(true);
     }
 
     return (
-        <OverLay>
+        <OverLay className="disabled-padding">
             <div className="attribute-detail-management">
                 <h1 className={"primary-label"}>Attribute Detail Management</h1>
                 <p className={"primary-description"}>Add, edit, or delete attribute values</p>
                 <form className={"form"}>
                     <div className={"form-input-container"}>
-                        <label className={"form-input-lable lable-attribute-name attribute-name-lable"}>Attribute
-                            Name</label>
+                        <label className={"form-input-lable lable-attribute-name attribute-name-lable"}>Attribute Name</label>
                         <div className={"group-input-attribute-name"}>
                             <input
                                 type={"text"}
@@ -104,14 +110,14 @@ const AttributeDetailManagement: React.FC<AttributeDetailManagementProps> = ({ h
                                 placeholder={"Enter your attribute name"}
                             />
                             <button onClick={handleEditAttributeName} className={"button-close-edit-attribute-name"}>
-                                <i className="fas fa-pencil-alt"></i>
+                                <FontAwesomeIcon icon={faPencilAlt} />
                             </button>
                         </div>
                     </div>
                     {
                         showEditAttributeName && <div className={"form-input-container"}>
                             <button onClick={handleCancelEditAttributeName} className="cancel-button">Cancel</button>
-                            <button className="add-button">Save</button>
+                            <button className="edit-button">Save</button>
                         </div>
                     }
                 </form>
@@ -126,32 +132,66 @@ const AttributeDetailManagement: React.FC<AttributeDetailManagementProps> = ({ h
                         <tr>
                             <td>Red</td>
                             <td>
-                                <button onClick={handleEditAttributeValue} className="edit-button">Edit</button>
+                                <button onClick={() => { handleEditAttributeValue(1) }} className="edit-button">Edit</button>
                                 <button className="delete-button">Delete</button>
                             </td>
                         </tr>
                         <tr>
                             <td>Blue</td>
                             <td>
-                                <button onClick={handleEditAttributeValue} className="edit-button">Edit</button>
+                                <button onClick={() => { handleEditAttributeValue(1) }} className="edit-button">Edit</button>
                                 <button className="delete-button">Delete</button>
                             </td>
                         </tr>
                     </tbody>
                 </table>
-                <button onClick={handleCancelEditAttribute} className="cancel-button">Cancel</button>
-                <button className="add-button margin-top-button">Add Value</button>
+                <div className="group-button">
+                    <button onClick={handleCancelEditAttribute} className="cancel-button">Cancel</button>
+                    <button onClick={handleAddAttributeValue} className="edit-button">Add Value</button>
+                </div>
                 {
-                    showEditAttributeValue && <EditAttributeValue hideOverlay={handleCancelEditAttributeValue} />
+                    showEditAttributeValue && <EditAttributeValue attributeDetailId={attributeDetailId} hideOverlay={handleCancelEditAttributeValue} />
                 }
             </div>
         </OverLay>
     );
 };
 
+interface ListAttributeType {
+    Id: number;
+    Name: string;
+    Value: number;
+}
 
 export const AttributeManagement: React.FC = () => {
 
+    const [listAttribute, setListAttribute] = React.useState<ListAttributeType[]>([
+        {
+            Id: 1,
+            Name: "Color",
+            Value: 12
+        },
+        {
+            Id: 2,
+            Name: "Material",
+            Value: 15
+        },
+        {
+            Id: 3,
+            Name: "Brand",
+            Value: 12
+        },
+        {
+            Id: 4,
+            Name: "Size",
+            Value: 19
+        },
+        {
+            Id: 5,
+            Name: "Category",
+            Value: 12
+        }
+    ]);
     const [showEditForm, setShowEditForm] = React.useState(false);
     const [showAddAttribute, setShowAddAttribute] = React.useState(false);
 
@@ -171,6 +211,19 @@ export const AttributeManagement: React.FC = () => {
         setShowAddAttribute(false);
     }
 
+    const renderListAttribute = listAttribute.map((attribute) => {
+        return (
+            <tr key={attribute.Id}>
+                <td>{attribute.Name}</td>
+                <td>{attribute.Value}</td>
+                <td>
+                    <button onClick={handleEdit} className={"edit-button"}>Edit</button>
+                    <button className={"delete-button"}>Delete</button>
+                </td>
+            </tr>
+        );
+    });
+
     return (
         <div>
             <div className="content-header-container">
@@ -185,7 +238,9 @@ export const AttributeManagement: React.FC = () => {
                             className="form-input"
                             placeholder={"Search user"}
                         />
-                        <button className="form-input-submit">Search</button>
+                        <button className="form-input-submit">
+                            <FontAwesomeIcon icon={faSearch} />
+                        </button>
                     </form>
                     <button onClick={handleAddAttribute} className="add-button margin-top-button">Add Attribute</button>
                 </div>
@@ -200,22 +255,7 @@ export const AttributeManagement: React.FC = () => {
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td>Color</td>
-                            <td>15</td>
-                            <td>
-                                <button onClick={handleEdit} className={"edit-button"}>Edit</button>
-                                <button className={"delete-button"}>Delete</button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>Size</td>
-                            <td>15</td>
-                            <td>
-                                <button onClick={handleEdit} className={"edit-button"}>Edit</button>
-                                <button className={"delete-button"}>Delete</button>
-                            </td>
-                        </tr>
+                        {renderListAttribute}
                     </tbody>
                 </table>
             </div>

@@ -6,6 +6,10 @@
     border: 1px solid #e0e0e0;
 }
 
+.attribute-detail-management .group-button {
+    margin-top: 15px;
+}
+
 .attribute-name-lable {
     margin-top: 15px;
     font-weight: bolder;

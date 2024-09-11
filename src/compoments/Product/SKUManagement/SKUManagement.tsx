@@ -59,7 +59,7 @@ export const SKUManagement: React.FC = () => {
                     <thead>
                         <tr>
                             <th>SKU Code</th>
-                            <th>Product Type</th>
+                            <th>Category</th>
                             <th>Color</th>
                             <th>Size</th>
                             <th>Material</th>

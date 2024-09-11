@@ -12,3 +12,7 @@
   overflow: auto;
   padding: 50px 0px;
 }
+
+.container-overlay.disabled-padding {
+  padding: 0px;
+}

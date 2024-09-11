@@ -2,12 +2,16 @@ import React from 'react';
 import './SublierManagement.css';
 import { OverLay } from "../../OverLay/OverLay";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faTimes } from '@fortawesome/free-solid-svg-icons';
+import { faSearch, faTimes } from '@fortawesome/free-solid-svg-icons';
 
 interface Supplier {
     id: number;
     name: string;
-    contactInfo: string;
+    description: string;
+    phone: string;
+    sublierCode: string;
+    address: string;
+    email: string;
 }
 
 interface FormSupplierProps {
@@ -15,9 +19,29 @@ interface FormSupplierProps {
     supplierId: number | null;
 }
 
+interface FormDataTypes {
+    supplierName: string;
+    description: string;
+    phone: string;
+    sublierCode: string;
+    address: string;
+    email: string;
+}
+
 const FormSublier: React.FC<FormSupplierProps> = ({ supplierId, handleClose }) => {
 
-    const [supplierName, setSupplierName] = React.useState<string>('');
+    const [formData, setFormData] = React.useState<FormDataTypes>({
+        supplierName: '',
+        description: '',
+        phone: '',
+        sublierCode: '',
+        address: '',
+        email: '',
+    });
+
+    const handleChageInput = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setFormData({ ...formData, [e.target.name]: e.target.value });
+    }
 
     const handleAdd = () => {
         console.log('Add supplier');
@@ -43,20 +67,61 @@ const FormSublier: React.FC<FormSupplierProps> = ({ supplierId, handleClose }) =
                             placeholder="Enter supplier name"
                             className="form-input"
                             required
-                            value={supplierName}
-                            onChange={(e) => setSupplierName(e.target.value)}
+                            value={formData.supplierName}
+                            name='supplierName'
+                            onChange={handleChageInput}
                         />
                     </div>
                     <div className={"form-input-container"}>
-                        <label htmlFor={"contact-info"} className="form-label">Contact Infor</label>
+                        <label htmlFor={"description"} className="form-label">Description</label>
                         <input
-                            id={"contact-info"}
+                            id={"description"}
                             type="text"
-                            placeholder="Enter contact info"
+                            placeholder="Enter your description"
                             className="form-input"
                             required
-                            value={supplierName}
-                            onChange={(e) => setSupplierName(e.target.value)}
+                            name='description'
+                            value={formData.description}
+                            onChange={handleChageInput}
+                        />
+                    </div>
+                    <div className={"form-input-container"}>
+                        <label htmlFor={"phone"} className="form-label">Phone</label>
+                        <input
+                            id={"phone"}
+                            type="phone"
+                            placeholder="Enter your supplier phone"
+                            className="form-input"
+                            required
+                            name='phone'
+                            value={formData.phone}
+                            onChange={handleChageInput}
+                        />
+                    </div>
+                    <div className={"form-input-container"}>
+                        <label htmlFor={"address"} className="form-label">Address</label>
+                        <input
+                            id={"address"}
+                            type="address"
+                            placeholder="Enter your supplier address"
+                            className="form-input"
+                            required
+                            name='address'
+                            value={formData.address}
+                            onChange={handleChageInput}
+                        />
+                    </div>
+                    <div className={"form-input-container"}>
+                        <label htmlFor={"email"} className="form-label">Email</label>
+                        <input
+                            id={"email"}
+                            type="email"
+                            placeholder="Enter your supplier email"
+                            className="form-input"
+                            required
+                            name='email'
+                            value={formData.email}
+                            onChange={handleChageInput}
                         />
                     </div>
                     <button
@@ -74,9 +139,33 @@ const FormSublier: React.FC<FormSupplierProps> = ({ supplierId, handleClose }) =
 export const SublierManagement: React.FC = () => {
 
     const [suppliers, setSuppliers] = React.useState<Supplier[]>([
-        { id: 1, name: 'Supplier A', contactInfo: '123456789' },
-        { id: 2, name: 'Supplier B', contactInfo: '123456789' },
-        { id: 3, name: 'Supplier C', contactInfo: '123456789' },
+        {
+            id: 1,
+            name: 'Supplier 1',
+            description: 'Description 1',
+            phone: '0123456789',
+            sublierCode: 'S001',
+            address: 'Address 1',
+            email: 'abc@gmail.com',
+        },
+        {
+            id: 2,
+            name: 'Supplier 2',
+            description: 'Description 2',
+            phone: '0123456789',
+            sublierCode: 'S002',
+            address: 'Address 2',
+            email: 'hailua@gmail.com',
+        },
+        {
+            id: 3,
+            name: 'Supplier 3',
+            description: 'Description 3',
+            phone: '0123456789',
+            sublierCode: 'S003',
+            address: 'Address 3',
+            email: 'trantrong@gmail.com',
+        },
     ]);
     const [showOverlay, setShowOverlay] = React.useState(false);
     const [sublierId, setSublierId] = React.useState<number | null>(null);
@@ -97,9 +186,13 @@ export const SublierManagement: React.FC = () => {
     const sublierList = suppliers.map((supplier, index) => {
         return (
             <tr key={supplier.id}>
-                <td>{supplier.id}</td>
+                <td>{index + 1}</td>
                 <td>{supplier.name}</td>
-                <td>{supplier.contactInfo}</td>
+                <td>{supplier.description}</td>
+                <td>{supplier.phone}</td>
+                <td>{supplier.sublierCode}</td>
+                <td>{supplier.address}</td>
+                <td>{supplier.email}</td>
                 <td>
                     <button className="edit-button"
                         onClick={() => {
@@ -132,7 +225,9 @@ export const SublierManagement: React.FC = () => {
                             className="form-input"
                             placeholder={"Search user"}
                         />
-                        <button className="form-input-submit">Search</button>
+                        <button className="form-input-submit">
+                            <FontAwesomeIcon icon={faSearch} />
+                        </button>
                     </form>
                     <button onClick={handleAdd} className="add-button margin-top-button">Add Supplier</button>
                 </div>
@@ -143,8 +238,12 @@ export const SublierManagement: React.FC = () => {
                         <tr>
                             <th>#</th>
                             <th>Name</th>
-                            <th>Contact Info</th>
-                            <th>Actions</th>
+                            <th>Description</th>
+                            <th>Phone</th>
+                            <th>Supplier Code</th>
+                            <th>Address</th>
+                            <th>Email</th>
+                            <th>Action</th>
                         </tr>
                     </thead>
                     <tbody>

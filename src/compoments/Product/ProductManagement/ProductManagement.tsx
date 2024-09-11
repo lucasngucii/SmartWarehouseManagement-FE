@@ -2,9 +2,9 @@ import React from 'react'
 import { OverLay } from '../../OverLay/OverLay'
 import { Product } from '../../../interface/Product'
 import './ProductManagement.css'
-import Select, { ActionMeta, MultiValue, SingleValue } from "react-select";
+import Select, { ActionMeta, MultiValue, SingleValue, StylesConfig } from "react-select";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faTimes } from '@fortawesome/free-solid-svg-icons';
+import { faSearch, faTimes } from '@fortawesome/free-solid-svg-icons';
 
 interface OptionType {
     value: string;
@@ -38,11 +38,6 @@ const OverLayProductManagement: React.FC<OverLayProductManagementProps> = ({ han
             { value: "Category 2", label: "Category 2" },
             { value: "Category 3", label: "Category 3" },
         ],
-        productType: [
-            { value: "Electronics", label: "Electronics" },
-            { value: "Clothing", label: "Clothing" },
-            { value: "Furniture", label: "Furniture" },
-        ],
         color: [
             { value: "Black", label: "Black" },
             { value: "Red", label: "Red" },
@@ -53,6 +48,21 @@ const OverLayProductManagement: React.FC<OverLayProductManagementProps> = ({ han
             { value: "Supplier 2", label: "Supplier 2" },
             { value: "Supplier 3", label: "Supplier 3" },
         ],
+        brand: [
+            { value: "Brand 1", label: "Brand 1" },
+            { value: "Brand 2", label: "Brand 2" },
+            { value: "Brand 3", label: "Brand 3" },
+        ],
+        material: [
+            { value: "Material 1", label: "Material 1" },
+            { value: "Material 2", label: "Material 2" },
+            { value: "Material 3", label: "Material 3" },
+        ],
+        size: [
+            { value: "Size 1", label: "Size 1" },
+            { value: "Size 2", label: "Size 2" },
+            { value: "Size 3", label: "Size 3" },
+        ],
     }
     const [formData, setFormData] = React.useState<SKUFormData>();
     const handleSelectChangeGroup = (newValue: SingleValue<OptionType> | MultiValue<OptionType>, actionMeta: ActionMeta<OptionType>) => {
@@ -61,7 +71,16 @@ const OverLayProductManagement: React.FC<OverLayProductManagementProps> = ({ han
             [actionMeta.name as string]: newValue
         }));
     };
-
+    const customSelectStyles: StylesConfig<any, false> = {
+        control: (base) => ({
+            ...base,
+            width: "100%",
+            height: "45px",
+            borderRadius: "4px",
+            border: "1px solid #d1d1d1",
+            fontSize: "14px",
+        }),
+    };
     return (
         <OverLay>
             <div className='modal-product-detail'>
@@ -77,16 +96,7 @@ const OverLayProductManagement: React.FC<OverLayProductManagementProps> = ({ han
                     <div className='form-input-container'>
                         <label className='form-input-lable'>category</label>
                         <Select
-                            styles={{
-                                control: (base) => ({
-                                    ...base,
-                                    width: "100%",
-                                    height: "45px",
-                                    borderRadius: "4px",
-                                    border: "1px solid #d1d1d1",
-                                    fontSize: "14px",
-                                }),
-                            }}
+                            styles={customSelectStyles}
                             value={formData?.productType}
                             onChange={(valueSelect, actionMeta) => handleSelectChangeGroup(valueSelect, {
                                 ...actionMeta,
@@ -96,39 +106,9 @@ const OverLayProductManagement: React.FC<OverLayProductManagementProps> = ({ han
                         />
                     </div>
                     <div className={"form-input-container"}>
-                        <label htmlFor={"productType"}>Product Type:</label>
-                        <Select
-                            styles={{
-                                control: (base) => ({
-                                    ...base,
-                                    width: "100%",
-                                    height: "45px",
-                                    borderRadius: "4px",
-                                    border: "1px solid #d1d1d1",
-                                    fontSize: "14px",
-                                }),
-                            }}
-                            value={formData?.productType}
-                            onChange={(valueSelect, actionMeta) => handleSelectChangeGroup(valueSelect, {
-                                ...actionMeta,
-                                name: "productType"
-                            })}
-                            options={listOptions.productType}
-                        />
-                    </div>
-                    <div className={"form-input-container"}>
                         <label htmlFor={"color"}>Color:</label>
                         <Select
-                            styles={{
-                                control: (base) => ({
-                                    ...base,
-                                    width: "100%",
-                                    height: "45px",
-                                    borderRadius: "4px",
-                                    border: "1px solid #d1d1d1",
-                                    fontSize: "14px",
-                                }),
-                            }}
+                            styles={customSelectStyles}
                             value={formData?.color}
                             onChange={(valueSelect, actionMeta) => handleSelectChangeGroup(valueSelect, {
                                 ...actionMeta,
@@ -139,29 +119,44 @@ const OverLayProductManagement: React.FC<OverLayProductManagementProps> = ({ han
                     </div>
                     <div className={"form-input-container"}>
                         <label htmlFor={"color"}>Size:</label>
-                        <input id='size' type="number" placeholder="Enter your size number" className="form-input" />
+                        <Select
+                            styles={customSelectStyles}
+                            value={formData?.size}
+                            onChange={(valueSelect, actionMeta) => handleSelectChangeGroup(valueSelect, {
+                                ...actionMeta,
+                                name: "size"
+                            })}
+                            options={listOptions.size}
+                        />
                     </div>
                     <div className={"form-input-container"}>
                         <label htmlFor={"material"}>Material:</label>
-                        <input id='material' type="text" placeholder="Enter your material name" className="form-input" />
+                        <Select
+                            styles={customSelectStyles}
+                            value={formData?.material}
+                            onChange={(valueSelect, actionMeta) => handleSelectChangeGroup(valueSelect, {
+                                ...actionMeta,
+                                name: "material"
+                            })}
+                            options={listOptions.material}
+                        />
                     </div>
                     <div className={"form-input-container"}>
                         <label htmlFor={"brand"}>Brand:</label>
-                        <input id='brand' type="text" placeholder="Enter your brand name" className="form-input" />
+                        <Select
+                            styles={customSelectStyles}
+                            value={formData?.brand}
+                            onChange={(valueSelect, actionMeta) => handleSelectChangeGroup(valueSelect, {
+                                ...actionMeta,
+                                name: "brand"
+                            })}
+                            options={listOptions.brand}
+                        />
                     </div>
                     <div className={"form-input-container"}>
                         <label htmlFor={"color"}>Suplier:</label>
                         <Select
-                            styles={{
-                                control: (base) => ({
-                                    ...base,
-                                    width: "100%",
-                                    height: "45px",
-                                    borderRadius: "4px",
-                                    border: "1px solid #d1d1d1",
-                                    fontSize: "14px",
-                                }),
-                            }}
+                            styles={customSelectStyles}
                             value={formData?.color}
                             onChange={(valueSelect, actionMeta) => handleSelectChangeGroup(valueSelect, {
                                 ...actionMeta,
@@ -257,7 +252,9 @@ export const ProductManagement: React.FC = () => {
                             className="form-input"
                             placeholder={"Search user"}
                         />
-                        <button className="form-input-submit">Search</button>
+                        <button className="form-input-submit">
+                            <FontAwesomeIcon icon={faSearch} />
+                        </button>
                     </form>
                     <button onClick={handleAddProduct} className='add-button margin-top-button'>Add Product</button>
                 </div>
