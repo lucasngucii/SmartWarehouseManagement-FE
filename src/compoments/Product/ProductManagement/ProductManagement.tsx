@@ -4,12 +4,14 @@ import './ProductManagement.css'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSearch } from '@fortawesome/free-solid-svg-icons';
 import { OverLayProductManagement } from './compoments/OverLayProductManagement';
+import { OverLayProductDetails } from './compoments/OverLayProductDetails';
 
 
 export const ProductManagement: React.FC = () => {
 
     const [showOverLay, setShowOverLay] = React.useState<boolean>(false)
-    const [showOverLayDetail, setShowOverLayDetail] = React.useState<boolean>(false)
+    const [showOverLayDetails, setShowOverLayDetails] = React.useState<boolean>(true)
+    const [productId, setProductId] = React.useState<number>(0)
     const [products, setProducts] = React.useState<Product[]>([
         {
             name: 'Product 1',
@@ -46,11 +48,11 @@ export const ProductManagement: React.FC = () => {
     }
 
     const handleDetailProduct = () => {
-        setShowOverLayDetail(true)
+        setShowOverLayDetails(true)
     }
 
     const handleColseDetailProduct = () => {
-        setShowOverLayDetail(false)
+        setShowOverLayDetails(false)
     }
 
     const renderProducts = products.map((product, index) => {
@@ -64,7 +66,6 @@ export const ProductManagement: React.FC = () => {
                 <td>{product.supplier}</td>
                 <td>
                     <button onClick={handleDetailProduct} className='view-button'>Details</button>
-                    <button onClick={handleDetailProduct} className='edit-button'>Edit</button>
                     <button className='delete-button'>Delete</button>
                 </td>
             </tr>
@@ -111,6 +112,7 @@ export const ProductManagement: React.FC = () => {
                 </table>
             </div>
             {showOverLay && <OverLayProductManagement handleClose={handleCloseAddProduct} />}
+            {showOverLayDetails && <OverLayProductDetails handleClose={handleColseDetailProduct} productId={productId} />}
         </div>
     )
 }

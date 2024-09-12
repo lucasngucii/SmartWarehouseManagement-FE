@@ -9,31 +9,59 @@ interface OptionType {
     label: string;
 }
 
+interface Options {
+    Category: OptionType[];
+    Status: OptionType[];
+}
+
 interface AddUserComponentProps {
     hideOverlay: () => void;
     userId?: number | null;
 }
 
+interface FormDataTypes {
+    username: string;
+    fullname: string;
+    group: OptionType | null;
+    status: OptionType | null;
+    email: string;
+    phone: string;
+    password: string;
+    confirmPassword: string;
+}
+
 export const AddUserComponent: React.FC<AddUserComponentProps> = ({ hideOverlay, userId }) => {
 
-    const optionsGroup: OptionType[] = [
-        { value: "Admin", label: "Admin" },
-        { value: "Staff", label: "Staff" },
-        { value: "Customer", label: "Customer" },
-    ];
-    const [selectedOptionGroup, setSelectedOptionGroup] = React.useState<OptionType | null>(null);
-    const handleSelectChangeGroup = (newValue: SingleValue<OptionType> | MultiValue<OptionType>) => {
-        setSelectedOptionGroup(newValue as OptionType);
+    const options: Options = {
+        Category: [
+            { value: "Electronics", label: "Electronics" },
+            { value: "Clothes", label: "Clothes" },
+            { value: "Furniture", label: "Furniture" },
+        ],
+        Status: [
+            { value: "Active", label: "Active" },
+            { value: "Disable", label: "Disable" },
+        ],
     };
 
-    const optionsStatus: OptionType[] = [
-        { value: "Active", label: "Active" },
-        { value: "Disable", label: "Disable" },
-    ];
-    const [selectedOptionStatus, setSelectedOptionStatus] = React.useState<OptionType | null>(null);
-    const handleSelectChangeStatus = (newValue: SingleValue<OptionType> | MultiValue<OptionType>) => {
-        setSelectedOptionStatus(newValue as OptionType);
-    };
+    const [formData, setFormData] = React.useState<FormDataTypes>({
+        username: "",
+        fullname: "",
+        group: null,
+        status: null,
+        email: "",
+        phone: "",
+        password: "",
+        confirmPassword: "",
+    });
+
+    const handleChangeSelect = (name: string, newValue: SingleValue<OptionType> | MultiValue<OptionType>) => {
+        setFormData({ ...formData, [name]: newValue });
+    }
+
+    const handleChangeInput = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setFormData({ ...formData, [e.target.name]: e.target.value });
+    }
 
     const handleSubmit = () => {
         if (userId) {
@@ -60,6 +88,7 @@ export const AddUserComponent: React.FC<AddUserComponentProps> = ({ hideOverlay,
                             className="form-input"
                             required
                             placeholder={"Enter Username"}
+                            onChange={handleChangeInput}
                         />
                     </div>
                     <div className="form-input-container">
@@ -71,6 +100,7 @@ export const AddUserComponent: React.FC<AddUserComponentProps> = ({ hideOverlay,
                             className="form-input"
                             required
                             placeholder={"Enter your fullname"}
+                            onChange={handleChangeInput}
                         />
                     </div>
                     <div className="form-input-container">
@@ -86,9 +116,9 @@ export const AddUserComponent: React.FC<AddUserComponentProps> = ({ hideOverlay,
                                     fontSize: "14px",
                                 }),
                             }}
-                            value={selectedOptionGroup as OptionType}
-                            onChange={handleSelectChangeGroup}
-                            options={optionsGroup}
+                            value={formData.group}
+                            onChange={(selectedOption) => handleChangeSelect("group", selectedOption)}
+                            options={options.Category}
                         />
                     </div>
                     <div className="form-input-container">
@@ -104,9 +134,9 @@ export const AddUserComponent: React.FC<AddUserComponentProps> = ({ hideOverlay,
                                     fontSize: "14px",
                                 }),
                             }}
-                            value={selectedOptionStatus as OptionType}
-                            onChange={handleSelectChangeStatus}
-                            options={optionsStatus}
+                            value={formData.status}
+                            onChange={(selectedOption) => handleChangeSelect("status", selectedOption)}
+                            options={options.Status}
                         />
                     </div>
                     <div className="form-input-container">
@@ -118,6 +148,7 @@ export const AddUserComponent: React.FC<AddUserComponentProps> = ({ hideOverlay,
                             className="form-input"
                             required
                             placeholder={"Enter Email"}
+                            onChange={handleChangeInput}
                         />
                     </div>
                     <div className="form-input-container">
@@ -129,6 +160,7 @@ export const AddUserComponent: React.FC<AddUserComponentProps> = ({ hideOverlay,
                             className="form-input"
                             required
                             placeholder={"Enter phone number"}
+                            onChange={handleChangeInput}
                         />
                     </div>
                     <div className="form-input-container">
@@ -141,6 +173,7 @@ export const AddUserComponent: React.FC<AddUserComponentProps> = ({ hideOverlay,
                             className="form-input"
                             required
                             placeholder={"Enter Password"}
+                            onChange={handleChangeInput}
                         />
                     </div>
                     <div className="form-input-container">
@@ -148,10 +181,11 @@ export const AddUserComponent: React.FC<AddUserComponentProps> = ({ hideOverlay,
                         <input
                             type="password"
                             id="confirm-password"
-                            name="confirm-password"
+                            name="confirmPassword"
                             className="form-input"
                             required
                             placeholder={"Confirm Password"}
+                            onChange={handleChangeInput}
                         />
                     </div>
                     <input

@@ -1,4 +1,5 @@
-.modal-product-detail {
+.modal-product-detail,
+.product-details-container {
     position: relative;
     background-color: #fff;
     padding: 20px;
@@ -6,4 +7,13 @@
     width: 580px;
 }
 
-/* product detail  */
+.product-details-container {
+    min-width: 650px;
+}
+
+.group-deminsion-attribute {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 30px;
+}
