@@ -1,4 +1,4 @@
-export function validateUsername(username: string): string {
+export function ValidateUsername(username: string): string {
     const usernameRegexString = process.env.REACT_APP_USERNAME_REGEX;
 
     if (!usernameRegexString) {
@@ -9,6 +9,6 @@ export function validateUsername(username: string): string {
     if (usernameRegex.test(username)) {
         return "";
     } else {
-        return "Tối thiểu 8-20 ký tự, không chứa ký tự đặc biệt";
+        return "Minimum 8-20 characters, no special characters";
     }
 }

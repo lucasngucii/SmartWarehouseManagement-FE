@@ -1,4 +1,4 @@
-export function validatePassword(password: string): string {
+export function ValidatePassWord(password: string): string {
     const passwordRegexString = process.env.REACT_APP_PASSWORD_REGEX;
 
     if (!passwordRegexString) {
@@ -9,6 +9,6 @@ export function validatePassword(password: string): string {
     if (passwordRegex.test(password)) {
         return ""
     } else {
-        return "Tối thiểu tám ký tự, ít nhất một chữ cái viết hoa, một chữ cái viết thường, một số và một ký tự đặc biệt"
+        return "Minimum eight characters, at least one uppercase letter, one lowercase letter, one number and one special character"
     }
 }

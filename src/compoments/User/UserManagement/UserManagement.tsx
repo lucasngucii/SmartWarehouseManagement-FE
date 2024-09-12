@@ -12,19 +12,17 @@ export const UserManagement: React.FC = () => {
             id: 1,
             username: "lecongkhanh124",
             fullName: "john_doe",
-            group: "Admin",
+            role: "Admin",
             email: "john@example.com",
             phoneNumber: "0321547895",
-            status: true,
         },
         {
             id: 2,
             username: "tadsabc123",
             fullName: "john_doe",
-            group: "Staff",
+            role: "Staff",
             email: "abc@example.com",
             phoneNumber: "0321547895",
-            status: true,
         },
     ]);
     const [showOverlay, setShowOverlay] = React.useState(false);
@@ -45,10 +43,9 @@ export const UserManagement: React.FC = () => {
                 <td>{index + 1}</td>
                 <td>{user.username}</td>
                 <td>{user.fullName}</td>
-                <td>{user.group}</td>
+                <td>{user.role}</td>
                 <td>{user.email}</td>
                 <td>{user.phoneNumber}</td>
-                <td>{user.status ? "Active" : "InActive"}</td>
                 <td>
                     <button
                         onClick={() => {
@@ -97,7 +94,6 @@ export const UserManagement: React.FC = () => {
                             <th>Group</th>
                             <th>Email</th>
                             <th>Phone</th>
-                            <th>Status</th>
                             <th>Actions</th>
                         </tr>
                     </thead>

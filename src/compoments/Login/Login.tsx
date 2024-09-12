@@ -2,8 +2,8 @@ import React from "react";
 import "./Login.css";
 import { useNavigate } from "react-router-dom";
 import { LoginAPI } from "../../services/authen-api/LoginAPI";
-import { validateUsername } from "../../util/validateUsername";
-import { validatePassword } from "../../util/validatePassword";
+import { ValidateUsername } from "../../util/validateUsername";
+import { ValidatePassWord } from "../../util/validatePassword";
 
 interface formDataType {
     username: string;
@@ -71,8 +71,8 @@ export const Login: React.FC = () => {
 
     const validate2 = () => {
         let check = true;
-        const checkUsername = validateUsername(formData.username);
-        const checkPassword = validatePassword(formData.password);
+        const checkUsername = ValidateUsername(formData.username);
+        const checkPassword = ValidatePassWord(formData.password);
 
         if (checkUsername) {
             setErrors(prevState => {

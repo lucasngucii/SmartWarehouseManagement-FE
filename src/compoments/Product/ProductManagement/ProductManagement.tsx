@@ -10,7 +10,7 @@ import { OverLayProductDetails } from './compoments/OverLayProductDetails';
 export const ProductManagement: React.FC = () => {
 
     const [showOverLay, setShowOverLay] = React.useState<boolean>(false)
-    const [showOverLayDetails, setShowOverLayDetails] = React.useState<boolean>(true)
+    const [showOverLayDetails, setShowOverLayDetails] = React.useState<boolean>(false)
     const [productId, setProductId] = React.useState<number>(0)
     const [products, setProducts] = React.useState<Product[]>([
         {
