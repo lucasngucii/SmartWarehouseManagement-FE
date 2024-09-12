@@ -1,32 +1,18 @@
-import { Outlet } from "react-router-dom";
+import { Outlet, useNavigate } from "react-router-dom";
 import './Content.css';
 import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faUser, faBell, faChevronDown, faUserCircle, faCogs, faSignOutAlt } from '@fortawesome/free-solid-svg-icons';
-
-const DropDownMenu: React.FC = () => {
-    return (
-        <div className='dropdown-menu'>
-            <a href="/profile">
-                <FontAwesomeIcon icon={faUserCircle} className="dropdown-icon" />
-                Profile
-            </a>
-            <a href="/settings">
-                <FontAwesomeIcon icon={faCogs} className="dropdown-icon" />
-                Settings
-            </a>
-            <a href="/logout">
-                <FontAwesomeIcon icon={faSignOutAlt} className="dropdown-icon" />
-                Logout
-            </a>
-        </div>
-
-    );
-}
+import { faUser, faBell, faChevronDown } from '@fortawesome/free-solid-svg-icons';
+import { LogoutAPI } from "../../services/authen-api/LogoutAPI";
+import { DropDownMenu } from "./compoments/DropDownMenu";
+import { ModelClose } from "./compoments/ModelClose";
 
 const ContentHeader: React.FC = () => {
+
+    const navigate = useNavigate();
     const [currentDate, setCurrentDate] = React.useState<string>("");
     const [dropdownOpen, setDropdownOpen] = React.useState(false);
+    const [modelLogout, setModelLogout] = React.useState(false);
     const dropdownRef = React.useRef<HTMLDivElement>(null);
 
     React.useEffect(() => {
@@ -58,6 +44,27 @@ const ContentHeader: React.FC = () => {
         setDropdownOpen(!dropdownOpen);
     };
 
+    const openModelLogout = (e: React.MouseEvent<HTMLAnchorElement>) => {
+        e.preventDefault();
+        setModelLogout(true);
+    }
+
+    const closeModelLogout = () => {
+        setModelLogout(false);
+    }
+
+    const handleLogout = (e: React.MouseEvent<HTMLButtonElement>) => {
+        e.preventDefault();
+        LogoutAPI()
+            .then((response) => {
+                console.log(response);
+                localStorage.removeItem("token");
+                navigate("/login");
+            }).catch((err) => {
+                console.error(err);
+            });
+    }
+
     return (
         <div className='content-header'>
             <div className='header-date'>{currentDate}</div>
@@ -69,9 +76,10 @@ const ContentHeader: React.FC = () => {
                         <span className='account-username'>John Doe</span>
                         <FontAwesomeIcon icon={faChevronDown} title="Options" />
                     </div>
-                    {dropdownOpen && <DropDownMenu />}
+                    {dropdownOpen && <DropDownMenu openModelLogout={openModelLogout} />}
                 </div>
             </div>
+            {modelLogout && <ModelClose closeModelLogout={closeModelLogout} handleLogout={handleLogout} />}
         </div>
     );
 }

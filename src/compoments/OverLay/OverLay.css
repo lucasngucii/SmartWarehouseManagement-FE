@@ -6,7 +6,7 @@
   height: 100%;
   margin-left: 250px;
   background-color: rgba(0, 0, 0, 0.5);
-  z-index: 100;
+  z-index: 1;
   display: grid;
   place-items: center;
   overflow: auto;
@@ -15,4 +15,10 @@
 
 .container-overlay.disabled-padding {
   padding: 0px;
+}
+
+.container-overlay.fullscreen {
+  width: 100%;
+  margin-left: 0;
+  z-index: 1001;
 }
