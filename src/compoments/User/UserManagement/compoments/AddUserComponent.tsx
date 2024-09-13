@@ -8,6 +8,9 @@ import { validateFullname } from "../../../../util/validateFullName";
 import { validateEmail } from "../../../../util/validateEmail";
 import { ValidatePassWord } from "../../../../util/validatePassword";
 import { validatePhone } from "../../../../util/validatePhone";
+import { GetRolesAPI } from "../../../../services/authen-api/GetRolesAPI";
+import { Role } from "../../../../interface/Role";
+import { RegisterAPI, RegisterRequest } from "../../../../services/authen-api/RegisterAPI";
 
 interface OptionType {
     value: string;
@@ -15,7 +18,6 @@ interface OptionType {
 }
 
 interface Options {
-    Category: OptionType[];
     Role: OptionType[];
 }
 
@@ -46,19 +48,37 @@ interface FormErrorTypes {
 
 export const AddUserComponent: React.FC<AddUserComponentProps> = ({ hideOverlay, userId }) => {
 
-    const options: Options = {
-        Category: [
-            { value: "Electronics", label: "Electronics" },
-            { value: "Clothes", label: "Clothes" },
-            { value: "Furniture", label: "Furniture" },
-        ],
-        Role: [
-            { value: "Admin", label: "Admin" },
-            { value: "Staff", label: "Staff" },
-            { value: "Customer", label: "Customer" },
-        ]
+    const [isLoading, setIsLoading] = React.useState<boolean>(false);
+    const [isLoadingSubmit, setIsLoadingSubmit] = React.useState<boolean>(false);
+    const [globalError, setGlobalError] = React.useState<string>("");
+    const [options, setOptions] = React.useState<Options>({
+        Role: []
+    });
 
-    };
+    React.useEffect(() => {
+        setIsLoading(true);
+        GetRolesAPI()
+            .then((response) => {
+                const roles: Role[] = response.data;
+                const roleOptions = roles.map((role) => {
+                    return {
+                        value: role.name,
+                        label: role.name,
+                    }
+                });
+
+                setOptions(preVal => {
+                    return { ...preVal, Role: roleOptions }
+                })
+
+            }).catch((err: any) => {
+                console.error(err);
+                setGlobalError("Something went wrong. Please try again later");
+            }).finally(() => {
+                setIsLoading(false);
+            })
+
+    }, [])
 
     const [formData, setFormData] = React.useState<FormDataTypes>({
         username: "",
@@ -202,13 +222,35 @@ export const AddUserComponent: React.FC<AddUserComponentProps> = ({ hideOverlay,
         return check
     }
 
-    const handleSubmit = () => {
+    const handleSubmit = (e: React.MouseEvent<HTMLInputElement>) => {
+        e.preventDefault();
         if (validate1() && validate2()) {
+
+            const dataRequest: RegisterRequest = {
+                username: formData.username,
+                email: formData.email,
+                password: formData.password,
+                fullName: formData.fullname,
+                phoneNumber: formData.phone,
+                role: formData.role!.value,
+            }
+
+            setIsLoadingSubmit(true);
             if (userId) {
-                console.log("Update user");
+                console.log(dataRequest);
                 return;
             }
-            console.log("Add user");
+
+            RegisterAPI(dataRequest)
+                .then(() => {
+                    hideOverlay();
+                })
+                .catch((err) => {
+                    console.error(err);
+                    setGlobalError("Something went wrong. Please try again later");
+                }).finally(() => {
+                    setIsLoadingSubmit(false);
+                })
         }
     }
 
@@ -219,6 +261,7 @@ export const AddUserComponent: React.FC<AddUserComponentProps> = ({ hideOverlay,
                     <FontAwesomeIcon icon={faTimes} />
                 </button>
                 <p className="primary-label form-lable">{userId ? "UPDATE USER" : "NEW USER"}</p>
+                <p className="primary-message-error margin-bottom-15 text-center">{globalError}</p>
                 <form className="form">
                     <div className="form-input-container">
                         <label htmlFor="username" className="form-input-lable">UserName</label>
@@ -262,6 +305,7 @@ export const AddUserComponent: React.FC<AddUserComponentProps> = ({ hideOverlay,
                             value={formData.role}
                             onChange={(selectedOption) => handleChangeSelect("role", selectedOption)}
                             options={options.Role}
+                            isLoading={isLoading}
                         />
                         <span className="form-error">{formError.role}</span>
                     </div>
@@ -322,7 +366,7 @@ export const AddUserComponent: React.FC<AddUserComponentProps> = ({ hideOverlay,
                         type="submit"
                         className="form-input-submit"
                         onClick={handleSubmit}
-                        value={userId ? "Update User" : "Add User"}
+                        value={isLoadingSubmit ? "Loading..." : userId ? "Update User" : "Add User"}
                     />
                 </form>
             </div>

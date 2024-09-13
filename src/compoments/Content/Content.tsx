@@ -56,8 +56,7 @@ const ContentHeader: React.FC = () => {
     const handleLogout = (e: React.MouseEvent<HTMLButtonElement>) => {
         e.preventDefault();
         LogoutAPI()
-            .then((response) => {
-                console.log(response);
+            .then(() => {
                 localStorage.removeItem("token");
                 navigate("/login");
             }).catch((err) => {
