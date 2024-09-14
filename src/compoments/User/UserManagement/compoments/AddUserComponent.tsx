@@ -59,7 +59,7 @@ export const AddUserComponent: React.FC<AddUserComponentProps> = ({ hideOverlay,
         setIsLoading(true);
         GetRolesAPI()
             .then((response) => {
-                const roles: Role[] = response.data;
+                const roles: Role[] = response;
                 const roleOptions = roles.map((role) => {
                     return {
                         value: role.name,

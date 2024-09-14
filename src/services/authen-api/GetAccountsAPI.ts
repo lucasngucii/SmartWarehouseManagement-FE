@@ -1,17 +1,31 @@
 import axios from "axios";
 import { ResponseError } from "../../interface/ResponseError";
-import { Role } from "../../interface/Role";
 
-export const GetRolesAPI = async (): Promise<Role[]> => {
+interface Account {
+    id: string;
+    username: string;
+    fullname: string;
+    email: string;
+    roleName: string;
+    status: string;
+    phoneNumber: string;
+}
+
+interface ResponseGetAccounts {
+    accounts: Account[];
+}
+
+export const GetAccountsAPI = async (): Promise<ResponseGetAccounts> => {
+
     try {
         const HOST = process.env.REACT_APP_HOST_BE;
-        const token = localStorage.getItem("token");
+        const token = localStorage.getItem('token');
 
         if (!token) {
-            throw new Error("Token is not found");
+            throw new Error("Token not found.");
         }
 
-        const response = await axios.get(`${HOST}/auth/roles`, {
+        const response = await axios.get(`${HOST}/account/ad`, {
             headers: {
                 Authorization: `Bearer ${token}`,
             },
@@ -27,6 +41,5 @@ export const GetRolesAPI = async (): Promise<Role[]> => {
         } else {
             throw new Error("An unexpected error occurred.");
         }
-
     }
 }

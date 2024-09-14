@@ -4,6 +4,7 @@ import { User } from "../../../interface/User";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
 import { AddUserComponent } from "./compoments/AddUserComponent";
+import { GetAccountsAPI } from "../../../services/authen-api/GetAccountsAPI";
 
 export const UserManagement: React.FC = () => {
 
@@ -27,6 +28,15 @@ export const UserManagement: React.FC = () => {
     ]);
     const [showOverlay, setShowOverlay] = React.useState(false);
     const [userId, setUserId] = React.useState<number | null>(null);
+
+    // React.useEffect(() => {
+    //     GetAccountsAPI()
+    //         .then((response) => {
+    //             console.log(response);
+    //         }).catch((error) => {
+    //             console.log(error);
+    //         });
+    // }, []);
 
     const handleShowOverlay = () => {
         setShowOverlay(true);

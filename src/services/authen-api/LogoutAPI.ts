@@ -18,7 +18,7 @@ export const LogoutAPI = async (): Promise<LogoutResponse> => {
             headers: {
                 Authorization: `Bearer ${token}`
             }
-        })).data;
+        })).data.data;
 
     } catch (error) {
 

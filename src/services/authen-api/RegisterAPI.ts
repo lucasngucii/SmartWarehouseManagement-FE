@@ -42,7 +42,7 @@ export const RegisterAPI = async (data: RegisterRequest): Promise<RegisterRespon
                 "Authorization": `Bearer ${token}`
             }
         });
-        return response.data;
+        return response.data.data;
 
     } catch (error) {
 

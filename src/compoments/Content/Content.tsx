@@ -6,10 +6,14 @@ import { faUser, faBell, faChevronDown } from '@fortawesome/free-solid-svg-icons
 import { LogoutAPI } from "../../services/authen-api/LogoutAPI";
 import { DropDownMenu } from "./compoments/DropDownMenu";
 import { ModelClose } from "./compoments/ModelClose";
+import { get } from "http";
+import { GetProfile } from "../../util/getProfile";
+import { profile } from "console";
 
 const ContentHeader: React.FC = () => {
 
     const navigate = useNavigate();
+    const myProfile = GetProfile();
     const [currentDate, setCurrentDate] = React.useState<string>("");
     const [dropdownOpen, setDropdownOpen] = React.useState(false);
     const [modelLogout, setModelLogout] = React.useState(false);
@@ -58,6 +62,7 @@ const ContentHeader: React.FC = () => {
         LogoutAPI()
             .then(() => {
                 localStorage.removeItem("token");
+                localStorage.removeItem("profile");
                 navigate("/login");
             }).catch((err) => {
                 console.error(err.message);
@@ -72,7 +77,7 @@ const ContentHeader: React.FC = () => {
                 <div className="account-container" onClick={toggleDropdown} ref={dropdownRef}>
                     <div className='user-info'>
                         <FontAwesomeIcon icon={faUser} className="header-icon" title="User" />
-                        <span className='account-username'>John Doe</span>
+                        <span className='account-username'>{myProfile?.username || "John Doe"}</span>
                         <FontAwesomeIcon icon={faChevronDown} title="Options" />
                     </div>
                     {dropdownOpen && <DropDownMenu openModelLogout={openModelLogout} />}

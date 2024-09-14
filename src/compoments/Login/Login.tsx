@@ -5,6 +5,7 @@ import { LoginAPI } from "../../services/authen-api/LoginAPI";
 import { ValidateUsername } from "../../util/validateUsername";
 import { ValidatePassWord } from "../../util/validatePassword";
 import axios from "axios";
+import { GetProfileByTokenAPI } from "../../services/authen-api/GetProfileByTokenAPI";
 
 interface formDataType {
     username: string;
@@ -100,14 +101,21 @@ export const Login: React.FC = () => {
 
     const handleSubmit = async () => {
         setLoading(true);
-        await LoginAPI(formData).then((response) => {
-            localStorage.setItem("token", response.data.token);
-            navigate("/");
-        }).catch((error) => {
-            setGlobalError(error.message);
-        }).finally(() => {
-            setLoading(false);
-        });
+
+        LoginAPI(formData)
+            .then((responseLogin) => {
+                const token = responseLogin.token;
+                localStorage.setItem("token", token);
+                return GetProfileByTokenAPI(token);
+            }).then((responseGetProfile) => {
+                localStorage.setItem("profile", JSON.stringify(responseGetProfile));
+                navigate("/");
+                return
+            }).catch((error) => {
+                setGlobalError(error.message);
+            }).finally(() => {
+                setLoading(false);
+            });
     }
 
     return (
