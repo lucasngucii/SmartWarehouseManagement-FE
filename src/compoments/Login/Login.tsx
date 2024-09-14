@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { LoginAPI } from "../../services/authen-api/LoginAPI";
 import { ValidateUsername } from "../../util/validateUsername";
 import { ValidatePassWord } from "../../util/validatePassword";
+import axios from "axios";
 
 interface formDataType {
     username: string;
@@ -99,28 +100,11 @@ export const Login: React.FC = () => {
 
     const handleSubmit = async () => {
         setLoading(true);
-
-        if (!navigator.onLine) {
-            setGlobalError("No internet connection");
-            setLoading(false);
-            return;
-        }
-
         await LoginAPI(formData).then((response) => {
-            if (response.data) {
-                localStorage.setItem("token", response.data.token);
-                localStorage.setItem("role", response.data.role);
-                navigate("/");
-            } else {
-                console.error(response.message);
-            }
+            localStorage.setItem("token", response.data.token);
+            navigate("/");
         }).catch((error) => {
-            if (error.message === "Network Error" || error.code === 'ERR_NETWORK') {
-                setGlobalError("Network issue detected. Please check your internet connection.");
-            } else {
-                setGlobalError("Invalid username or password");
-            }
-            console.error(error.message);
+            setGlobalError(error.message);
         }).finally(() => {
             setLoading(false);
         });

@@ -71,9 +71,9 @@ export const AddUserComponent: React.FC<AddUserComponentProps> = ({ hideOverlay,
                     return { ...preVal, Role: roleOptions }
                 })
 
-            }).catch((err: any) => {
-                console.error(err);
-                setGlobalError("Something went wrong. Please try again later");
+            }).catch((err) => {
+                console.error(err.message);
+                setGlobalError(err.message);
             }).finally(() => {
                 setIsLoading(false);
             })
@@ -246,8 +246,22 @@ export const AddUserComponent: React.FC<AddUserComponentProps> = ({ hideOverlay,
                     hideOverlay();
                 })
                 .catch((err) => {
-                    console.error(err);
-                    setGlobalError("Something went wrong. Please try again later");
+                    const message: string = err.message;
+                    if (message.includes("Username")) {
+                        setFormError(preVal => {
+                            return { ...preVal, username: message }
+                        })
+                    } else if (message.includes("Email")) {
+                        setFormError(preVal => {
+                            return { ...preVal, email: message }
+                        })
+                    } else if (message.includes("Phone")) {
+                        setFormError(preVal => {
+                            return { ...preVal, phone: message }
+                        })
+                    } else {
+                        setGlobalError(message);
+                    }
                 }).finally(() => {
                     setIsLoadingSubmit(false);
                 })

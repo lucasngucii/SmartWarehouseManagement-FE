@@ -16,6 +16,14 @@ interface LoginResponse {
 }
 
 export const LoginAPI = async (loginRequest: LoginRequest): Promise<LoginResponse> => {
-    const HOST = process.env.REACT_APP_HOST_BE;
-    return (await axios.post(`${HOST}/auth/login`, loginRequest)).data;
+    try {
+        const HOST = process.env.REACT_APP_HOST_BE;
+        return (await axios.post(`${HOST}/auth/login`, loginRequest)).data;
+    } catch (error) {
+        if (axios.isAxiosError(error) && error.response) {
+            throw new Error("Invalid username or password.");
+        } else {
+            throw new Error("An unexpected error occurred.");
+        }
+    }
 }

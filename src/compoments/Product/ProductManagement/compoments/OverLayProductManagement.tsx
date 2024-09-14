@@ -16,6 +16,7 @@ interface SKUFormData {
     size?: OptionType | null;
     material?: OptionType | null;
     brand?: OptionType | null;
+    supplier?: OptionType | null;
     dimension?: Dimension;
 }
 
@@ -93,7 +94,7 @@ export const OverLayProductManagement: React.FC<OverLayProductManagementProps> =
                         <input className='form-input' type='text' id='product-name' placeholder='Enter Product Name' />
                     </div>
                     <div className='form-input-container'>
-                        <label className='form-input-lable'>category</label>
+                        <label className='form-input-lable'>Category</label>
                         <Select
                             styles={customSelectStyles}
                             value={formData?.productType}
@@ -153,25 +154,25 @@ export const OverLayProductManagement: React.FC<OverLayProductManagementProps> =
                         />
                     </div>
                     <div className={"form-input-container"}>
-                        <label htmlFor={"color"}>Suplier:</label>
+                        <label htmlFor={"color"}>Supplier:</label>
                         <Select
                             styles={customSelectStyles}
                             value={formData?.color}
                             onChange={(valueSelect, actionMeta) => handleSelectChangeGroup(valueSelect, {
                                 ...actionMeta,
-                                name: "supblier"
+                                name: "supplier"
                             })}
                             options={listOptions.supplier}
                         />
                     </div>
                     <div className={"form-input-container"}>
                         <label htmlFor={"color"}>Dimension:</label>
-                        <div className={"dimension-container"}>
-                            <input type="number" placeholder="Length" className="dimension-input" />
+                        <div className={"group-deminsion-attribute"}>
+                            <input type="number" placeholder="Length" className="form-input" />
                             <span>x</span>
-                            <input type="number" placeholder="Width" className="dimension-input" />
+                            <input type="number" placeholder="Width" className="form-input" />
                             <span>x</span>
-                            <input type="number" placeholder="Height" className="dimension-input" />
+                            <input type="number" placeholder="Height" className="form-input" />
                         </div>
                     </div>
                     <button className='form-input-submit'>Add Product</button>

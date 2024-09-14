@@ -60,7 +60,7 @@ const ContentHeader: React.FC = () => {
                 localStorage.removeItem("token");
                 navigate("/login");
             }).catch((err) => {
-                console.error(err);
+                console.error(err.message);
             });
     }
 
