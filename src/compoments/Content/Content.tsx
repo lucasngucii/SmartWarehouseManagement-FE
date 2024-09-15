@@ -6,9 +6,7 @@ import { faUser, faBell, faChevronDown } from '@fortawesome/free-solid-svg-icons
 import { LogoutAPI } from "../../services/authen-api/LogoutAPI";
 import { DropDownMenu } from "./compoments/DropDownMenu";
 import { ModelClose } from "./compoments/ModelClose";
-import { get } from "http";
 import { GetProfile } from "../../util/getProfile";
-import { profile } from "console";
 
 const ContentHeader: React.FC = () => {
 

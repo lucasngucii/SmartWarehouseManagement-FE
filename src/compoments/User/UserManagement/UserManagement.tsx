@@ -7,13 +7,15 @@ import { Account } from "../../../interface/Account";
 import React from "react";
 import { RePulseLoader } from "../../Loading/PulseLoader";
 import { NoData } from "../../NoData/NoData";
+import { ModelConfirmDeleteUser } from "./compoments/ModelConfirmDeleteUser";
 
 export const UserManagement: React.FC = () => {
 
     const [users, setUsers] = React.useState<Account[]>([]);
     const [isLoading, setIsLoading] = React.useState(false);
-    const [showOverlay, setShowOverlay] = React.useState(false);
-    const [userId, setUserId] = React.useState<string | null>(null);
+    const [showOverlayModelUser, setShowOverlayModelUser] = React.useState(false);
+    const [showOverlayModelDelete, setShowOverlayModelDelete] = React.useState(false);
+    const [userId, setUserId] = React.useState<string>("");
     const [globalError, setGlobalError] = React.useState<string>("");
 
     React.useEffect(() => {
@@ -29,13 +31,27 @@ export const UserManagement: React.FC = () => {
             });
     }, []);
 
-    const handleShowOverlay = () => {
-        setShowOverlay(true);
+    const handleShowOverlayModelUser = () => {
+        setShowOverlayModelUser(true);
     }
 
-    const handleHideOverlay = () => {
-        setShowOverlay(false);
-        setUserId(null);
+    const handleHideOverlayModelUser = () => {
+        setShowOverlayModelUser(false);
+        setUserId("");
+    }
+
+    const handleShowOverlayModelDelete = (userId: string) => {
+        setShowOverlayModelDelete(true);
+        setUserId(userId);
+    }
+
+    const handleHideOverlayModelDelete = () => {
+        setShowOverlayModelDelete(false);
+        setUserId("");
+    }
+
+    const updateUsers = (response: Account[]) => {
+        setUsers(response);
     }
 
     const listUser = users.map((user, index) => {
@@ -44,20 +60,19 @@ export const UserManagement: React.FC = () => {
                 <td>{index + 1}</td>
                 <td>{user.username}</td>
                 <td>{user.fullName}</td>
-                <td>Admin</td>
                 <td>{user.email}</td>
                 <td>{user.phoneNumber}</td>
                 <td>
                     <button
                         onClick={() => {
                             setUserId(user.id)
-                            handleShowOverlay()
+                            handleShowOverlayModelUser()
                         }}
                         className="edit-button"
                     >
                         Edit
                     </button>
-                    <button className="delete-button">Delete</button>
+                    <button onClick={() => handleShowOverlayModelDelete(user.id)} className="delete-button">Delete</button>
                 </td>
             </tr>
         )
@@ -82,7 +97,7 @@ export const UserManagement: React.FC = () => {
                             <FontAwesomeIcon icon={faSearch} />
                         </button>
                     </form>
-                    <button onClick={handleShowOverlay} className="add-button">Add User</button>
+                    <button onClick={handleShowOverlayModelUser} className="add-button">Add User</button>
                 </div>
             </div>
             <div className="table-container">
@@ -92,7 +107,6 @@ export const UserManagement: React.FC = () => {
                             <th>#</th>
                             <th>Username</th>
                             <th>FullName</th>
-                            <th>Role</th>
                             <th>Email</th>
                             <th>Phone</th>
                             <th>Actions</th>
@@ -107,7 +121,8 @@ export const UserManagement: React.FC = () => {
                 }
                 <RePulseLoader loading={isLoading} />
             </div>
-            {showOverlay && <AddUserComponent hideOverlay={handleHideOverlay} userId={userId} />}
+            {showOverlayModelUser && <AddUserComponent hideOverlay={handleHideOverlayModelUser} userId={userId} />}
+            {showOverlayModelDelete && <ModelConfirmDeleteUser userId={userId} closeModelConfirmDelete={handleHideOverlayModelDelete} updateUsers={updateUsers} />}
         </div>
     );
 }
