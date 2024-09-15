@@ -1,0 +1,18 @@
+.no-data-container {
+    width: 100%;
+    min-height: 100px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    margin: 20px 0;
+    background-color: #f8f9fa;
+    border: 1px solid #e0e0e0;
+    border-radius: 5px;
+}
+
+.no-data-message {
+    font-size: 18px;
+    color: #A4A4A4;
+    text-align: center;
+}

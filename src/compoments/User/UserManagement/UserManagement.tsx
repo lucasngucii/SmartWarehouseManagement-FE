@@ -1,42 +1,33 @@
-import React from "react";
 import "./UserManagement.css";
-import { User } from "../../../interface/User";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
 import { AddUserComponent } from "./compoments/AddUserComponent";
 import { GetAccountsAPI } from "../../../services/authen-api/GetAccountsAPI";
+import { Account } from "../../../interface/Account";
+import React from "react";
+import { RePulseLoader } from "../../Loading/PulseLoader";
+import { NoData } from "../../NoData/NoData";
 
 export const UserManagement: React.FC = () => {
 
-    const [users, setUsers] = React.useState<User[]>([
-        {
-            id: 1,
-            username: "lecongkhanh124",
-            fullName: "john_doe",
-            role: "Admin",
-            email: "john@example.com",
-            phoneNumber: "0321547895",
-        },
-        {
-            id: 2,
-            username: "tadsabc123",
-            fullName: "john_doe",
-            role: "Staff",
-            email: "abc@example.com",
-            phoneNumber: "0321547895",
-        },
-    ]);
+    const [users, setUsers] = React.useState<Account[]>([]);
+    const [isLoading, setIsLoading] = React.useState(false);
     const [showOverlay, setShowOverlay] = React.useState(false);
-    const [userId, setUserId] = React.useState<number | null>(null);
+    const [userId, setUserId] = React.useState<string | null>(null);
+    const [globalError, setGlobalError] = React.useState<string>("");
 
-    // React.useEffect(() => {
-    //     GetAccountsAPI()
-    //         .then((response) => {
-    //             console.log(response);
-    //         }).catch((error) => {
-    //             console.log(error);
-    //         });
-    // }, []);
+    React.useEffect(() => {
+        setIsLoading(true);
+        GetAccountsAPI()
+            .then((response) => {
+                setUsers(response);
+            }).catch((error) => {
+                console.error(error);
+                setGlobalError(error.message);
+            }).finally(() => {
+                setIsLoading(false);
+            });
+    }, []);
 
     const handleShowOverlay = () => {
         setShowOverlay(true);
@@ -53,7 +44,7 @@ export const UserManagement: React.FC = () => {
                 <td>{index + 1}</td>
                 <td>{user.username}</td>
                 <td>{user.fullName}</td>
-                <td>{user.role}</td>
+                <td>Admin</td>
                 <td>{user.email}</td>
                 <td>{user.phoneNumber}</td>
                 <td>
@@ -101,16 +92,20 @@ export const UserManagement: React.FC = () => {
                             <th>#</th>
                             <th>Username</th>
                             <th>FullName</th>
-                            <th>Group</th>
+                            <th>Role</th>
                             <th>Email</th>
                             <th>Phone</th>
                             <th>Actions</th>
                         </tr>
                     </thead>
                     <tbody>
-                        {listUser}
+                        {users.length > 0 && listUser}
                     </tbody>
                 </table>
+                {
+                    (users.length === 0 || globalError) && <NoData message={globalError} />
+                }
+                <RePulseLoader loading={isLoading} />
             </div>
             {showOverlay && <AddUserComponent hideOverlay={handleHideOverlay} userId={userId} />}
         </div>

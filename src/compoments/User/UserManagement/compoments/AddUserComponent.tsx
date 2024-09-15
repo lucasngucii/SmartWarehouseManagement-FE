@@ -23,7 +23,7 @@ interface Options {
 
 interface AddUserComponentProps {
     hideOverlay: () => void;
-    userId?: number | null;
+    userId?: string | null;
 }
 
 interface FormDataTypes {
