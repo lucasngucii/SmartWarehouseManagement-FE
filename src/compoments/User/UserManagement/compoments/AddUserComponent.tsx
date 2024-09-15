@@ -228,7 +228,7 @@ export const AddUserComponent: React.FC<AddUserComponentProps> = ({ hideOverlay,
             })
         }
 
-        if (checkPasswrod && !userId) {
+        if (checkPasswrod && (userId !== null && formData.password.length > 0)) {
             check = false;
             setFormError(preVal => {
                 return { ...preVal, password: checkPasswrod }
@@ -242,7 +242,7 @@ export const AddUserComponent: React.FC<AddUserComponentProps> = ({ hideOverlay,
             })
         }
 
-        if (formData.password !== formData.confirmPassword && !userId) {
+        if (formData.password !== formData.confirmPassword) {
             check = false;
             setFormError(preVal => {
                 return { ...preVal, confirmPassword: "ConfirmPassword must match password" }
@@ -257,12 +257,11 @@ export const AddUserComponent: React.FC<AddUserComponentProps> = ({ hideOverlay,
         if (validate1() && validate2()) {
 
             const dataRequest: RegisterRequest = {
-                username: formData.username,
                 email: formData.email,
                 password: formData.password,
                 fullName: formData.fullname,
                 phoneNumber: formData.phone,
-                roleName: formData.role!.value,
+                // roleName: formData.role!.value,
             }
 
             setIsLoadingSubmit(true);
@@ -281,18 +280,22 @@ export const AddUserComponent: React.FC<AddUserComponentProps> = ({ hideOverlay,
                             throw new Error("updateUsers is not a function");
                         }
                     }).catch((err) => {
-                        const message: string = err.message;
-                        if (message.includes("Username")) {
-                            setFormError(preVal => {
-                                return { ...preVal, username: message }
-                            })
-                        } else if (message.includes("Email")) {
+                        const message: string = err.message.toLowerCase();
+                        if (message.includes("email")) {
                             setFormError(preVal => {
                                 return { ...preVal, email: message }
                             })
-                        } else if (message.includes("Phone")) {
+                        } else if (message.includes("phone")) {
                             setFormError(preVal => {
                                 return { ...preVal, phone: message }
+                            })
+                        } else if (message.includes("password")) {
+                            setFormError(preVal => {
+                                return { ...preVal, password: message }
+                            })
+                        } else if (message.includes("role")) {
+                            setFormError(preVal => {
+                                return { ...preVal, role: message }
                             })
                         } else {
                             setGlobalError(message);
@@ -314,16 +317,16 @@ export const AddUserComponent: React.FC<AddUserComponentProps> = ({ hideOverlay,
                         throw new Error("updateUsers is not a function");
                     }
                 }).catch((err) => {
-                    const message: string = err.message;
-                    if (message.includes("Username")) {
+                    const message: string = err.message.toLowerCase();
+                    if (message.includes("username")) {
                         setFormError(preVal => {
                             return { ...preVal, username: message }
                         })
-                    } else if (message.includes("Email")) {
+                    } else if (message.includes("email")) {
                         setFormError(preVal => {
                             return { ...preVal, email: message }
                         })
-                    } else if (message.includes("Phone")) {
+                    } else if (message.includes("phone")) {
                         setFormError(preVal => {
                             return { ...preVal, phone: message }
                         })
@@ -356,6 +359,7 @@ export const AddUserComponent: React.FC<AddUserComponentProps> = ({ hideOverlay,
                             placeholder={"Enter Username"}
                             value={formData.username}
                             onChange={handleChangeInput}
+                            disabled={userId ? true : false}
                         />
                         <span className="form-error">{formError.username}</span>
                     </div>

@@ -7,10 +7,10 @@ interface UpdateUserRequest {
     password?: string;
     fullName: string;
     phoneNumber: string;
-    roleName: string;
+    // roleName: string;
 }
 
-export const UpdateAccountAPI = async (userId: string, userData: UpdateUserRequest): Promise<void> => {
+export const UpdateAccountAPI = async (userId: string, userData: Partial<UpdateUserRequest>): Promise<void> => {
     console.log(userData)
     try {
         const HOST = process.env.REACT_APP_HOST_BE;
@@ -20,7 +20,7 @@ export const UpdateAccountAPI = async (userId: string, userData: UpdateUserReque
             throw new Error("Token not found.");
         }
 
-        await axios.put(`${HOST}/account/ad/update/${userId}`, { userData }, {
+        await axios.put(`${HOST}/account/ad/update/${userId}`, userData, {
             headers: {
                 Authorization: `Bearer ${token}`,
             },

@@ -3,12 +3,11 @@ import { Role } from "../../interface/Role";
 import { ResponseError } from "../../interface/ResponseError";
 
 export interface RegisterRequest {
-    username: string;
     email: string;
     password?: string;
     fullName: string;
     phoneNumber: string;
-    roleName: string;
+    // roleName: string;
 }
 
 interface RegisterResponse {
