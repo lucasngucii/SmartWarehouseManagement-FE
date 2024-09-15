@@ -22,6 +22,7 @@ export const UserManagement: React.FC = () => {
         setIsLoading(true);
         GetAccountsAPI()
             .then((response) => {
+                // console.log(response);
                 setUsers(response);
             }).catch((error) => {
                 console.error(error);
@@ -62,6 +63,7 @@ export const UserManagement: React.FC = () => {
                 <td>{user.fullName}</td>
                 <td>{user.email}</td>
                 <td>{user.phoneNumber}</td>
+                <td>{user.role.name}</td>
                 <td>
                     <button
                         onClick={() => {
@@ -109,6 +111,7 @@ export const UserManagement: React.FC = () => {
                             <th>FullName</th>
                             <th>Email</th>
                             <th>Phone</th>
+                            <th>Role</th>
                             <th>Actions</th>
                         </tr>
                     </thead>
@@ -117,11 +120,11 @@ export const UserManagement: React.FC = () => {
                     </tbody>
                 </table>
                 {
-                    (users.length === 0 || globalError) && <NoData message={globalError} />
+                    (users.length === 0 || globalError) && !isLoading && <NoData message={globalError} />
                 }
                 <RePulseLoader loading={isLoading} />
             </div>
-            {showOverlayModelUser && <AddUserComponent hideOverlay={handleHideOverlayModelUser} userId={userId} />}
+            {showOverlayModelUser && <AddUserComponent hideOverlay={handleHideOverlayModelUser} userId={userId} updateUsers={updateUsers} />}
             {showOverlayModelDelete && <ModelConfirmDeleteUser userId={userId} closeModelConfirmDelete={handleHideOverlayModelDelete} updateUsers={updateUsers} />}
         </div>
     );

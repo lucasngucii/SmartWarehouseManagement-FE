@@ -11,6 +11,10 @@ import { validatePhone } from "../../../../util/validatePhone";
 import { GetRolesAPI } from "../../../../services/authen-api/GetRolesAPI";
 import { Role } from "../../../../interface/Role";
 import { RegisterAPI, RegisterRequest } from "../../../../services/authen-api/RegisterAPI";
+import { Account } from "../../../../interface/Account";
+import { GetAccountsAPI } from "../../../../services/authen-api/GetAccountsAPI";
+import { UpdateAccountAPI } from "../../../../services/authen-api/UpdateAccountAPI";
+import { GetAccountById } from "../../../../services/authen-api/GetAccountById";
 
 interface OptionType {
     value: string;
@@ -24,6 +28,7 @@ interface Options {
 interface AddUserComponentProps {
     hideOverlay: () => void;
     userId?: string | null;
+    updateUsers?: (response: Account[]) => void;
 }
 
 interface FormDataTypes {
@@ -46,13 +51,32 @@ interface FormErrorTypes {
     confirmPassword: string;
 }
 
-export const AddUserComponent: React.FC<AddUserComponentProps> = ({ hideOverlay, userId }) => {
+export const AddUserComponent: React.FC<AddUserComponentProps> = ({ hideOverlay, userId, updateUsers }) => {
 
     const [isLoading, setIsLoading] = React.useState<boolean>(false);
     const [isLoadingSubmit, setIsLoadingSubmit] = React.useState<boolean>(false);
     const [globalError, setGlobalError] = React.useState<string>("");
     const [options, setOptions] = React.useState<Options>({
         Role: []
+    });
+    const [formData, setFormData] = React.useState<FormDataTypes>({
+        username: "",
+        fullname: "",
+        role: null,
+        email: "",
+        phone: "",
+        password: "",
+        confirmPassword: "",
+    });
+
+    const [formError, setFormError] = React.useState<FormErrorTypes>({
+        username: "",
+        fullname: "",
+        role: "",
+        email: "",
+        phone: "",
+        password: "",
+        confirmPassword: "",
     });
 
     React.useEffect(() => {
@@ -77,28 +101,34 @@ export const AddUserComponent: React.FC<AddUserComponentProps> = ({ hideOverlay,
             }).finally(() => {
                 setIsLoading(false);
             })
-
     }, [])
 
-    const [formData, setFormData] = React.useState<FormDataTypes>({
-        username: "",
-        fullname: "",
-        role: null,
-        email: "",
-        phone: "",
-        password: "",
-        confirmPassword: "",
-    });
+    React.useEffect(() => {
+        if (userId) {
+            GetAccountById(userId)
+                .then((response) => {
+                    const data: Account = response;
+                    const roleOption: OptionType = {
+                        value: data.role.name,
+                        label: data.role.name,
+                    }
 
-    const [formError, setFormError] = React.useState<FormErrorTypes>({
-        username: "",
-        fullname: "",
-        role: "",
-        email: "",
-        phone: "",
-        password: "",
-        confirmPassword: "",
-    });
+                    setFormData({
+                        username: data.username,
+                        fullname: data.fullName,
+                        role: roleOption,
+                        email: data.email,
+                        phone: data.phoneNumber,
+                        password: "",
+                        confirmPassword: "",
+                    })
+
+                }).catch((err) => {
+                    console.error(err.message);
+                    setGlobalError(err.message);
+                })
+        }
+    }, [userId])
 
     const handleChangeSelect = (name: string, newValue: SingleValue<OptionType> | MultiValue<OptionType>) => {
         setFormData({ ...formData, [name]: newValue });
@@ -152,14 +182,14 @@ export const AddUserComponent: React.FC<AddUserComponentProps> = ({ hideOverlay,
             })
         }
 
-        if (!formData.password) {
+        if (!formData.password && !userId) {
             check = false;
             setFormError(preVal => {
                 return { ...preVal, password: "Password is required" }
             })
         }
 
-        if (!formData.confirmPassword) {
+        if (!formData.confirmPassword && !userId) {
             check = false;
             setFormError(preVal => {
                 return { ...preVal, confirmPassword: "ConfirmPassword is required" }
@@ -198,7 +228,7 @@ export const AddUserComponent: React.FC<AddUserComponentProps> = ({ hideOverlay,
             })
         }
 
-        if (checkPasswrod) {
+        if (checkPasswrod && !userId) {
             check = false;
             setFormError(preVal => {
                 return { ...preVal, password: checkPasswrod }
@@ -212,7 +242,7 @@ export const AddUserComponent: React.FC<AddUserComponentProps> = ({ hideOverlay,
             })
         }
 
-        if (formData.password !== formData.confirmPassword) {
+        if (formData.password !== formData.confirmPassword && !userId) {
             check = false;
             setFormError(preVal => {
                 return { ...preVal, confirmPassword: "ConfirmPassword must match password" }
@@ -232,20 +262,58 @@ export const AddUserComponent: React.FC<AddUserComponentProps> = ({ hideOverlay,
                 password: formData.password,
                 fullName: formData.fullname,
                 phoneNumber: formData.phone,
-                role: formData.role!.value,
+                roleName: formData.role!.value,
             }
 
             setIsLoadingSubmit(true);
             if (userId) {
-                console.log(dataRequest);
+                if (dataRequest.password === "") {
+                    delete dataRequest.password;
+                }
+                UpdateAccountAPI(userId, dataRequest)
+                    .then(() => {
+                        return GetAccountsAPI();
+                    }).then((response) => {
+                        if (updateUsers) {
+                            updateUsers(response);
+                            hideOverlay();
+                        } else {
+                            throw new Error("updateUsers is not a function");
+                        }
+                    }).catch((err) => {
+                        const message: string = err.message;
+                        if (message.includes("Username")) {
+                            setFormError(preVal => {
+                                return { ...preVal, username: message }
+                            })
+                        } else if (message.includes("Email")) {
+                            setFormError(preVal => {
+                                return { ...preVal, email: message }
+                            })
+                        } else if (message.includes("Phone")) {
+                            setFormError(preVal => {
+                                return { ...preVal, phone: message }
+                            })
+                        } else {
+                            setGlobalError(message);
+                        }
+                    }).finally(() => {
+                        setIsLoadingSubmit(false);
+                    })
                 return;
             }
 
             RegisterAPI(dataRequest)
                 .then(() => {
-                    hideOverlay();
-                })
-                .catch((err) => {
+                    return GetAccountsAPI();
+                }).then((response) => {
+                    if (updateUsers) {
+                        updateUsers(response);
+                        hideOverlay();
+                    } else {
+                        throw new Error("updateUsers is not a function");
+                    }
+                }).catch((err) => {
                     const message: string = err.message;
                     if (message.includes("Username")) {
                         setFormError(preVal => {
@@ -286,6 +354,7 @@ export const AddUserComponent: React.FC<AddUserComponentProps> = ({ hideOverlay,
                             className="form-input"
                             required
                             placeholder={"Enter Username"}
+                            value={formData.username}
                             onChange={handleChangeInput}
                         />
                         <span className="form-error">{formError.username}</span>
@@ -299,6 +368,7 @@ export const AddUserComponent: React.FC<AddUserComponentProps> = ({ hideOverlay,
                             className="form-input"
                             required
                             placeholder={"Enter your fullname"}
+                            value={formData.fullname}
                             onChange={handleChangeInput}
                         />
                         <span className="form-error">{formError.fullname}</span>
@@ -333,6 +403,7 @@ export const AddUserComponent: React.FC<AddUserComponentProps> = ({ hideOverlay,
                             required
                             placeholder={"Enter Email"}
                             onChange={handleChangeInput}
+                            value={formData.email}
                         />
                         <span className="form-error">{formError.email}</span>
                     </div>
@@ -346,6 +417,7 @@ export const AddUserComponent: React.FC<AddUserComponentProps> = ({ hideOverlay,
                             required
                             placeholder={"Enter phone number"}
                             onChange={handleChangeInput}
+                            value={formData.phone}
                         />
                         <span className="form-error">{formError.phone}</span>
                     </div>
@@ -360,6 +432,7 @@ export const AddUserComponent: React.FC<AddUserComponentProps> = ({ hideOverlay,
                             required
                             placeholder={"Enter Password"}
                             onChange={handleChangeInput}
+                            value={formData.password}
                         />
                         <span className="form-error">{formError.password}</span>
                     </div>
@@ -373,6 +446,7 @@ export const AddUserComponent: React.FC<AddUserComponentProps> = ({ hideOverlay,
                             required
                             placeholder={"Confirm Password"}
                             onChange={handleChangeInput}
+                            value={formData.confirmPassword}
                         />
                         <span className="form-error">{formError.confirmPassword}</span>
                     </div>

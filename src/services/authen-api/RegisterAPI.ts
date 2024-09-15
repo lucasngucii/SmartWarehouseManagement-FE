@@ -5,10 +5,10 @@ import { ResponseError } from "../../interface/ResponseError";
 export interface RegisterRequest {
     username: string;
     email: string;
-    password: string;
+    password?: string;
     fullName: string;
     phoneNumber: string;
-    role: string;
+    roleName: string;
 }
 
 interface RegisterResponse {
