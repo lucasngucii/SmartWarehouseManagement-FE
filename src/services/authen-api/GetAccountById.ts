@@ -2,7 +2,7 @@ import axios from "axios";
 import { ResponseError } from "../../interface/ResponseError";
 import { Account } from "../../interface/Account";
 
-export const GetAccountById = async (userId: string): Promise<Account> => {
+const GetAccountById = async (userId: string): Promise<Account> => {
     try {
         const HOST = process.env.REACT_APP_HOST_BE;
         const token = localStorage.getItem('token');
@@ -29,3 +29,5 @@ export const GetAccountById = async (userId: string): Promise<Account> => {
         }
     }
 }
+
+export default GetAccountById;

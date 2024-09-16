@@ -2,7 +2,7 @@ import axios from "axios";
 import { ResponseError } from "../../interface/ResponseError";
 import { Role } from "../../interface/Role";
 
-export const GetRolesAPI = async (): Promise<Role[]> => {
+const GetRolesAPI = async (): Promise<Role[]> => {
     try {
         const HOST = process.env.REACT_APP_HOST_BE;
         const token = localStorage.getItem("token");
@@ -30,3 +30,5 @@ export const GetRolesAPI = async (): Promise<Role[]> => {
 
     }
 }
+
+export default GetRolesAPI;

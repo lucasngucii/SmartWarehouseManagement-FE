@@ -1,7 +1,7 @@
 import React from "react";
-import { OverLay } from "../../../OverLay/OverLay";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTimes } from "@fortawesome/free-solid-svg-icons";
+import {OverLay} from "../../../../compoments/OverLay/OverLay";
 
 interface FormSupplierProps {
     handleClose: () => void;

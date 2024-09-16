@@ -1,8 +1,8 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { OverLay } from "../../../OverLay/OverLay"
 import { faTimes } from "@fortawesome/free-solid-svg-icons";
 import React from "react";
 import Select, { MultiValue, SingleValue } from "react-select";
+import {OverLay} from "../../../../compoments/OverLay/OverLay";
 
 interface OptionType {
     value: string;

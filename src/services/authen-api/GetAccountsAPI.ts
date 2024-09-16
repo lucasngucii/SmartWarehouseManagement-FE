@@ -16,7 +16,7 @@ enum Order {
     DESC = "DESC",
 }
 
-export const GetAccountsAPI = async (limit?: number, offset?: number, order?: Order, orderBy?: OrderBy): Promise<Account[]> => {
+const GetAccountsAPI = async (limit?: number, offset?: number, order?: Order, orderBy?: OrderBy): Promise<Account[]> => {
 
     try {
         const HOST = process.env.REACT_APP_HOST_BE;
@@ -43,3 +43,5 @@ export const GetAccountsAPI = async (limit?: number, offset?: number, order?: Or
         }
     }
 }
+
+export default GetAccountsAPI;

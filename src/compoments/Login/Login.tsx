@@ -1,11 +1,10 @@
 import React from "react";
 import "./Login.css";
 import { useNavigate } from "react-router-dom";
-import { LoginAPI } from "../../services/authen-api/LoginAPI";
-import { ValidateUsername } from "../../util/validateUsername";
-import { ValidatePassWord } from "../../util/validatePassword";
-import axios from "axios";
-import { GetProfileByTokenAPI } from "../../services/authen-api/GetProfileByTokenAPI";
+import ValidateUsername from "../../util/validateUsername";
+import ValidatePassWord from "../../util/validatePassword";
+import LoginAPI from "../../services/authen-api/LoginAPI";
+import GetProfileByTokenAPI from "../../services/authen-api/GetProfileByTokenAPI";
 
 interface formDataType {
     username: string;

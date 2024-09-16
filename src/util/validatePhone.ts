@@ -1,4 +1,4 @@
-export function validatePhone(phone: string): string {
+export default function validatePhone(phone: string): string {
     const phoneRegexString = process.env.REACT_APP_PHONE_REGEX;
 
     if (!phoneRegexString) {

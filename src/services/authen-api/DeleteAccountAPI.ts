@@ -1,7 +1,7 @@
 import axios from "axios";
 import { ResponseError } from "../../interface/ResponseError";
 
-export const DeleteAccountAPI = async (userId: string) => {
+const DeleteAccountAPI = async (userId: string) => {
     try {
         const HOST = process.env.REACT_APP_HOST_BE;
         const token = localStorage.getItem('token');
@@ -25,3 +25,5 @@ export const DeleteAccountAPI = async (userId: string) => {
         }
     }
 }
+
+export default DeleteAccountAPI;

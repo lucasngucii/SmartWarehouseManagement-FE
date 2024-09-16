@@ -7,13 +7,13 @@ import {
 } from "react-router-dom";
 import App from './App';
 import reportWebVitals from './reportWebVitals';
-import { Dashboard } from "./compoments/Dashboard/Dashboard";
+import { Dashboard } from "./page/Dashboard/Dashboard";
 import { Login } from "./compoments/Login/Login";
-import { UserManagement } from "./compoments/User/UserManagement/./UserManagement";
-import { SKUManagement } from "./compoments/Product/SKUManagement/SKUManagement";
-import { SublierManagement } from "./compoments/Product/SublierManagenent/SublierManagement";
-import { AttributeManagement } from "./compoments/Product/AttributeManagement/AttributeManagement";
-import { ProductManagement } from './compoments/Product/ProductManagement/ProductManagement';
+import { UserManagement } from "./page/User/UserManagement/./UserManagement";
+import {SKUManagement} from "./page/Product/SKUManagement/SKUManagement";
+import {SublierManagement} from "./page/Product/SublierManagenent/SublierManagement";
+import {AttributeManagement} from "./page/Product/AttributeManagement/AttributeManagement";
+import {ProductManagement} from "./page/Product/ProductManagement/ProductManagement";
 
 const router = createBrowserRouter([
     {

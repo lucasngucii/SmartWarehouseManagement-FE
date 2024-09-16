@@ -1,9 +1,9 @@
 import Select, { ActionMeta, MultiValue, SingleValue, StylesConfig } from "react-select";
-import { OverLay } from '../../../OverLay/OverLay'
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTimes } from "@fortawesome/free-solid-svg-icons";
 import React from "react";
 import "../ProductManagement.css";
+import {OverLay} from "../../../../compoments/OverLay/OverLay";
 
 interface OptionType {
     value: string;

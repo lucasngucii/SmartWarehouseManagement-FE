@@ -2,12 +2,12 @@ import "./UserManagement.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
 import { AddUserComponent } from "./compoments/AddUserComponent";
-import { GetAccountsAPI } from "../../../services/authen-api/GetAccountsAPI";
 import { Account } from "../../../interface/Account";
 import React from "react";
-import { RePulseLoader } from "../../Loading/PulseLoader";
-import { NoData } from "../../NoData/NoData";
+import { RePulseLoader } from "../../../compoments/Loading/PulseLoader";
+import { NoData } from "../../../compoments/NoData/NoData";
 import { ModelConfirmDeleteUser } from "./compoments/ModelConfirmDeleteUser";
+import GetAccountsAPI from "../../../services/authen-api/GetAccountsAPI";
 
 export const UserManagement: React.FC = () => {
 
@@ -22,6 +22,7 @@ export const UserManagement: React.FC = () => {
         setIsLoading(true);
         GetAccountsAPI()
             .then((response) => {
+                console.log(response)
                 // console.log(response);
                 setUsers(response);
             }).catch((error) => {
@@ -55,31 +56,31 @@ export const UserManagement: React.FC = () => {
         setUsers(response);
     }
 
-    const listUser = users.map((user, index) => {
-        return (
-            <tr key={user.id}>
-                <td>{index + 1}</td>
-                <td>{user.username}</td>
-                <td>{user.fullName}</td>
-                <td>{user.email}</td>
-                <td>{user.phoneNumber}</td>
-                <td>{user.role.name}</td>
-                <td>
-                    <button
-                        onClick={() => {
-                            setUserId(user.id)
-                            handleShowOverlayModelUser()
-                        }}
-                        className="edit-button"
-                    >
-                        Edit
-                    </button>
-                    <button onClick={() => handleShowOverlayModelDelete(user.id)} className="delete-button">Delete</button>
-                </td>
-            </tr>
-        )
-    }
-    );
+    // const listUser = users.map((user, index) => {
+    //     return (
+    //         <tr key={user.id}>
+    //             <td>{index + 1}</td>
+    //             <td>{user.username}</td>
+    //             <td>{user.fullName}</td>
+    //             <td>{user.email}</td>
+    //             <td>{user.phoneNumber}</td>
+    //             <td>{user.role.name}</td>
+    //             <td>
+    //                 <button
+    //                     onClick={() => {
+    //                         setUserId(user.id)
+    //                         handleShowOverlayModelUser()
+    //                     }}
+    //                     className="edit-button"
+    //                 >
+    //                     Edit
+    //                 </button>
+    //                 <button onClick={() => handleShowOverlayModelDelete(user.id)} className="delete-button">Delete</button>
+    //             </td>
+    //         </tr>
+    //     )
+    // }
+    // );
 
     return (
         <div>
@@ -116,7 +117,7 @@ export const UserManagement: React.FC = () => {
                         </tr>
                     </thead>
                     <tbody>
-                        {users.length > 0 && listUser}
+                        {/* {users.length > 0 && listUser} */}
                     </tbody>
                 </table>
                 {

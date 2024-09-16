@@ -12,7 +12,7 @@ interface GetProfileByTokenAPIResponse {
     role: Permission;
 }
 
-export const GetProfileByTokenAPI = async (token: string): Promise<GetProfileByTokenAPIResponse> => {
+const GetProfileByTokenAPI = async (token: string): Promise<GetProfileByTokenAPIResponse> => {
     try {
         const HOST = process.env.REACT_APP_HOST_BE;
         const response = await axios.get(`${HOST}/account/profile`, {
@@ -30,3 +30,5 @@ export const GetProfileByTokenAPI = async (token: string): Promise<GetProfileByT
         }
     }
 }
+
+export default GetProfileByTokenAPI;

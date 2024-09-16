@@ -1,4 +1,4 @@
-export function ValidateUsername(username: string): string {
+export default function ValidateUsername(username: string): string {
     const usernameRegexString = process.env.REACT_APP_USERNAME_REGEX;
 
     if (!usernameRegexString) {

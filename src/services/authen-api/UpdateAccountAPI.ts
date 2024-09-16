@@ -10,7 +10,7 @@ interface UpdateUserRequest {
     // roleName: string;
 }
 
-export const UpdateAccountAPI = async (userId: string, userData: Partial<UpdateUserRequest>): Promise<void> => {
+const UpdateAccountAPI = async (userId: string, userData: Partial<UpdateUserRequest>): Promise<void> => {
     console.log(userData)
     try {
         const HOST = process.env.REACT_APP_HOST_BE;
@@ -36,3 +36,5 @@ export const UpdateAccountAPI = async (userId: string, userData: Partial<UpdateU
         }
     }
 }
+
+export default UpdateAccountAPI;

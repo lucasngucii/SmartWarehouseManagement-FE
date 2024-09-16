@@ -10,7 +10,7 @@ interface LoginResponse {
     role: string;
 }
 
-export const LoginAPI = async (loginRequest: LoginRequest): Promise<LoginResponse> => {
+const LoginAPI = async (loginRequest: LoginRequest): Promise<LoginResponse> => {
     try {
         const HOST = process.env.REACT_APP_HOST_BE;
         return (await axios.post(`${HOST}/auth/login`, loginRequest)).data.data;
@@ -22,3 +22,5 @@ export const LoginAPI = async (loginRequest: LoginRequest): Promise<LoginRespons
         }
     }
 }
+
+export default LoginAPI;

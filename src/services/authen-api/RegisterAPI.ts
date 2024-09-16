@@ -25,7 +25,7 @@ interface RegisterResponse {
     status: boolean;
 }
 
-export const RegisterAPI = async (data: RegisterRequest): Promise<RegisterResponse> => {
+const RegisterAPI = async (data: RegisterRequest): Promise<RegisterResponse> => {
 
     try {
 
@@ -53,3 +53,5 @@ export const RegisterAPI = async (data: RegisterRequest): Promise<RegisterRespon
         }
     }
 }
+
+export default RegisterAPI;

@@ -3,10 +3,10 @@ import './Content.css';
 import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUser, faBell, faChevronDown } from '@fortawesome/free-solid-svg-icons';
-import { LogoutAPI } from "../../services/authen-api/LogoutAPI";
 import { DropDownMenu } from "./compoments/DropDownMenu";
 import { ModelClose } from "./compoments/ModelClose";
-import { GetProfile } from "../../util/getProfile";
+import GetProfile from "../../util/getProfile";
+import LogoutAPI from "../../services/authen-api/LogoutAPI";
 
 const ContentHeader: React.FC = () => {
 

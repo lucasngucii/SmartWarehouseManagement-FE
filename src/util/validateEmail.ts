@@ -1,4 +1,4 @@
-export function validateEmail(email: string): string {
+export default function validateEmail(email: string): string {
     const emailRegexString = process.env.REACT_APP_EMAIL_REGEX;
 
     if (!emailRegexString) {

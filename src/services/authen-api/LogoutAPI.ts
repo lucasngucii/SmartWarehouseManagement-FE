@@ -5,7 +5,7 @@ interface LogoutResponse {
     message: string;
 }
 
-export const LogoutAPI = async (): Promise<LogoutResponse> => {
+const LogoutAPI = async (): Promise<LogoutResponse> => {
     try {
         const HOST = process.env.REACT_APP_HOST_BE;
         const token = localStorage.getItem("token");
@@ -31,3 +31,5 @@ export const LogoutAPI = async (): Promise<LogoutResponse> => {
 
     }
 }
+
+export default LogoutAPI;

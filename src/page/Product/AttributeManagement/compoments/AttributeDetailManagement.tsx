@@ -1,8 +1,8 @@
 import React from "react";
 import { EditAttributeValue } from "./EditAttributeValue";
-import { OverLay } from "../../../OverLay/OverLay";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPencilAlt } from "@fortawesome/free-solid-svg-icons";
+import {OverLay} from "../../../../compoments/OverLay/OverLay";
 
 interface AttributeDetailManagementProps {
     handleCancelEditAttribute: () => void;

@@ -1,29 +1,28 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { OverLay } from "../../../OverLay/OverLay";
 import { faTimes } from "@fortawesome/free-solid-svg-icons";
+import {OverLay} from "../../../../compoments/OverLay/OverLay";
 
-interface EditAttributeValueProps {
-    hideOverlay: (e: React.MouseEvent<HTMLButtonElement>) => void;
-    attributeDetailId: number;
+interface AddAttributeProps {
+    hideOverlay: () => void;
 }
 
-export const EditAttributeValue: React.FC<EditAttributeValueProps> = ({ hideOverlay, attributeDetailId }) => {
+export const AddAttribute: React.FC<AddAttributeProps> = ({ hideOverlay }) => {
     return (
         <OverLay>
-            <div className="edit-attribute-value">
+            <div className="add-attribute-container">
                 <button onClick={hideOverlay} className="button-close">
                     <FontAwesomeIcon icon={faTimes} />
                 </button>
-                <h1 className={"primary-label form-lable"}>{`${attributeDetailId ? "Edit" : "Add"} Attribute Value`}</h1>
+                <h1 className={"primary-label form-lable"}>NEW ATTRIBUTE</h1>
                 <form className={"form"}>
                     <div className={"form-input-container"}>
                         <input
                             type={"text"}
                             className={"form-input"}
-                            placeholder={"Enter your attribute value"}
+                            placeholder={"Enter your attribute name"}
                         />
                     </div>
-                    <button className="form-input-submit">Save</button>
+                    <button className="form-input-submit">Add Attribute</button>
                 </form>
             </div>
         </OverLay>

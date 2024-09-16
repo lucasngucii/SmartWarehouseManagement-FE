@@ -1,20 +1,20 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { OverLay } from "../../../OverLay/OverLay";
+import { OverLay } from "../../../../compoments/OverLay/OverLay";
 import Select, { MultiValue, SingleValue } from "react-select";
 import { faTimes } from "@fortawesome/free-solid-svg-icons";
 import React from "react";
-import { ValidateUsername } from "../../../../util/validateUsername";
-import { validateFullname } from "../../../../util/validateFullName";
-import { validateEmail } from "../../../../util/validateEmail";
-import { ValidatePassWord } from "../../../../util/validatePassword";
-import { validatePhone } from "../../../../util/validatePhone";
-import { GetRolesAPI } from "../../../../services/authen-api/GetRolesAPI";
 import { Role } from "../../../../interface/Role";
-import { RegisterAPI, RegisterRequest } from "../../../../services/authen-api/RegisterAPI";
+import RegisterAPI, { RegisterRequest } from "../../../../services/authen-api/RegisterAPI";
 import { Account } from "../../../../interface/Account";
-import { GetAccountsAPI } from "../../../../services/authen-api/GetAccountsAPI";
-import { UpdateAccountAPI } from "../../../../services/authen-api/UpdateAccountAPI";
-import { GetAccountById } from "../../../../services/authen-api/GetAccountById";
+import ValidateUsername from "../../../../util/validateUsername";
+import validateFullname from "../../../../util/validateFullName";
+import validateEmail from "../../../../util/validateEmail";
+import ValidatePassWord from "../../../../util/validatePassword";
+import validatePhone from "../../../../util/validatePhone";
+import GetRolesAPI from "../../../../services/authen-api/GetRolesAPI";
+import GetAccountById from "../../../../services/authen-api/GetAccountById";
+import UpdateAccountAPI from "../../../../services/authen-api/UpdateAccountAPI";
+import GetAccountsAPI from "../../../../services/authen-api/GetAccountsAPI";
 
 interface OptionType {
     value: string;

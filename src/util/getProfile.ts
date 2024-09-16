@@ -1,6 +1,6 @@
 import { Profile } from "../interface/Profile";
 
-export const GetProfile = (): Profile | null => {
+export default function GetProfile(): Profile | null {
 
     const myProfile = localStorage.getItem("profile");
 
