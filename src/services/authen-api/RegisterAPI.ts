@@ -3,11 +3,12 @@ import { Role } from "../../interface/Role";
 import { ResponseError } from "../../interface/ResponseError";
 
 export interface RegisterRequest {
+    username: string;
     email: string;
     password?: string;
     fullName: string;
     phoneNumber: string;
-    // roleName: string;
+    roleName: string;
 }
 
 interface RegisterResponse {
@@ -44,7 +45,7 @@ const RegisterAPI = async (data: RegisterRequest): Promise<RegisterResponse> => 
         return response.data.data;
 
     } catch (error) {
-
+        console.log(error);
         if (axios.isAxiosError(error) && error.response) {
             const data = error.response.data as ResponseError;
             throw new Error(data.message || "An error occurred during registration.");

@@ -16,7 +16,15 @@ enum Order {
     DESC = "DESC",
 }
 
-const GetAccountsAPI = async (limit?: number, offset?: number, order?: Order, orderBy?: OrderBy): Promise<Account[]> => {
+interface ResponseGetAccounts {
+    data: Account[];
+    total: number;
+    limit: number;
+    offset: number;
+    totalElementOfPage: number;
+}
+
+const GetAccountsAPI = async (limit?: number, offset?: number, order?: Order, orderBy?: OrderBy): Promise<ResponseGetAccounts> => {
 
     try {
         const HOST = process.env.REACT_APP_HOST_BE;

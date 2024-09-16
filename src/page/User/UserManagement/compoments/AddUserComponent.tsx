@@ -257,11 +257,12 @@ export const AddUserComponent: React.FC<AddUserComponentProps> = ({ hideOverlay,
         if (validate1() && validate2()) {
 
             const dataRequest: RegisterRequest = {
+                username: formData.username,
                 email: formData.email,
                 password: formData.password,
                 fullName: formData.fullname,
                 phoneNumber: formData.phone,
-                // roleName: formData.role!.value,
+                roleName: formData.role!.value,
             }
 
             setIsLoadingSubmit(true);
@@ -274,31 +275,23 @@ export const AddUserComponent: React.FC<AddUserComponentProps> = ({ hideOverlay,
                         return GetAccountsAPI();
                     }).then((response) => {
                         if (updateUsers) {
-                            updateUsers(response);
+                            updateUsers(response.data);
                             hideOverlay();
                         } else {
                             throw new Error("updateUsers is not a function");
                         }
                     }).catch((err) => {
                         const message: string = err.message.toLowerCase();
-                        if (message.includes("email")) {
+                        if (message.includes("password")) {
                             setFormError(preVal => {
-                                return { ...preVal, email: message }
-                            })
-                        } else if (message.includes("phone")) {
-                            setFormError(preVal => {
-                                return { ...preVal, phone: message }
-                            })
-                        } else if (message.includes("password")) {
-                            setFormError(preVal => {
-                                return { ...preVal, password: message }
+                                return { ...preVal, password: err.message }
                             })
                         } else if (message.includes("role")) {
                             setFormError(preVal => {
-                                return { ...preVal, role: message }
+                                return { ...preVal, role: err.message }
                             })
                         } else {
-                            setGlobalError(message);
+                            setGlobalError(err.message);
                         }
                     }).finally(() => {
                         setIsLoadingSubmit(false);
@@ -306,12 +299,13 @@ export const AddUserComponent: React.FC<AddUserComponentProps> = ({ hideOverlay,
                 return;
             }
 
+            console.log(dataRequest);
             RegisterAPI(dataRequest)
                 .then(() => {
                     return GetAccountsAPI();
                 }).then((response) => {
                     if (updateUsers) {
-                        updateUsers(response);
+                        updateUsers(response.data);
                         hideOverlay();
                     } else {
                         throw new Error("updateUsers is not a function");
@@ -320,18 +314,18 @@ export const AddUserComponent: React.FC<AddUserComponentProps> = ({ hideOverlay,
                     const message: string = err.message.toLowerCase();
                     if (message.includes("username")) {
                         setFormError(preVal => {
-                            return { ...preVal, username: message }
+                            return { ...preVal, username: err.message }
                         })
                     } else if (message.includes("email")) {
                         setFormError(preVal => {
-                            return { ...preVal, email: message }
+                            return { ...preVal, email: err.message }
                         })
                     } else if (message.includes("phone")) {
                         setFormError(preVal => {
-                            return { ...preVal, phone: message }
+                            return { ...preVal, phone: err.message }
                         })
                     } else {
-                        setGlobalError(message);
+                        setGlobalError(err.message);
                     }
                 }).finally(() => {
                     setIsLoadingSubmit(false);

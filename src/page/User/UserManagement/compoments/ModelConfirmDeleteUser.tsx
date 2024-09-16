@@ -22,7 +22,7 @@ export const ModelConfirmDeleteUser: React.FC<ModelConfirmDeleteUserProps> = ({ 
             .then(() => {
                 return GetAccountsAPI();
             }).then((response) => {
-                updateUsers(response);
+                updateUsers(response.data);
                 closeModelConfirmDelete();
             }).catch((error) => {
                 console.error(error);

@@ -8,6 +8,8 @@ import { RePulseLoader } from "../../../compoments/Loading/PulseLoader";
 import { NoData } from "../../../compoments/NoData/NoData";
 import { ModelConfirmDeleteUser } from "./compoments/ModelConfirmDeleteUser";
 import GetAccountsAPI from "../../../services/authen-api/GetAccountsAPI";
+import Pagination from "../../../compoments/Pagination/Pagination";
+import PaginationType from "../../../interface/Pagination";
 
 export const UserManagement: React.FC = () => {
 
@@ -17,21 +19,32 @@ export const UserManagement: React.FC = () => {
     const [showOverlayModelDelete, setShowOverlayModelDelete] = React.useState(false);
     const [userId, setUserId] = React.useState<string>("");
     const [globalError, setGlobalError] = React.useState<string>("");
+    const [pagination, setPagination] = React.useState<PaginationType>({
+        total: 0,
+        limit: 0,
+        offset: 0,
+        totalElementOfPage: 0
+    });
 
     React.useEffect(() => {
         setIsLoading(true);
         GetAccountsAPI()
             .then((response) => {
                 console.log(response)
-                // console.log(response);
-                setUsers(response);
+                setUsers(response.data);
+                setPagination({
+                    total: response.total,
+                    limit: response.limit,
+                    offset: response.offset,
+                    totalElementOfPage: response.totalElementOfPage
+                });
             }).catch((error) => {
                 console.error(error);
                 setGlobalError(error.message);
             }).finally(() => {
                 setIsLoading(false);
             });
-    }, []);
+    }, [pagination.offset]);
 
     const handleShowOverlayModelUser = () => {
         setShowOverlayModelUser(true);
@@ -56,31 +69,38 @@ export const UserManagement: React.FC = () => {
         setUsers(response);
     }
 
-    // const listUser = users.map((user, index) => {
-    //     return (
-    //         <tr key={user.id}>
-    //             <td>{index + 1}</td>
-    //             <td>{user.username}</td>
-    //             <td>{user.fullName}</td>
-    //             <td>{user.email}</td>
-    //             <td>{user.phoneNumber}</td>
-    //             <td>{user.role.name}</td>
-    //             <td>
-    //                 <button
-    //                     onClick={() => {
-    //                         setUserId(user.id)
-    //                         handleShowOverlayModelUser()
-    //                     }}
-    //                     className="edit-button"
-    //                 >
-    //                     Edit
-    //                 </button>
-    //                 <button onClick={() => handleShowOverlayModelDelete(user.id)} className="delete-button">Delete</button>
-    //             </td>
-    //         </tr>
-    //     )
-    // }
-    // );
+    const handleChangePage = (page: number) => {
+        setPagination({
+            ...pagination,
+            offset: page
+        });;
+    }
+
+    const listUser = users.map((user, index) => {
+        return (
+            <tr key={user.id}>
+                <td>{index + 1}</td>
+                <td>{user.username}</td>
+                <td>{user.fullName}</td>
+                <td>{user.email}</td>
+                <td>{user.phoneNumber}</td>
+                <td>{user.role.name}</td>
+                <td>
+                    <button
+                        onClick={() => {
+                            setUserId(user.id)
+                            handleShowOverlayModelUser()
+                        }}
+                        className="edit-button"
+                    >
+                        Edit
+                    </button>
+                    <button onClick={() => handleShowOverlayModelDelete(user.id)} className="delete-button">Delete</button>
+                </td>
+            </tr>
+        )
+    }
+    );
 
     return (
         <div>
@@ -117,9 +137,12 @@ export const UserManagement: React.FC = () => {
                         </tr>
                     </thead>
                     <tbody>
-                        {/* {users.length > 0 && listUser} */}
+                        {users.length > 0 && listUser}
                     </tbody>
                 </table>
+                {
+                    users.length > 0 && <Pagination currentPage={pagination?.offset} totalPages={pagination?.total} onPageChange={handleChangePage} />
+                }
                 {
                     (users.length === 0 || globalError) && !isLoading && <NoData message={globalError} />
                 }
