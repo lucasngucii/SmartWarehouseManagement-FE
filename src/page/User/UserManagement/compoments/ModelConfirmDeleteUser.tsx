@@ -4,14 +4,16 @@ import { Account } from "../../../../interface/Account";
 import { RePulseLoader } from "../../../../compoments/Loading/PulseLoader";
 import DeleteAccountAPI from "../../../../services/authen-api/DeleteAccountAPI";
 import GetAccountsAPI from "../../../../services/authen-api/GetAccountsAPI";
+import PaginationType from "../../../../interface/Pagination";
 
 interface ModelConfirmDeleteUserProps {
     userId: string;
     closeModelConfirmDelete: () => void;
     updateUsers: (response: Account[]) => void;
+    updatePagination: (response: PaginationType) => void;
 }
 
-export const ModelConfirmDeleteUser: React.FC<ModelConfirmDeleteUserProps> = ({ userId, closeModelConfirmDelete, updateUsers }) => {
+export const ModelConfirmDeleteUser: React.FC<ModelConfirmDeleteUserProps> = ({ userId, closeModelConfirmDelete, updateUsers, updatePagination }) => {
 
     const [isLoading, setIsLoading] = React.useState(false);
     const [globalError, setGlobalError] = React.useState<string>("");
@@ -23,6 +25,12 @@ export const ModelConfirmDeleteUser: React.FC<ModelConfirmDeleteUserProps> = ({ 
                 return GetAccountsAPI();
             }).then((response) => {
                 updateUsers(response.data);
+                updatePagination({
+                    total: response.total,
+                    limit: response.limit,
+                    offset: response.offset,
+                    totalElementOfPage: response.totalElementOfPage
+                });
                 closeModelConfirmDelete();
             }).catch((error) => {
                 console.error(error);

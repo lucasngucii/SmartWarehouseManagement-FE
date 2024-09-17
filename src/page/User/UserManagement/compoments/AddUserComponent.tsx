@@ -15,6 +15,7 @@ import GetRolesAPI from "../../../../services/authen-api/GetRolesAPI";
 import GetAccountById from "../../../../services/authen-api/GetAccountById";
 import UpdateAccountAPI from "../../../../services/authen-api/UpdateAccountAPI";
 import GetAccountsAPI from "../../../../services/authen-api/GetAccountsAPI";
+import PaginationType from "../../../../interface/Pagination";
 
 interface OptionType {
     value: string;
@@ -29,6 +30,7 @@ interface AddUserComponentProps {
     hideOverlay: () => void;
     userId?: string | null;
     updateUsers?: (response: Account[]) => void;
+    updatePagination: (response: PaginationType) => void;
 }
 
 interface FormDataTypes {
@@ -51,7 +53,7 @@ interface FormErrorTypes {
     confirmPassword: string;
 }
 
-export const AddUserComponent: React.FC<AddUserComponentProps> = ({ hideOverlay, userId, updateUsers }) => {
+export const AddUserComponent: React.FC<AddUserComponentProps> = ({ hideOverlay, userId, updateUsers, updatePagination }) => {
 
     const [isLoading, setIsLoading] = React.useState<boolean>(false);
     const [isLoadingSubmit, setIsLoadingSubmit] = React.useState<boolean>(false);
@@ -276,6 +278,12 @@ export const AddUserComponent: React.FC<AddUserComponentProps> = ({ hideOverlay,
                     }).then((response) => {
                         if (updateUsers) {
                             updateUsers(response.data);
+                            updatePagination({
+                                total: response.total,
+                                limit: response.limit,
+                                offset: response.offset,
+                                totalElementOfPage: response.totalElementOfPage
+                            })
                             hideOverlay();
                         } else {
                             throw new Error("updateUsers is not a function");

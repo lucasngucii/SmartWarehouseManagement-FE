@@ -24,7 +24,14 @@ interface ResponseGetAccounts {
     totalElementOfPage: number;
 }
 
-const GetAccountsAPI = async (limit?: number, offset?: number, order?: Order, orderBy?: OrderBy): Promise<ResponseGetAccounts> => {
+interface GetAccountsAPIProps {
+    limit?: number;
+    offset?: number;
+    order?: Order;
+    orderBy?: OrderBy;
+}
+
+const GetAccountsAPI = async (input?: GetAccountsAPIProps): Promise<ResponseGetAccounts> => {
 
     try {
         const HOST = process.env.REACT_APP_HOST_BE;
@@ -34,7 +41,7 @@ const GetAccountsAPI = async (limit?: number, offset?: number, order?: Order, or
             throw new Error("Token not found.");
         }
 
-        const response = await axios.get(`${HOST}/account/ad?limit=${limit || 10}&offset=${offset || 1}&order=${order || "ASC"}&orderBy=${orderBy || "fullName"}`, {
+        const response = await axios.get(`${HOST}/account/ad?limit=${input?.limit || 10}&offset=${input?.offset || 1}&order=${input?.order || Order.ASC}&orderBy=${input?.orderBy || OrderBy.FullName}`, {
             headers: {
                 Authorization: `Bearer ${token}`,
             },

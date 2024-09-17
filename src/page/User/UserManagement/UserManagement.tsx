@@ -30,7 +30,26 @@ export const UserManagement: React.FC = () => {
         setIsLoading(true);
         GetAccountsAPI()
             .then((response) => {
-                console.log(response)
+                setUsers(response.data);
+                setPagination({
+                    total: response.total,
+                    limit: response.limit,
+                    offset: response.offset,
+                    totalElementOfPage: response.totalElementOfPage
+                });
+            }).catch((error) => {
+                console.error(error);
+                setGlobalError(error.message);
+            }).finally(() => {
+                setIsLoading(false);
+            });
+    }, []);
+
+    React.useEffect(() => {
+        setIsLoading(true);
+        GetAccountsAPI({ offset: pagination.offset })
+            .then((response) => {
+                console.log(response);
                 setUsers(response.data);
                 setPagination({
                     total: response.total,
@@ -69,11 +88,15 @@ export const UserManagement: React.FC = () => {
         setUsers(response);
     }
 
+    const updatePagination = (response: PaginationType) => {
+        setPagination(response);
+    }
+
     const handleChangePage = (page: number) => {
         setPagination({
             ...pagination,
             offset: page
-        });;
+        });
     }
 
     const listUser = users.map((user, index) => {
@@ -148,8 +171,8 @@ export const UserManagement: React.FC = () => {
                 }
                 <RePulseLoader loading={isLoading} />
             </div>
-            {showOverlayModelUser && <AddUserComponent hideOverlay={handleHideOverlayModelUser} userId={userId} updateUsers={updateUsers} />}
-            {showOverlayModelDelete && <ModelConfirmDeleteUser userId={userId} closeModelConfirmDelete={handleHideOverlayModelDelete} updateUsers={updateUsers} />}
+            {showOverlayModelUser && <AddUserComponent hideOverlay={handleHideOverlayModelUser} userId={userId} updateUsers={updateUsers} updatePagination={updatePagination} />}
+            {showOverlayModelDelete && <ModelConfirmDeleteUser userId={userId} closeModelConfirmDelete={handleHideOverlayModelDelete} updateUsers={updateUsers} updatePagination={updatePagination} />}
         </div>
     );
 }
