@@ -23,11 +23,11 @@ const ModelConfirmDeleteAttributeValue: React.FC<ModelConfirmDeleteAttributeValu
         setIsLoading(true);
         DeleteAttributeValue(attributeId, attributeValueId)
             .then(() => {
-                return GetAttributeDetail(attributeId);
+                return GetAttributeDetail({ id: attributeId });
             }).then((response) => {
                 updateAttributeValues(response.data);
                 updatePagination({
-                    total: response.total,
+                    totalPage: response.totalPage,
                     limit: response.limit,
                     offset: response.offset,
                     totalElementOfPage: response.totalElementOfPage

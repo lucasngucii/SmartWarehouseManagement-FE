@@ -1,26 +1,9 @@
 import axios from "axios";
-import AttributeDetailType from "../../interface/AttributeDetail";
 import { ResponseError } from "../../interface/ResponseError";
 import returnNameAttribute from "../../util/returnNameAttribute";
-import Order from "../../enum/Order";
+import Attribute from "../../interface/Attribute";
 
-interface GetAttributeDetailResponse {
-    data: AttributeDetailType[];
-    totalPage: number;
-    limit: number;
-    offset: number;
-    totalElementOfPage: number;
-}
-
-interface GetAttributeDetailProps {
-    id: number;
-    limit?: number;
-    offset?: number;
-    order?: Order;
-    orderBy?: string;
-}
-
-const GetAttributeDetail = async (data: GetAttributeDetailProps): Promise<GetAttributeDetailResponse> => {
+const AddAttributeValue = async (id: number, data: Attribute): Promise<void> => {
 
     try {
         const HOST = process.env.REACT_APP_HOST_BE;
@@ -30,11 +13,11 @@ const GetAttributeDetail = async (data: GetAttributeDetailProps): Promise<GetAtt
             throw new Error("Token is not found");
         }
 
-        if (returnNameAttribute(data.id) === "") {
+        if (returnNameAttribute(id) === "") {
             throw new Error("Attribute is not found");
         }
 
-        const response = await axios.get(`${HOST}/${returnNameAttribute(data.id)}?limit=${data?.limit || 10}&offset=${data?.offset || 1}&order=${data?.order || Order.ASC}&orderBy=${data?.orderBy || "name"}`, {
+        const response = await axios.post(`${HOST}/${returnNameAttribute(id)}`, data, {
             headers: {
                 Authorization: `Bearer ${token}`
             }
@@ -53,4 +36,4 @@ const GetAttributeDetail = async (data: GetAttributeDetailProps): Promise<GetAtt
     }
 }
 
-export default GetAttributeDetail;
+export default AddAttributeValue;

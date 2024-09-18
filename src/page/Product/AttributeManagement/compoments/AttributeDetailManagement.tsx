@@ -25,7 +25,7 @@ export const AttributeDetailManagement: React.FC<AttributeDetailManagementProps>
     const [showEditAttributeValue, setShowEditAttributeValue] = React.useState(false);
     const [showModelConfirmDelete, setShowModelConfirmDelete] = React.useState(false);
     const [pagination, setPagination] = React.useState<PaginationType>({
-        total: 0,
+        totalPage: 0,
         limit: 0,
         offset: 0,
         totalElementOfPage: 0
@@ -33,12 +33,11 @@ export const AttributeDetailManagement: React.FC<AttributeDetailManagementProps>
 
     React.useEffect(() => {
         setIsLoading(true);
-        GetAttributeDetail(attributeId)
+        GetAttributeDetail({ id: attributeId, offset: pagination.offset })
             .then((response) => {
-                console.log(response.data);
                 setAttributeValues(response.data);
                 setPagination({
-                    total: response.total,
+                    totalPage: response.totalPage,
                     limit: response.limit,
                     offset: response.offset,
                     totalElementOfPage: response.totalElementOfPage
@@ -49,15 +48,15 @@ export const AttributeDetailManagement: React.FC<AttributeDetailManagementProps>
             }).finally(() => {
                 setIsLoading(false);
             })
-    }, [attributeId]);
+    }, [attributeId, pagination.offset]);
 
     const handleCancelEditAttributeValue = () => {
         setAttributeValueId("")
         setShowEditAttributeValue(false);
     }
 
-    const handleEditAttributeValue = (attributeId: string) => {
-        setAttributeValueId(attributeId);
+    const handleEditAttributeValue = (attributeValueId: string) => {
+        setAttributeValueId(attributeValueId);
         setShowEditAttributeValue(true);
     }
 
@@ -65,8 +64,8 @@ export const AttributeDetailManagement: React.FC<AttributeDetailManagementProps>
         setShowEditAttributeValue(true);
     }
 
-    const handleDeleteAttributeValue = (attributeId: string) => {
-        setAttributeValueId(attributeId);
+    const handleDeleteAttributeValue = (attributeValueId: string) => {
+        setAttributeValueId(attributeValueId);
         setShowModelConfirmDelete(true);
     }
 
@@ -145,7 +144,7 @@ export const AttributeDetailManagement: React.FC<AttributeDetailManagementProps>
                                 <FontAwesomeIcon icon={faSearch} />
                             </button>
                         </form>
-                        <button onClick={handleAddAttributeValue} className="add-button">Add values</button>
+                        <button onClick={handleAddAttributeValue} className="add-button">Add value</button>
                     </div>
                 </div>
                 <form className={"form"}>
@@ -179,7 +178,7 @@ export const AttributeDetailManagement: React.FC<AttributeDetailManagementProps>
                     </table>
                 </div>
                 {
-                    attributeValues.length > 0 && <Pagination currentPage={pagination?.offset} totalPages={pagination?.total} onPageChange={handleChangePage} />
+                    attributeValues.length > 0 && <Pagination currentPage={pagination?.offset} totalPages={pagination?.totalPage} onPageChange={handleChangePage} />
                 }
                 {
                     (attributeValues.length === 0 || globalError) && !isLoading && <NoData message={globalError} />
@@ -188,8 +187,11 @@ export const AttributeDetailManagement: React.FC<AttributeDetailManagementProps>
                 {
                     showEditAttributeValue &&
                     <EditAttributeValue
+                        attributeId={attributeId}
                         attributeDetailId={attributeValueId}
                         hideOverlay={handleCancelEditAttributeValue}
+                        updatePagination={updatePagination}
+                        updateAttributeValues={updateAttributeValues}
                     />
                 }
                 {

@@ -50,7 +50,7 @@ export const AttributeManagement: React.FC = () => {
                 <td>{attribute.Id}</td>
                 <td>{attribute.Name}</td>
                 <td>
-                    <button onClick={() => { handleEdit(attribute.Id) }} className={"edit-button"}>Edit Values</button>
+                    <button onClick={() => { handleEdit(attribute.Id) }} className={"edit-button"}>Add Value</button>
                 </td>
             </tr>
         );

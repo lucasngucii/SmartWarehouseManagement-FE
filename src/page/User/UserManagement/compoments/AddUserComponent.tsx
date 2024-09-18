@@ -279,7 +279,7 @@ export const AddUserComponent: React.FC<AddUserComponentProps> = ({ hideOverlay,
                         if (updateUsers) {
                             updateUsers(response.data);
                             updatePagination({
-                                total: response.total,
+                                totalPage: response.totalPage,
                                 limit: response.limit,
                                 offset: response.offset,
                                 totalElementOfPage: response.totalElementOfPage

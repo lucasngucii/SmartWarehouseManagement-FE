@@ -1,6 +1,7 @@
 import axios from "axios";
 import { ResponseError } from "../../interface/ResponseError";
 import { Account } from "../../interface/Account";
+import Order from "../../enum/Order";
 
 enum OrderBy {
     Username = "username",
@@ -11,14 +12,9 @@ enum OrderBy {
     PhoneNumber = "phoneNumber",
 }
 
-enum Order {
-    ASC = "ASC",
-    DESC = "DESC",
-}
-
 interface ResponseGetAccounts {
     data: Account[];
-    total: number;
+    totalPage: number;
     limit: number;
     offset: number;
     totalElementOfPage: number;

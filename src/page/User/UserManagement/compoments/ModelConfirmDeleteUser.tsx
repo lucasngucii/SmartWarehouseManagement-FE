@@ -26,7 +26,7 @@ export const ModelConfirmDeleteUser: React.FC<ModelConfirmDeleteUserProps> = ({ 
             }).then((response) => {
                 updateUsers(response.data);
                 updatePagination({
-                    total: response.total,
+                    totalPage: response.totalPage,
                     limit: response.limit,
                     offset: response.offset,
                     totalElementOfPage: response.totalElementOfPage

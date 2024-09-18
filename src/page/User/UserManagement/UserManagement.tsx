@@ -20,7 +20,7 @@ export const UserManagement: React.FC = () => {
     const [userId, setUserId] = React.useState<string>("");
     const [globalError, setGlobalError] = React.useState<string>("");
     const [pagination, setPagination] = React.useState<PaginationType>({
-        total: 0,
+        totalPage: 0,
         limit: 0,
         offset: 0,
         totalElementOfPage: 0
@@ -32,7 +32,7 @@ export const UserManagement: React.FC = () => {
             .then((response) => {
                 setUsers(response.data);
                 setPagination({
-                    total: response.total,
+                    totalPage: response.totalPage,
                     limit: response.limit,
                     offset: response.offset,
                     totalElementOfPage: response.totalElementOfPage
@@ -52,7 +52,7 @@ export const UserManagement: React.FC = () => {
                 console.log(response);
                 setUsers(response.data);
                 setPagination({
-                    total: response.total,
+                    totalPage: response.totalPage,
                     limit: response.limit,
                     offset: response.offset,
                     totalElementOfPage: response.totalElementOfPage
@@ -164,7 +164,7 @@ export const UserManagement: React.FC = () => {
                     </tbody>
                 </table>
                 {
-                    users.length > 0 && <Pagination currentPage={pagination?.offset} totalPages={pagination?.total} onPageChange={handleChangePage} />
+                    users.length > 0 && <Pagination currentPage={pagination?.offset} totalPages={pagination?.totalPage} onPageChange={handleChangePage} />
                 }
                 {
                     (users.length === 0 || globalError) && !isLoading && <NoData message={globalError} />

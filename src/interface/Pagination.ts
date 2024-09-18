@@ -1,5 +1,5 @@
 export default interface PaginationType {
-    total: number;
+    totalPage: number;
     limit: number;
     offset: number;
     totalElementOfPage: number;
