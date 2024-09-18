@@ -49,7 +49,6 @@ export const UserManagement: React.FC = () => {
         setIsLoading(true);
         GetAccountsAPI({ offset: pagination.offset })
             .then((response) => {
-                console.log(response);
                 setUsers(response.data);
                 setPagination({
                     totalPage: response.totalPage,

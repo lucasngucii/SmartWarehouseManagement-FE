@@ -112,7 +112,7 @@ export const AttributeDetailManagement: React.FC<AttributeDetailManagementProps>
                 <td>{index + 1}</td>
                 <td>{attributeValue.name}</td>
                 <td>{attributeValue.description}</td>
-                <td>{attributeValue.sizeCode}</td>
+                <td>{attributeValue.sizeCode || attributeValue.brandCode || attributeValue.categoryCode || attributeValue.colorCode || attributeValue.materialCode}</td>
                 <td>
                     <button onClick={() => { handleEditAttributeValue(attributeValue.id) }} className="edit-button">Edit</button>
                     <button onClick={() => { handleDeleteAttributeValue(attributeValue.id) }} className="delete-button">Delete</button>

@@ -6,5 +6,9 @@ export default interface AttributeDetailType {
     isDelete: boolean,
     name: string,
     description: string,
-    sizeCode: string,
+    sizeCode?: string,
+    colorCode?: string,
+    materialCode?: string,
+    brandCode?: string,
+    categoryCode?: string
 }

@@ -5,6 +5,10 @@ import Attribute from "../../interface/Attribute";
 
 const AddAttributeValue = async (id: number, data: Attribute): Promise<void> => {
 
+    const customData: Attribute = {
+        ...data
+    };
+
     try {
         const HOST = process.env.REACT_APP_HOST_BE;
         const token = localStorage.getItem("token");
@@ -17,7 +21,28 @@ const AddAttributeValue = async (id: number, data: Attribute): Promise<void> => 
             throw new Error("Attribute is not found");
         }
 
-        const response = await axios.post(`${HOST}/${returnNameAttribute(id)}`, data, {
+        switch (returnNameAttribute(id)) {
+            case "materials":
+                customData.materialCode = customData.sizeCode;
+                delete customData.sizeCode;
+                break;
+            case "colors":
+                customData.colorCode = customData.sizeCode;
+                delete customData.sizeCode;
+                break;
+            case "brands":
+                customData.brandCode = customData.sizeCode;
+                delete customData.sizeCode;
+                break;
+            case "categories":
+                customData.categoryCode = customData.sizeCode;
+                delete customData.sizeCode;
+                break;
+            default:
+                break;
+        }
+
+        const response = await axios.post(`${HOST}/${returnNameAttribute(id)}`, customData, {
             headers: {
                 Authorization: `Bearer ${token}`
             }
