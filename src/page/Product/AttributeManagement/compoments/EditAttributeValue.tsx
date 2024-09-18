@@ -1,10 +1,10 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTimes } from "@fortawesome/free-solid-svg-icons";
-import {OverLay} from "../../../../compoments/OverLay/OverLay";
+import { OverLay } from "../../../../compoments/OverLay/OverLay";
 
 interface EditAttributeValueProps {
     hideOverlay: (e: React.MouseEvent<HTMLButtonElement>) => void;
-    attributeDetailId: number;
+    attributeDetailId: string;
 }
 
 export const EditAttributeValue: React.FC<EditAttributeValueProps> = ({ hideOverlay, attributeDetailId }) => {
@@ -14,13 +14,30 @@ export const EditAttributeValue: React.FC<EditAttributeValueProps> = ({ hideOver
                 <button onClick={hideOverlay} className="button-close">
                     <FontAwesomeIcon icon={faTimes} />
                 </button>
-                <h1 className={"primary-label form-lable"}>{`${attributeDetailId ? "Edit" : "Add"} Attribute Value`}</h1>
+                <h1 className={"primary-label form-lable"}>{`${attributeDetailId ? "Edit" : "Add"} Value`}</h1>
                 <form className={"form"}>
                     <div className={"form-input-container"}>
+                        <label className={"form-lable"}>Value Name</label>
                         <input
                             type={"text"}
                             className={"form-input"}
-                            placeholder={"Enter your attribute value"}
+                            placeholder={"Enter Value name"}
+                        />
+                    </div>
+                    <div className={"form-input-container"}>
+                        <label className={"form-lable"}>Description</label>
+                        <input
+                            type={"text"}
+                            className={"form-input"}
+                            placeholder={"Enter your description"}
+                        />
+                    </div>
+                    <div className={"form-input-container"}>
+                        <label className={"form-lable"}>Code</label>
+                        <input
+                            type={"text"}
+                            className={"form-input"}
+                            placeholder={"Enter your code"}
                         />
                     </div>
                     <button className="form-input-submit">Save</button>

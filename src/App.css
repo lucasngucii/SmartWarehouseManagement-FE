@@ -124,6 +124,7 @@ body {
 
 /* Table container styles */
 .table-container {
+    width: 100%;
     overflow-x: auto;
 }
 
@@ -132,6 +133,7 @@ body {
     width: 100%;
     border-collapse: separate;
     border-spacing: 0;
+    table-layout: fixed;
 }
 
 /* Header styles */
@@ -142,11 +144,9 @@ body {
     padding: 15px 20px;
     border-bottom: 2px solid #ddd;
     text-align: left;
-}
-
-/* Column width for the first column */
-.table.id-column th:first-child {
-    width: 5%;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
 }
 
 /* Cell styles */
@@ -156,6 +156,16 @@ body {
     padding: 15px 20px;
     border-bottom: 1px solid #ddd;
     text-align: left;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+/* Column width for the first column */
+.table.id-column th:first-child,
+.table.id-column td:first-child {
+    width: 5%;
+    max-width: none;
 }
 
 /* Hover effect for rows */
@@ -177,17 +187,6 @@ body {
     border-bottom: 2px solid #ddd;
 }
 
-/* Responsive table styling */
-@media (max-width: 768px) {
-    .table {
-        font-size: 14px;
-    }
-
-    .table th,
-    .table td {
-        padding: 10px;
-    }
-}
 
 /* Global Button Styles */
 .view-button,
@@ -204,6 +203,30 @@ body {
     font-weight: 500;
     transition: background-color 0.3s ease, transform 0.2s ease;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* back button */
+.back-button {
+    background-color: #ffffff;
+    color: #3498db;
+    padding: 10px 0;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 22px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    transition: transform 0.2s ease, background-color 0.2s ease, color 0.2s ease;
+}
+
+.back-button:hover {
+    transform: scale(1.1);
+}
+
+.back-button:active {
+    transform: scale(0.95);
 }
 
 /* Cancel Button */

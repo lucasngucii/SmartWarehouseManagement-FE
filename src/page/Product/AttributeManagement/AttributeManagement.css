@@ -6,10 +6,6 @@
     border: 1px solid #e0e0e0;
 }
 
-.attribute-detail-management .group-button {
-    margin-top: 15px;
-}
-
 .attribute-name-lable {
     margin-top: 15px;
     font-weight: bolder;
@@ -20,17 +16,6 @@
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
-}
-
-.hidden-border-right-input-attribute-name {
-    border-right: none !important;
-    border-bottom-right-radius: 0 !important;
-    border-top-right-radius: 0 !important;
-}
-
-.hidden-border-right-input-attribute-name:focus {
-    border: 1px solid #e0e0e0 !important;
-    border-right: none !important;
 }
 
 .button-close-edit-attribute-name {
