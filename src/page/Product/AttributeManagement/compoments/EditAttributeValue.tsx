@@ -8,6 +8,8 @@ import GetAttributeDetail from "../../../../services/attribute/GetAttributeDetai
 import PaginationType from "../../../../interface/Pagination";
 import AttributeDetailType from "../../../../interface/AttributeDetail";
 import { Form } from "react-bootstrap";
+import GetAttributeValueById from "../../../../services/attribute/GetAttributeValueById";
+import UpdateAttributeValue from "../../../../services/attribute/UpdateAttributeValue";
 
 interface EditAttributeValueProps {
     hideOverlay: () => void;
@@ -27,6 +29,22 @@ export const EditAttributeValue: React.FC<EditAttributeValueProps> = ({ hideOver
     const [loading, setLoading] = React.useState(false);
     const [globalError, setGlobalError] = React.useState("");
 
+    React.useEffect(() => {
+        if (attributeDetailId) {
+            GetAttributeValueById(attributeId, attributeDetailId)
+                .then((response) => {
+                    setFormData({
+                        name: response.name,
+                        description: response.description,
+                        sizeCode: response.sizeCode || response.brandCode || response.colorCode || response.materialCode || response.categoryCode
+                    });
+                }).catch((error) => {
+                    console.error(error);
+                    setGlobalError(error.message);
+                });
+        }
+    }, [attributeDetailId, attributeId]);
+
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setFormData({
             ...formData,
@@ -37,24 +55,45 @@ export const EditAttributeValue: React.FC<EditAttributeValueProps> = ({ hideOver
     const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         setLoading(true);
-        AddAttributeValue(attributeId, formData)
-            .then(() => {
-                return GetAttributeDetail({ id: attributeId });
-            }).then((response) => {
-                updateAttributeValues(response.data);
-                updatePagination({
-                    totalPage: response.totalPage,
-                    limit: response.limit,
-                    offset: response.offset,
-                    totalElementOfPage: response.totalElementOfPage
-                });
-                hideOverlay();
-            }).catch((error) => {
-                console.error(error);
-                setGlobalError(error.message);
-            }).finally(() => {
-                setLoading(false);
-            })
+        if (attributeDetailId) {
+            UpdateAttributeValue(attributeId, attributeDetailId, formData)
+                .then(() => {
+                    return GetAttributeDetail({ id: attributeId });
+                }).then((response) => {
+                    updateAttributeValues(response.data);
+                    updatePagination({
+                        totalPage: response.totalPage,
+                        limit: response.limit,
+                        offset: response.offset,
+                        totalElementOfPage: response.totalElementOfPage
+                    });
+                    hideOverlay();
+                }).catch((error) => {
+                    console.error(error);
+                    setGlobalError(error.message);
+                }).finally(() => {
+                    setLoading(false);
+                })
+        } else {
+            AddAttributeValue(attributeId, formData)
+                .then(() => {
+                    return GetAttributeDetail({ id: attributeId });
+                }).then((response) => {
+                    updateAttributeValues(response.data);
+                    updatePagination({
+                        totalPage: response.totalPage,
+                        limit: response.limit,
+                        offset: response.offset,
+                        totalElementOfPage: response.totalElementOfPage
+                    });
+                    hideOverlay();
+                }).catch((error) => {
+                    console.error(error);
+                    setGlobalError(error.message);
+                }).finally(() => {
+                    setLoading(false);
+                })
+        }
     }
 
     return (
@@ -64,7 +103,7 @@ export const EditAttributeValue: React.FC<EditAttributeValueProps> = ({ hideOver
                     <FontAwesomeIcon icon={faTimes} />
                 </button>
                 <h1 className={"h2 text-center fw-bold"}>{`${attributeDetailId ? "Edit" : "Add"} Value`}</h1>
-                <span className="primary-message-error text-center">{globalError}</span>
+                <p className="text-center text-danger">{globalError}</p>
                 <Form onSubmit={handleSubmit}>
                     <Form.Group className="mb-3">
                         <Form.Label className={"form-lable"}>Value Name</Form.Label>

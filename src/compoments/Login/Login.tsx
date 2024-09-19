@@ -5,6 +5,7 @@ import ValidateUsername from "../../util/validateUsername";
 import ValidatePassWord from "../../util/validatePassword";
 import LoginAPI from "../../services/authen-api/LoginAPI";
 import GetProfileByTokenAPI from "../../services/authen-api/GetProfileByTokenAPI";
+import { Form } from "react-bootstrap";
 
 interface formDataType {
     username: string;
@@ -120,39 +121,36 @@ export const Login: React.FC = () => {
     return (
         <div className="login-container">
             <div className="login-box">
-                <h1>Login</h1>
+                <p className="h2 text-center fw-bold">Login</p>
                 <p className="primary-message-error margin-bottom-15 text-center">{globalError}</p>
-                <form className="form">
-                    <div className={"form-input-container"}>
-                        <label className="form-input-lable">Username:</label>
-                        <input
-                            onChange={handleInputChange}
+                <Form onSubmit={(e) => {
+                    e.preventDefault();
+                    if (validate1() && validate2()) handleSubmit()
+                }}>
+                    <Form.Group className="mb-3">
+                        <Form.Label>Username</Form.Label>
+                        <Form.Control
                             type="text"
-                            name="username"
-                            className="form-input"
                             placeholder="Enter your username"
-                        />
-                        <span className="form-error">{errors.username}</span>
-                    </div>
-                    <div className={"form-input-container"}>
-                        <label className="form-input-lable">Password:</label>
-                        <input
+                            name="username"
                             onChange={handleInputChange}
+                        />
+                        <Form.Text className="text-danger">{errors.username}</Form.Text>
+                    </Form.Group>
+                    <Form.Group className="mb-3">
+                        <Form.Label>Password</Form.Label>
+                        <Form.Control
                             type="password"
+                            placeholder="Enter your password"
                             name="password"
-                            className="form-input"
-                            placeholder="Enter your password" />
-                        <span className="form-error">{errors.password}</span>
-                    </div>
-                    <button
-                        onClick={() => { if (validate1() && validate2()) handleSubmit() }}
-                        type="button"
-                        className="form-input-submit"
-                        disabled={loading}
-                    >
-                        {loading ? "Loading..." : "Login"}
-                    </button>
-                </form>
+                            onChange={handleInputChange}
+                        />
+                        <Form.Text className="text-danger">{errors.password}</Form.Text>
+                    </Form.Group>
+                    <Form.Group className="mb-3">
+                        <Form.Control className="btn btn-primary" type="submit" disabled={loading} value={loading ? "Loading..." : "Login"} />
+                    </Form.Group>
+                </Form>
             </div>
         </div>
     );

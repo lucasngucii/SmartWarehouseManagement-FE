@@ -96,32 +96,6 @@ body {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
-/* CSS cho nút trong form-search */
-.form-search .form-input-submit {
-    padding: 12px 20px;
-    background: linear-gradient(135deg, #27ae60 50%, #1e8449 50%);
-    color: #ffffff;
-    border: none;
-    border-radius: 6px;
-    font-size: 16px;
-    font-weight: 500;
-    cursor: pointer;
-    transition: background 0.3s ease, transform 0.2s ease;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-}
-
-.form-search .form-input-submit:hover {
-    background: linear-gradient(135deg, #1e8449 50%, #186a3b 50%);
-    transform: translateY(-2px);
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
-}
-
-.form-search .form-input-submit:active {
-    background: linear-gradient(135deg, #186a3b 50%, #145a32 50%);
-    transform: translateY(0);
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-}
-
 /* back button */
 .back-button {
     background-color: #ffffff;
