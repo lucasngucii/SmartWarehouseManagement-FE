@@ -51,8 +51,8 @@ export const ModelConfirmDeleteUser: React.FC<ModelConfirmDeleteUserProps> = ({ 
                         <RePulseLoader loading={isLoading} />
                         :
                         <div className="model-buttons">
-                            <button className="cancel-button" onClick={closeModelConfirmDelete}>Cancel</button>
-                            <button className="delete-button" onClick={() => { handleDeleteAccount(userId) }}>Delete</button>
+                            <button className="btn btn-secondary" onClick={closeModelConfirmDelete}>Cancel</button>
+                            <button className="btn btn-danger" onClick={() => { handleDeleteAccount(userId) }}>Delete</button>
                         </div>
                 }
             </div>

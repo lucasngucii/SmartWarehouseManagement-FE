@@ -1,8 +1,9 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTimes } from "@fortawesome/free-solid-svg-icons";
 import React from "react";
-import Select, { MultiValue, SingleValue } from "react-select";
-import {OverLay} from "../../../../compoments/OverLay/OverLay";
+import Select, { MultiValue, SingleValue, StylesConfig } from "react-select";
+import { OverLay } from "../../../../compoments/OverLay/OverLay";
+import { Form } from "react-bootstrap";
 
 interface OptionType {
     value: string;
@@ -57,7 +58,7 @@ export const OverLayProductDetails: React.FC<OverLayProductDetailsProps> = ({ ha
         setFormData({ ...formData, [e.target.name]: e.target.value });
     }
 
-    const handleSubmit = (e: React.MouseEvent<HTMLButtonElement>) => {
+    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
         if (openEdit) {
             setOpenEdit(false)
@@ -66,6 +67,16 @@ export const OverLayProductDetails: React.FC<OverLayProductDetailsProps> = ({ ha
         alert("Product is saved")
         setOpenEdit(true)
     }
+
+    const customSelectStyles: StylesConfig<any, false> = {
+        control: (base) => ({
+            ...base,
+            width: "100%",
+            borderRadius: "4px",
+            border: "1px solid #d1d1d1",
+            fontSize: "14px",
+        }),
+    };
 
     const options: Options = {
         Category: [
@@ -107,158 +118,170 @@ export const OverLayProductDetails: React.FC<OverLayProductDetailsProps> = ({ ha
                 <button onClick={handleClose} className="button-close">
                     <FontAwesomeIcon icon={faTimes} />
                 </button>
-                <h2 className="primary-label form-lable">Product Details</h2>
-                <form className="form">
-                    <div className="form-input-container">
-                        <label className="form-input-lable">Product Name</label>
-                        <input onChange={handleChangeInput} name="productName" className="form-input" type="text" placeholder="Enter Product Name" disabled={openEdit} />
-                    </div>
-                    <div className="form-input-container">
-                        <label className="form-input-lable">SKU Code</label>
-                        <input onChange={handleChangeInput} name="sku" className="form-input" type="text" placeholder="Your SKU" disabled />
-                    </div>
-                    <div className="form-input-container">
-                        <label className="form-input-lable">Batch Number</label>
-                        <input onChange={handleChangeInput} name="batchNumber" className="form-input" type="text" placeholder="Your Batch Number" disabled />
-                    </div>
-                    <div className="form-input-container">
-                        <label className="form-input-lable">Category</label>
+                <h2 className="h2 text-center fw-bold">Product Details</h2>
+                <Form onClick={handleSubmit}>
+                    <Form.Group className="mb-3" controlId="formBasicEmail">
+                        <Form.Label>Product Name</Form.Label>
+                        <Form.Control
+                            type="text"
+                            placeholder="Enter Product Name"
+                            disabled={openEdit}
+                            onChange={handleChangeInput}
+                            name="productName"
+                        />
+                    </Form.Group>
+                    <Form.Group className="mb-3" controlId="formBasicEmail">
+                        <Form.Label>SKU Code</Form.Label>
+                        <Form.Control
+                            type="text"
+                            placeholder="Your SKU"
+                            disabled
+                            onChange={handleChangeInput}
+                            name="sku"
+                        />
+                    </Form.Group>
+                    <Form.Group className="mb-3" controlId="formBasicEmail">
+                        <Form.Label>Batch Number</Form.Label>
+                        <Form.Control
+                            type="text"
+                            placeholder="Your Batch Number"
+                            disabled
+                            onChange={handleChangeInput}
+                            name="batchNumber"
+                        />
+                    </Form.Group>
+                    <Form.Group className="mb-3" controlId="formBasicEmail">
+                        <Form.Label>Category</Form.Label>
                         <Select
-                            styles={{
-                                control: (base) => ({
-                                    ...base,
-                                    width: "100%",
-                                    height: "45px",
-                                    borderRadius: "4px",
-                                    border: "1px solid #d1d1d1",
-                                    fontSize: "14px",
-                                }),
-                            }}
+                            styles={customSelectStyles}
                             value={formData.category}
                             onChange={(newValue) => handleChangeSelect("category", newValue)}
                             options={options.Category}
                             isDisabled={openEdit}
                         />
-                    </div>
-                    <div className="form-input-container">
-                        <label className="form-input-lable">Unit</label>
-                        <input onChange={handleChangeInput} name="unit" className="form-input" type="text" placeholder="Enter your product unit" disabled={openEdit} />
-                    </div>
-                    <div className="form-input-container">
-                        <label className="form-input-lable">Weight</label>
-                        <input onChange={handleChangeInput} name="weight" className="form-input" type="number" placeholder="Enter your product weight" disabled={openEdit} />
-                    </div>
-                    <div className="form-input-container">
-                        <label className="form-input-lable">Quantity</label>
-                        <input onChange={handleChangeInput} name="quantity" className="form-input" type="number" placeholder="Your quantity" disabled />
-                    </div>
-                    <div className="form-input-container">
-                        <label className="form-input-lable">Deminsion ( L - W - H )</label>
+                    </Form.Group>
+                    <Form.Group className="mb-3" controlId="formBasicEmail">
+                        <Form.Label>Unit</Form.Label>
+                        <Form.Control
+                            type="text"
+                            placeholder="Enter your product unit"
+                            disabled={openEdit}
+                            onChange={handleChangeInput}
+                            name="unit"
+                        />
+                    </Form.Group>
+                    <Form.Group className="mb-3" controlId="formBasicEmail">
+                        <Form.Label>Weight</Form.Label>
+                        <Form.Control
+                            type="number"
+                            placeholder="Enter your product weight"
+                            disabled={openEdit}
+                            onChange={handleChangeInput}
+                            name="weight"
+                        />
+                    </Form.Group>
+                    <Form.Group className="mb-3" controlId="formBasicEmail">
+                        <Form.Label>Quantity</Form.Label>
+                        <Form.Control
+                            type="number"
+                            placeholder="Your quantity"
+                            disabled
+                            onChange={handleChangeInput}
+                            name="quantity"
+                        />
+                    </Form.Group>
+                    <Form.Group className="mb-3" controlId="formBasicEmail">
+                        <Form.Label>Deminsion ( L - W - H )</Form.Label>
                         <div className="group-deminsion-attribute">
-                            <input onChange={handleChangeInput} name="length" className="form-input" type="number" placeholder="Length" disabled={openEdit} />
+                            <Form.Control
+                                type="number"
+                                placeholder="Length"
+                                disabled={openEdit}
+                                onChange={handleChangeInput}
+                                name="length"
+                            />
                             <span className="deminsion-separator">x</span>
-                            <input onChange={handleChangeInput} name="width" className="form-input" type="number" placeholder="Width" disabled={openEdit} />
+                            <Form.Control
+                                type="number"
+                                placeholder="Width"
+                                disabled={openEdit}
+                                onChange={handleChangeInput}
+                                name="width"
+                            />
                             <span className="deminsion-separator">x</span>
-                            <input onChange={handleChangeInput} name="height" className="form-input" type="number" placeholder="Height" disabled={openEdit} />
+                            <Form.Control
+                                type="number"
+                                placeholder="Height"
+                                disabled={openEdit}
+                                onChange={handleChangeInput}
+                                name="height"
+                            />
                         </div>
-                    </div>
-                    <div className="form-input-container">
-                        <label className="form-input-lable">Pulisher</label>
+                    </Form.Group>
+                    <Form.Group className="mb-3" controlId="formBasicEmail">
+                        <Form.Label>Pulisher</Form.Label>
                         <Select
-                            styles={{
-                                control: (base) => ({
-                                    ...base,
-                                    width: "100%",
-                                    height: "45px",
-                                    borderRadius: "4px",
-                                    border: "1px solid #d1d1d1",
-                                    fontSize: "14px",
-                                }),
-                            }}
+                            styles={customSelectStyles}
                             value={formData.publisher}
                             onChange={(newValue) => handleChangeSelect("publisher", newValue)}
                             options={options.Supplier}
                             isDisabled={openEdit}
                         />
-                    </div>
-                    <div className="form-input-container">
-                        <label className="form-input-lable">Color</label>
+                    </Form.Group>
+                    <Form.Group className="mb-3" controlId="formBasicEmail">
+                        <Form.Label>Color</Form.Label>
                         <Select
-                            styles={{
-                                control: (base) => ({
-                                    ...base,
-                                    width: "100%",
-                                    height: "45px",
-                                    borderRadius: "4px",
-                                    border: "1px solid #d1d1d1",
-                                    fontSize: "14px",
-                                }),
-                            }}
+                            styles={customSelectStyles}
                             value={formData.color}
                             onChange={(newValue) => handleChangeSelect("color", newValue)}
                             options={options.Color}
                             isDisabled={openEdit}
                         />
-                    </div>
-                    <div className="form-input-container">
-                        <label className="form-input-lable">Size</label>
+                    </Form.Group>
+                    <Form.Group className="mb-3" controlId="formBasicEmail">
+                        <Form.Label>Size</Form.Label>
                         <Select
-                            styles={{
-                                control: (base) => ({
-                                    ...base,
-                                    width: "100%",
-                                    height: "45px",
-                                    borderRadius: "4px",
-                                    border: "1px solid #d1d1d1",
-                                    fontSize: "14px",
-                                }),
-                            }}
+                            styles={customSelectStyles}
                             value={formData.size}
                             onChange={(newValue) => handleChangeSelect("size", newValue)}
                             options={options.Size}
                             isDisabled={openEdit}
                         />
-                    </div>
-                    <div className="form-input-container">
-                        <label className="form-input-lable">Material</label>
+                    </Form.Group>
+                    <Form.Group className="mb-3" controlId="formBasicEmail">
+                        <Form.Label>Material</Form.Label>
                         <Select
-                            styles={{
-                                control: (base) => ({
-                                    ...base,
-                                    width: "100%",
-                                    height: "45px",
-                                    borderRadius: "4px",
-                                    border: "1px solid #d1d1d1",
-                                    fontSize: "14px",
-                                }),
-                            }}
+                            styles={customSelectStyles}
                             value={formData.material}
                             onChange={(newValue) => handleChangeSelect("material", newValue)}
                             options={options.Material}
                             isDisabled={openEdit}
                         />
-                    </div>
-                    <div className="form-input-container">
-                        <label className="form-input-lable">Brand</label>
+                    </Form.Group>
+                    <Form.Group className="mb-3" controlId="formBasicEmail">
+                        <Form.Label>Brand</Form.Label>
                         <Select
-                            styles={{
-                                control: (base) => ({
-                                    ...base,
-                                    width: "100%",
-                                    height: "45px",
-                                    borderRadius: "4px",
-                                    border: "1px solid #d1d1d1",
-                                    fontSize: "14px",
-                                }),
-                            }}
+                            styles={customSelectStyles}
                             value={formData.brand}
                             onChange={(newValue) => handleChangeSelect("brand", newValue)}
                             options={options.Brand}
                             isDisabled={openEdit}
                         />
-                    </div>
-                    <button onClick={handleSubmit} type="submit" className="form-input-submit">{openEdit ? "Edit" : "Save"}</button>
-                </form>
+                    </Form.Group>
+                    <Form.Group className="mb-3" controlId="formBasicEmail">
+                        <Form.Label>Supplier</Form.Label>
+                        <Select
+                            styles={customSelectStyles}
+                            value={formData.color}
+                            onChange={(newValue) => handleChangeSelect("supplier", newValue)}
+                            options={options.Supplier}
+                            isDisabled={openEdit}
+                        />
+                    </Form.Group>
+                    <Form.Group className="mb-3" controlId="formBasicEmail">
+                        <Form.Control type="submit" value={openEdit ? "Edit" : "Save"} className="btn btn-primary" />
+                    </Form.Group>
+                </Form>
             </div>
         </OverLay>
     )

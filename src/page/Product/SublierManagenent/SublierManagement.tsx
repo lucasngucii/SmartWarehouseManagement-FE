@@ -1,8 +1,9 @@
 import React from 'react';
 import './SublierManagement.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faSearch } from '@fortawesome/free-solid-svg-icons';
+import { faPencilAlt, faSearch, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { FormSublier } from './compoments/FormSublier';
+import { Button, Form, Table } from 'react-bootstrap';
 
 interface Supplier {
     id: number;
@@ -72,17 +73,23 @@ export const SublierManagement: React.FC = () => {
                 <td>{supplier.address}</td>
                 <td>{supplier.email}</td>
                 <td>
-                    <button className="edit-button"
-                        onClick={() => {
-                            setShowOverlay(true);
-                            setSublierId(supplier.id);
-                        }}
-                    >
-                        Edit
-                    </button>
-                    <button className="delete-button"
-                        onClick={() => handleDelete(supplier.id)}>Delete
-                    </button>
+                    <div className="d-flex flex-row gap-2">
+                        <Button
+                            onClick={() => {
+                                setShowOverlay(true);
+                                setSublierId(supplier.id);
+                            }}
+                            variant="primary"
+                        >
+                            <FontAwesomeIcon icon={faPencilAlt} />
+                        </Button>
+                        <Button
+                            onClick={() => handleDelete(supplier.id)}
+                            variant="danger"
+                        >
+                            <FontAwesomeIcon icon={faTrash} />
+                        </Button>
+                    </div>
                 </td>
             </tr>
         );
@@ -91,44 +98,38 @@ export const SublierManagement: React.FC = () => {
 
     return (
         <div>
-            <div className="content-header-container">
-                <div className="content-header-left">
-                    <h2 className="primary-label">Sublier Management</h2>
-                    <p className="primary-description">Manage your suppliers here</p>
+            <div className="d-flex justify-content-between align-items-center mb-3">
+                <div>
+                    <h2 className={"h2 fw-bold"}>Sublier Management</h2>
+                    <p className={"h6"}>Manage your suppliers here</p>
                 </div>
-                <div className="content-header-right">
-                    <form className="form-search">
-                        <input
-                            type="search"
-                            className="form-input"
-                            placeholder={"Search user"}
-                        />
-                        <button className="form-input-submit">
+                <div className="d-flex flex-row gap-5">
+                    <div className="d-flex flex-row gap-2">
+                        <Form.Control className="p-2" type="text" placeholder="Search" />
+                        <Button variant="secondary">
                             <FontAwesomeIcon icon={faSearch} />
-                        </button>
-                    </form>
-                    <button onClick={handleAdd} className="add-button margin-top-button">Add Supplier</button>
+                        </Button>
+                    </div>
+                    <Button onClick={handleAdd} variant="success fw-bold">NEW +</Button>
                 </div>
             </div>
-            <div className="table-container">
-                <table className="table id-column">
-                    <thead>
-                        <tr>
-                            <th>#</th>
-                            <th>Name</th>
-                            <th>Description</th>
-                            <th>Phone</th>
-                            <th>Supplier Code</th>
-                            <th>Address</th>
-                            <th>Email</th>
-                            <th>Action</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {sublierList}
-                    </tbody>
-                </table>
-            </div>
+            <Table striped hover bordered>
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Name</th>
+                        <th>Description</th>
+                        <th>Phone</th>
+                        <th>Supplier Code</th>
+                        <th>Address</th>
+                        <th>Email</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {sublierList}
+                </tbody>
+            </Table>
             {
                 showOverlay && <FormSublier handleClose={handleClose} supplierId={sublierId} />
             }

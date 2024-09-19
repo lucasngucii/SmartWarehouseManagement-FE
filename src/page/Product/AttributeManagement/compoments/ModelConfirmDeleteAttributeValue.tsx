@@ -44,7 +44,7 @@ const ModelConfirmDeleteAttributeValue: React.FC<ModelConfirmDeleteAttributeValu
     return (
         <OverLay className="fullscreen">
             <div className="global-model">
-                <h2>Confirm Delete</h2>
+                <h2 className="h2 fw-bold">Confirm Delete</h2>
                 <p>Are you sure you want to delete this attribute value?</p>
                 <span className="primary-message-error text-center">{globalError}</span>
                 {
@@ -52,8 +52,8 @@ const ModelConfirmDeleteAttributeValue: React.FC<ModelConfirmDeleteAttributeValu
                         <RePulseLoader loading={isLoading} />
                         :
                         <div className="model-buttons">
-                            <button className="cancel-button" onClick={closeModelConfirmDelete}>Cancel</button>
-                            <button className="delete-button" onClick={handelDeleteAttributeValue}>Delete</button>
+                            <button className="btn btn-secondary" onClick={closeModelConfirmDelete}>Cancel</button>
+                            <button className="btn btn-danger" onClick={handelDeleteAttributeValue}>Delete</button>
                         </div>
                 }
             </div>

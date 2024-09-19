@@ -2,9 +2,10 @@ import React from 'react'
 import { Product } from '../../../interface/Product'
 import './ProductManagement.css'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faSearch } from '@fortawesome/free-solid-svg-icons';
+import { faInfoCircle, faSearch, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { OverLayProductManagement } from './compoments/OverLayProductManagement';
 import { OverLayProductDetails } from './compoments/OverLayProductDetails';
+import { Button, Form, Table } from 'react-bootstrap';
 
 
 export const ProductManagement: React.FC = () => {
@@ -65,8 +66,21 @@ export const ProductManagement: React.FC = () => {
                 <td>{product.category}</td>
                 <td>{product.supplier}</td>
                 <td>
-                    <button onClick={handleDetailProduct} className='view-button'>Details</button>
-                    <button className='delete-button'>Delete</button>
+                    <div className='d-flex gap-2'>
+                        <Button
+                            onClick={() => {
+                                handleDetailProduct()
+                            }}
+                            variant="primary"
+                        >
+                            <FontAwesomeIcon icon={faInfoCircle} />
+                        </Button>
+                        <Button
+                            variant="danger"
+                        >
+                            <FontAwesomeIcon icon={faTrash} />
+                        </Button>
+                    </div>
                 </td>
             </tr>
         )
@@ -74,43 +88,37 @@ export const ProductManagement: React.FC = () => {
 
     return (
         <div>
-            <div className="content-header-container">
-                <div className="content-header-left">
-                    <h2 className='primary-label'>Product Management</h2>
-                    <p className='primary-description'>Manage your products here</p>
+            <div className="d-flex justify-content-between align-items-center mb-3">
+                <div>
+                    <h2 className={"h2 fw-bold"}>Product Management</h2>
+                    <p className={"h6"}>Manage your products here</p>
                 </div>
-                <div className="content-header-right">
-                    <form className="form-search">
-                        <input
-                            type="search"
-                            className="form-input"
-                            placeholder={"Search user"}
-                        />
-                        <button className="form-input-submit">
+                <div className="d-flex flex-row gap-5">
+                    <div className="d-flex flex-row gap-2">
+                        <Form.Control className="p-2" type="text" placeholder="Search" />
+                        <Button variant="secondary">
                             <FontAwesomeIcon icon={faSearch} />
-                        </button>
-                    </form>
-                    <button onClick={handleAddProduct} className='add-button margin-top-button'>Add Product</button>
+                        </Button>
+                    </div>
+                    <Button onClick={handleAddProduct} variant="success fw-bold">NEW +</Button>
                 </div>
             </div>
-            <div className="table-container">
-                <table className='table id-column'>
-                    <thead>
-                        <tr>
-                            <th>#</th>
-                            <th>Product Name</th>
-                            <th>SKU</th>
-                            <th>Price</th>
-                            <th>Category</th>
-                            <th>Supplier</th>
-                            <th>Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {renderProducts}
-                    </tbody>
-                </table>
-            </div>
+            <Table striped bordered hover>
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Product Name</th>
+                        <th>SKU</th>
+                        <th>Price</th>
+                        <th>Category</th>
+                        <th>Supplier</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {renderProducts}
+                </tbody>
+            </Table>
             {showOverLay && <OverLayProductManagement handleClose={handleCloseAddProduct} />}
             {showOverLayDetails && <OverLayProductDetails handleClose={handleColseDetailProduct} productId={productId} />}
         </div>

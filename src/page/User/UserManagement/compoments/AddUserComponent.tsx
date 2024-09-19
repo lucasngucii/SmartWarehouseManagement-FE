@@ -16,6 +16,7 @@ import GetAccountById from "../../../../services/authen-api/GetAccountById";
 import UpdateAccountAPI from "../../../../services/authen-api/UpdateAccountAPI";
 import GetAccountsAPI from "../../../../services/authen-api/GetAccountsAPI";
 import PaginationType from "../../../../interface/Pagination";
+import { Form } from "react-bootstrap";
 
 interface OptionType {
     value: string;
@@ -347,46 +348,39 @@ export const AddUserComponent: React.FC<AddUserComponentProps> = ({ hideOverlay,
                 <button onClick={hideOverlay} className="button-close">
                     <FontAwesomeIcon icon={faTimes} />
                 </button>
-                <p className="primary-label form-lable">{userId ? "UPDATE USER" : "NEW USER"}</p>
+                <p className="h3 text-center fw-bold">{userId ? "UPDATE USER" : "NEW USER"}</p>
                 <p className="primary-message-error margin-bottom-15 text-center">{globalError}</p>
-                <form className="form">
-                    <div className="form-input-container">
-                        <label htmlFor="username" className="form-input-lable">UserName</label>
-                        <input
+                <Form>
+                    <Form.Group className="mb-3">
+                        <Form.Label>UserName</Form.Label>
+                        <Form.Control
                             type="text"
-                            id="username"
                             name="username"
-                            className="form-input"
-                            required
-                            placeholder={"Enter Username"}
+                            placeholder="Enter Username"
                             value={formData.username}
                             onChange={handleChangeInput}
                             disabled={userId ? true : false}
                         />
-                        <span className="form-error">{formError.username}</span>
-                    </div>
-                    <div className="form-input-container">
-                        <label htmlFor="fullname" className="form-input-lable">FullName</label>
-                        <input
+                        <Form.Text className="text-danger">{formError.username}</Form.Text>
+                    </Form.Group>
+                    <Form.Group className="mb-3">
+                        <Form.Label>FullName</Form.Label>
+                        <Form.Control
                             type="text"
-                            id="fullname"
                             name="fullname"
-                            className="form-input"
-                            required
-                            placeholder={"Enter your fullname"}
+                            placeholder="Enter Fullname"
                             value={formData.fullname}
                             onChange={handleChangeInput}
                         />
-                        <span className="form-error">{formError.fullname}</span>
-                    </div>
-                    <div className="form-input-container">
-                        <label htmlFor="confirm-password" className="form-input-lable">Role</label>
+                        <Form.Text className="text-danger">{formError.fullname}</Form.Text>
+                    </Form.Group>
+                    <Form.Group className="mb-3">
+                        <Form.Label>Role</Form.Label>
                         <Select
                             styles={{
                                 control: (base) => ({
                                     ...base,
                                     width: "100%",
-                                    height: "45px",
                                     borderRadius: "4px",
                                     border: "1px solid #d1d1d1",
                                     fontSize: "14px",
@@ -397,72 +391,61 @@ export const AddUserComponent: React.FC<AddUserComponentProps> = ({ hideOverlay,
                             options={options.Role}
                             isLoading={isLoading}
                         />
-                        <span className="form-error">{formError.role}</span>
-                    </div>
-                    <div className="form-input-container">
-                        <label htmlFor="email" className="form-input-lable">Email</label>
-                        <input
+                        <Form.Text className="text-danger">{formError.role}</Form.Text>
+                    </Form.Group>
+                    <Form.Group className="mb-3">
+                        <Form.Label>Email</Form.Label>
+                        <Form.Control
                             type="email"
-                            id="email"
                             name="email"
-                            className="form-input"
-                            required
-                            placeholder={"Enter Email"}
-                            onChange={handleChangeInput}
+                            placeholder="Enter email"
                             value={formData.email}
+                            onChange={handleChangeInput}
                         />
-                        <span className="form-error">{formError.email}</span>
-                    </div>
-                    <div className="form-input-container">
-                        <label htmlFor="phone" className="form-input-lable">Phone Number</label>
-                        <input
+                        <Form.Text className="text-danger">{formError.email}</Form.Text>
+                    </Form.Group>
+                    <Form.Group className="mb-3">
+                        <Form.Label>Phone</Form.Label>
+                        <Form.Control
                             type="text"
-                            id="phone"
                             name="phone"
-                            className="form-input"
-                            required
-                            placeholder={"Enter phone number"}
-                            onChange={handleChangeInput}
+                            placeholder="Enter phone number"
                             value={formData.phone}
+                            onChange={handleChangeInput}
                         />
-                        <span className="form-error">{formError.phone}</span>
-                    </div>
-                    <div className="form-input-container">
-                        <label htmlFor="password" className="form-input-lable">{userId ? "New Password" : "Password"}</label>
+                        <Form.Text className="text-danger">{formError.phone}</Form.Text>
+                    </Form.Group>
+                    <Form.Group className="mb-3">
+                        <Form.Label>Password</Form.Label>
                         <p className={"form-group-label-second"}>{userId ? "** Leave blank if you don't want to change password" : ""}</p>
-                        <input
+                        <Form.Control
                             type="password"
-                            id="password"
                             name="password"
-                            className="form-input"
-                            required
-                            placeholder={"Enter Password"}
-                            onChange={handleChangeInput}
+                            placeholder="Enter password"
                             value={formData.password}
-                        />
-                        <span className="form-error">{formError.password}</span>
-                    </div>
-                    <div className="form-input-container">
-                        <label htmlFor="confirm-password" className="form-input-lable">Confirm Password</label>
-                        <input
-                            type="password"
-                            id="confirm-password"
-                            name="confirmPassword"
-                            className="form-input"
-                            required
-                            placeholder={"Confirm Password"}
                             onChange={handleChangeInput}
-                            value={formData.confirmPassword}
                         />
-                        <span className="form-error">{formError.confirmPassword}</span>
-                    </div>
-                    <input
-                        type="submit"
-                        className="form-input-submit"
-                        onClick={handleSubmit}
-                        value={isLoadingSubmit ? "Loading..." : userId ? "Update User" : "Add User"}
-                    />
-                </form>
+                        <Form.Text className="text-danger">{formError.password}</Form.Text>
+                    </Form.Group>
+                    <Form.Group className="mb-3">
+                        <Form.Label>Confirm Password</Form.Label>
+                        <Form.Control
+                            type="password"
+                            name="confirmPassword"
+                            placeholder="Enter confirm password"
+                            value={formData.confirmPassword}
+                            onChange={handleChangeInput}
+                        />
+                        <Form.Text className="text-danger">{formError.confirmPassword}</Form.Text>
+                    </Form.Group>
+                    <Form.Group className="mb-3">
+                        <Form.Control
+                            type="submit"
+                            value={userId ? "UPDATE" : "CREATE"}
+                            className="btn btn-primary"
+                        />
+                    </Form.Group>
+                </Form>
             </div>
         </OverLay>
     );

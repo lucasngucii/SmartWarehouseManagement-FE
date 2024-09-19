@@ -7,9 +7,10 @@ import Attribute from "../../../../interface/Attribute";
 import GetAttributeDetail from "../../../../services/attribute/GetAttributeDetail";
 import PaginationType from "../../../../interface/Pagination";
 import AttributeDetailType from "../../../../interface/AttributeDetail";
+import { Form } from "react-bootstrap";
 
 interface EditAttributeValueProps {
-    hideOverlay: (e: React.MouseEvent<HTMLButtonElement>) => void;
+    hideOverlay: () => void;
     attributeDetailId: string;
     attributeId: number;
     updateAttributeValues: (data: AttributeDetailType[]) => void;
@@ -33,8 +34,8 @@ export const EditAttributeValue: React.FC<EditAttributeValueProps> = ({ hideOver
         });
     }
 
-    const handleSubmit = (e: React.MouseEvent<HTMLButtonElement>) => {
-        e.preventDefault();
+    const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+        event.preventDefault();
         setLoading(true);
         AddAttributeValue(attributeId, formData)
             .then(() => {
@@ -47,7 +48,7 @@ export const EditAttributeValue: React.FC<EditAttributeValueProps> = ({ hideOver
                     offset: response.offset,
                     totalElementOfPage: response.totalElementOfPage
                 });
-                hideOverlay(e);
+                hideOverlay();
             }).catch((error) => {
                 console.error(error);
                 setGlobalError(error.message);
@@ -62,44 +63,48 @@ export const EditAttributeValue: React.FC<EditAttributeValueProps> = ({ hideOver
                 <button onClick={hideOverlay} className="button-close">
                     <FontAwesomeIcon icon={faTimes} />
                 </button>
-                <h1 className={"primary-label form-lable"}>{`${attributeDetailId ? "Edit" : "Add"} Value`}</h1>
+                <h1 className={"h2 text-center fw-bold"}>{`${attributeDetailId ? "Edit" : "Add"} Value`}</h1>
                 <span className="primary-message-error text-center">{globalError}</span>
-                <form className={"form"}>
-                    <div className={"form-input-container"}>
-                        <label className={"form-lable"}>Value Name</label>
-                        <input
-                            type={"text"}
-                            className={"form-input"}
-                            placeholder={"Enter Value name"}
-                            name={"name"}
+                <Form onSubmit={handleSubmit}>
+                    <Form.Group className="mb-3">
+                        <Form.Label className={"form-lable"}>Value Name</Form.Label>
+                        <Form.Control
+                            type="text"
+                            placeholder="Enter Value name"
+                            name="name"
                             value={formData.name}
                             onChange={handleChange}
                         />
-                    </div>
-                    <div className={"form-input-container"}>
-                        <label className={"form-lable"}>Description</label>
-                        <input
-                            type={"text"}
-                            className={"form-input"}
-                            placeholder={"Enter your description"}
-                            name={"description"}
+                    </Form.Group>
+                    <Form.Group className="mb-3">
+                        <Form.Label className={"form-lable"}>Description</Form.Label>
+                        <Form.Control
+                            type="text"
+                            placeholder="Enter your description"
+                            name="description"
                             value={formData.description}
                             onChange={handleChange}
                         />
-                    </div>
-                    <div className={"form-input-container"}>
-                        <label className={"form-lable"}>Code</label>
-                        <input
-                            type={"text"}
-                            className={"form-input"}
-                            placeholder={"Enter your code"}
-                            name={"sizeCode"}
+                    </Form.Group>
+                    <Form.Group className="mb-3">
+                        <Form.Label className={"form-lable"}>Code</Form.Label>
+                        <Form.Control
+                            type="text"
+                            placeholder="Enter your code"
+                            name="sizeCode"
                             value={formData.sizeCode}
                             onChange={handleChange}
                         />
-                    </div>
-                    <button disabled={loading} onClick={handleSubmit} className="form-input-submit">{loading ? "Loading..." : (attributeDetailId ? "Update" : "Save")}</button>
-                </form>
+                    </Form.Group>
+                    <Form.Group className="mb-3">
+                        <Form.Control
+                            type="submit"
+                            value={loading ? "Loading..." : (attributeDetailId ? "Update" : "Save")}
+                            disabled={loading}
+                            className="btn btn-primary"
+                        />
+                    </Form.Group>
+                </Form>
             </div>
         </OverLay>
     );

@@ -3,7 +3,8 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTimes } from "@fortawesome/free-solid-svg-icons";
 import React from "react";
 import "../ProductManagement.css";
-import {OverLay} from "../../../../compoments/OverLay/OverLay";
+import { OverLay } from "../../../../compoments/OverLay/OverLay";
+import { Form } from "react-bootstrap";
 
 interface OptionType {
     value: string;
@@ -11,6 +12,7 @@ interface OptionType {
 }
 
 interface SKUFormData {
+    productName?: string;
     productType?: OptionType | null;
     color?: OptionType | null;
     size?: OptionType | null;
@@ -71,11 +73,16 @@ export const OverLayProductManagement: React.FC<OverLayProductManagementProps> =
             [actionMeta.name as string]: newValue
         }));
     };
+    const handleChangeInput = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setFormData((prevFormData) => ({
+            ...prevFormData,
+            [e.target.name]: e.target.value
+        }));
+    }
     const customSelectStyles: StylesConfig<any, false> = {
         control: (base) => ({
             ...base,
             width: "100%",
-            height: "45px",
             borderRadius: "4px",
             border: "1px solid #d1d1d1",
             fontSize: "14px",
@@ -87,26 +94,32 @@ export const OverLayProductManagement: React.FC<OverLayProductManagementProps> =
                 <button onClick={handleClose} className="button-close">
                     <FontAwesomeIcon icon={faTimes} />
                 </button>
-                <p className='primary-label form-lable'>NEW PRODUCT</p>
-                <form className='form'>
-                    <div className='form-input-container'>
-                        <label htmlFor='product-name' className='form-input-lable'>Product Name</label>
-                        <input className='form-input' type='text' id='product-name' placeholder='Enter Product Name' />
-                    </div>
-                    <div className='form-input-container'>
-                        <label className='form-input-lable'>Category</label>
+                <p className='h2 fw-bold text-center'>NEW PRODUCT</p>
+                <Form>
+                    <Form.Group className='mb-3'>
+                        <Form.Label>Product Name</Form.Label>
+                        <Form.Control
+                            type='text'
+                            placeholder='Enter product name'
+                            value={formData?.productName}
+                            name='productName'
+                            onChange={handleChangeInput}
+                        />
+                    </Form.Group>
+                    <Form.Group className='mb-3'>
+                        <Form.Label>Category</Form.Label>
                         <Select
                             styles={customSelectStyles}
                             value={formData?.productType}
                             onChange={(valueSelect, actionMeta) => handleSelectChangeGroup(valueSelect, {
                                 ...actionMeta,
-                                name: "categories"
+                                name: "productType"
                             })}
                             options={listOptions.categories}
                         />
-                    </div>
-                    <div className={"form-input-container"}>
-                        <label htmlFor={"color"}>Color:</label>
+                    </Form.Group>
+                    <Form.Group className='mb-3'>
+                        <Form.Label>Color</Form.Label>
                         <Select
                             styles={customSelectStyles}
                             value={formData?.color}
@@ -116,9 +129,9 @@ export const OverLayProductManagement: React.FC<OverLayProductManagementProps> =
                             })}
                             options={listOptions.color}
                         />
-                    </div>
-                    <div className={"form-input-container"}>
-                        <label htmlFor={"color"}>Size:</label>
+                    </Form.Group>
+                    <Form.Group className='mb-3'>
+                        <Form.Label>Size</Form.Label>
                         <Select
                             styles={customSelectStyles}
                             value={formData?.size}
@@ -128,9 +141,9 @@ export const OverLayProductManagement: React.FC<OverLayProductManagementProps> =
                             })}
                             options={listOptions.size}
                         />
-                    </div>
-                    <div className={"form-input-container"}>
-                        <label htmlFor={"material"}>Material:</label>
+                    </Form.Group>
+                    <Form.Group className='mb-3'>
+                        <Form.Label>Material</Form.Label>
                         <Select
                             styles={customSelectStyles}
                             value={formData?.material}
@@ -140,9 +153,9 @@ export const OverLayProductManagement: React.FC<OverLayProductManagementProps> =
                             })}
                             options={listOptions.material}
                         />
-                    </div>
-                    <div className={"form-input-container"}>
-                        <label htmlFor={"brand"}>Brand:</label>
+                    </Form.Group>
+                    <Form.Group className='mb-3'>
+                        <Form.Label>Brand</Form.Label>
                         <Select
                             styles={customSelectStyles}
                             value={formData?.brand}
@@ -152,9 +165,9 @@ export const OverLayProductManagement: React.FC<OverLayProductManagementProps> =
                             })}
                             options={listOptions.brand}
                         />
-                    </div>
-                    <div className={"form-input-container"}>
-                        <label htmlFor={"color"}>Supplier:</label>
+                    </Form.Group>
+                    <Form.Group className='mb-3'>
+                        <Form.Label>Supplier</Form.Label>
                         <Select
                             styles={customSelectStyles}
                             value={formData?.color}
@@ -164,19 +177,21 @@ export const OverLayProductManagement: React.FC<OverLayProductManagementProps> =
                             })}
                             options={listOptions.supplier}
                         />
-                    </div>
-                    <div className={"form-input-container"}>
-                        <label htmlFor={"color"}>Dimension:</label>
+                    </Form.Group>
+                    <Form.Group className='mb-3'>
+                        <Form.Label>Supplier</Form.Label>
                         <div className={"group-deminsion-attribute"}>
-                            <input type="number" placeholder="Length" className="form-input" />
+                            <Form.Control type="number" placeholder="Length" className="form-input" />
                             <span>x</span>
-                            <input type="number" placeholder="Width" className="form-input" />
+                            <Form.Control type="number" placeholder="Width" className="form-input" />
                             <span>x</span>
-                            <input type="number" placeholder="Height" className="form-input" />
+                            <Form.Control type="number" placeholder="Height" className="form-input" />
                         </div>
-                    </div>
-                    <button className='form-input-submit'>Add Product</button>
-                </form>
+                    </Form.Group>
+                    <Form.Group className='mb-3'>
+                        <Form.Control type="submit" value={"Add Product"} className="btn btn-primary" />
+                    </Form.Group>
+                </Form>
             </div>
         </OverLay>
     )

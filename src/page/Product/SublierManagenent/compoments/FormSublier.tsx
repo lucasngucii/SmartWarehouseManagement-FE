@@ -1,7 +1,8 @@
 import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTimes } from "@fortawesome/free-solid-svg-icons";
-import {OverLay} from "../../../../compoments/OverLay/OverLay";
+import { OverLay } from "../../../../compoments/OverLay/OverLay";
+import { Form } from "react-bootstrap";
 
 interface FormSupplierProps {
     handleClose: () => void;
@@ -46,80 +47,66 @@ export const FormSublier: React.FC<FormSupplierProps> = ({ supplierId, handleClo
                 <button onClick={handleClose} className="button-close">
                     <FontAwesomeIcon icon={faTimes} />
                 </button>
-                <p className="primary-label form-lable">{supplierId ? "UPDATE SUPLIER" : "NEW SUBLIER"}</p>
-                <form className={"form"}>
-                    <div className={"form-input-container"}>
-                        <label htmlFor={"supplier-name"} className="form-label">Supplier Name</label>
-                        <input
-                            id={"supplier-name"}
+                <p className="h2 fw-bold text-center">{supplierId ? "UPDATE SUPLIER" : "NEW SUBLIER"}</p>
+                <Form onClick={supplierId ? handleUpdate : handleAdd}>
+                    <Form.Group className="mb-3">
+                        <Form.Label>Supplier Name</Form.Label>
+                        <Form.Control
                             type="text"
                             placeholder="Enter supplier name"
-                            className="form-input"
-                            required
                             value={formData.supplierName}
                             name='supplierName'
                             onChange={handleChageInput}
                         />
-                    </div>
-                    <div className={"form-input-container"}>
-                        <label htmlFor={"description"} className="form-label">Description</label>
-                        <input
-                            id={"description"}
+                    </Form.Group>
+                    <Form.Group className="mb-3">
+                        <Form.Label>Description</Form.Label>
+                        <Form.Control
                             type="text"
                             placeholder="Enter your description"
-                            className="form-input"
-                            required
                             name='description'
                             value={formData.description}
                             onChange={handleChageInput}
                         />
-                    </div>
-                    <div className={"form-input-container"}>
-                        <label htmlFor={"phone"} className="form-label">Phone</label>
-                        <input
-                            id={"phone"}
+                    </Form.Group>
+                    <Form.Group className="mb-3">
+                        <Form.Label>Phone</Form.Label>
+                        <Form.Control
                             type="phone"
                             placeholder="Enter your supplier phone"
-                            className="form-input"
-                            required
                             name='phone'
                             value={formData.phone}
                             onChange={handleChageInput}
                         />
-                    </div>
-                    <div className={"form-input-container"}>
-                        <label htmlFor={"address"} className="form-label">Address</label>
-                        <input
-                            id={"address"}
+                    </Form.Group>
+                    <Form.Group className="mb-3">
+                        <Form.Label>Address</Form.Label>
+                        <Form.Control
                             type="address"
                             placeholder="Enter your supplier address"
-                            className="form-input"
-                            required
                             name='address'
                             value={formData.address}
                             onChange={handleChageInput}
                         />
-                    </div>
-                    <div className={"form-input-container"}>
-                        <label htmlFor={"email"} className="form-label">Email</label>
-                        <input
-                            id={"email"}
+                    </Form.Group>
+                    <Form.Group className="mb-3">
+                        <Form.Label>Email</Form.Label>
+                        <Form.Control
                             type="email"
                             placeholder="Enter your supplier email"
-                            className="form-input"
-                            required
                             name='email'
                             value={formData.email}
                             onChange={handleChageInput}
                         />
-                    </div>
-                    <button
-                        onClick={supplierId ? handleUpdate : handleAdd}
-                        className="form-input-submit"
-                    >
-                        {supplierId ? "Update Suplier" : "Add Supplier"}
-                    </button>
-                </form>
+                    </Form.Group>
+                    <Form.Group className="mb-3">
+                        <Form.Control
+                            type="submit"
+                            value={supplierId ? "Update Suplier" : "Add Supplier"}
+                            className="btn btn-primary"
+                        />
+                    </Form.Group>
+                </Form>
             </div>
         </OverLay>
     )

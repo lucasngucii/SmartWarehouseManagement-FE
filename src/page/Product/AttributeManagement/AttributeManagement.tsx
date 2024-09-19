@@ -1,6 +1,9 @@
 import React from "react";
 import "./AttributeManagement.css";
 import { AttributeDetailManagement } from "./compoments/AttributeDetailManagement";
+import { Button, Table } from "react-bootstrap";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faPencilAlt } from "@fortawesome/free-solid-svg-icons";
 
 interface ListAttributeType {
     Id: number;
@@ -50,7 +53,12 @@ export const AttributeManagement: React.FC = () => {
                 <td>{attribute.Id}</td>
                 <td>{attribute.Name}</td>
                 <td>
-                    <button onClick={() => { handleEdit(attribute.Id) }} className={"edit-button"}>Add Value</button>
+                    <Button
+                        onClick={() => { handleEdit(attribute.Id) }}
+                        variant="primary"
+                    >
+                        <FontAwesomeIcon icon={faPencilAlt} />
+                    </Button>
                 </td>
             </tr>
         );
@@ -58,26 +66,24 @@ export const AttributeManagement: React.FC = () => {
 
     return (
         <div>
-            <div className="content-header-container">
-                <div className="content-header-left">
-                    <h2 className={"primary-label"}>Attribute Management</h2>
-                    <p className={"primary-description"}>Add, edit, or delete attributes</p>
+            <div className="d-flex justify-content-between align-items-center mb-3">
+                <div>
+                    <h2 className={"h2 fw-bold"}>Attribute Management</h2>
+                    <p className={"h6"}>Add, edit, or delete attributes</p>
                 </div>
             </div>
-            <div className="table-container">
-                <table className={"table id-column"}>
-                    <thead>
-                        <tr>
-                            <th>#</th>
-                            <th>Attribute Name</th>
-                            <th>Action</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {renderListAttribute}
-                    </tbody>
-                </table>
-            </div>
+            <Table striped bordered hover>
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Attribute Name</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {renderListAttribute}
+                </tbody>
+            </Table>
             {
                 showEditForm && <AttributeDetailManagement handleCancelEditAttribute={handleCancelEdit} attributeId={attributeId} />
             }

@@ -8,8 +8,9 @@ import Pagination from "../../../../compoments/Pagination/Pagination";
 import { NoData } from "../../../../compoments/NoData/NoData";
 import { RePulseLoader } from "../../../../compoments/Loading/PulseLoader";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faArrowLeft, faSearch } from "@fortawesome/free-solid-svg-icons";
+import { faArrowLeft, faPencilAlt, faSearch, faTrash } from "@fortawesome/free-solid-svg-icons";
 import ModelConfirmDeleteAttributeValue from "./ModelConfirmDeleteAttributeValue";
+import { Button, Form, Table } from "react-bootstrap";
 
 interface AttributeDetailManagementProps {
     handleCancelEditAttribute: () => void;
@@ -114,8 +115,22 @@ export const AttributeDetailManagement: React.FC<AttributeDetailManagementProps>
                 <td>{attributeValue.description}</td>
                 <td>{attributeValue.sizeCode || attributeValue.brandCode || attributeValue.categoryCode || attributeValue.colorCode || attributeValue.materialCode}</td>
                 <td>
-                    <button onClick={() => { handleEditAttributeValue(attributeValue.id) }} className="edit-button">Edit</button>
-                    <button onClick={() => { handleDeleteAttributeValue(attributeValue.id) }} className="delete-button">Delete</button>
+                    <div className="d-flex flex-row gap-2">
+                        <Button
+                            onClick={() => {
+                                handleEditAttributeValue(attributeValue.id)
+                            }}
+                            variant="primary"
+                        >
+                            <FontAwesomeIcon icon={faPencilAlt} />
+                        </Button>
+                        <Button
+                            onClick={() => handleDeleteAttributeValue(attributeValue.id)}
+                            variant="danger"
+                        >
+                            <FontAwesomeIcon icon={faTrash} />
+                        </Button>
+                    </div>
                 </td>
             </tr>
         );
@@ -128,55 +143,47 @@ export const AttributeDetailManagement: React.FC<AttributeDetailManagementProps>
                     <FontAwesomeIcon icon={faArrowLeft} />
                     Back
                 </button>
-                <div className="content-header-container">
-                    <div className="content-header-left">
-                        <h1 className={"primary-label"}>Attribute Detail Management</h1>
-                        <p className={"primary-description"}>Add, edit, or delete attribute values</p>
+                <div className="d-flex justify-content-between align-items-center mb-3">
+                    <div>
+                        <h2 className={"h2 fw-bold"}>Attribute Detail Management</h2>
+                        <p className={"h6"}>Add, edit, or delete attribute values</p>
                     </div>
-                    <div className="content-header-right">
-                        <form className="form-search">
-                            <input
-                                type="search"
-                                className="form-input"
-                                placeholder={"Search user"}
-                            />
-                            <button className="form-input-submit">
+                    <div className="d-flex flex-row gap-5">
+                        <div className="d-flex flex-row gap-2">
+                            <Form.Control className="p-2" type="search" placeholder="Search" />
+                            <Button variant="secondary">
                                 <FontAwesomeIcon icon={faSearch} />
-                            </button>
-                        </form>
-                        <button onClick={handleAddAttributeValue} className="add-button">Add value</button>
-                    </div>
-                </div>
-                <form className={"form"}>
-                    <div className={"form-input-container"}>
-                        <label className={"form-input-lable lable-attribute-name attribute-name-lable"}>Attribute Name</label>
-                        <div className={"group-input-attribute-name"}>
-                            <input
-                                type={"text"}
-                                disabled={true}
-                                className={"form-input"}
-                                placeholder={"Enter your attribute name"}
-                                value={getAttributeName(attributeId)}
-                            />
+                            </Button>
                         </div>
+                        <Button onClick={handleAddAttributeValue} variant="success fw-bold">NEW +</Button>
                     </div>
-                </form>
-                <div className="table-container">
-                    <table className="table id-column">
-                        <thead>
-                            <tr>
-                                <th>#</th>
-                                <th>Name</th>
-                                <th>Description</th>
-                                <th>Size Code</th>
-                                <th>Action</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {renderAttributeValues}
-                        </tbody>
-                    </table>
                 </div>
+                <div className="mb-3">
+                    <Form.Group>
+                        <Form.Label>Attribute Name</Form.Label>
+                        <Form.Control
+                            className="p-2"
+                            type="search"
+                            disabled={true}
+                            placeholder={"Enter your attribute name"}
+                            value={getAttributeName(attributeId)}
+                        />
+                    </Form.Group>
+                </div>
+                <Table hover striped bordered>
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Name</th>
+                            <th>Description</th>
+                            <th>Size Code</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {renderAttributeValues}
+                    </tbody>
+                </Table>
                 {
                     attributeValues.length > 0 && <Pagination currentPage={pagination?.offset} totalPages={pagination?.totalPage} onPageChange={handleChangePage} />
                 }
