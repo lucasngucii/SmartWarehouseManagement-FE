@@ -10,6 +10,7 @@ import AttributeDetailType from "../../../../interface/AttributeDetail";
 import { Form } from "react-bootstrap";
 import GetAttributeValueById from "../../../../services/attribute/GetAttributeValueById";
 import UpdateAttributeValue from "../../../../services/attribute/UpdateAttributeValue";
+import validateVietnamese from "../../../../util/validateVietnamese";
 
 interface EditAttributeValueProps {
     hideOverlay: () => void;
@@ -22,6 +23,11 @@ interface EditAttributeValueProps {
 export const EditAttributeValue: React.FC<EditAttributeValueProps> = ({ hideOverlay, attributeDetailId, attributeId, updateAttributeValues, updatePagination }) => {
 
     const [formData, setFormData] = React.useState<Attribute>({
+        name: "",
+        description: "",
+        sizeCode: ""
+    });
+    const [error, setError] = React.useState({
         name: "",
         description: "",
         sizeCode: ""
@@ -49,6 +55,12 @@ export const EditAttributeValue: React.FC<EditAttributeValueProps> = ({ hideOver
         setFormData({
             ...formData,
             [e.target.name]: e.target.value
+        });
+        setError(preValue => {
+            return {
+                ...preValue,
+                [e.target.name]: ""
+            }
         });
     }
 
@@ -96,6 +108,71 @@ export const EditAttributeValue: React.FC<EditAttributeValueProps> = ({ hideOver
         }
     }
 
+    const validate1 = (): boolean => {
+        let check = true;
+
+        if (!formData.name) {
+            setError(preValue => {
+                return {
+                    ...preValue,
+                    name: "Name is required"
+                }
+            });
+            check = false;
+        }
+
+        if (!formData.description) {
+            setError(preValue => {
+                return {
+                    ...preValue,
+                    description: "Description is required"
+                }
+            });
+            check = false;
+        }
+
+        if (!formData.sizeCode) {
+            setError(preValue => {
+                return {
+                    ...preValue,
+                    sizeCode: "Code is required"
+                }
+            });
+            check = false;
+        }
+
+        return check;
+    }
+
+    const validate2 = (): boolean => {
+        let check = true;
+
+        const checkName = validateVietnamese(formData.name);
+        const checkDescription = validateVietnamese(formData.description);
+
+        if (checkName !== "") {
+            setError(preValue => {
+                return {
+                    ...preValue,
+                    name: checkName
+                }
+            });
+            check = false;
+        }
+
+        if (checkDescription !== "") {
+            setError(preValue => {
+                return {
+                    ...preValue,
+                    description: checkDescription
+                }
+            });
+            check = false;
+        }
+
+        return check;
+    }
+
     return (
         <OverLay>
             <div className="edit-attribute-value">
@@ -104,7 +181,12 @@ export const EditAttributeValue: React.FC<EditAttributeValueProps> = ({ hideOver
                 </button>
                 <h1 className={"h2 text-center fw-bold"}>{`${attributeDetailId ? "Edit" : "Add"} Value`}</h1>
                 <p className="text-center text-danger">{globalError}</p>
-                <Form onSubmit={handleSubmit}>
+                <Form onSubmit={(event) => {
+                    event.preventDefault();
+                    if (validate1() && validate2()) {
+                        // handleSubmit(event);
+                    }
+                }}>
                     <Form.Group className="mb-3">
                         <Form.Label className={"form-lable"}>Value Name</Form.Label>
                         <Form.Control
@@ -114,6 +196,7 @@ export const EditAttributeValue: React.FC<EditAttributeValueProps> = ({ hideOver
                             value={formData.name}
                             onChange={handleChange}
                         />
+                        <Form.Text className="text-danger">{error.name}</Form.Text>
                     </Form.Group>
                     <Form.Group className="mb-3">
                         <Form.Label className={"form-lable"}>Description</Form.Label>
@@ -124,6 +207,7 @@ export const EditAttributeValue: React.FC<EditAttributeValueProps> = ({ hideOver
                             value={formData.description}
                             onChange={handleChange}
                         />
+                        <Form.Text className="text-danger">{error.description}</Form.Text>
                     </Form.Group>
                     <Form.Group className="mb-3">
                         <Form.Label className={"form-lable"}>Code</Form.Label>
@@ -134,6 +218,7 @@ export const EditAttributeValue: React.FC<EditAttributeValueProps> = ({ hideOver
                             value={formData.sizeCode}
                             onChange={handleChange}
                         />
+                        <Form.Text className="text-danger">{error.sizeCode}</Form.Text>
                     </Form.Group>
                     <Form.Group className="mb-3">
                         <Form.Control

@@ -1,53 +1,45 @@
 import React from 'react';
-import './SublierManagement.css';
+import './SupplierManagement.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPencilAlt, faSearch, faTrash } from '@fortawesome/free-solid-svg-icons';
-import { FormSublier } from './compoments/FormSublier';
 import { Button, Form, Table } from 'react-bootstrap';
-
-interface Supplier {
-    id: number;
-    name: string;
-    description: string;
-    phone: string;
-    sublierCode: string;
-    address: string;
-    email: string;
-}
+import { FormSupplier } from './compoments/FormSupplier';
+import GetSuppliers from '../../../services/supplier/GetSuppliers';
+import Supplier from '../../../interface/Supplier';
+import PaginationType from '../../../interface/Pagination';
 
 export const SublierManagement: React.FC = () => {
 
-    const [suppliers, setSuppliers] = React.useState<Supplier[]>([
-        {
-            id: 1,
-            name: 'Supplier 1',
-            description: 'Description 1',
-            phone: '0123456789',
-            sublierCode: 'S001',
-            address: 'Address 1',
-            email: 'abc@gmail.com',
-        },
-        {
-            id: 2,
-            name: 'Supplier 2',
-            description: 'Description 2',
-            phone: '0123456789',
-            sublierCode: 'S002',
-            address: 'Address 2',
-            email: 'hailua@gmail.com',
-        },
-        {
-            id: 3,
-            name: 'Supplier 3',
-            description: 'Description 3',
-            phone: '0123456789',
-            sublierCode: 'S003',
-            address: 'Address 3',
-            email: 'trantrong@gmail.com',
-        },
-    ]);
+    const [suppliers, setSuppliers] = React.useState<Supplier[]>([]);
+    const [isLoading, setIsLoading] = React.useState<boolean>(false);
+    const [globalError, setGlobalError] = React.useState<string>("");
     const [showOverlay, setShowOverlay] = React.useState(false);
-    const [sublierId, setSublierId] = React.useState<number | null>(null);
+    const [sublierId, setSublierId] = React.useState<string>("");
+    const [pagination, setPagination] = React.useState<PaginationType>({
+        limit: 0,
+        offset: 0,
+        totalPage: 0,
+        totalElementOfPage: 0
+    });
+
+    React.useEffect(() => {
+        setIsLoading(true);
+        GetSuppliers()
+            .then((response) => {
+                setSuppliers(response.data);
+                setPagination({
+                    limit: response.limit,
+                    offset: response.offset,
+                    totalPage: response.totalPage,
+                    totalElementOfPage: response.totalElementOfPage
+                });
+            }).catch((error) => {
+                console.error(error);
+                setGlobalError(error.message);
+            }).finally(() => {
+                setIsLoading(false);
+            });
+    }, []);
 
     const handleAdd = () => {
         setShowOverlay(true);
@@ -55,10 +47,10 @@ export const SublierManagement: React.FC = () => {
 
     const handleClose = () => {
         setShowOverlay(false);
-        setSublierId(null);
+        setSublierId("");
     }
 
-    const handleDelete = (id: number) => {
+    const handleDelete = (id: string) => {
         console.log(`Delete supplier with ID: ${id}`);
     };
 
@@ -69,7 +61,7 @@ export const SublierManagement: React.FC = () => {
                 <td>{supplier.name}</td>
                 <td>{supplier.description}</td>
                 <td>{supplier.phone}</td>
-                <td>{supplier.sublierCode}</td>
+                <td>{supplier.supplierCode}</td>
                 <td>{supplier.address}</td>
                 <td>{supplier.email}</td>
                 <td>
@@ -131,7 +123,7 @@ export const SublierManagement: React.FC = () => {
                 </tbody>
             </Table>
             {
-                showOverlay && <FormSublier handleClose={handleClose} supplierId={sublierId} />
+                showOverlay && <FormSupplier handleClose={handleClose} supplierId={sublierId} />
             }
         </div>
     );

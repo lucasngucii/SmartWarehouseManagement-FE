@@ -6,7 +6,7 @@ import { Form } from "react-bootstrap";
 
 interface FormSupplierProps {
     handleClose: () => void;
-    supplierId: number | null;
+    supplierId: string;
 }
 
 interface FormDataTypes {
@@ -18,7 +18,7 @@ interface FormDataTypes {
     email: string;
 }
 
-export const FormSublier: React.FC<FormSupplierProps> = ({ supplierId, handleClose }) => {
+export const FormSupplier: React.FC<FormSupplierProps> = ({ supplierId, handleClose }) => {
 
     const [formData, setFormData] = React.useState<FormDataTypes>({
         supplierName: '',

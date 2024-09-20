@@ -34,7 +34,7 @@ export const Sidebar: React.FC = () => {
                         [
                             { href: "/product-management", lable: "Manage Product" },
                             { href: "/management-sku", lable: "Manage SKU" },
-                            { href: "/management-sublier", lable: "Manage Subliers" },
+                            { href: "/management-sublier", lable: "Manage Supplier" },
                             { href: "/management-attribute", lable: "Manage Attributes" },
                         ]
                     }

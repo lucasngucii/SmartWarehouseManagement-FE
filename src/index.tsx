@@ -10,10 +10,10 @@ import reportWebVitals from './reportWebVitals';
 import { Dashboard } from "./page/Dashboard/Dashboard";
 import { Login } from "./compoments/Login/Login";
 import { UserManagement } from "./page/User/UserManagement/./UserManagement";
-import {SKUManagement} from "./page/Product/SKUManagement/SKUManagement";
-import {SublierManagement} from "./page/Product/SublierManagenent/SublierManagement";
-import {AttributeManagement} from "./page/Product/AttributeManagement/AttributeManagement";
-import {ProductManagement} from "./page/Product/ProductManagement/ProductManagement";
+import { SKUManagement } from "./page/Product/SKUManagement/SKUManagement";
+import { AttributeManagement } from "./page/Product/AttributeManagement/AttributeManagement";
+import { ProductManagement } from "./page/Product/ProductManagement/ProductManagement";
+import { SublierManagement } from './page/Product/SublierManagenent/SupplierManagement';
 
 const router = createBrowserRouter([
     {

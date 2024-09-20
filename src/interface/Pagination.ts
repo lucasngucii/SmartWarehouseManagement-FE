@@ -3,5 +3,4 @@ export default interface PaginationType {
     limit: number;
     offset: number;
     totalElementOfPage: number;
-
 }
