@@ -19,7 +19,7 @@ export const AttributeManagement: React.FC = () => {
         },
         {
             Id: 2,
-            Name: "Material",
+            Name: "Model",
         },
         {
             Id: 3,

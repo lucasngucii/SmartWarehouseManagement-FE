@@ -1,6 +1,7 @@
 import axios from "axios";
 import { ResponseError } from "../../interface/ResponseError";
 import Supplier from "../../interface/Supplier";
+import Order from "../../enum/Order";
 
 interface GetSuppliersResponse {
     data: Supplier[];
@@ -10,11 +11,24 @@ interface GetSuppliersResponse {
     totalElementOfPage: number;
 }
 
-const GetSuppliers = async (): Promise<GetSuppliersResponse> => {
+enum OrderBy {
+    Name = "name",
+    Address = "address",
+    Phone = "phone",
+}
+
+interface GetSuppliersProps {
+    limit?: number;
+    offset?: number;
+    order?: Order;
+    orderBy?: OrderBy;
+}
+
+const GetSuppliers = async (data?: GetSuppliersProps): Promise<GetSuppliersResponse> => {
     try {
         const HOST = process.env.REACT_APP_HOST_BE;
         const token = localStorage.getItem('token');
-        const response = await axios.get(`${HOST}/suppliers?limit=3&offset=1&order=ASC&orderBy=name`, {
+        const response = await axios.get(`${HOST}/suppliers?limit=${data?.limit || 10}&offset=${data?.offset || 1}&order=${data?.order || Order.ASC}&orderBy=${data?.orderBy || OrderBy.Name}`, {
             headers: {
                 'Authorization': `Bearer ${token}`
             }

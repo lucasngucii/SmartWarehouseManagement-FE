@@ -7,6 +7,8 @@ import { FormSupplier } from './compoments/FormSupplier';
 import GetSuppliers from '../../../services/supplier/GetSuppliers';
 import Supplier from '../../../interface/Supplier';
 import PaginationType from '../../../interface/Pagination';
+import { NoData } from '../../../compoments/NoData/NoData';
+import Pagination from '../../../compoments/Pagination/Pagination';
 
 export const SublierManagement: React.FC = () => {
 
@@ -14,7 +16,7 @@ export const SublierManagement: React.FC = () => {
     const [isLoading, setIsLoading] = React.useState<boolean>(false);
     const [globalError, setGlobalError] = React.useState<string>("");
     const [showOverlay, setShowOverlay] = React.useState(false);
-    const [sublierId, setSublierId] = React.useState<string>("");
+    const [supplierId, setSupplierId] = React.useState<string>("");
     const [pagination, setPagination] = React.useState<PaginationType>({
         limit: 0,
         offset: 0,
@@ -41,18 +43,44 @@ export const SublierManagement: React.FC = () => {
             });
     }, []);
 
+    React.useEffect(() => {
+        setIsLoading(true);
+        GetSuppliers({ offset: pagination.offset })
+            .then((response) => {
+                setSuppliers(response.data);
+                setPagination({
+                    limit: response.limit,
+                    offset: response.offset,
+                    totalPage: response.totalPage,
+                    totalElementOfPage: response.totalElementOfPage
+                });
+            }).catch((error) => {
+                console.error(error);
+                setGlobalError(error.message);
+            }).finally(() => {
+                setIsLoading(false);
+            });
+    }, [pagination.offset]);
+
     const handleAdd = () => {
         setShowOverlay(true);
     }
 
     const handleClose = () => {
         setShowOverlay(false);
-        setSublierId("");
+        setSupplierId("");
     }
 
     const handleDelete = (id: string) => {
         console.log(`Delete supplier with ID: ${id}`);
     };
+
+    const handleChangePage = (page: number) => {
+        setPagination({
+            ...pagination,
+            offset: page
+        });
+    }
 
     const sublierList = suppliers.map((supplier, index) => {
         return (
@@ -69,7 +97,7 @@ export const SublierManagement: React.FC = () => {
                         <Button
                             onClick={() => {
                                 setShowOverlay(true);
-                                setSublierId(supplier.id);
+                                setSupplierId(supplier.id);
                             }}
                             variant="primary"
                         >
@@ -92,7 +120,7 @@ export const SublierManagement: React.FC = () => {
         <div>
             <div className="d-flex justify-content-between align-items-center mb-3">
                 <div>
-                    <h2 className={"h2 fw-bold"}>Sublier Management</h2>
+                    <h2 className={"h2 fw-bold"}>Supplier Management</h2>
                     <p className={"h6"}>Manage your suppliers here</p>
                 </div>
                 <div className="d-flex flex-row gap-5">
@@ -123,7 +151,13 @@ export const SublierManagement: React.FC = () => {
                 </tbody>
             </Table>
             {
-                showOverlay && <FormSupplier handleClose={handleClose} supplierId={sublierId} />
+                suppliers.length > 0 && <Pagination currentPage={pagination?.offset} totalPages={pagination?.totalPage} onPageChange={handleChangePage} />
+            }
+            {
+                (suppliers.length === 0 || globalError) && !isLoading && <NoData message={globalError} />
+            }
+            {
+                showOverlay && <FormSupplier handleClose={handleClose} supplierId={supplierId} />
             }
         </div>
     );
