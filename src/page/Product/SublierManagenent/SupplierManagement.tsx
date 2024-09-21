@@ -9,6 +9,7 @@ import Supplier from '../../../interface/Supplier';
 import PaginationType from '../../../interface/Pagination';
 import { NoData } from '../../../compoments/NoData/NoData';
 import Pagination from '../../../compoments/Pagination/Pagination';
+import ModelConfirmDeleteSupplier from './compoments/ModelConfirmDeleteSupplier';
 
 export const SublierManagement: React.FC = () => {
 
@@ -16,6 +17,7 @@ export const SublierManagement: React.FC = () => {
     const [isLoading, setIsLoading] = React.useState<boolean>(false);
     const [globalError, setGlobalError] = React.useState<string>("");
     const [showOverlay, setShowOverlay] = React.useState(false);
+    const [showConfirmDelete, setShowConfirmDelete] = React.useState(false);
     const [supplierId, setSupplierId] = React.useState<string>("");
     const [pagination, setPagination] = React.useState<PaginationType>({
         limit: 0,
@@ -72,7 +74,8 @@ export const SublierManagement: React.FC = () => {
     }
 
     const handleDelete = (id: string) => {
-        console.log(`Delete supplier with ID: ${id}`);
+        setSupplierId(id);
+        setShowConfirmDelete(true);
     };
 
     const handleChangePage = (page: number) => {
@@ -80,6 +83,14 @@ export const SublierManagement: React.FC = () => {
             ...pagination,
             offset: page
         });
+    }
+
+    const updateSuppliers = (suppliers: Supplier[]) => {
+        setSuppliers(suppliers);
+    }
+
+    const updateSPagination = (pagination: PaginationType) => {
+        setPagination(pagination);
     }
 
     const sublierList = suppliers.map((supplier, index) => {
@@ -158,6 +169,17 @@ export const SublierManagement: React.FC = () => {
             }
             {
                 showOverlay && <FormSupplier handleClose={handleClose} supplierId={supplierId} />
+            }
+            {
+                showConfirmDelete &&
+                <ModelConfirmDeleteSupplier
+                    supplierId={supplierId}
+                    closeModelConfirmDelete={() => {
+                        setShowConfirmDelete(false)
+                    }}
+                    updateSuppliers={updateSuppliers}
+                    updatePagination={updateSPagination}
+                />
             }
         </div>
     );
