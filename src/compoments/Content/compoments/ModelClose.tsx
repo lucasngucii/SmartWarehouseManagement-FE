@@ -9,11 +9,11 @@ export const ModelClose: React.FC<ModelCloseProps> = ({ closeModelLogout, handle
     return (
         <OverLay className="fullscreen">
             <div className="global-model">
-                <h2>Logout</h2>
+                <h2 className="h2 text-center fw-bold">Logout</h2>
                 <p>Are you sure you want to logout?</p>
                 <div className="model-buttons">
-                    <button className="cancel-button" onClick={closeModelLogout}>Cancel</button>
-                    <button className="delete-button" onClick={handleLogout}>Logout</button>
+                    <button className="btn btn-secondary" onClick={closeModelLogout}>Cancel</button>
+                    <button className="btn btn-danger" onClick={handleLogout}>Logout</button>
                 </div>
             </div>
         </OverLay>

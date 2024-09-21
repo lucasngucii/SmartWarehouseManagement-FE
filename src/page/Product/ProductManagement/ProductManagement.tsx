@@ -93,7 +93,7 @@ export const ProductManagement: React.FC = () => {
                     <h2 className={"h2 fw-bold"}>Product Management</h2>
                     <p className={"h6"}>Manage your products here</p>
                 </div>
-                <div className="d-flex flex-row gap-5">
+                <div className="d-flex flex-row gap-3">
                     <div className="d-flex flex-row gap-2">
                         <Form.Control className="p-2" type="text" placeholder="Search" />
                         <Button variant="secondary">

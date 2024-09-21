@@ -1,6 +1,6 @@
 import React from "react";
 import "./AttributeManagement.css";
-import { AttributeDetailManagement } from "./compoments/AttributeDetailManagement";
+import { AttributeValueManagement } from "./compoments/AttributeValueManagement";
 import { Button, Table } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPencilAlt } from "@fortawesome/free-solid-svg-icons";
@@ -85,7 +85,7 @@ export const AttributeManagement: React.FC = () => {
                 </tbody>
             </Table>
             {
-                showEditForm && <AttributeDetailManagement handleCancelEditAttribute={handleCancelEdit} attributeId={attributeId} />
+                showEditForm && <AttributeValueManagement handleCancelEditAttribute={handleCancelEdit} attributeId={attributeId} />
             }
         </div>
     );

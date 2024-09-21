@@ -1,7 +1,7 @@
 import "./UserManagement.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPencilAlt, faSearch, faTrash } from "@fortawesome/free-solid-svg-icons";
-import { AddUserComponent } from "./compoments/AddUserComponent";
+import { EditUserComponent } from "./compoments/EditUserComponent";
 import { Account } from "../../../interface/Account";
 import React from "react";
 import { RePulseLoader } from "../../../compoments/Loading/PulseLoader";
@@ -139,14 +139,14 @@ export const UserManagement: React.FC = () => {
                     <h2 className={"h2 fw-bold"}>User Account Management</h2>
                     <p className={"h6"}>Manage user accounts and their status</p>
                 </div>
-                <div className="d-flex flex-row gap-5">
+                <div className="d-flex flex-row gap-3">
                     <div className="d-flex flex-row gap-2">
                         <Form.Control className="p-2" type="text" placeholder="Search" />
                         <Button variant="secondary">
                             <FontAwesomeIcon icon={faSearch} />
                         </Button>
                     </div>
-                    <Button onClick={handleShowOverlayModelUser} variant="success fw-bold">NEW +</Button>
+                    <Button onClick={handleShowOverlayModelUser} variant="success fw-bold">+ Add Account</Button>
                 </div>
             </div>
             <Table striped bordered hover >
@@ -172,7 +172,7 @@ export const UserManagement: React.FC = () => {
                 (users.length === 0 || globalError) && !isLoading && <NoData message={globalError} />
             }
             <RePulseLoader loading={isLoading} />
-            {showOverlayModelUser && <AddUserComponent hideOverlay={handleHideOverlayModelUser} userId={userId} updateUsers={updateUsers} updatePagination={updatePagination} />}
+            {showOverlayModelUser && <EditUserComponent hideOverlay={handleHideOverlayModelUser} userId={userId} updateUsers={updateUsers} updatePagination={updatePagination} />}
             {showOverlayModelDelete && <ModelConfirmDeleteUser userId={userId} closeModelConfirmDelete={handleHideOverlayModelDelete} updateUsers={updateUsers} updatePagination={updatePagination} />}
         </div>
     );

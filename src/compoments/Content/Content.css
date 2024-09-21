@@ -59,7 +59,7 @@
 }
 
 /* Dropdown menu styling */
-.dropdown-menu {
+.dropdown-menu-user {
     display: flex;
     flex-direction: column;
     position: absolute;
@@ -73,7 +73,7 @@
     width: 200px;
 }
 
-.dropdown-menu a {
+.dropdown-menu-user a {
     padding: 12px 16px;
     text-decoration: none;
     color: #333333;
@@ -82,11 +82,11 @@
     border-bottom: 1px solid #E0E0E0;
 }
 
-.dropdown-menu a:last-child {
+.dropdown-menu-user a:last-child {
     border-bottom: none;
 }
 
-.dropdown-menu a:hover {
+.dropdown-menu-user a:hover {
     background-color: #F5F5F5;
 }
 

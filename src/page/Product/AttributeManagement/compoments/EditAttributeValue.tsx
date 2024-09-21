@@ -1,5 +1,5 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faTimes } from "@fortawesome/free-solid-svg-icons";
+import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
 import { OverLay } from "../../../../compoments/OverLay/OverLay";
 import React from "react";
 import AddAttributeValue from "../../../../services/attribute/AddAttributeValue";
@@ -7,7 +7,7 @@ import Attribute from "../../../../interface/Attribute";
 import GetAttributeDetail from "../../../../services/attribute/GetAttributeDetail";
 import PaginationType from "../../../../interface/Pagination";
 import AttributeDetailType from "../../../../interface/AttributeDetail";
-import { Form } from "react-bootstrap";
+import { Button, Col, Form, Row } from "react-bootstrap";
 import GetAttributeValueById from "../../../../services/attribute/GetAttributeValueById";
 import UpdateAttributeValue from "../../../../services/attribute/UpdateAttributeValue";
 import validateVietnamese from "../../../../util/validateVietnamese";
@@ -34,6 +34,7 @@ export const EditAttributeValue: React.FC<EditAttributeValueProps> = ({ hideOver
     });
     const [loading, setLoading] = React.useState(false);
     const [globalError, setGlobalError] = React.useState("");
+    const [editAttributeValue, setEditAttributeValue] = React.useState(false);
 
     React.useEffect(() => {
         if (attributeDetailId) {
@@ -51,7 +52,7 @@ export const EditAttributeValue: React.FC<EditAttributeValueProps> = ({ hideOver
         }
     }, [attributeDetailId, attributeId]);
 
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLTextAreaElement>) => {
         setFormData({
             ...formData,
             [e.target.name]: e.target.value
@@ -64,8 +65,7 @@ export const EditAttributeValue: React.FC<EditAttributeValueProps> = ({ hideOver
         });
     }
 
-    const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-        event.preventDefault();
+    const handleSubmit = () => {
         setLoading(true);
         if (attributeDetailId) {
             UpdateAttributeValue(attributeId, attributeDetailId, formData)
@@ -79,7 +79,7 @@ export const EditAttributeValue: React.FC<EditAttributeValueProps> = ({ hideOver
                         offset: response.offset,
                         totalElementOfPage: response.totalElementOfPage
                     });
-                    hideOverlay();
+                    setEditAttributeValue(false);
                 }).catch((error) => {
                     console.error(error);
                     setGlobalError(error.message);
@@ -98,7 +98,7 @@ export const EditAttributeValue: React.FC<EditAttributeValueProps> = ({ hideOver
                         offset: response.offset,
                         totalElementOfPage: response.totalElementOfPage
                     });
-                    hideOverlay();
+                    setEditAttributeValue(false);
                 }).catch((error) => {
                     console.error(error);
                     setGlobalError(error.message);
@@ -174,61 +174,114 @@ export const EditAttributeValue: React.FC<EditAttributeValueProps> = ({ hideOver
     }
 
     return (
-        <OverLay>
-            <div className="edit-attribute-value">
-                <button onClick={hideOverlay} className="button-close">
-                    <FontAwesomeIcon icon={faTimes} />
-                </button>
-                <h1 className={"h2 text-center fw-bold"}>{`${attributeDetailId ? "Edit" : "Add"} Value`}</h1>
-                <p className="text-center text-danger">{globalError}</p>
-                <Form onSubmit={(event) => {
-                    event.preventDefault();
-                    if (validate1() && validate2()) {
-                        // handleSubmit(event);
-                    }
-                }}>
+        <OverLay className="disabled-padding">
+            <div className="edit-attribute-value p-4 bg-light rounded">
+                <div className="d-flex justify-content-between align-items-center mb-4">
+                    <h2 className="fw-bold">
+                        {`${attributeDetailId ? "Edit" : "Add"} Value`}
+                    </h2>
+                    <button
+                        onClick={() => hideOverlay()}
+                        className="btn btn-outline-primary"
+                    >
+                        <FontAwesomeIcon icon={faArrowLeft} /> Back
+                    </button>
+                </div>
+
+                <div className="border rounded shadow-sm p-4 mb-4">
+                    <div className="d-flex justify-content-between align-items-center mb-3">
+                        <span className="fw-semibold h6">Attribute Value Information</span>
+                        {attributeDetailId && (
+                            <button
+                                className="btn btn-outline-secondary btn-sm"
+                                disabled={editAttributeValue}
+                                onClick={() => setEditAttributeValue(true)}
+                            >
+                                Edit
+                            </button>
+                        )}
+                    </div>
+
+                    <Row className="mb-3">
+                        <Col md={6}>
+                            <Form.Group className="mb-3">
+                                <Form.Label>Name</Form.Label>
+                                <Form.Control
+                                    className="py-3"
+                                    type="text"
+                                    value={formData.name}
+                                    name="name"
+                                    onChange={handleChange}
+                                    disabled={!editAttributeValue && attributeDetailId !== ""}
+                                    placeholder="Enter name"
+                                />
+                            </Form.Group>
+                        </Col>
+                        <Col md={6}>
+                            <Form.Group className="mb-3">
+                                <Form.Label>Code</Form.Label>
+                                <Form.Control
+                                    className="py-3"
+                                    type="text"
+                                    value={formData.sizeCode}
+                                    name="sizeCode"
+                                    onChange={handleChange}
+                                    disabled={!editAttributeValue && attributeDetailId !== ""}
+                                    placeholder="Enter code"
+                                />
+                            </Form.Group>
+                        </Col>
+                    </Row>
+
                     <Form.Group className="mb-3">
-                        <Form.Label className={"form-lable"}>Value Name</Form.Label>
-                        <Form.Control
-                            type="text"
-                            placeholder="Enter Value name"
-                            name="name"
-                            value={formData.name}
-                            onChange={handleChange}
-                        />
-                        <Form.Text className="text-danger">{error.name}</Form.Text>
-                    </Form.Group>
-                    <Form.Group className="mb-3">
-                        <Form.Label className={"form-lable"}>Description</Form.Label>
-                        <Form.Control
-                            type="text"
-                            placeholder="Enter your description"
+                        <Form.Label>Description</Form.Label>
+                        <textarea
+                            className="form-control py-2"
                             name="description"
                             value={formData.description}
                             onChange={handleChange}
+                            disabled={!editAttributeValue && attributeDetailId !== ""}
+                            placeholder="Enter description"
+                            rows={3}
                         />
-                        <Form.Text className="text-danger">{error.description}</Form.Text>
                     </Form.Group>
-                    <Form.Group className="mb-3">
-                        <Form.Label className={"form-lable"}>Code</Form.Label>
-                        <Form.Control
-                            type="text"
-                            placeholder="Enter your code"
-                            name="sizeCode"
-                            value={formData.sizeCode}
-                            onChange={handleChange}
-                        />
-                        <Form.Text className="text-danger">{error.sizeCode}</Form.Text>
-                    </Form.Group>
-                    <Form.Group className="mb-3">
-                        <Form.Control
-                            type="submit"
-                            value={loading ? "Loading..." : (attributeDetailId ? "Update" : "Save")}
+                    {editAttributeValue && attributeDetailId && (
+                        <div className="d-flex gap-2">
+                            <button
+                                className="btn btn-secondary"
+                                onClick={() => setEditAttributeValue(false)}
+                                disabled={loading}
+                            >
+                                Cancel
+                            </button>
+                            <button
+                                className="btn btn-primary"
+                                onClick={() => {
+                                    if (validate1() && validate2()) {
+                                        handleSubmit();
+                                    }
+                                }}
+                                disabled={loading}
+                            >
+                                Save
+                            </button>
+                        </div>
+                    )}
+
+                    {!attributeDetailId && (
+                        <Button
+                            className="btn btn-primary w-100"
+                            onClick={() => {
+                                if (validate1() && validate2()) {
+                                    handleSubmit();
+                                }
+                            }}
                             disabled={loading}
-                            className="btn btn-primary"
-                        />
-                    </Form.Group>
-                </Form>
+                        >
+                            Create
+                        </Button>
+                    )}
+                </div>
             </div>
         </OverLay>
     );

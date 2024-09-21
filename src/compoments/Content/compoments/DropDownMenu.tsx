@@ -8,7 +8,7 @@ interface DropDownMenuProps {
 export const DropDownMenu: React.FC<DropDownMenuProps> = ({ openModelLogout }) => {
 
     return (
-        <div className='dropdown-menu'>
+        <div className='dropdown-menu-user'>
             <a href="/profile">
                 <FontAwesomeIcon icon={faUserCircle} className="dropdown-icon" />
                 Profile

@@ -12,12 +12,12 @@ import { faArrowLeft, faPencilAlt, faSearch, faTrash } from "@fortawesome/free-s
 import ModelConfirmDeleteAttributeValue from "./ModelConfirmDeleteAttributeValue";
 import { Button, Form, Table } from "react-bootstrap";
 
-interface AttributeDetailManagementProps {
+interface AttributeValueManagementProps {
     handleCancelEditAttribute: () => void;
     attributeId: number;
 }
 
-export const AttributeDetailManagement: React.FC<AttributeDetailManagementProps> = ({ handleCancelEditAttribute, attributeId }) => {
+export const AttributeValueManagement: React.FC<AttributeValueManagementProps> = ({ handleCancelEditAttribute, attributeId }) => {
 
     const [attributeValues, setAttributeValues] = React.useState<AttributeDetailType[]>([]);
     const [globalError, setGlobalError] = React.useState("");
@@ -148,7 +148,7 @@ export const AttributeDetailManagement: React.FC<AttributeDetailManagementProps>
                         <h2 className={"h2 fw-bold"}>Attribute Detail Management</h2>
                         <p className={"h6"}>Add, edit, or delete attribute values</p>
                     </div>
-                    <div className="d-flex flex-row gap-5">
+                    <div className="d-flex flex-row gap-3">
                         <div className="d-flex flex-row gap-2">
                             <Form.Control className="p-2" type="search" placeholder="Search" />
                             <Button variant="secondary">

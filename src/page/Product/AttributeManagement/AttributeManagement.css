@@ -38,9 +38,5 @@
 /*add attribute name*/
 .edit-attribute-value,
 .add-attribute-container {
-    position: relative;
-    background-color: #ffffff;
-    padding: 20px;
-    border-radius: 8px;
-    width: 500px;
+    width: 650px;
 }

@@ -43,7 +43,7 @@ export const ModelConfirmDeleteUser: React.FC<ModelConfirmDeleteUserProps> = ({ 
     return (
         <OverLay className="fullscreen">
             <div className="global-model">
-                <h2>Confirm Delete</h2>
+                <h2 className="fw-bold text-center h2">Confirm Delete</h2>
                 <p>Are you sure you want to delete this user?</p>
                 <span className="primary-message-error text-center">{globalError}</span>
                 {

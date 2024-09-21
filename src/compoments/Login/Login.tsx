@@ -122,7 +122,7 @@ export const Login: React.FC = () => {
         <div className="login-container">
             <div className="login-box">
                 <p className="h2 text-center fw-bold">Login</p>
-                <p className="primary-message-error margin-bottom-15 text-center">{globalError}</p>
+                <p className="mb-3 text-center text-danger">{globalError}</p>
                 <Form onSubmit={(e) => {
                     e.preventDefault();
                     if (validate1() && validate2()) handleSubmit()
@@ -130,6 +130,7 @@ export const Login: React.FC = () => {
                     <Form.Group className="mb-3">
                         <Form.Label>Username</Form.Label>
                         <Form.Control
+                            className="py-2"
                             type="text"
                             placeholder="Enter your username"
                             name="username"
@@ -140,6 +141,7 @@ export const Login: React.FC = () => {
                     <Form.Group className="mb-3">
                         <Form.Label>Password</Form.Label>
                         <Form.Control
+                            className="py-2"
                             type="password"
                             placeholder="Enter your password"
                             name="password"
@@ -147,9 +149,7 @@ export const Login: React.FC = () => {
                         />
                         <Form.Text className="text-danger">{errors.password}</Form.Text>
                     </Form.Group>
-                    <Form.Group className="mb-3">
-                        <Form.Control className="btn btn-primary" type="submit" disabled={loading} value={loading ? "Loading..." : "Login"} />
-                    </Form.Group>
+                    <Form.Control className="btn btn-primary" type="submit" disabled={loading} value={loading ? "Loading..." : "Login"} />
                 </Form>
             </div>
         </div>
