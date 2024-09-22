@@ -3,13 +3,13 @@ import './SupplierManagement.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPencilAlt, faSearch, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { Button, Form, Table } from 'react-bootstrap';
-import { FormSupplier } from './compoments/FormSupplier';
 import GetSuppliers from '../../../services/supplier/GetSuppliers';
 import Supplier from '../../../interface/Supplier';
 import PaginationType from '../../../interface/Pagination';
 import { NoData } from '../../../compoments/NoData/NoData';
 import Pagination from '../../../compoments/Pagination/Pagination';
 import ModelConfirmDeleteSupplier from './compoments/ModelConfirmDeleteSupplier';
+import SupplierForm from './compoments/SupplierForm';
 
 export const SublierManagement: React.FC = () => {
 
@@ -168,7 +168,7 @@ export const SublierManagement: React.FC = () => {
                 (suppliers.length === 0 || globalError) && !isLoading && <NoData message={globalError} />
             }
             {
-                showOverlay && <FormSupplier handleClose={handleClose} supplierId={supplierId} />
+                showOverlay && <SupplierForm handleClose={handleClose} updatePagination={updateSPagination} updateSuppliers={updateSuppliers} />
             }
             {
                 showConfirmDelete &&
