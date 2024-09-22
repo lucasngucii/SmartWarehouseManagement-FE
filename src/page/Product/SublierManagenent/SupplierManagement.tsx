@@ -141,7 +141,7 @@ export const SublierManagement: React.FC = () => {
                             <FontAwesomeIcon icon={faSearch} />
                         </Button>
                     </div>
-                    <Button onClick={handleAdd} variant="success fw-bold">NEW +</Button>
+                    <Button onClick={handleAdd} variant="success fw-bold">+ Add Supplier</Button>
                 </div>
             </div>
             <Table striped hover bordered>

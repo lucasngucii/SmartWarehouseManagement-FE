@@ -5,28 +5,30 @@ import { ResponseError } from "../../interface/ResponseError";
 export interface RegisterRequest {
     username: string;
     email: string;
-    password?: string;
+    password: string;
     fullName: string;
     phoneNumber: string;
     roleName: string;
+    position: string;
+    address: string;
 }
 
-interface RegisterResponse {
-    id: string;
-    username: string;
-    password: string;
-    fullName: string;
-    email: string;
-    phoneNumber: string;
-    role: Role;
-    createAt: string;
-    updateAt: string;
-    createBy: string;
-    isDeleted: boolean;
-    status: boolean;
-}
+// interface RegisterResponse {
+//     id: string;
+//     username: string;
+//     password: string;
+//     fullName: string;
+//     email: string;
+//     phoneNumber: string;
+//     role: Role;
+//     createAt: string;
+//     updateAt: string;
+//     createBy: string;
+//     isDeleted: boolean;
+//     status: boolean;
+// }
 
-const RegisterAPI = async (data: RegisterRequest): Promise<RegisterResponse> => {
+const RegisterAPI = async (data: RegisterRequest): Promise<void> => {
 
     try {
 

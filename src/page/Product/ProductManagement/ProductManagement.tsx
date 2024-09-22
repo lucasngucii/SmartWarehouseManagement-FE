@@ -100,7 +100,7 @@ export const ProductManagement: React.FC = () => {
                             <FontAwesomeIcon icon={faSearch} />
                         </Button>
                     </div>
-                    <Button onClick={handleAddProduct} variant="success fw-bold">NEW +</Button>
+                    <Button onClick={handleAddProduct} variant="success fw-bold">+ Add Product</Button>
                 </div>
             </div>
             <Table striped bordered hover>

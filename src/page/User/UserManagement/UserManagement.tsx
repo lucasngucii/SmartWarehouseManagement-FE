@@ -11,6 +11,7 @@ import GetAccountsAPI from "../../../services/authen-api/GetAccountsAPI";
 import Pagination from "../../../compoments/Pagination/Pagination";
 import PaginationType from "../../../interface/Pagination";
 import { Button, Form, Table } from "react-bootstrap";
+import FormRegisterUser from "./compoments/FormRegisterUser";
 
 export const UserManagement: React.FC = () => {
 
@@ -18,6 +19,7 @@ export const UserManagement: React.FC = () => {
     const [isLoading, setIsLoading] = React.useState(false);
     const [showOverlayModelUser, setShowOverlayModelUser] = React.useState(false);
     const [showOverlayModelDelete, setShowOverlayModelDelete] = React.useState(false);
+    const [showOverlayModelRegister, setShowOverlayModelRegister] = React.useState(false);
     const [userId, setUserId] = React.useState<string>("");
     const [globalError, setGlobalError] = React.useState<string>("");
     const [pagination, setPagination] = React.useState<PaginationType>({
@@ -65,10 +67,6 @@ export const UserManagement: React.FC = () => {
             });
     }, [pagination.offset]);
 
-    const handleShowOverlayModelUser = () => {
-        setShowOverlayModelUser(true);
-    }
-
     const handleHideOverlayModelUser = () => {
         setShowOverlayModelUser(false);
         setUserId("");
@@ -113,7 +111,7 @@ export const UserManagement: React.FC = () => {
                         <Button
                             onClick={() => {
                                 setUserId(user.id)
-                                handleShowOverlayModelUser()
+                                setShowOverlayModelUser(true);
                             }}
                             variant="primary"
                         >
@@ -146,7 +144,7 @@ export const UserManagement: React.FC = () => {
                             <FontAwesomeIcon icon={faSearch} />
                         </Button>
                     </div>
-                    <Button onClick={handleShowOverlayModelUser} variant="success fw-bold">+ Add Account</Button>
+                    <Button onClick={() => { setShowOverlayModelRegister(true) }} variant="success fw-bold">+ Add Account</Button>
                 </div>
             </div>
             <Table striped bordered hover >
@@ -174,6 +172,7 @@ export const UserManagement: React.FC = () => {
             <RePulseLoader loading={isLoading} />
             {showOverlayModelUser && <EditUserComponent hideOverlay={handleHideOverlayModelUser} userId={userId} updateUsers={updateUsers} updatePagination={updatePagination} />}
             {showOverlayModelDelete && <ModelConfirmDeleteUser userId={userId} closeModelConfirmDelete={handleHideOverlayModelDelete} updateUsers={updateUsers} updatePagination={updatePagination} />}
+            {showOverlayModelRegister && <FormRegisterUser handleClose={() => { setShowOverlayModelRegister(false) }} updateUsers={updateUsers} updatePagination={updatePagination} />}
         </div>
     );
 }

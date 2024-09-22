@@ -1,13 +1,10 @@
 import { OverLay } from "../../../../compoments/OverLay/OverLay";
-import Select, { MultiValue, SingleValue, StylesConfig } from "react-select";
-import React from "react";
+import React, { ChangeEvent } from "react";
 import { Role } from "../../../../interface/Role";
-import RegisterAPI, { RegisterRequest } from "../../../../services/authen-api/RegisterAPI";
 import { Account } from "../../../../interface/Account";
 import ValidateUsername from "../../../../util/validateUsername";
 import validateFullname from "../../../../util/validateFullName";
 import validateEmail from "../../../../util/validateEmail";
-import ValidatePassWord from "../../../../util/validatePassword";
 import validatePhone from "../../../../util/validatePhone";
 import GetRolesAPI from "../../../../services/authen-api/GetRolesAPI";
 import GetAccountById from "../../../../services/authen-api/GetAccountById";
@@ -16,16 +13,8 @@ import GetAccountsAPI from "../../../../services/authen-api/GetAccountsAPI";
 import PaginationType from "../../../../interface/Pagination";
 import { Col, Container, Form, Image, InputGroup, Row } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faArrowLeft, faEdit } from "@fortawesome/free-solid-svg-icons";
-
-interface OptionType {
-    value: string;
-    label: string;
-}
-
-interface Options {
-    Role: OptionType[];
-}
+import { faArrowLeft, faEdit, faSave } from "@fortawesome/free-solid-svg-icons";
+import Gender from "../../../../enum/Gender";
 
 interface EditUserComponentProps {
     hideOverlay: () => void;
@@ -35,23 +24,31 @@ interface EditUserComponentProps {
 }
 
 interface FormDataTypes {
-    username: string;
-    fullname: string;
-    role: OptionType | null;
-    email: string;
-    phone: string;
-    password: string;
-    confirmPassword: string;
+    fullName?: string;
+    dateOfBirth?: string;
+    gender?: string;
+    email?: string;
+    phoneNumber?: string;
+    position?: string;
+    address?: string;
+    username?: string;
+    roleName?: string;
+    password?: string;
+    confirmPassword?: string;
 }
 
 interface FormErrorTypes {
-    username: string;
-    fullname: string;
-    role: string;
-    email: string;
-    phone: string;
-    password: string;
-    confirmPassword: string;
+    fullName?: string;
+    dateOfBirth?: string;
+    gender?: string;
+    email?: string;
+    phoneNumber?: string;
+    position?: string;
+    address?: string;
+    username?: string;
+    roleName?: string;
+    password?: string;
+    confirmPassword?: string;
 }
 
 export const EditUserComponent: React.FC<EditUserComponentProps> = ({ hideOverlay, userId, updateUsers, updatePagination }) => {
@@ -59,48 +56,49 @@ export const EditUserComponent: React.FC<EditUserComponentProps> = ({ hideOverla
     const [isLoading, setIsLoading] = React.useState<boolean>(false);
     const [isLoadingSubmit, setIsLoadingSubmit] = React.useState<boolean>(false);
     const [globalError, setGlobalError] = React.useState<string>("");
-    const [editBaseInfo, setEditBaseInfo] = React.useState<boolean>(false);
-    const [editPersonalInfo, setEditPersonalInfo] = React.useState<boolean>(false);
-    const [editAccountInfo, setEditAccountInfo] = React.useState<boolean>(false);
-    const [options, setOptions] = React.useState<Options>({
-        Role: []
+    const [editUser, setEditUser] = React.useState<boolean>(false);
+    const [roles, setRoles] = React.useState<Role[]>([]);
+    const [dataDefault, setDataDefault] = React.useState<FormDataTypes>({
+        fullName: "",
+        dateOfBirth: "",
+        gender: "",
+        email: "",
+        phoneNumber: "",
+        position: "",
+        address: "",
+        username: "",
+        roleName: "",
     });
     const [formData, setFormData] = React.useState<FormDataTypes>({
-        username: "",
-        fullname: "",
-        role: null,
+        fullName: "",
+        dateOfBirth: "",
+        gender: "",
         email: "",
-        phone: "",
-        password: "",
-        confirmPassword: "",
+        phoneNumber: "",
+        position: "",
+        address: "",
+        roleName: "",
+        username: "",
     });
 
     const [formError, setFormError] = React.useState<FormErrorTypes>({
-        username: "",
-        fullname: "",
-        role: "",
+        fullName: "",
+        dateOfBirth: "",
+        gender: "",
         email: "",
-        phone: "",
-        password: "",
-        confirmPassword: "",
+        phoneNumber: "",
+        position: "",
+        address: "",
+        roleName: "",
+        username: "",
     });
+    const gender: Gender[] = [Gender.Male, Gender.Female, Gender.Others];
 
     React.useEffect(() => {
         setIsLoading(true);
         GetRolesAPI()
             .then((response) => {
-                const roles: Role[] = response;
-                const roleOptions = roles.map((role) => {
-                    return {
-                        value: role.name,
-                        label: role.name,
-                    }
-                });
-
-                setOptions(preVal => {
-                    return { ...preVal, Role: roleOptions }
-                })
-
+                setRoles(response);
             }).catch((err) => {
                 console.error(err.message);
                 setGlobalError(err.message);
@@ -113,22 +111,28 @@ export const EditUserComponent: React.FC<EditUserComponentProps> = ({ hideOverla
         if (userId) {
             GetAccountById(userId)
                 .then((response) => {
-                    const data: Account = response;
-                    const roleOption: OptionType = {
-                        value: data.role.name,
-                        label: data.role.name,
-                    }
-
                     setFormData({
-                        username: data.username,
-                        fullname: data.fullName,
-                        role: roleOption,
-                        email: data.email,
-                        phone: data.phoneNumber,
-                        password: "",
-                        confirmPassword: "",
-                    })
-
+                        fullName: response.fullName,
+                        dateOfBirth: response.dateOfBirth,
+                        gender: response.gender,
+                        email: response.email,
+                        phoneNumber: response.phoneNumber,
+                        position: response.position,
+                        address: response.address,
+                        username: response.username,
+                        roleName: response.role.name,
+                    });
+                    setDataDefault({
+                        fullName: response.fullName,
+                        dateOfBirth: response.dateOfBirth,
+                        gender: response.gender,
+                        email: response.email,
+                        phoneNumber: response.phoneNumber,
+                        position: response.position,
+                        address: response.address,
+                        username: response.username,
+                        roleName: response.role.name,
+                    });
                 }).catch((err) => {
                     console.error(err.message);
                     setGlobalError(err.message);
@@ -136,49 +140,29 @@ export const EditUserComponent: React.FC<EditUserComponentProps> = ({ hideOverla
         }
     }, [userId])
 
-    const handleChangeSelect = (name: string, newValue: SingleValue<OptionType> | MultiValue<OptionType>) => {
-        setFormData({ ...formData, [name]: newValue });
-        setFormError(preVal => {
-            return { ...preVal, [name]: "" }
-        })
-    }
-
-    const handleChangeInput = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setFormData({ ...formData, [e.target.name]: e.target.value });
-        setFormError(preVal => {
-            return { ...preVal, [e.target.name]: "" }
-        })
-    }
-
-    const customSelectStyles: StylesConfig<any, false> = {
-        control: (base) => ({
-            ...base,
-            width: "100%",
-            borderRadius: "4px",
-            border: "1px solid #d1d1d1",
-            fontSize: "1rem",
-            padding: "0.5rem",
-        }),
+    const handleChangeInput = (e: ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
+        const { name, value } = e.target;
+        setFormData(preVal => ({
+            ...preVal,
+            [name]: value
+        }));
+        setFormError(preVal => ({
+            ...preVal,
+            [name]: ""
+        }));
     };
 
     const validate1 = (): boolean => {
         let check = true;
 
-        if (!formData.username) {
-            check = false;
-            setFormError(preVal => {
-                return { ...preVal, username: "Username is required" }
-            })
-        }
-
-        if (!formData.fullname) {
+        if (!formData.fullName) {
             check = false;
             setFormError(preVal => {
                 return { ...preVal, fullname: "Fullname is required" }
             })
         }
 
-        if (!formData.role) {
+        if (!formData.roleName) {
             check = false;
             setFormError(preVal => {
                 return { ...preVal, role: "Role is required" }
@@ -192,7 +176,7 @@ export const EditUserComponent: React.FC<EditUserComponentProps> = ({ hideOverla
             })
         }
 
-        if (!formData.phone) {
+        if (!formData.phoneNumber) {
             check = false;
             setFormError(preVal => {
                 return { ...preVal, phone: "Phone is required" }
@@ -206,23 +190,15 @@ export const EditUserComponent: React.FC<EditUserComponentProps> = ({ hideOverla
             })
         }
 
-        if (!formData.confirmPassword && !userId) {
-            check = false;
-            setFormError(preVal => {
-                return { ...preVal, confirmPassword: "ConfirmPassword is required" }
-            })
-        }
-
         return check
     }
 
     const validate2 = (): boolean => {
         let check = true;
-        const checkUserName = ValidateUsername(formData.username);
-        const checkFullName = validateFullname(formData.fullname);
-        const checkEmail = validateEmail(formData.email)
-        const checkPasswrod = ValidatePassWord(formData.password);
-        const checkPhone = validatePhone(formData.phone);
+        const checkUserName = ValidateUsername(formData.username || "");
+        const checkFullName = validateFullname(formData.fullName || "");
+        const checkEmail = validateEmail(formData.email || "");
+        const checkPhone = validatePhone(formData.phoneNumber || "");
 
         if (checkUserName) {
             check = false;
@@ -245,13 +221,6 @@ export const EditUserComponent: React.FC<EditUserComponentProps> = ({ hideOverla
             })
         }
 
-        if (checkPasswrod && (userId !== null && formData.password.length > 0)) {
-            check = false;
-            setFormError(preVal => {
-                return { ...preVal, password: checkPasswrod }
-            })
-        }
-
         if (checkPhone) {
             check = false;
             setFormError(preVal => {
@@ -259,36 +228,60 @@ export const EditUserComponent: React.FC<EditUserComponentProps> = ({ hideOverla
             })
         }
 
-        if (formData.password !== formData.confirmPassword) {
-            check = false;
-            setFormError(preVal => {
-                return { ...preVal, confirmPassword: "ConfirmPassword must match password" }
-            })
-        }
-
         return check
     }
 
-    const handleSubmit = (e: React.MouseEvent<HTMLInputElement>) => {
-        e.preventDefault();
+    const checkChangeFormData = (): boolean => {
+
+        let check = true;
+
+        if (formData.fullName !== dataDefault.fullName) {
+            check = false;
+        }
+
+        if (formData.dateOfBirth !== dataDefault.dateOfBirth) {
+            check = false;
+        }
+
+        if (formData.gender !== dataDefault.gender) {
+            check = false;
+        }
+
+        if (formData.email !== dataDefault.email) {
+            check = false;
+        }
+
+        if (formData.phoneNumber !== dataDefault.phoneNumber) {
+            check = false;
+        }
+
+        if (formData.position !== dataDefault.position) {
+            check = false;
+        }
+
+        if (formData.address !== dataDefault.address) {
+            check = false;
+        }
+
+        if (formData.roleName !== dataDefault.roleName) {
+            check = false;
+        }
+
+        return check;
+
+    }
+
+    const handleSubmit = () => {
         if (validate1() && validate2()) {
-
-            const dataRequest: RegisterRequest = {
-                username: formData.username,
-                email: formData.email,
-                password: formData.password,
-                fullName: formData.fullname,
-                phoneNumber: formData.phone,
-                roleName: formData.role!.value,
-            }
-
             setIsLoadingSubmit(true);
             if (userId) {
-                if (dataRequest.password === "") {
-                    delete dataRequest.password;
-                }
-                UpdateAccountAPI(userId, dataRequest)
+                UpdateAccountAPI(userId, formData)
                     .then(() => {
+                        const dataRequest = {
+                            ...formData,
+                        }
+                        delete dataRequest.username;
+                        setDataDefault(dataRequest);
                         return GetAccountsAPI();
                     }).then((response) => {
                         if (updateUsers) {
@@ -299,7 +292,7 @@ export const EditUserComponent: React.FC<EditUserComponentProps> = ({ hideOverla
                                 offset: response.offset,
                                 totalElementOfPage: response.totalElementOfPage
                             })
-                            hideOverlay();
+                            setEditUser(false);
                         } else {
                             throw new Error("updateUsers is not a function");
                         }
@@ -311,7 +304,7 @@ export const EditUserComponent: React.FC<EditUserComponentProps> = ({ hideOverla
                             })
                         } else if (message.includes("role")) {
                             setFormError(preVal => {
-                                return { ...preVal, role: err.message }
+                                return { ...preVal, roleName: err.message }
                             })
                         } else {
                             setGlobalError(err.message);
@@ -320,89 +313,85 @@ export const EditUserComponent: React.FC<EditUserComponentProps> = ({ hideOverla
                         setIsLoadingSubmit(false);
                     })
                 return;
+            } else {
+                setGlobalError("User id is not found");
             }
-
-            console.log(dataRequest);
-            RegisterAPI(dataRequest)
-                .then(() => {
-                    return GetAccountsAPI();
-                }).then((response) => {
-                    if (updateUsers) {
-                        updateUsers(response.data);
-                        hideOverlay();
-                    } else {
-                        throw new Error("updateUsers is not a function");
-                    }
-                }).catch((err) => {
-                    const message: string = err.message.toLowerCase();
-                    if (message.includes("username")) {
-                        setFormError(preVal => {
-                            return { ...preVal, username: err.message }
-                        })
-                    } else if (message.includes("email")) {
-                        setFormError(preVal => {
-                            return { ...preVal, email: err.message }
-                        })
-                    } else if (message.includes("phone")) {
-                        setFormError(preVal => {
-                            return { ...preVal, phone: err.message }
-                        })
-                    } else {
-                        setGlobalError(err.message);
-                    }
-                }).finally(() => {
-                    setIsLoadingSubmit(false);
-                })
         }
     }
 
     return (
         <OverLay className="disabled-padding">
             <Container fluid className="bg-light w-100 h-100 p-4">
-                <div className="d-flex justify-content-between align-items-center mb-3">
-                    <span className="fw-bold h2">{userId ? "Edit User" : "Add User"}</span>
-                    <button
-                        onClick={() => hideOverlay()}
-                        className="btn btn-outline-primary"
-                    >
-                        <FontAwesomeIcon icon={faArrowLeft} /> Back
-                    </button>
+                <button
+                    onClick={() => hideOverlay()}
+                    className="btn btn-outline-primary mb-3 d-flex align-items-center"
+                >
+                    <FontAwesomeIcon icon={faArrowLeft} className="me-2" /> Back
+                </button>
+                <div className="d-flex justify-content-between align-items-center mb-4">
+                    <h2 className="fw-bold mb-0">{userId ? "Edit User" : "Add User"}</h2>
+                    {editUser ? (
+                        <div className="d-flex flex-row gap-2">
+                            <button
+                                disabled={isLoadingSubmit || checkChangeFormData()}
+                                onClick={() => handleSubmit()}
+                                className="btn btn-primary fw-bold d-flex align-items-center"
+                            >
+                                <FontAwesomeIcon icon={faSave} className="me-2" />
+                                {isLoadingSubmit ? "Saving..." : "Save"}
+                            </button>
+                            <button
+                                disabled={isLoadingSubmit}
+                                onClick={() => {
+                                    setEditUser(false);
+                                    setFormData(dataDefault);
+                                }}
+                                className="btn btn-secondary fw-bold"
+                            >
+                                Cancel
+                            </button>
+                        </div>
+                    ) : (
+                        <button
+                            onClick={() => setEditUser(true)}
+                            className="btn btn-danger fw-bold d-flex align-items-center"
+                        >
+                            <FontAwesomeIcon icon={faEdit} className="me-2" /> Edit
+                        </button>
+                    )}
                 </div>
                 <Row>
-                    <Col>
-                        <div className="d-flex flex-row algin-items-center border p-3 gap-3 rounded mb-4 shadow-sm">
+                    <Col md={6}>
+                        <div className="d-flex flex-row align-items-center border p-3 gap-3 rounded mb-4 shadow-lg user-card">
                             <div className="position-relative">
                                 <Image src="images/default-avt.png" roundedCircle style={{ width: "100px", height: "auto" }} />
-                                <div className="position-absolute bottom-0 end-0 pe-auto">
-                                    <Form>
-                                        <button className="btn btn-light btn-sm shadow-sm" onClick={() => { console.log("click") }}>
-                                            <FontAwesomeIcon icon={faEdit} />
-                                        </button>
-                                    </Form>
+                                <div className="position-absolute bottom-0 end-0">
+                                    <button className="btn btn-light btn-sm shadow-sm" onClick={() => { console.log("click") }}>
+                                        <FontAwesomeIcon icon={faEdit} />
+                                    </button>
                                 </div>
                             </div>
                             <div className="d-flex flex-column justify-content-center">
-                                <span className="fw-semibold">{formData.fullname}</span>
-                                <span>Product Design</span>
-                                <span>951 Đường Di Động, Quận 13, TP.HCM</span>
+                                <span className="fw-semibold">{formData.fullName || "No data!"}</span>
+                                <span>{formData.position || "No data!"}</span>
+                                <span>{formData.address || "No data!"}</span>
                             </div>
                         </div>
-                        <div className="border p-3 gap-3 rounded mb-4 shadow-sm">
-                            <div className="d-flex justify-content-between">
-                                <span className="fw-semibold">Basic Information</span>
-                                <button className="btn btn-outline-secondary btn-sm" disabled={editBaseInfo} onClick={() => { setEditBaseInfo(true) }}>Edit</button>
-                            </div>
+
+                        <div className="border p-3 gap-3 rounded mb-4 shadow-lg basic-info">
+                            <h5 className="fw-semibold">Basic Information</h5>
                             <Row>
                                 <Form.Group className="mb-3">
-                                    <Form.Label>FullName</Form.Label>
+                                    <Form.Label>Full Name</Form.Label>
                                     <Form.Control
                                         className="py-3"
                                         type="text"
-                                        value={formData.fullname}
-                                        name="fullname"
+                                        value={formData.fullName}
+                                        name="fullName"
                                         onChange={handleChangeInput}
-                                        disabled={!editBaseInfo}
+                                        disabled={!editUser}
                                     />
+                                    <Form.Text className="text-danger">{formError.fullName}</Form.Text>
                                 </Form.Group>
                                 <Col>
                                     <Form.Group className="mb-3">
@@ -410,36 +399,36 @@ export const EditUserComponent: React.FC<EditUserComponentProps> = ({ hideOverla
                                         <Form.Control
                                             className="py-3"
                                             type="date"
-                                            value={"2002-02-02"}
-                                            name="dob"
-                                            disabled={!editBaseInfo}
+                                            value={formData.dateOfBirth}
+                                            name="dateOfBirth"
+                                            disabled={!editUser}
+                                            onChange={handleChangeInput}
                                         />
+                                        <Form.Text className="text-danger">{formError.dateOfBirth}</Form.Text>
                                     </Form.Group>
                                 </Col>
                                 <Col>
                                     <Form.Group className="mb-3">
                                         <Form.Label>Gender</Form.Label>
-                                        <Form.Select disabled={!editBaseInfo} className="py-3">
-                                            <option>Choose...</option>
-                                            <option>Male</option>
-                                            <option>Femail</option>
+                                        <Form.Select
+                                            value={formData.gender}
+                                            onChange={handleChangeInput}
+                                            name="gender"
+                                            disabled={!editUser}
+                                            className="py-3"
+                                        >
+                                            <option value={""}>Choose...</option>
+                                            {gender.map((item, index) => (
+                                                <option key={index} value={item}>{item}</option>
+                                            ))}
                                         </Form.Select>
+                                        <Form.Text className="text-danger">{formError.gender}</Form.Text>
                                     </Form.Group>
                                 </Col>
                             </Row>
-                            {
-                                editBaseInfo &&
-                                <div className="d-flex gap-2">
-                                    <button className="btn btn-secondary" onClick={() => { setEditBaseInfo(false) }}>Cancel</button>
-                                    <button className="btn btn-primary" onClick={() => { setEditBaseInfo(false) }}>Save</button>
-                                </div>
-                            }
                         </div>
-                        <div className="border p-3 gap-3 rounded shadow-sm">
-                            <div className="d-flex justify-content-between">
-                                <span className="fw-semibold">Persionnal Information</span>
-                                <button className="btn btn-outline-secondary btn-sm" disabled={editPersonalInfo} onClick={() => { setEditPersonalInfo(true) }}>Edit</button>
-                            </div>
+                        <div className="border p-3 gap-3 rounded shadow-lg personal-info">
+                            <h5 className="fw-semibold">Personal Information</h5>
                             <Row>
                                 <Col>
                                     <Form.Group className="mb-3">
@@ -450,57 +439,56 @@ export const EditUserComponent: React.FC<EditUserComponentProps> = ({ hideOverla
                                             value={formData.email}
                                             name="email"
                                             onChange={handleChangeInput}
-                                            disabled={!editPersonalInfo}
+                                            disabled={!editUser}
                                         />
+                                        <Form.Text className="text-danger">{formError.email}</Form.Text>
                                     </Form.Group>
-                                    <Form.Group>
+                                    <Form.Group className="mb-3">
                                         <Form.Label>Position</Form.Label>
                                         <Form.Control
                                             className="py-3"
                                             type="text"
-                                            value="Product Design"
-                                            disabled={!editPersonalInfo}
+                                            value={formData.position}
+                                            name="position"
+                                            onChange={handleChangeInput}
+                                            disabled={!editUser}
                                         />
+                                        <Form.Text className="text-danger">{formError.position}</Form.Text>
                                     </Form.Group>
                                 </Col>
                                 <Col>
                                     <Form.Group className="mb-3">
-                                        <Form.Label>PhoneNumber</Form.Label>
+                                        <Form.Label>Phone Number</Form.Label>
                                         <Form.Control
                                             className="py-3"
                                             type="text"
-                                            value={formData.phone}
-                                            name="phone"
+                                            value={formData.phoneNumber}
+                                            name="phoneNumber"
                                             onChange={handleChangeInput}
-                                            disabled={!editPersonalInfo}
+                                            disabled={!editUser}
                                         />
+                                        <Form.Text className="text-danger">{formError.phoneNumber}</Form.Text>
                                     </Form.Group>
                                     <Form.Group className="mb-3">
                                         <Form.Label>Address</Form.Label>
                                         <Form.Control
                                             className="py-3"
                                             type="text"
-                                            value="951 Đường Di Động, Quận 13, TP.HCM"
-                                            disabled={!editPersonalInfo}
+                                            value={formData.address}
+                                            name="address"
+                                            onChange={handleChangeInput}
+                                            disabled={!editUser}
                                         />
+                                        <Form.Text className="text-danger">{formError.address}</Form.Text>
                                     </Form.Group>
                                 </Col>
                             </Row>
-                            {
-                                editPersonalInfo &&
-                                <div className="d-flex gap-2">
-                                    <button className="btn btn-secondary" onClick={() => { setEditPersonalInfo(false) }}>Cancel</button>
-                                    <button className="btn btn-primary" onClick={() => { setEditPersonalInfo(false) }}>Save</button>
-                                </div>
-                            }
                         </div>
                     </Col>
-                    <Col>
-                        <div className="border p-3 gap-3 rounded mb-4 shadow-sm">
-                            <div className="d-flex justify-content-between">
-                                <span className="fw-semibold">Account Information</span>
-                                <button className="btn btn-outline-secondary btn-sm" disabled={editAccountInfo} onClick={() => { setEditAccountInfo(true) }}>Edit</button>
-                            </div>
+
+                    <Col md={6}>
+                        <div className="border p-3 gap-3 rounded mb-4 shadow-lg account-info">
+                            <h5 className="fw-semibold">Account Information</h5>
                             <Row>
                                 <Col>
                                     <Form.Group className="mb-3">
@@ -512,18 +500,25 @@ export const EditUserComponent: React.FC<EditUserComponentProps> = ({ hideOverla
                                             name="username"
                                             disabled
                                         />
+                                        <Form.Text className="text-danger">{formError.username}</Form.Text>
                                     </Form.Group>
                                 </Col>
                                 <Col>
                                     <Form.Group className="mb-3">
                                         <Form.Label>Role</Form.Label>
-                                        <Select
-                                            styles={customSelectStyles}
-                                            options={options.Role}
-                                            value={formData.role}
-                                            onChange={(newValue) => handleChangeSelect("role", newValue)}
-                                            isDisabled={!editAccountInfo}
-                                        />
+                                        <Form.Select
+                                            value={formData.roleName}
+                                            name="roleName"
+                                            onChange={handleChangeInput}
+                                            disabled={!editUser}
+                                            className="py-3"
+                                        >
+                                            <option value={""}>Choose...</option>
+                                            {roles.map((item, index) => (
+                                                <option key={index} value={item.name}>{item.name}</option>
+                                            ))}
+                                        </Form.Select>
+                                        <Form.Text className="text-danger">{formError.roleName}</Form.Text>
                                     </Form.Group>
                                 </Col>
                             </Row>
@@ -538,17 +533,11 @@ export const EditUserComponent: React.FC<EditUserComponentProps> = ({ hideOverla
                                         disabled
                                     />
                                     <InputGroup.Text>
-                                        <button className="btn btn-outline-secondary btn-sm" disabled={!editAccountInfo} >ChangePassword</button>
+                                        <button className="btn btn-outline-secondary btn-sm" disabled={!editUser}>Change Password</button>
                                     </InputGroup.Text>
                                 </InputGroup>
+                                <Form.Text className="text-danger">{formError.password}</Form.Text>
                             </Form.Group>
-                            {
-                                editAccountInfo &&
-                                <div className="d-flex gap-2">
-                                    <button className="btn btn-secondary" onClick={() => { setEditAccountInfo(false) }}>Cancel</button>
-                                    <button className="btn btn-primary" onClick={() => { setEditAccountInfo(false) }}>Save</button>
-                                </div>
-                            }
                         </div>
                     </Col>
                 </Row>

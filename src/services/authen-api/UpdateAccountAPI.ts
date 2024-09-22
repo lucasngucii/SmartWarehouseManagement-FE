@@ -2,15 +2,18 @@ import axios from "axios";
 import { ResponseError } from "../../interface/ResponseError";
 
 interface UpdateUserRequest {
-    username: string;
-    email: string;
+    email?: string;
     password?: string;
-    fullName: string;
-    phoneNumber: string;
-    // roleName: string;
+    fullName?: string;
+    phoneNumber?: string;
+    gender?: string;
+    dateOfBirth?: string;
+    position?: string;
+    address?: string;
+    roleName?: string;
 }
 
-const UpdateAccountAPI = async (userId: string, userData: Partial<UpdateUserRequest>): Promise<void> => {
+const UpdateAccountAPI = async (userId: string, userData: UpdateUserRequest): Promise<void> => {
     console.log(userData)
     try {
         const HOST = process.env.REACT_APP_HOST_BE;
