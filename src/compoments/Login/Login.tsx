@@ -5,7 +5,7 @@ import ValidateUsername from "../../util/validateUsername";
 import ValidatePassWord from "../../util/validatePassword";
 import LoginAPI from "../../services/authen-api/LoginAPI";
 import GetProfileByTokenAPI from "../../services/authen-api/GetProfileByTokenAPI";
-import { Form } from "react-bootstrap";
+import { Button, Col, Container, Form, Row } from "react-bootstrap";
 
 interface formDataType {
     username: string;
@@ -99,9 +99,9 @@ export const Login: React.FC = () => {
         return check;
     }
 
-    const handleSubmit = async () => {
+    const handleSubmit = (e: React.FormEvent) => {
+        e.preventDefault();
         setLoading(true);
-
         LoginAPI(formData)
             .then((responseLogin) => {
                 const token = responseLogin.token;
@@ -119,39 +119,57 @@ export const Login: React.FC = () => {
     }
 
     return (
-        <div className="login-container">
-            <div className="login-box">
-                <p className="h2 text-center fw-bold">Login</p>
-                <p className="mb-3 text-center text-danger">{globalError}</p>
-                <Form onSubmit={(e) => {
-                    e.preventDefault();
-                    if (validate1() && validate2()) handleSubmit()
-                }}>
-                    <Form.Group className="mb-3">
-                        <Form.Label>Username</Form.Label>
-                        <Form.Control
-                            className="py-2"
-                            type="text"
-                            placeholder="Enter your username"
-                            name="username"
-                            onChange={handleInputChange}
-                        />
-                        <Form.Text className="text-danger">{errors.username}</Form.Text>
-                    </Form.Group>
-                    <Form.Group className="mb-3">
-                        <Form.Label>Password</Form.Label>
-                        <Form.Control
-                            className="py-2"
-                            type="password"
-                            placeholder="Enter your password"
-                            name="password"
-                            onChange={handleInputChange}
-                        />
-                        <Form.Text className="text-danger">{errors.password}</Form.Text>
-                    </Form.Group>
-                    <Form.Control className="btn btn-primary" type="submit" disabled={loading} value={loading ? "Loading..." : "Login"} />
-                </Form>
-            </div>
-        </div>
+        <Container fluid className="d-flex justify-content-center align-items-center vh-100 bg-light">
+            <Row className="w-100">
+                <Col xs={12} md={6} lg={4} className="mx-auto">
+                    <div className="login-box shadow-lg p-4 rounded bg-white">
+                        <h2 className="text-center mb-4 fw-bold">Login</h2>
+                        {globalError && <p className="text-danger text-center">{globalError}</p>}
+                        <Form onSubmit={handleSubmit}>
+                            <Form.Group className="mb-3">
+                                <Form.Label>Username</Form.Label>
+                                <Form.Control
+                                    className="py-3"
+                                    type="text"
+                                    placeholder="Enter your username"
+                                    name="username"
+                                    value={formData.username}
+                                    onChange={handleInputChange}
+                                    isInvalid={!!errors.username}
+                                />
+                                <Form.Control.Feedback type="invalid">
+                                    {errors.username}
+                                </Form.Control.Feedback>
+                            </Form.Group>
+
+                            <Form.Group className="mb-4">
+                                <Form.Label>Password</Form.Label>
+                                <Form.Control
+                                    className="py-3"
+                                    type="password"
+                                    placeholder="Enter your password"
+                                    name="password"
+                                    value={formData.password}
+                                    onChange={handleInputChange}
+                                    isInvalid={!!errors.password}
+                                />
+                                <Form.Control.Feedback type="invalid">
+                                    {errors.password}
+                                </Form.Control.Feedback>
+                            </Form.Group>
+
+                            <Button
+                                variant="primary"
+                                className="w-100 py-3 fw-bold"
+                                type="submit"
+                                disabled={loading}
+                            >
+                                {loading ? 'Loading...' : 'Login'}
+                            </Button>
+                        </Form>
+                    </div>
+                </Col>
+            </Row>
+        </Container>
     );
 }
