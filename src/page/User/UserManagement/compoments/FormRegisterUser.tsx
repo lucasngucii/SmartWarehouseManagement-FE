@@ -388,6 +388,15 @@ const FormRegisterUser: React.FC<FormRegisterUserProps> = ({ handleClose, update
                                         checked={formData.gender === 'female'}
                                         onChange={handleChange}
                                     />
+                                    <Form.Check
+                                        inline
+                                        label="Orthers"
+                                        name="gender"
+                                        type="radio"
+                                        value="orthers"
+                                        checked={formData.gender === 'orthers'}
+                                        onChange={handleChange}
+                                    />
                                 </div>
                                 <Form.Text className="text-danger">{formError.gender}</Form.Text>
                             </Form.Group>

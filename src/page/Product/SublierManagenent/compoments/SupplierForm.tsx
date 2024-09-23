@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
-import { Form, Button, Container, Row, Col, CloseButton } from 'react-bootstrap';
+import { Form, Button, Row, Col, CloseButton, Alert } from 'react-bootstrap';
 import Supplier from '../../../../interface/Supplier';
 import PaginationType from '../../../../interface/Pagination';
 import { OverLay } from '../../../../compoments/OverLay/OverLay';
+import CreateSupplier from '../../../../services/supplier/CreateSupplier';
+import GetSuppliers from '../../../../services/supplier/GetSuppliers';
 
 interface SupplierData {
     name: string;
@@ -27,6 +29,8 @@ interface SupplierFormProps {
 
 const SupplierForm: React.FC<SupplierFormProps> = ({ handleClose, updatePagination, updateSuppliers }) => {
 
+    const [isloading, setIsLoading] = useState(false);
+    const [globalError, setGlobalError] = useState<string>("");
     const [formData, setFormData] = useState<SupplierData>({
         name: '',
         description: '',
@@ -48,14 +52,36 @@ const SupplierForm: React.FC<SupplierFormProps> = ({ handleClose, updatePaginati
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-        console.log(formData);
+        setIsLoading(true);
+        CreateSupplier(formData)
+            .then(() => {
+                return GetSuppliers();
+            }).then((response) => {
+                updateSuppliers(response.data);
+                updatePagination({
+                    limit: response.limit,
+                    offset: response.offset,
+                    totalElementOfPage: response.totalElementOfPage,
+                    totalPage: response.totalPage
+                });
+                handleClose();
+            }).catch((error) => {
+                console.error(error);
+                setGlobalError(error.message);
+            }).finally(() => {
+                setIsLoading(false);
+            });
+
     };
 
     return (
         <OverLay>
-            <Container className="supplier-form-container mt-5">
-                <Row className="justify-content-center">
-                    <Col xs={12} md={10} lg={8} className='position-relative'>
+            <div className="supplier-form-container">
+                {
+                    globalError && <Alert variant="danger" onClose={() => setGlobalError("")} dismissible>{globalError}</Alert>
+                }
+                <Row>
+                    <Col className='position-relative'>
                         <CloseButton
                             onClick={handleClose}
                             className="position-absolute btn-close"
@@ -149,6 +175,17 @@ const SupplierForm: React.FC<SupplierFormProps> = ({ handleClose, updatePaginati
                                     </Col>
                                 </Row>
                                 <Form.Group className="mb-3">
+                                    <Form.Label>Address</Form.Label>
+                                    <Form.Control
+                                        type='text'
+                                        placeholder="Enter address"
+                                        name="address"
+                                        value={formData.address}
+                                        onChange={handleInputChange}
+                                        required
+                                    />
+                                </Form.Group>
+                                <Form.Group className="mb-3">
                                     <Form.Label>Description</Form.Label>
                                     <Form.Control
                                         as="textarea"
@@ -197,14 +234,14 @@ const SupplierForm: React.FC<SupplierFormProps> = ({ handleClose, updatePaginati
                                         </Form.Group>
                                     </Col>
                                 </Row>
-                                <Button variant="primary" type="submit" className="w-100">
-                                    Create Supplier
+                                <Button disabled={isloading} variant="primary" type="submit" className="w-100">
+                                    {isloading ? 'Loading...' : 'Create'}
                                 </Button>
                             </Form>
                         </div>
                     </Col>
                 </Row>
-            </Container>
+            </div>
         </OverLay>
     );
 };

@@ -120,59 +120,57 @@ export const Login: React.FC = () => {
     }
 
     return (
-        <OverLay>
-            <Container fluid className="d-flex justify-content-center align-items-center vh-100 bg-light">
-                <Row className="w-100">
-                    <Col xs={12} md={6} lg={4} className="mx-auto">
-                        <div className="login-box shadow-lg p-4 rounded bg-white">
-                            <h2 className="text-center mb-4 fw-bold">Login</h2>
-                            {globalError && <p className="text-danger text-center">{globalError}</p>}
-                            <Form onSubmit={handleSubmit}>
-                                <Form.Group className="mb-3">
-                                    <Form.Label>Username</Form.Label>
-                                    <Form.Control
-                                        className="py-3"
-                                        type="text"
-                                        placeholder="Enter your username"
-                                        name="username"
-                                        value={formData.username}
-                                        onChange={handleInputChange}
-                                        isInvalid={!!errors.username}
-                                    />
-                                    <Form.Control.Feedback type="invalid">
-                                        {errors.username}
-                                    </Form.Control.Feedback>
-                                </Form.Group>
+        <Container fluid className="d-flex justify-content-center align-items-center vh-100 bg-light">
+            <Row className="w-100">
+                <Col xs={12} md={6} lg={4} className="mx-auto">
+                    <div className="login-box shadow-lg p-4 rounded bg-white">
+                        <h2 className="text-center mb-4 fw-bold">Login</h2>
+                        {globalError && <p className="text-danger text-center">{globalError}</p>}
+                        <Form onSubmit={handleSubmit}>
+                            <Form.Group className="mb-3">
+                                <Form.Label>Username</Form.Label>
+                                <Form.Control
+                                    className="py-3"
+                                    type="text"
+                                    placeholder="Enter your username"
+                                    name="username"
+                                    value={formData.username}
+                                    onChange={handleInputChange}
+                                    isInvalid={!!errors.username}
+                                />
+                                <Form.Control.Feedback type="invalid">
+                                    {errors.username}
+                                </Form.Control.Feedback>
+                            </Form.Group>
 
-                                <Form.Group className="mb-4">
-                                    <Form.Label>Password</Form.Label>
-                                    <Form.Control
-                                        className="py-3"
-                                        type="password"
-                                        placeholder="Enter your password"
-                                        name="password"
-                                        value={formData.password}
-                                        onChange={handleInputChange}
-                                        isInvalid={!!errors.password}
-                                    />
-                                    <Form.Control.Feedback type="invalid">
-                                        {errors.password}
-                                    </Form.Control.Feedback>
-                                </Form.Group>
+                            <Form.Group className="mb-4">
+                                <Form.Label>Password</Form.Label>
+                                <Form.Control
+                                    className="py-3"
+                                    type="password"
+                                    placeholder="Enter your password"
+                                    name="password"
+                                    value={formData.password}
+                                    onChange={handleInputChange}
+                                    isInvalid={!!errors.password}
+                                />
+                                <Form.Control.Feedback type="invalid">
+                                    {errors.password}
+                                </Form.Control.Feedback>
+                            </Form.Group>
 
-                                <Button
-                                    variant="primary"
-                                    className="w-100 py-3 fw-bold"
-                                    type="submit"
-                                    disabled={loading}
-                                >
-                                    {loading ? 'Loading...' : 'Login'}
-                                </Button>
-                            </Form>
-                        </div>
-                    </Col>
-                </Row>
-            </Container>
-        </OverLay>
+                            <Button
+                                variant="primary"
+                                className="w-100 py-3 fw-bold"
+                                type="submit"
+                                disabled={loading}
+                            >
+                                {loading ? 'Loading...' : 'Login'}
+                            </Button>
+                        </Form>
+                    </div>
+                </Col>
+            </Row>
+        </Container>
     );
 }

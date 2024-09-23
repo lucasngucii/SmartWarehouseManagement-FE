@@ -360,13 +360,18 @@ export const EditUserComponent: React.FC<EditUserComponentProps> = ({ hideOverla
                         </button>
                     )}
                 </div>
+
                 <Row>
                     <Col md={6}>
                         <div className="d-flex flex-row align-items-center border p-3 gap-3 rounded mb-4 shadow-lg user-card">
                             <div className="position-relative">
                                 <Image src="images/default-avt.png" roundedCircle style={{ width: "100px", height: "auto" }} />
                                 <div className="position-absolute bottom-0 end-0">
-                                    <button className="btn btn-light btn-sm shadow-sm" onClick={() => { console.log("click") }}>
+                                    <button
+                                        className="btn btn-light btn-sm shadow-sm rounded-circle d-flex align-items-center justify-content-center text-primary"
+                                        style={{ width: "35px", height: "35px" }}
+                                        onClick={() => { console.log("click") }}
+                                    >
                                         <FontAwesomeIcon icon={faEdit} />
                                     </button>
                                 </div>
@@ -485,6 +490,7 @@ export const EditUserComponent: React.FC<EditUserComponentProps> = ({ hideOverla
                             </Row>
                         </div>
                     </Col>
+
 
                     <Col md={6}>
                         <div className="border p-3 gap-3 rounded mb-4 shadow-lg account-info">
