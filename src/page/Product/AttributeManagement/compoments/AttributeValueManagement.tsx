@@ -139,9 +139,11 @@ export const AttributeValueManagement: React.FC<AttributeValueManagementProps> =
     return (
         <OverLay className="disabled-padding">
             <div className="attribute-detail-management">
-                <button onClick={handleCancelEditAttribute} className="back-button">
-                    <FontAwesomeIcon icon={faArrowLeft} />
-                    Back
+                <button
+                    onClick={handleCancelEditAttribute}
+                    className="btn btn-primary mb-3 d-flex align-items-center"
+                >
+                    <FontAwesomeIcon icon={faArrowLeft} className="me-2" /> Back
                 </button>
                 <div className="d-flex justify-content-between align-items-center mb-3">
                     <div>

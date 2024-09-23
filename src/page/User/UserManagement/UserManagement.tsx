@@ -1,8 +1,7 @@
-import "./UserManagement.css";
+import "./css/UserManagement.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPencilAlt, faSearch, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { EditUserComponent } from "./compoments/EditUserComponent";
-import { Account } from "../../../interface/Account";
 import React from "react";
 import { RePulseLoader } from "../../../compoments/Loading/PulseLoader";
 import { NoData } from "../../../compoments/NoData/NoData";
@@ -12,6 +11,7 @@ import Pagination from "../../../compoments/Pagination/Pagination";
 import PaginationType from "../../../interface/Pagination";
 import { Button, Form, Table } from "react-bootstrap";
 import FormRegisterUser from "./compoments/FormRegisterUser";
+import { Account } from "../../../interface/Account";
 
 export const UserManagement: React.FC = () => {
 

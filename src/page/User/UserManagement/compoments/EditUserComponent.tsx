@@ -11,14 +11,15 @@ import GetAccountById from "../../../../services/authen-api/GetAccountById";
 import UpdateAccountAPI from "../../../../services/authen-api/UpdateAccountAPI";
 import GetAccountsAPI from "../../../../services/authen-api/GetAccountsAPI";
 import PaginationType from "../../../../interface/Pagination";
-import { Col, Container, Form, Image, InputGroup, Row } from "react-bootstrap";
+import { Alert, Col, Container, Form, Image, InputGroup, Row } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowLeft, faEdit, faSave } from "@fortawesome/free-solid-svg-icons";
 import Gender from "../../../../enum/Gender";
+import ChangePasswordForm from "./ChangePasswordForm";
 
 interface EditUserComponentProps {
     hideOverlay: () => void;
-    userId?: string | null;
+    userId: string;
     updateUsers?: (response: Account[]) => void;
     updatePagination: (response: PaginationType) => void;
 }
@@ -56,7 +57,9 @@ export const EditUserComponent: React.FC<EditUserComponentProps> = ({ hideOverla
     const [isLoading, setIsLoading] = React.useState<boolean>(false);
     const [isLoadingSubmit, setIsLoadingSubmit] = React.useState<boolean>(false);
     const [globalError, setGlobalError] = React.useState<string>("");
+    const [globalSuccess, setGlobalSuccess] = React.useState<string>("");
     const [editUser, setEditUser] = React.useState<boolean>(false);
+    const [changePassword, setChangePassword] = React.useState<boolean>(false);
     const [roles, setRoles] = React.useState<Role[]>([]);
     const [dataDefault, setDataDefault] = React.useState<FormDataTypes>({
         fullName: "",
@@ -195,17 +198,9 @@ export const EditUserComponent: React.FC<EditUserComponentProps> = ({ hideOverla
 
     const validate2 = (): boolean => {
         let check = true;
-        const checkUserName = ValidateUsername(formData.username || "");
         const checkFullName = validateFullname(formData.fullName || "");
         const checkEmail = validateEmail(formData.email || "");
         const checkPhone = validatePhone(formData.phoneNumber || "");
-
-        if (checkUserName) {
-            check = false;
-            setFormError(preVal => {
-                return { ...preVal, username: checkUserName }
-            })
-        }
 
         if (checkFullName) {
             check = false;
@@ -292,6 +287,7 @@ export const EditUserComponent: React.FC<EditUserComponentProps> = ({ hideOverla
                                 offset: response.offset,
                                 totalElementOfPage: response.totalElementOfPage
                             })
+                            setGlobalSuccess("Update user successfully!");
                             setEditUser(false);
                         } else {
                             throw new Error("updateUsers is not a function");
@@ -324,12 +320,14 @@ export const EditUserComponent: React.FC<EditUserComponentProps> = ({ hideOverla
             <Container fluid className="bg-light w-100 h-100 p-4">
                 <button
                     onClick={() => hideOverlay()}
-                    className="btn btn-outline-primary mb-3 d-flex align-items-center"
+                    className="btn btn-primary mb-3 d-flex align-items-center"
                 >
                     <FontAwesomeIcon icon={faArrowLeft} className="me-2" /> Back
                 </button>
                 <div className="d-flex justify-content-between align-items-center mb-4">
                     <h2 className="fw-bold mb-0">{userId ? "Edit User" : "Add User"}</h2>
+                    {globalError && <Alert onClose={() => setGlobalError("")} variant="danger" dismissible>{globalError}</Alert>}
+                    {globalSuccess && <Alert onClose={() => setGlobalSuccess("")} variant="success" dismissible>{globalSuccess}</Alert>}
                     {editUser ? (
                         <div className="d-flex flex-row gap-2">
                             <button
@@ -353,6 +351,7 @@ export const EditUserComponent: React.FC<EditUserComponentProps> = ({ hideOverla
                         </div>
                     ) : (
                         <button
+                            disabled={isLoadingSubmit || isLoading}
                             onClick={() => setEditUser(true)}
                             className="btn btn-danger fw-bold d-flex align-items-center"
                         >
@@ -539,7 +538,13 @@ export const EditUserComponent: React.FC<EditUserComponentProps> = ({ hideOverla
                                         disabled
                                     />
                                     <InputGroup.Text>
-                                        <button className="btn btn-outline-secondary btn-sm" disabled={!editUser}>Change Password</button>
+                                        <button
+                                            className="btn btn-outline-secondary btn-sm"
+                                            disabled={!editUser}
+                                            onClick={() => setChangePassword(true)}
+                                        >
+                                            Change Password
+                                        </button>
                                     </InputGroup.Text>
                                 </InputGroup>
                                 <Form.Text className="text-danger">{formError.password}</Form.Text>
@@ -547,6 +552,7 @@ export const EditUserComponent: React.FC<EditUserComponentProps> = ({ hideOverla
                         </div>
                     </Col>
                 </Row>
+                {changePassword && <ChangePasswordForm userId={userId} hideOver={() => setChangePassword(false)} />}
             </Container>
         </OverLay >
     );

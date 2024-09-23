@@ -31,6 +31,7 @@ const SupplierForm: React.FC<SupplierFormProps> = ({ handleClose, updatePaginati
 
     const [isloading, setIsLoading] = useState(false);
     const [globalError, setGlobalError] = useState<string>("");
+    const [globalSuccess, setGlobalSuccess] = useState<string>("");
     const [formData, setFormData] = useState<SupplierData>({
         name: '',
         description: '',
@@ -64,7 +65,10 @@ const SupplierForm: React.FC<SupplierFormProps> = ({ handleClose, updatePaginati
                     totalElementOfPage: response.totalElementOfPage,
                     totalPage: response.totalPage
                 });
-                handleClose();
+                setGlobalSuccess("Supplier created successfully");
+                setTimeout(() => {
+                    handleClose();
+                }, 1000);
             }).catch((error) => {
                 console.error(error);
                 setGlobalError(error.message);
@@ -79,6 +83,9 @@ const SupplierForm: React.FC<SupplierFormProps> = ({ handleClose, updatePaginati
             <div className="supplier-form-container">
                 {
                     globalError && <Alert variant="danger" onClose={() => setGlobalError("")} dismissible>{globalError}</Alert>
+                }
+                {
+                    globalSuccess && <Alert variant="success" onClose={() => setGlobalSuccess("")} dismissible>{globalSuccess}</Alert>
                 }
                 <Row>
                     <Col className='position-relative'>
@@ -234,7 +241,7 @@ const SupplierForm: React.FC<SupplierFormProps> = ({ handleClose, updatePaginati
                                         </Form.Group>
                                     </Col>
                                 </Row>
-                                <Button disabled={isloading} variant="primary" type="submit" className="w-100">
+                                <Button disabled={isloading} variant="primary" type="submit" className="w-100 py-3 rounded" style={{ fontWeight: 'bold', letterSpacing: '1px' }}>
                                     {isloading ? 'Loading...' : 'Create'}
                                 </Button>
                             </Form>

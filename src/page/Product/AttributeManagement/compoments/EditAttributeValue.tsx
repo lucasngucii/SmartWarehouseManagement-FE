@@ -7,7 +7,7 @@ import Attribute from "../../../../interface/Attribute";
 import GetAttributeDetail from "../../../../services/attribute/GetAttributeDetail";
 import PaginationType from "../../../../interface/Pagination";
 import AttributeDetailType from "../../../../interface/AttributeDetail";
-import { Button, Col, Form, Row } from "react-bootstrap";
+import { Alert, Button, Col, Form, Row } from "react-bootstrap";
 import GetAttributeValueById from "../../../../services/attribute/GetAttributeValueById";
 import UpdateAttributeValue from "../../../../services/attribute/UpdateAttributeValue";
 import validateVietnamese from "../../../../util/validateVietnamese";
@@ -34,6 +34,7 @@ export const EditAttributeValue: React.FC<EditAttributeValueProps> = ({ hideOver
     });
     const [loading, setLoading] = React.useState(false);
     const [globalError, setGlobalError] = React.useState("");
+    const [globalSuccess, setGlobalSuccess] = React.useState("");
     const [editAttributeValue, setEditAttributeValue] = React.useState(false);
 
     React.useEffect(() => {
@@ -79,6 +80,7 @@ export const EditAttributeValue: React.FC<EditAttributeValueProps> = ({ hideOver
                         offset: response.offset,
                         totalElementOfPage: response.totalElementOfPage
                     });
+                    setGlobalSuccess("Update attribute value successfully");
                     setEditAttributeValue(false);
                 }).catch((error) => {
                     console.error(error);
@@ -176,15 +178,25 @@ export const EditAttributeValue: React.FC<EditAttributeValueProps> = ({ hideOver
     return (
         <OverLay className="disabled-padding">
             <div className="edit-attribute-value p-4 bg-light rounded">
+                {globalError && (
+                    <Alert variant="danger" onClose={() => { setGlobalError("") }} dismissible>
+                        {globalError}
+                    </Alert>
+                )}
+                {globalSuccess && (
+                    <Alert variant="success" onClose={() => { setGlobalSuccess("") }} dismissible>
+                        {globalSuccess}
+                    </Alert>
+                )}
                 <div className="d-flex justify-content-between align-items-center mb-4">
                     <h2 className="fw-bold">
                         {`${attributeDetailId ? "Edit" : "Add"} Value`}
                     </h2>
                     <button
                         onClick={() => hideOverlay()}
-                        className="btn btn-outline-primary"
+                        className="btn btn-primary mb-3 d-flex align-items-center"
                     >
-                        <FontAwesomeIcon icon={faArrowLeft} /> Back
+                        <FontAwesomeIcon icon={faArrowLeft} className="me-2" /> Back
                     </button>
                 </div>
 
@@ -207,7 +219,7 @@ export const EditAttributeValue: React.FC<EditAttributeValueProps> = ({ hideOver
                             <Form.Group className="mb-3">
                                 <Form.Label>Name</Form.Label>
                                 <Form.Control
-                                    className="py-3"
+                                    className="p-3"
                                     type="text"
                                     value={formData.name}
                                     name="name"
@@ -221,7 +233,7 @@ export const EditAttributeValue: React.FC<EditAttributeValueProps> = ({ hideOver
                             <Form.Group className="mb-3">
                                 <Form.Label>Code</Form.Label>
                                 <Form.Control
-                                    className="py-3"
+                                    className="p-3"
                                     type="text"
                                     value={formData.sizeCode}
                                     name="sizeCode"
@@ -236,7 +248,7 @@ export const EditAttributeValue: React.FC<EditAttributeValueProps> = ({ hideOver
                     <Form.Group className="mb-3">
                         <Form.Label>Description</Form.Label>
                         <textarea
-                            className="form-control py-2"
+                            className="form-control p-3"
                             name="description"
                             value={formData.description}
                             onChange={handleChange}
@@ -270,7 +282,7 @@ export const EditAttributeValue: React.FC<EditAttributeValueProps> = ({ hideOver
 
                     {!attributeDetailId && (
                         <Button
-                            className="btn btn-primary w-100"
+                            variant="primary" type="submit" className="w-100 py-3 rounded" style={{ fontWeight: 'bold', letterSpacing: '1px' }}
                             onClick={() => {
                                 if (validate1() && validate2()) {
                                     handleSubmit();

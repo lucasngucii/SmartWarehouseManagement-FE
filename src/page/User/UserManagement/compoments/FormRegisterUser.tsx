@@ -36,6 +36,7 @@ const FormRegisterUser: React.FC<FormRegisterUserProps> = ({ handleClose, update
 
     const [loading, setLoading] = React.useState<boolean>(false);
     const [globalError, setGlobalError] = React.useState<string>("");
+    const [globalSuccess, setGlobalSuccess] = React.useState<string>("");
     const [roles, setRoles] = React.useState<Role[]>([]);
     const [formData, setFormData] = React.useState<FormData>({
         username: '',
@@ -102,7 +103,10 @@ const FormRegisterUser: React.FC<FormRegisterUserProps> = ({ handleClose, update
                         offset: response.offset,
                         totalElementOfPage: response.totalElementOfPage
                     });
-                    handleClose();
+                    setGlobalSuccess("Register user successfully.");
+                    setTimeout(() => {
+                        handleClose();
+                    }, 1000);
                 })
                 .catch((error) => {
                     console.error(error);
@@ -201,6 +205,13 @@ const FormRegisterUser: React.FC<FormRegisterUserProps> = ({ handleClose, update
                     globalError && (
                         <Alert variant="danger" onClose={() => setGlobalError("")} dismissible>
                             {globalError}
+                        </Alert>
+                    )
+                }
+                {
+                    globalSuccess && (
+                        <Alert variant="success" onClose={() => setGlobalSuccess("")} dismissible>
+                            {globalSuccess}
                         </Alert>
                     )
                 }
