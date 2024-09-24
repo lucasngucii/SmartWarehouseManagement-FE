@@ -10,6 +10,23 @@ import { NoData } from '../../../compoments/NoData/NoData';
 import Pagination from '../../../compoments/Pagination/Pagination';
 import ModelConfirmDeleteSupplier from './compoments/ModelConfirmDeleteSupplier';
 import SupplierForm from './compoments/SupplierForm';
+import SupplierDetail from './compoments/SupplierDetail';
+
+const supplierData = {
+    name: "Red",
+    address: "khonsgssbises1st",
+    phone: "03812725802",
+    email: "lehan2asksnsssd1isoa@gmail.com",
+    description: "khocnsss1sgbiettt neeee",
+    supplierCode: "1",
+    contactPerson: "1",
+    location: "Ha noi1",
+    status: false,
+    notes: "khong co1",
+    website: "khongbiet1",
+    taxId: "12",
+    isActive: true
+};
 
 export const SublierManagement: React.FC = () => {
 
@@ -17,6 +34,7 @@ export const SublierManagement: React.FC = () => {
     const [isLoading, setIsLoading] = React.useState<boolean>(false);
     const [globalError, setGlobalError] = React.useState<string>("");
     const [showOverlay, setShowOverlay] = React.useState(false);
+    const [showDetail, setShowDetail] = React.useState(false);
     const [showConfirmDelete, setShowConfirmDelete] = React.useState(false);
     const [supplierId, setSupplierId] = React.useState<string>("");
     const [pagination, setPagination] = React.useState<PaginationType>({
@@ -64,10 +82,6 @@ export const SublierManagement: React.FC = () => {
             });
     }, [pagination.offset]);
 
-    const handleAdd = () => {
-        setShowOverlay(true);
-    }
-
     const handleClose = () => {
         setShowOverlay(false);
         setSupplierId("");
@@ -107,8 +121,8 @@ export const SublierManagement: React.FC = () => {
                     <div className="d-flex flex-row gap-2">
                         <Button
                             onClick={() => {
-                                setShowOverlay(true);
                                 setSupplierId(supplier.id);
+                                setShowDetail(true);
                             }}
                             variant="primary"
                         >
@@ -141,7 +155,7 @@ export const SublierManagement: React.FC = () => {
                             <FontAwesomeIcon icon={faSearch} />
                         </Button>
                     </div>
-                    <Button onClick={handleAdd} variant="success fw-bold">+ Add Supplier</Button>
+                    <Button onClick={() => { }} variant="success fw-bold">+ Add Supplier</Button>
                 </div>
             </div>
             <Table striped hover bordered>
@@ -180,6 +194,12 @@ export const SublierManagement: React.FC = () => {
                     updateSuppliers={updateSuppliers}
                     updatePagination={updateSPagination}
                 />
+            }
+            {
+                showDetail && <SupplierDetail updatePagination={updateSPagination} updateSuppliers={updateSuppliers} supplierId={supplierId} hideOverlay={() => {
+                    setShowDetail(false);
+                    setSupplierId("");
+                }} />
             }
         </div>
     );

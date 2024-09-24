@@ -10,4 +10,11 @@ export default interface Supplier {
     updatedAt: string;
     createdBy: string;
     isDeleted: boolean;
+    contactPerson: string;
+    location: string;
+    status: boolean;
+    notes: string;
+    website: string;
+    taxId: string;
+    isActive: boolean;
 }

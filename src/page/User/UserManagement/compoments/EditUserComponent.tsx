@@ -2,7 +2,6 @@ import { OverLay } from "../../../../compoments/OverLay/OverLay";
 import React, { ChangeEvent } from "react";
 import { Role } from "../../../../interface/Role";
 import { Account } from "../../../../interface/Account";
-import ValidateUsername from "../../../../util/validateUsername";
 import validateFullname from "../../../../util/validateFullName";
 import validateEmail from "../../../../util/validateEmail";
 import validatePhone from "../../../../util/validatePhone";
@@ -317,14 +316,14 @@ export const EditUserComponent: React.FC<EditUserComponentProps> = ({ hideOverla
 
     return (
         <OverLay className="disabled-padding">
-            <Container fluid className="bg-light w-100 h-100 p-4">
+            <Container fluid className="w-100 h-100 p-4 bg-light">
                 <button
                     onClick={() => hideOverlay()}
                     className="btn btn-primary mb-3 d-flex align-items-center"
                 >
                     <FontAwesomeIcon icon={faArrowLeft} className="me-2" /> Back
                 </button>
-                <div className="d-flex justify-content-between align-items-center mb-4">
+                <div className="d-flex justify-content-between align-items-center mb-3">
                     <h2 className="fw-bold mb-0">{userId ? "Edit User" : "Add User"}</h2>
                     {globalError && <Alert onClose={() => setGlobalError("")} variant="danger" dismissible>{globalError}</Alert>}
                     {globalSuccess && <Alert onClose={() => setGlobalSuccess("")} variant="success" dismissible>{globalSuccess}</Alert>}
@@ -333,7 +332,7 @@ export const EditUserComponent: React.FC<EditUserComponentProps> = ({ hideOverla
                             <button
                                 disabled={isLoadingSubmit || checkChangeFormData()}
                                 onClick={() => handleSubmit()}
-                                className="btn btn-primary fw-bold d-flex align-items-center"
+                                className="btn btn-primary d-flex align-items-center"
                             >
                                 <FontAwesomeIcon icon={faSave} className="me-2" />
                                 {isLoadingSubmit ? "Saving..." : "Save"}
@@ -344,7 +343,7 @@ export const EditUserComponent: React.FC<EditUserComponentProps> = ({ hideOverla
                                     setEditUser(false);
                                     setFormData(dataDefault);
                                 }}
-                                className="btn btn-secondary fw-bold"
+                                className="btn btn-secondary"
                             >
                                 Cancel
                             </button>
@@ -360,11 +359,11 @@ export const EditUserComponent: React.FC<EditUserComponentProps> = ({ hideOverla
                     )}
                 </div>
 
-                <Row>
-                    <Col md={6}>
-                        <div className="d-flex flex-row align-items-center border p-3 gap-3 rounded mb-4 shadow-lg user-card">
+                <Row className="p-4 rounded shadow">
+                    <Col md={6} className="shadow rounded">
+                        <div className="d-flex flex-row align-items-center p-3 gap-3 rounded mb-1 user-card">
                             <div className="position-relative">
-                                <Image src="images/default-avt.png" roundedCircle style={{ width: "100px", height: "auto" }} />
+                                <Image src="https://res.cloudinary.com/dlrionk8h/image/upload/v1727174250/er5mtiiis4yruphmbobm.jpg" roundedCircle style={{ width: "120px", height: "120px" }} />
                                 <div className="position-absolute bottom-0 end-0">
                                     <button
                                         className="btn btn-light btn-sm shadow-sm rounded-circle d-flex align-items-center justify-content-center text-primary"
@@ -382,7 +381,7 @@ export const EditUserComponent: React.FC<EditUserComponentProps> = ({ hideOverla
                             </div>
                         </div>
 
-                        <div className="border p-3 gap-3 rounded mb-4 shadow-lg basic-info">
+                        <div className="p-3 gap-3 rounded mb-1">
                             <h5 className="fw-semibold">Basic Information</h5>
                             <Row>
                                 <Form.Group className="mb-3">
@@ -431,7 +430,7 @@ export const EditUserComponent: React.FC<EditUserComponentProps> = ({ hideOverla
                                 </Col>
                             </Row>
                         </div>
-                        <div className="border p-3 gap-3 rounded shadow-lg personal-info">
+                        <div className="p-3 gap-3 rounded">
                             <h5 className="fw-semibold">Personal Information</h5>
                             <Row>
                                 <Col>
@@ -491,8 +490,8 @@ export const EditUserComponent: React.FC<EditUserComponentProps> = ({ hideOverla
                     </Col>
 
 
-                    <Col md={6}>
-                        <div className="border p-3 gap-3 rounded mb-4 shadow-lg account-info">
+                    <Col md={6} >
+                        <div className="p-3 gap-3 rounded">
                             <h5 className="fw-semibold">Account Information</h5>
                             <Row>
                                 <Col>
