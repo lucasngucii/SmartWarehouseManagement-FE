@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { OverLay } from '../../../../compoments/OverLay/OverLay';
 import { Alert, Col, Container, Form, Row } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faArrowLeft, faEdit, faSave } from '@fortawesome/free-solid-svg-icons';
+import { faArrowLeft, faChevronLeft, faEdit, faSave } from '@fortawesome/free-solid-svg-icons';
 import GetSupplierById from '../../../../services/supplier/GetSupplierById';
 import Supplier from '../../../../interface/Supplier';
 import UpdateSupplierById from '../../../../services/supplier/UpdateSupplierById';
@@ -136,14 +136,16 @@ const SupplierDetail: React.FC<SupplierDetailProps> = ({ supplierId, hideOverlay
     return (
         <OverLay className='disabled-padding'>
             <Container fluid className='bg-light w-100 h-100 p-4'>
-                <button
-                    onClick={hideOverlay}
-                    className="btn btn-primary mb-3 d-flex align-items-center"
-                >
-                    <FontAwesomeIcon icon={faArrowLeft} className="me-2" /> Back
-                </button>
                 <div className="d-flex justify-content-between align-items-center mb-3">
-                    <h2 className="fw-bold mb-0">Edit Supplier</h2>
+                    <div className="d-flex flex-row align-items-center gap-2">
+                        <button
+                            onClick={hideOverlay}
+                            className="btn fs-3 px-3 text-primary"
+                        >
+                            <FontAwesomeIcon icon={faChevronLeft} />
+                        </button>
+                        <h2 className="fw-bold mb-0">Edit Supplier</h2>
+                    </div>
                     {globalError && <Alert onClose={() => setGlobalError("")} variant="danger" dismissible>{globalError}</Alert>}
                     {globalSuccess && <Alert onClose={() => setGlobalSuccess("")} variant="success" dismissible>{globalSuccess}</Alert>}
                     {isEditing ? (
@@ -199,7 +201,7 @@ const SupplierDetail: React.FC<SupplierDetailProps> = ({ supplierId, hideOverlay
                                         <Form.Label>Phone</Form.Label>
                                         <Form.Control
                                             className="py-3"
-                                            type="text"
+                                            type="tel"
                                             value={formData.phone}
                                             name="phone"
                                             onChange={handleChange}
@@ -238,7 +240,7 @@ const SupplierDetail: React.FC<SupplierDetailProps> = ({ supplierId, hideOverlay
                                     <Form.Label>Website</Form.Label>
                                     <Form.Control
                                         className="py-3"
-                                        type="text"
+                                        type="website"
                                         value={formData.website}
                                         name="website"
                                         onChange={handleChange}

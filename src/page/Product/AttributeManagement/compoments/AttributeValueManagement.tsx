@@ -8,7 +8,7 @@ import Pagination from "../../../../compoments/Pagination/Pagination";
 import { NoData } from "../../../../compoments/NoData/NoData";
 import { RePulseLoader } from "../../../../compoments/Loading/PulseLoader";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faArrowLeft, faPencilAlt, faSearch, faTrash } from "@fortawesome/free-solid-svg-icons";
+import { faArrowLeft, faChevronLeft, faPencilAlt, faSearch, faTrash } from "@fortawesome/free-solid-svg-icons";
 import ModelConfirmDeleteAttributeValue from "./ModelConfirmDeleteAttributeValue";
 import { Button, Form, Table } from "react-bootstrap";
 
@@ -139,16 +139,15 @@ export const AttributeValueManagement: React.FC<AttributeValueManagementProps> =
     return (
         <OverLay className="disabled-padding">
             <div className="attribute-detail-management">
-                <button
-                    onClick={handleCancelEditAttribute}
-                    className="btn btn-primary mb-3 d-flex align-items-center"
-                >
-                    <FontAwesomeIcon icon={faArrowLeft} className="me-2" /> Back
-                </button>
-                <div className="d-flex justify-content-between align-items-center mb-3">
-                    <div>
-                        <h2 className={"h2 fw-bold"}>Attribute Detail Management</h2>
-                        <p className={"h6"}>Add, edit, or delete attribute values</p>
+                <div className="d-flex justify-content-between align-items-center mb-5">
+                    <div className="d-flex flex-row align-items-center gap-2">
+                        <button
+                            onClick={handleCancelEditAttribute}
+                            className="btn fs-3 px-3 text-primary"
+                        >
+                            <FontAwesomeIcon icon={faChevronLeft} />
+                        </button>
+                        <h2 className="mb-0 fw-bold">{`Attribute Detail: "${getAttributeName(attributeId)}"`}</h2>
                     </div>
                     <div className="d-flex flex-row gap-3">
                         <div className="d-flex flex-row gap-2">
@@ -159,18 +158,6 @@ export const AttributeValueManagement: React.FC<AttributeValueManagementProps> =
                         </div>
                         <Button onClick={handleAddAttributeValue} variant="success fw-bold">NEW +</Button>
                     </div>
-                </div>
-                <div className="mb-3">
-                    <Form.Group>
-                        <Form.Label>Attribute Name</Form.Label>
-                        <Form.Control
-                            className="p-2"
-                            type="search"
-                            disabled={true}
-                            placeholder={"Enter your attribute name"}
-                            value={getAttributeName(attributeId)}
-                        />
-                    </Form.Group>
                 </div>
                 <Table hover striped bordered>
                     <thead>

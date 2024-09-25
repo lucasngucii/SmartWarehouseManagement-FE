@@ -12,7 +12,7 @@ import GetAccountsAPI from "../../../../services/authen-api/GetAccountsAPI";
 import PaginationType from "../../../../interface/Pagination";
 import { Alert, Col, Container, Form, Image, InputGroup, Row } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faArrowLeft, faEdit, faSave } from "@fortawesome/free-solid-svg-icons";
+import { faArrowLeft, faChevronLeft, faEdit, faSave } from "@fortawesome/free-solid-svg-icons";
 import Gender from "../../../../enum/Gender";
 import ChangePasswordForm from "./ChangePasswordForm";
 
@@ -317,14 +317,16 @@ export const EditUserComponent: React.FC<EditUserComponentProps> = ({ hideOverla
     return (
         <OverLay className="disabled-padding">
             <Container fluid className="w-100 h-100 p-4 bg-light">
-                <button
-                    onClick={() => hideOverlay()}
-                    className="btn btn-primary mb-3 d-flex align-items-center"
-                >
-                    <FontAwesomeIcon icon={faArrowLeft} className="me-2" /> Back
-                </button>
                 <div className="d-flex justify-content-between align-items-center mb-3">
-                    <h2 className="fw-bold mb-0">{userId ? "Edit User" : "Add User"}</h2>
+                    <div className="d-flex flex-row align-items-center gap-2">
+                        <button
+                            onClick={() => hideOverlay()}
+                            className="btn fs-3 px-3 text-primary"
+                        >
+                            <FontAwesomeIcon icon={faChevronLeft} />
+                        </button>
+                        <h2 className="fw-bold mb-0">{userId ? "Edit User" : "Add User"}</h2>
+                    </div>
                     {globalError && <Alert onClose={() => setGlobalError("")} variant="danger" dismissible>{globalError}</Alert>}
                     {globalSuccess && <Alert onClose={() => setGlobalSuccess("")} variant="success" dismissible>{globalSuccess}</Alert>}
                     {editUser ? (

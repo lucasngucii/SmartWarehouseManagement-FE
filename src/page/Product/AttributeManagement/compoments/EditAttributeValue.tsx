@@ -7,7 +7,7 @@ import Attribute from "../../../../interface/Attribute";
 import GetAttributeDetail from "../../../../services/attribute/GetAttributeDetail";
 import PaginationType from "../../../../interface/Pagination";
 import AttributeDetailType from "../../../../interface/AttributeDetail";
-import { Alert, Button, Col, Form, Row } from "react-bootstrap";
+import { Alert, Button, CloseButton, Col, Form, Row } from "react-bootstrap";
 import GetAttributeValueById from "../../../../services/attribute/GetAttributeValueById";
 import UpdateAttributeValue from "../../../../services/attribute/UpdateAttributeValue";
 import validateVietnamese from "../../../../util/validateVietnamese";
@@ -189,15 +189,10 @@ export const EditAttributeValue: React.FC<EditAttributeValueProps> = ({ hideOver
                     </Alert>
                 )}
                 <div className="d-flex justify-content-between align-items-center mb-4">
-                    <h2 className="fw-bold">
+                    <h2 className="fw-bold mb-0">
                         {`${attributeDetailId ? "Edit" : "Add"} Value`}
                     </h2>
-                    <button
-                        onClick={() => hideOverlay()}
-                        className="btn btn-primary mb-3 d-flex align-items-center"
-                    >
-                        <FontAwesomeIcon icon={faArrowLeft} className="me-2" /> Back
-                    </button>
+                    <CloseButton onClick={() => hideOverlay()} />
                 </div>
 
                 <div className="border rounded shadow-sm p-4 mb-4">
