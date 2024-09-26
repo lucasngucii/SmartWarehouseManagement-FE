@@ -9,6 +9,7 @@ import { Button, Form, Table } from 'react-bootstrap';
 import GetProducts from '../../../services/product/GetProducts';
 import PaginationType from '../../../interface/Pagination';
 import Pagination from '../../../compoments/Pagination/Pagination';
+import ModelConfirmDeleteProduct from './compoments/ModelConfirmDeleteProduct';
 
 
 export const ProductManagement: React.FC = () => {
@@ -16,6 +17,7 @@ export const ProductManagement: React.FC = () => {
     const [globalError, setGlobalError] = React.useState<string>("")
     const [showOverLay, setShowOverLay] = React.useState<boolean>(false)
     const [showOverLayDetails, setShowOverLayDetails] = React.useState<boolean>(false)
+    const [showModelConfirmDelete, setShowModelConfirmDelete] = React.useState<boolean>(false)
     const [productId, setProductId] = React.useState<string>("")
     const [products, setProducts] = React.useState<Product[]>([])
     const [pagination, setPagination] = React.useState<PaginationType>({
@@ -39,6 +41,14 @@ export const ProductManagement: React.FC = () => {
 
     const handleColseDetailProduct = () => {
         setShowOverLayDetails(false)
+    }
+
+    const updateProducts = (response: Product[]) => {
+        setProducts(response)
+    }
+
+    const updatePagination = (response: PaginationType) => {
+        setPagination(response)
     }
 
     const handleChangePage = (page: number) => {
@@ -92,6 +102,10 @@ export const ProductManagement: React.FC = () => {
                             <FontAwesomeIcon icon={faInfoCircle} />
                         </Button>
                         <Button
+                            onClick={() => {
+                                setShowModelConfirmDelete(true)
+                                setProductId(product.id)
+                            }}
                             variant="danger"
                         >
                             <FontAwesomeIcon icon={faTrash} />
@@ -135,10 +149,32 @@ export const ProductManagement: React.FC = () => {
                 </tbody>
             </Table>
             {
-                products.length > 0 && <Pagination currentPage={pagination.offset} totalPages={pagination?.totalPage} onPageChange={handleChangePage} />
+                products.length > 0 &&
+                <Pagination
+                    currentPage={pagination.offset}
+                    totalPages={pagination?.totalPage}
+                    onPageChange={handleChangePage}
+                />
             }
-            {showOverLay && <OverLayProductManagement handleClose={handleCloseAddProduct} />}
-            {showOverLayDetails && <OverLayProductDetails handleClose={handleColseDetailProduct} productId={productId} />}
+            {showOverLay &&
+                <OverLayProductManagement
+                    handleClose={handleCloseAddProduct}
+                />
+            }
+            {showOverLayDetails &&
+                <OverLayProductDetails
+                    handleClose={handleColseDetailProduct}
+                    productId={productId}
+                />
+            }
+            {showModelConfirmDelete &&
+                <ModelConfirmDeleteProduct
+                    productId={productId}
+                    closeModelConfirmDelete={() => setShowModelConfirmDelete(false)}
+                    updateProducts={updateProducts}
+                    updatePagination={updatePagination}
+                />
+            }
         </div>
     )
 }
