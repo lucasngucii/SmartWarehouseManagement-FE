@@ -1,5 +1,4 @@
 import React from 'react';
-import './SupplierManagement.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPencilAlt, faSearch, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { Button, Form, Table } from 'react-bootstrap';
@@ -9,31 +8,13 @@ import PaginationType from '../../../interface/Pagination';
 import { NoData } from '../../../compoments/NoData/NoData';
 import Pagination from '../../../compoments/Pagination/Pagination';
 import ModelConfirmDeleteSupplier from './compoments/ModelConfirmDeleteSupplier';
-import SupplierForm from './compoments/SupplierForm';
-import SupplierDetail from './compoments/SupplierDetail';
-
-const supplierData = {
-    name: "Red",
-    address: "khonsgssbises1st",
-    phone: "03812725802",
-    email: "lehan2asksnsssd1isoa@gmail.com",
-    description: "khocnsss1sgbiettt neeee",
-    supplierCode: "1",
-    contactPerson: "1",
-    location: "Ha noi1",
-    status: false,
-    notes: "khong co1",
-    website: "khongbiet1",
-    taxId: "12",
-    isActive: true
-};
+import FormEditSupplier from './compoments/FormEditSupplier';
 
 export const SublierManagement: React.FC = () => {
 
     const [suppliers, setSuppliers] = React.useState<Supplier[]>([]);
     const [isLoading, setIsLoading] = React.useState<boolean>(false);
     const [globalError, setGlobalError] = React.useState<string>("");
-    const [showOverlay, setShowOverlay] = React.useState(false);
     const [showDetail, setShowDetail] = React.useState(false);
     const [showConfirmDelete, setShowConfirmDelete] = React.useState(false);
     const [supplierId, setSupplierId] = React.useState<string>("");
@@ -81,11 +62,6 @@ export const SublierManagement: React.FC = () => {
                 setIsLoading(false);
             });
     }, [pagination.offset]);
-
-    const handleClose = () => {
-        setShowOverlay(false);
-        setSupplierId("");
-    }
 
     const handleDelete = (id: string) => {
         setSupplierId(id);
@@ -155,7 +131,7 @@ export const SublierManagement: React.FC = () => {
                             <FontAwesomeIcon icon={faSearch} />
                         </Button>
                     </div>
-                    <Button onClick={() => { setShowOverlay(true) }} variant="success fw-bold">+ Add Supplier</Button>
+                    <Button onClick={() => { setShowDetail(true) }} variant="success fw-bold">+ NEW</Button>
                 </div>
             </div>
             <Table striped hover bordered>
@@ -182,9 +158,6 @@ export const SublierManagement: React.FC = () => {
                 (suppliers.length === 0 || globalError) && !isLoading && <NoData message={globalError} />
             }
             {
-                showOverlay && <SupplierForm handleClose={handleClose} updatePagination={updateSPagination} updateSuppliers={updateSuppliers} />
-            }
-            {
                 showConfirmDelete &&
                 <ModelConfirmDeleteSupplier
                     supplierId={supplierId}
@@ -196,7 +169,7 @@ export const SublierManagement: React.FC = () => {
                 />
             }
             {
-                showDetail && <SupplierDetail updatePagination={updateSPagination} updateSuppliers={updateSuppliers} supplierId={supplierId} hideOverlay={() => {
+                showDetail && <FormEditSupplier updatePagination={updateSPagination} updateSuppliers={updateSuppliers} supplierId={supplierId} hideOverlay={() => {
                     setShowDetail(false);
                     setSupplierId("");
                 }} />

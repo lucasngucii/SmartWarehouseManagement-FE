@@ -8,7 +8,7 @@ import Pagination from "../../../../compoments/Pagination/Pagination";
 import { NoData } from "../../../../compoments/NoData/NoData";
 import { RePulseLoader } from "../../../../compoments/Loading/PulseLoader";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faArrowLeft, faChevronLeft, faPencilAlt, faSearch, faTrash } from "@fortawesome/free-solid-svg-icons";
+import { faChevronLeft, faPencilAlt, faSearch, faTrash } from "@fortawesome/free-solid-svg-icons";
 import ModelConfirmDeleteAttributeValue from "./ModelConfirmDeleteAttributeValue";
 import { Button, Form, Table } from "react-bootstrap";
 
@@ -139,7 +139,7 @@ export const AttributeValueManagement: React.FC<AttributeValueManagementProps> =
     return (
         <OverLay className="disabled-padding">
             <div className="attribute-detail-management">
-                <div className="d-flex justify-content-between align-items-center mb-5">
+                <div className="d-flex justify-content-between align-items-center mb-3">
                     <div className="d-flex flex-row align-items-center gap-2">
                         <button
                             onClick={handleCancelEditAttribute}
