@@ -1,12 +1,8 @@
 import React from "react";
-import "./Login.css";
 import { useNavigate } from "react-router-dom";
-import ValidateUsername from "../../util/validateUsername";
-import ValidatePassWord from "../../util/validatePassword";
 import LoginAPI from "../../services/authen-api/LoginAPI";
 import GetProfileByTokenAPI from "../../services/authen-api/GetProfileByTokenAPI";
 import { Button, Col, Container, Form, Row } from "react-bootstrap";
-import { OverLay } from "../OverLay/OverLay";
 
 interface formDataType {
     username: string;
@@ -45,61 +41,6 @@ export const Login: React.FC = () => {
         });
     }
 
-    const validate1 = () => {
-
-        let check = true;
-
-        if (!formData.username) {
-            setErrors(prevState => {
-                return {
-                    ...prevState,
-                    username: "Username is required"
-                }
-            });
-            check = false;
-        }
-
-        if (!formData.password) {
-            setErrors(prevState => {
-                return {
-                    ...prevState,
-                    password: "Password is required"
-                }
-            });
-            check = false;
-        }
-
-        return check;
-    }
-
-    const validate2 = () => {
-        let check = true;
-        const checkUsername = ValidateUsername(formData.username);
-        const checkPassword = ValidatePassWord(formData.password);
-
-        if (checkUsername) {
-            setErrors(prevState => {
-                return {
-                    ...prevState,
-                    username: "Invalid username"
-                }
-            });
-            check = false;
-        }
-
-        if (checkPassword) {
-            setErrors(prevState => {
-                return {
-                    ...prevState,
-                    password: "Invalid password"
-                }
-            });
-            check = false;
-        }
-
-        return check;
-    }
-
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
         setLoading(true);
@@ -121,8 +62,8 @@ export const Login: React.FC = () => {
 
     return (
         <Container fluid className="d-flex justify-content-center align-items-center vh-100 bg-light">
-            <Row className="w-100">
-                <Col xs={12} md={6} lg={4} className="mx-auto">
+            <Row>
+                <Col style={{ width: "550px" }}>
                     <div className="login-box shadow-lg p-4 rounded bg-white">
                         <h2 className="text-center mb-4 fw-bold">Login</h2>
                         {globalError && <p className="text-danger text-center">{globalError}</p>}
@@ -137,6 +78,7 @@ export const Login: React.FC = () => {
                                     value={formData.username}
                                     onChange={handleInputChange}
                                     isInvalid={!!errors.username}
+                                    required
                                 />
                                 <Form.Control.Feedback type="invalid">
                                     {errors.username}
@@ -153,6 +95,7 @@ export const Login: React.FC = () => {
                                     value={formData.password}
                                     onChange={handleInputChange}
                                     isInvalid={!!errors.password}
+                                    required
                                 />
                                 <Form.Control.Feedback type="invalid">
                                     {errors.password}
