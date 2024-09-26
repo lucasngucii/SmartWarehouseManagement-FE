@@ -1,34 +1,8 @@
 import axios from "axios";
-import { Role } from "../../interface/Role";
 import { ResponseError } from "../../interface/ResponseError";
+import { FormDataUser } from "../../interface/FormDataUser";
 
-export interface RegisterRequest {
-    username: string;
-    email: string;
-    password: string;
-    fullName: string;
-    phoneNumber: string;
-    roleName: string;
-    position: string;
-    address: string;
-}
-
-// interface RegisterResponse {
-//     id: string;
-//     username: string;
-//     password: string;
-//     fullName: string;
-//     email: string;
-//     phoneNumber: string;
-//     role: Role;
-//     createAt: string;
-//     updateAt: string;
-//     createBy: string;
-//     isDeleted: boolean;
-//     status: boolean;
-// }
-
-const RegisterAPI = async (data: RegisterRequest): Promise<void> => {
+const RegisterAPI = async (data: FormDataUser): Promise<void> => {
 
     try {
 

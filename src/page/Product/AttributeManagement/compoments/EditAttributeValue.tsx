@@ -1,5 +1,5 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
+import { faArrowLeft, faEdit } from "@fortawesome/free-solid-svg-icons";
 import { OverLay } from "../../../../compoments/OverLay/OverLay";
 import React from "react";
 import AddAttributeValue from "../../../../services/attribute/AddAttributeValue";
@@ -200,11 +200,11 @@ export const EditAttributeValue: React.FC<EditAttributeValueProps> = ({ hideOver
                         <span className="fw-semibold h6">Attribute Value Information</span>
                         {attributeDetailId && (
                             <button
-                                className="btn btn-outline-secondary btn-sm"
+                                className="btn btn-danger btn-sm"
                                 disabled={editAttributeValue}
                                 onClick={() => setEditAttributeValue(true)}
                             >
-                                Edit
+                                <FontAwesomeIcon icon={faEdit} className="me-1" />  Edit
                             </button>
                         )}
                     </div>

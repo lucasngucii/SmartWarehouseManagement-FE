@@ -1,22 +1,19 @@
 import React from 'react'
 import { Product } from '../../../interface/Product'
-import './ProductManagement.css'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faInfoCircle, faSearch, faTrash } from '@fortawesome/free-solid-svg-icons';
-import { OverLayProductManagement } from './compoments/OverLayProductManagement';
-import { OverLayProductDetails } from './compoments/OverLayProductDetails';
 import { Button, Form, Table } from 'react-bootstrap';
 import GetProducts from '../../../services/product/GetProducts';
 import PaginationType from '../../../interface/Pagination';
 import Pagination from '../../../compoments/Pagination/Pagination';
 import ModelConfirmDeleteProduct from './compoments/ModelConfirmDeleteProduct';
+import FormEditProduct from './compoments/FormEditProduct';
 
 
 export const ProductManagement: React.FC = () => {
 
     const [globalError, setGlobalError] = React.useState<string>("")
-    const [showOverLay, setShowOverLay] = React.useState<boolean>(false)
-    const [showOverLayDetails, setShowOverLayDetails] = React.useState<boolean>(false)
+    const [showFormEdit, setShowFormEdit] = React.useState<boolean>(false)
     const [showModelConfirmDelete, setShowModelConfirmDelete] = React.useState<boolean>(false)
     const [productId, setProductId] = React.useState<string>("")
     const [products, setProducts] = React.useState<Product[]>([])
@@ -26,22 +23,6 @@ export const ProductManagement: React.FC = () => {
         totalPage: 0,
         totalElementOfPage: 0
     })
-
-    const handleAddProduct = () => {
-        setShowOverLay(true)
-    }
-
-    const handleCloseAddProduct = () => {
-        setShowOverLay(false)
-    }
-
-    const handleDetailProduct = () => {
-        setShowOverLayDetails(true)
-    }
-
-    const handleColseDetailProduct = () => {
-        setShowOverLayDetails(false)
-    }
 
     const updateProducts = (response: Product[]) => {
         setProducts(response)
@@ -95,7 +76,7 @@ export const ProductManagement: React.FC = () => {
                     <div className='d-flex gap-2'>
                         <Button
                             onClick={() => {
-                                handleDetailProduct()
+
                             }}
                             variant="primary"
                         >
@@ -130,7 +111,7 @@ export const ProductManagement: React.FC = () => {
                             <FontAwesomeIcon icon={faSearch} />
                         </Button>
                     </div>
-                    <Button onClick={handleAddProduct} variant="success fw-bold">+ Add Product</Button>
+                    <Button onClick={() => setShowFormEdit(true)} variant="success fw-bold">+ Add Product</Button>
                 </div>
             </div>
             <Table striped bordered hover>
@@ -156,18 +137,12 @@ export const ProductManagement: React.FC = () => {
                     onPageChange={handleChangePage}
                 />
             }
-            {showOverLay &&
-                <OverLayProductManagement
-                    handleClose={handleCloseAddProduct}
-                />
+            {
+                showFormEdit &&
+                <FormEditProduct handleClose={() => setShowFormEdit(false)} />
             }
-            {showOverLayDetails &&
-                <OverLayProductDetails
-                    handleClose={handleColseDetailProduct}
-                    productId={productId}
-                />
-            }
-            {showModelConfirmDelete &&
+            {
+                showModelConfirmDelete &&
                 <ModelConfirmDeleteProduct
                     productId={productId}
                     closeModelConfirmDelete={() => setShowModelConfirmDelete(false)}

@@ -1,7 +1,6 @@
 import React from "react";
 import { OverLay } from "../../../../compoments/OverLay/OverLay";
 import { RePulseLoader } from "../../../../compoments/Loading/PulseLoader";
-import DeleteAccountAPI from "../../../../services/authen-api/DeleteAccountAPI";
 import PaginationType from "../../../../interface/Pagination";
 import { Product } from "../../../../interface/Product";
 import GetProducts from "../../../../services/product/GetProducts";

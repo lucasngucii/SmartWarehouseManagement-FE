@@ -179,10 +179,10 @@ const SupplierDetail: React.FC<SupplierDetailProps> = ({ supplierId, hideOverlay
                         </button>
                     )}
                 </div>
-                <Row className="p-4 rounded shadow">
-                    <Col md={6} className="shadow rounded">
+                <Row className="p-4">
+                    <Col md={6}>
                         <div className="p-3 gap-3 rounded mb-1">
-                            <h5 className="fw-semibold">Basic Information</h5>
+                            <h5 className="fw-semibold border-bottom pb-2 mb-3">Basic Information</h5>
                             <Row>
                                 <Form.Group className="mb-3">
                                     <Form.Label>Supplier Name</Form.Label>
@@ -251,7 +251,7 @@ const SupplierDetail: React.FC<SupplierDetailProps> = ({ supplierId, hideOverlay
                             </Row>
                         </div>
                         <div className="p-3 gap-3 rounded mb-1">
-                            <h5 className="fw-semibold">Contact Information</h5>
+                            <h5 className="fw-semibold border-bottom pb-2 mb-3">Contact Information</h5>
                             <Row>
                                 <Col md={6}>
                                     <Form.Group className="mb-3">
@@ -286,7 +286,7 @@ const SupplierDetail: React.FC<SupplierDetailProps> = ({ supplierId, hideOverlay
                     </Col>
                     <Col md={6} className="rounded">
                         <div className="p-3 gap-3 rounded mb-1">
-                            <h5 className="fw-semibold">Location Information</h5>
+                            <h5 className="fw-semibold border-bottom pb-2 mb-3">Location Information</h5>
                             <Form.Group className="mb-3">
                                 <Form.Label>Location</Form.Label>
                                 <Form.Control
@@ -301,7 +301,7 @@ const SupplierDetail: React.FC<SupplierDetailProps> = ({ supplierId, hideOverlay
                             </Form.Group>
                         </div>
                         <div className="p-3 gap-3 rounded mb-1">
-                            <h5 className="fw-semibold">Status Information</h5>
+                            <h5 className="fw-semibold border-bottom pb-2 mb-3">Status Information</h5>
                             <Row>
                                 <Col md={6}>
                                     <Form.Group className="mb-3">
@@ -338,7 +338,7 @@ const SupplierDetail: React.FC<SupplierDetailProps> = ({ supplierId, hideOverlay
                             </Row>
                         </div>
                         <div className="p-3 gap-3 rounded mb-1">
-                            <h5 className="fw-semibold">Additional Information</h5>
+                            <h5 className="fw-semibold border-bottom pb-2 mb-3">Additional Information</h5>
                             <Row>
                                 <Col md={6}>
                                     <Form.Group className="mb-3">
