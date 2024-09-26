@@ -20,7 +20,7 @@ interface Options {
 }
 
 interface OverLayProductDetailsProps {
-    productId: number;
+    productId: string;
     handleClose: () => void
 }
 

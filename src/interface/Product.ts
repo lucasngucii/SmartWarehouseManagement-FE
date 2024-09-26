@@ -1,8 +1,11 @@
 export interface Product {
+    id: string,
+    createAt: string,
+    updateAt: string,
+    createBy: string,
+    isDeleted: boolean,
     name: string,
-    sku: string,
-    price: number,
-    category: string,
-    quantity: number,
-    supplier: string
+    description: string,
+    productCode: string,
+    unit: string
 }

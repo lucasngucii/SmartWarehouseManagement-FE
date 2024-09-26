@@ -6,39 +6,24 @@ import { faInfoCircle, faSearch, faTrash } from '@fortawesome/free-solid-svg-ico
 import { OverLayProductManagement } from './compoments/OverLayProductManagement';
 import { OverLayProductDetails } from './compoments/OverLayProductDetails';
 import { Button, Form, Table } from 'react-bootstrap';
+import GetProducts from '../../../services/product/GetProducts';
+import PaginationType from '../../../interface/Pagination';
+import Pagination from '../../../compoments/Pagination/Pagination';
 
 
 export const ProductManagement: React.FC = () => {
 
+    const [globalError, setGlobalError] = React.useState<string>("")
     const [showOverLay, setShowOverLay] = React.useState<boolean>(false)
     const [showOverLayDetails, setShowOverLayDetails] = React.useState<boolean>(false)
-    const [productId, setProductId] = React.useState<number>(0)
-    const [products, setProducts] = React.useState<Product[]>([
-        {
-            name: 'Product 1',
-            sku: 'SKU 1',
-            price: 1000,
-            category: 'Category 1',
-            quantity: 10,
-            supplier: 'Supplier 1'
-        },
-        {
-            name: 'Product 2',
-            sku: 'SKU 2',
-            price: 2000,
-            category: 'Category 2',
-            quantity: 20,
-            supplier: 'Supplier 2'
-        },
-        {
-            name: 'Product 3',
-            sku: 'SKU 3',
-            price: 3000,
-            category: 'Category 3',
-            quantity: 30,
-            supplier: 'Supplier 3'
-        }
-    ])
+    const [productId, setProductId] = React.useState<string>("")
+    const [products, setProducts] = React.useState<Product[]>([])
+    const [pagination, setPagination] = React.useState<PaginationType>({
+        limit: 10,
+        offset: 1,
+        totalPage: 0,
+        totalElementOfPage: 0
+    })
 
     const handleAddProduct = () => {
         setShowOverLay(true)
@@ -56,15 +41,46 @@ export const ProductManagement: React.FC = () => {
         setShowOverLayDetails(false)
     }
 
+    const handleChangePage = (page: number) => {
+        GetProducts({ offset: page })
+            .then((response) => {
+                setProducts(response.data)
+                setPagination({
+                    limit: response.limit,
+                    offset: response.offset,
+                    totalPage: response.totalPage,
+                    totalElementOfPage: response.totalElementOfPage
+                })
+            }).catch((error) => {
+                console.error(error)
+                setGlobalError(error.message)
+            })
+    }
+
+    React.useEffect(() => {
+        GetProducts()
+            .then((response) => {
+                setProducts(response.data)
+                setPagination({
+                    limit: response.limit,
+                    offset: response.offset,
+                    totalPage: response.totalPage,
+                    totalElementOfPage: response.totalElementOfPage
+                })
+            }).catch((error) => {
+                console.error(error)
+                setGlobalError(error.message)
+            })
+    }, [])
+
     const renderProducts = products.map((product, index) => {
         return (
             <tr key={index}>
                 <td>{index + 1}</td>
                 <td>{product.name}</td>
-                <td>{product.sku}</td>
-                <td>{product.price}</td>
-                <td>{product.category}</td>
-                <td>{product.supplier}</td>
+                <td>{product.description}</td>
+                <td>{product.productCode}</td>
+                <td>{product.unit}</td>
                 <td>
                     <div className='d-flex gap-2'>
                         <Button
@@ -108,10 +124,9 @@ export const ProductManagement: React.FC = () => {
                     <tr>
                         <th>#</th>
                         <th>Product Name</th>
-                        <th>SKU</th>
-                        <th>Price</th>
-                        <th>Category</th>
-                        <th>Supplier</th>
+                        <th>Description</th>
+                        <th>Code</th>
+                        <th>Unit</th>
                         <th>Actions</th>
                     </tr>
                 </thead>
@@ -119,6 +134,9 @@ export const ProductManagement: React.FC = () => {
                     {renderProducts}
                 </tbody>
             </Table>
+            {
+                products.length > 0 && <Pagination currentPage={pagination.offset} totalPages={pagination?.totalPage} onPageChange={handleChangePage} />
+            }
             {showOverLay && <OverLayProductManagement handleClose={handleCloseAddProduct} />}
             {showOverLayDetails && <OverLayProductDetails handleClose={handleColseDetailProduct} productId={productId} />}
         </div>
