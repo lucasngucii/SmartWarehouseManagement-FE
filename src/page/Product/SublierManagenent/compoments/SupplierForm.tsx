@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Form, Button, Row, Col, CloseButton, Alert } from 'react-bootstrap';
+import { Form, Button, Row, Col, CloseButton, Alert, Container } from 'react-bootstrap';
 import Supplier from '../../../../interface/Supplier';
 import PaginationType from '../../../../interface/Pagination';
 import { OverLay } from '../../../../compoments/OverLay/OverLay';
@@ -79,8 +79,8 @@ const SupplierForm: React.FC<SupplierFormProps> = ({ handleClose, updatePaginati
     };
 
     return (
-        <OverLay>
-            <div className="supplier-form-container">
+        <OverLay className='bg-light'>
+            <Container style={{ width: "800px" }}>
                 {
                     globalError && <Alert variant="danger" onClose={() => setGlobalError("")} dismissible>{globalError}</Alert>
                 }
@@ -92,10 +92,10 @@ const SupplierForm: React.FC<SupplierFormProps> = ({ handleClose, updatePaginati
                         <CloseButton
                             onClick={handleClose}
                             className="position-absolute btn-close"
-                            style={{ top: "20px", right: "30px", cursor: 'pointer' }}
+                            style={{ top: "20px", right: "20px", cursor: 'pointer' }}
                         />
-                        <div className="supplier-form shadow p-4 rounded">
-                            <h2 className="text-center mb-4 fw-bold">Create Supplier</h2>
+                        <div className="supplier-form p-4 rounded">
+                            <h2 className="text-center mb-5 fw-bold">Create Supplier</h2>
                             <Form onSubmit={handleSubmit}>
                                 <Row>
                                     <Col md={6}>
@@ -108,6 +108,7 @@ const SupplierForm: React.FC<SupplierFormProps> = ({ handleClose, updatePaginati
                                                 value={formData.name}
                                                 onChange={handleInputChange}
                                                 required
+                                                className='py-3'
                                             />
                                         </Form.Group>
                                     </Col>
@@ -121,6 +122,7 @@ const SupplierForm: React.FC<SupplierFormProps> = ({ handleClose, updatePaginati
                                                 value={formData.phone}
                                                 onChange={handleInputChange}
                                                 required
+                                                className='py-3'
                                             />
                                         </Form.Group>
                                     </Col>
@@ -136,6 +138,7 @@ const SupplierForm: React.FC<SupplierFormProps> = ({ handleClose, updatePaginati
                                                 value={formData.email}
                                                 onChange={handleInputChange}
                                                 required
+                                                className='py-3'
                                             />
                                         </Form.Group>
                                     </Col>
@@ -149,6 +152,7 @@ const SupplierForm: React.FC<SupplierFormProps> = ({ handleClose, updatePaginati
                                                 value={formData.supplierCode}
                                                 onChange={handleInputChange}
                                                 required
+                                                className='py-3'
                                             />
                                         </Form.Group>
                                     </Col>
@@ -164,6 +168,7 @@ const SupplierForm: React.FC<SupplierFormProps> = ({ handleClose, updatePaginati
                                                 value={formData.contactPerson}
                                                 onChange={handleInputChange}
                                                 required
+                                                className='py-3'
                                             />
                                         </Form.Group>
                                     </Col>
@@ -177,6 +182,7 @@ const SupplierForm: React.FC<SupplierFormProps> = ({ handleClose, updatePaginati
                                                 value={formData.location}
                                                 onChange={handleInputChange}
                                                 required
+                                                className='py-3'
                                             />
                                         </Form.Group>
                                     </Col>
@@ -190,6 +196,7 @@ const SupplierForm: React.FC<SupplierFormProps> = ({ handleClose, updatePaginati
                                         value={formData.address}
                                         onChange={handleInputChange}
                                         required
+                                        className='py-3'
                                     />
                                 </Form.Group>
                                 <Form.Group className="mb-3">
@@ -225,6 +232,8 @@ const SupplierForm: React.FC<SupplierFormProps> = ({ handleClose, updatePaginati
                                                 name="website"
                                                 value={formData.website}
                                                 onChange={handleInputChange}
+                                                required
+                                                className='py-3'
                                             />
                                         </Form.Group>
                                     </Col>
@@ -237,6 +246,8 @@ const SupplierForm: React.FC<SupplierFormProps> = ({ handleClose, updatePaginati
                                                 name="taxId"
                                                 value={formData.taxId}
                                                 onChange={handleInputChange}
+                                                required
+                                                className='py-3'
                                             />
                                         </Form.Group>
                                     </Col>
@@ -248,7 +259,7 @@ const SupplierForm: React.FC<SupplierFormProps> = ({ handleClose, updatePaginati
                         </div>
                     </Col>
                 </Row>
-            </div>
+            </Container>
         </OverLay>
     );
 };

@@ -24,6 +24,7 @@ interface FormData {
     position: string;
     address: string;
     gender: string;
+    dateOfBirth: string;
 }
 
 interface FormRegisterUserProps {
@@ -48,7 +49,8 @@ const FormRegisterUser: React.FC<FormRegisterUserProps> = ({ handleClose, update
         roleName: '',
         position: '',
         address: '',
-        gender: ''
+        gender: '',
+        dateOfBirth: ''
     });
     const [formError, setFormError] = React.useState<FormData>({
         username: '',
@@ -60,7 +62,8 @@ const FormRegisterUser: React.FC<FormRegisterUserProps> = ({ handleClose, update
         roleName: '',
         position: '',
         address: '',
-        gender: ''
+        gender: '',
+        dateOfBirth: ''
     });
 
     React.useEffect(() => {
@@ -199,8 +202,8 @@ const FormRegisterUser: React.FC<FormRegisterUserProps> = ({ handleClose, update
     }
 
     return (
-        <OverLay>
-            <div className="container mt-5">
+        <OverLay className="bg-light">
+            <div className="container" style={{ width: "800px" }}>
                 {
                     globalError && (
                         <Alert variant="danger" onClose={() => setGlobalError("")} dismissible>
@@ -215,30 +218,40 @@ const FormRegisterUser: React.FC<FormRegisterUserProps> = ({ handleClose, update
                         </Alert>
                     )
                 }
-                <Form onSubmit={handleSubmit} className="shadow-lg p-5 rounded bg-light position-relative">
+                <Form onSubmit={handleSubmit} className="p-3 rounded bg-light position-relative">
                     <CloseButton
                         onClick={handleClose}
                         className="position-absolute btn-close"
                         style={{ top: "20px", right: "20px", cursor: 'pointer' }}
                     />
-                    <h2 className="text-center mb-4 fw-bold">User Registration</h2>
-
+                    <h2 className="text-center mb-2 fw-bold">User Registration</h2>
+                    <Form.Group className="mb-4" controlId="formFullName">
+                        <Form.Label>Full Name</Form.Label>
+                        <Form.Control
+                            type="text"
+                            placeholder="Enter full name"
+                            name="fullName"
+                            value={formData.fullName}
+                            onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleChange(e)}
+                            required
+                            className="py-3"
+                        />
+                        <Form.Text className="text-danger">{formError.fullName}</Form.Text>
+                    </Form.Group>
+                    <Form.Group className="mb-4" controlId="formUsername">
+                        <Form.Label>Username</Form.Label>
+                        <Form.Control
+                            type="text"
+                            placeholder="Enter username"
+                            name="username"
+                            value={formData.username}
+                            onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleChange(e)}
+                            required
+                            className="py-3"
+                        />
+                        <Form.Text className="text-danger">{formError.username}</Form.Text>
+                    </Form.Group>
                     <Row>
-                        <Col md={6}>
-                            <Form.Group className="mb-4" controlId="formUsername">
-                                <Form.Label>Username</Form.Label>
-                                <Form.Control
-                                    type="text"
-                                    placeholder="Enter username"
-                                    name="username"
-                                    value={formData.username}
-                                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleChange(e)}
-                                    required
-                                    className="rounded"
-                                />
-                                <Form.Text className="text-danger">{formError.username}</Form.Text>
-                            </Form.Group>
-                        </Col>
                         <Col md={6}>
                             <Form.Group className="mb-4" controlId="formEmail">
                                 <Form.Label>Email</Form.Label>
@@ -249,60 +262,9 @@ const FormRegisterUser: React.FC<FormRegisterUserProps> = ({ handleClose, update
                                     value={formData.email}
                                     onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleChange(e)}
                                     required
-                                    className="rounded"
+                                    className="py-3"
                                 />
                                 <Form.Text className="text-danger">{formError.email}</Form.Text>
-                            </Form.Group>
-                        </Col>
-                    </Row>
-
-                    <Row>
-                        <Col md={6}>
-                            <Form.Group className="mb-4" controlId="formPassword">
-                                <Form.Label>Password</Form.Label>
-                                <Form.Control
-                                    type="password"
-                                    placeholder="Enter password"
-                                    name="password"
-                                    value={formData.password}
-                                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleChange(e)}
-                                    required
-                                    className="rounded"
-                                />
-                                <Form.Text className="text-danger">{formError.password}</Form.Text>
-                            </Form.Group>
-                        </Col>
-                        <Col md={6}>
-                            <Form.Group className="mb-4" controlId="formConfirmPassword">
-                                <Form.Label>Confirm Password</Form.Label>
-                                <Form.Control
-                                    type="password"
-                                    placeholder="Confirm password"
-                                    name="confirmPassword"
-                                    value={formData.confirmPassword}
-                                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleChange(e)}
-                                    required
-                                    className="rounded"
-                                />
-                                <Form.Text className="text-danger">{formError.confirmPassword}</Form.Text>
-                            </Form.Group>
-                        </Col>
-                    </Row>
-
-                    <Row>
-                        <Col md={6}>
-                            <Form.Group className="mb-4" controlId="formFullName">
-                                <Form.Label>Full Name</Form.Label>
-                                <Form.Control
-                                    type="text"
-                                    placeholder="Enter full name"
-                                    name="fullName"
-                                    value={formData.fullName}
-                                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleChange(e)}
-                                    required
-                                    className="rounded"
-                                />
-                                <Form.Text className="text-danger">{formError.fullName}</Form.Text>
                             </Form.Group>
                         </Col>
                         <Col md={6}>
@@ -315,13 +277,84 @@ const FormRegisterUser: React.FC<FormRegisterUserProps> = ({ handleClose, update
                                     value={formData.phoneNumber}
                                     onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleChange(e)}
                                     required
-                                    className="rounded"
+                                    className="py-3"
                                 />
                                 <Form.Text className="text-danger">{formError.phoneNumber}</Form.Text>
                             </Form.Group>
                         </Col>
                     </Row>
-
+                    <Form.Group className="mb-4" controlId="formPassword">
+                        <Form.Label>Password</Form.Label>
+                        <Form.Control
+                            type="password"
+                            placeholder="Enter password"
+                            name="password"
+                            value={formData.password}
+                            onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleChange(e)}
+                            required
+                            className="py-3"
+                        />
+                        <Form.Text className="text-danger">{formError.password}</Form.Text>
+                    </Form.Group>
+                    <Form.Group className="mb-4" controlId="formConfirmPassword">
+                        <Form.Label>Confirm Password</Form.Label>
+                        <Form.Control
+                            type="password"
+                            placeholder="Confirm password"
+                            name="confirmPassword"
+                            value={formData.confirmPassword}
+                            onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleChange(e)}
+                            required
+                            className="py-3"
+                        />
+                        <Form.Text className="text-danger">{formError.confirmPassword}</Form.Text>
+                    </Form.Group>
+                    <Form.Group className="mb-4" controlId="formAddress">
+                        <Form.Label>Address</Form.Label>
+                        <Form.Control
+                            type="text"
+                            placeholder="Enter address"
+                            name="address"
+                            value={formData.address}
+                            onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleChange(e)}
+                            required
+                            className="py-3"
+                        />
+                        <Form.Text className="text-danger">{formError.address}</Form.Text>
+                    </Form.Group>
+                    <Row>
+                        <Col md={6}>
+                            <Form.Group className="mb-4" controlId="formConfirmPassword">
+                                <Form.Label>Date Of Birth</Form.Label>
+                                <Form.Control
+                                    type="date"
+                                    name="dateOfBirth"
+                                    value={formData.dateOfBirth}
+                                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleChange(e)}
+                                    required
+                                    className="py-3"
+                                />
+                                <Form.Text className="text-danger">{formError.dateOfBirth}</Form.Text>
+                            </Form.Group>
+                        </Col>
+                        <Col md={6}>
+                            <Form.Group className="mb-4" controlId="formGender">
+                                <Form.Label>Gender</Form.Label>
+                                <Form.Select
+                                    name="gender"
+                                    onChange={handleChange}
+                                    required
+                                    className="py-3"
+                                >
+                                    <option value="">Choose gender...</option>
+                                    <option value="male">Male</option>
+                                    <option value="female">Female</option>
+                                    <option value="others">Orthers</option>
+                                </Form.Select>
+                                <Form.Text className="text-danger">{formError.gender}</Form.Text>
+                            </Form.Group>
+                        </Col>
+                    </Row>
                     <Row>
                         <Col md={6}>
                             <Form.Group className="mb-4" controlId="formRoleName">
@@ -331,7 +364,7 @@ const FormRegisterUser: React.FC<FormRegisterUserProps> = ({ handleClose, update
                                     value={formData.roleName}
                                     onChange={handleChange}
                                     required
-                                    className="rounded"
+                                    className="py-3"
                                 >
                                     <option value="">Choose role...</option>
                                     {roles.map((role, index) => (
@@ -353,74 +386,19 @@ const FormRegisterUser: React.FC<FormRegisterUserProps> = ({ handleClose, update
                                     value={formData.position}
                                     onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleChange(e)}
                                     required
-                                    className="rounded"
+                                    className="py-3"
                                 />
                                 <Form.Text className="text-danger">{formError.position}</Form.Text>
                             </Form.Group>
                         </Col>
                     </Row>
-
-                    <Row>
-                        <Col md={6}>
-                            <Form.Group className="mb-4" controlId="formAddress">
-                                <Form.Label>Address</Form.Label>
-                                <Form.Control
-                                    type="text"
-                                    placeholder="Enter address"
-                                    name="address"
-                                    value={formData.address}
-                                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleChange(e)}
-                                    required
-                                    className="rounded"
-                                />
-                                <Form.Text className="text-danger">{formError.address}</Form.Text>
-                            </Form.Group>
-                        </Col>
-                        <Col md={6}>
-                            <Form.Group className="mb-4" controlId="formGender">
-                                <Form.Label>Gender</Form.Label>
-                                <div className="d-flex align-items-center">
-                                    <Form.Check
-                                        inline
-                                        label="Male"
-                                        name="gender"
-                                        type="radio"
-                                        value="male"
-                                        checked={formData.gender === 'male'}
-                                        onChange={handleChange}
-                                        className="me-3"
-                                    />
-                                    <Form.Check
-                                        inline
-                                        label="Female"
-                                        name="gender"
-                                        type="radio"
-                                        value="female"
-                                        checked={formData.gender === 'female'}
-                                        onChange={handleChange}
-                                    />
-                                    <Form.Check
-                                        inline
-                                        label="Orthers"
-                                        name="gender"
-                                        type="radio"
-                                        value="orthers"
-                                        checked={formData.gender === 'orthers'}
-                                        onChange={handleChange}
-                                    />
-                                </div>
-                                <Form.Text className="text-danger">{formError.gender}</Form.Text>
-                            </Form.Group>
-                        </Col>
-                    </Row>
-
                     <Button disabled={loading} variant="primary" type="submit" className="w-100 py-3 rounded" style={{ fontWeight: 'bold', letterSpacing: '1px' }}>
                         {loading ? "Loading..." : "Register"}
                     </Button>
                 </Form>
             </div>
 
-        </OverLay>
+        </OverLay >
     );
 }
 

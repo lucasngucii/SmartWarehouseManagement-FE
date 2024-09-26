@@ -1,4 +1,3 @@
-import "./css/UserManagement.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPencilAlt, faSearch, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { EditUserComponent } from "./compoments/EditUserComponent";
