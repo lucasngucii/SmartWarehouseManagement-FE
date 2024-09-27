@@ -111,7 +111,7 @@ export const ProductManagement: React.FC = () => {
                             <FontAwesomeIcon icon={faSearch} />
                         </Button>
                     </div>
-                    <Button onClick={() => setShowFormEdit(true)} variant="success fw-bold">+ Add Product</Button>
+                    <Button onClick={() => setShowFormEdit(true)} variant="success fw-bold">+ NEW</Button>
                 </div>
             </div>
             <Table striped bordered hover>
