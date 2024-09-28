@@ -225,7 +225,21 @@ const FormEditSupplier: React.FC<SupplierDetailProps> = ({ supplierId, hideOverl
                         setIsSaving(false);
                     });
             } else {
-                CreateSupplier(formData)
+                CreateSupplier({
+                    name: formData.name,
+                    description: formData.description,
+                    phone: formData.phone,
+                    email: formData.email,
+                    address: formData.address,
+                    supplierCode: formData.supplierCode,
+                    contactPerson: formData.contactPerson,
+                    location: formData.location,
+                    status: formData.status,
+                    notes: formData.notes,
+                    website: formData.website,
+                    taxId: formData.taxId,
+                    isActive: formData.isActive
+                })
                     .then(() => {
                         return GetSuppliers();
                     }).then((response) => {
@@ -546,7 +560,7 @@ const FormEditSupplier: React.FC<SupplierDetailProps> = ({ supplierId, hideOverl
                                 supplierId === "" &&
                                 <Button
                                     onClick={handleSubmit}
-                                    disabled={isSaving}
+                                    disabled={isSaving || (supplierId !== "" && globalSuccess !== "")}
                                     variant="primary"
                                     className='form-control fw-bold py-3'>
                                     {isSaving ? "Creating..." : "Create"}

@@ -13,6 +13,8 @@ interface CreateSupplierProps {
     notes: string;
     website: string;
     taxId: string;
+    status: boolean;
+    isActive: boolean;
 }
 
 const CreateSupplier = async (data: CreateSupplierProps): Promise<void> => {
