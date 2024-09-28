@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { Form, Button, Alert, Container, CloseButton } from 'react-bootstrap';
-import "../css/ChangePasswordForm.css";
 import { OverLay } from '../../../../compoments/OverLay/OverLay';
 import ValidatePassWord from '../../../../util/validatePassword';
 import UpdateAccountAPI from '../../../../services/authen-api/UpdateAccountAPI';
@@ -49,7 +48,7 @@ const ChangePasswordForm: React.FC<ChangePasswordFormProps> = ({ userId, hideOve
 
   return (
     <OverLay>
-      <Container className="change-password-form position-relative">
+      <Container className="position-relative bg-light p-4 rounded" style={{ width: "550px" }}>
         <CloseButton
           onClick={() => { hideOver() }}
           className="position-absolute btn-close"

@@ -46,6 +46,7 @@ export const EditUserComponent: React.FC<EditUserComponentProps> = ({ hideOverla
         address: "",
         username: "",
         roleName: "",
+        image: "",
     });
     const [formData, setFormData] = React.useState<FormDataUser>({
         fullName: "",
@@ -59,6 +60,7 @@ export const EditUserComponent: React.FC<EditUserComponentProps> = ({ hideOverla
         username: "",
         confirmPassword: "",
         password: "",
+        image: "",
     });
     const [formError, setFormError] = React.useState<FormDataUser>({
         fullName: "",
@@ -72,6 +74,7 @@ export const EditUserComponent: React.FC<EditUserComponentProps> = ({ hideOverla
         username: "",
         confirmPassword: "",
         password: "",
+        image: "",
     });
     const gender: Gender[] = [Gender.Male, Gender.Female, Gender.Others];
 
@@ -321,6 +324,7 @@ export const EditUserComponent: React.FC<EditUserComponentProps> = ({ hideOverla
             setIsLoadingSubmit(true);
             if (userId) {
                 const dataRequest = { ...formData }
+                delete dataRequest.username;
                 if (formData.roleName === dataDefault.roleName) delete dataRequest.roleName;
                 UpdateAccountAPI(userId, dataRequest)
                     .then(() => {
@@ -446,24 +450,27 @@ export const EditUserComponent: React.FC<EditUserComponentProps> = ({ hideOverla
                         )
                     }
                 </div>
-
                 <Row className="p-4">
                     <Col md={6}>
                         <Row className="p-3">
-                            <Col className="d-flex align-items-center justify-content-center">
-                                <div className="position-relative">
-                                    <Image src="https://res.cloudinary.com/dlrionk8h/image/upload/v1727174250/er5mtiiis4yruphmbobm.jpg" rounded style={{ width: "200px", height: "auto" }} />
-                                    <div className="position-absolute bottom-0 end-0">
-                                        <button
-                                            className="btn btn-light btn-sm shadow-sm rounded-circle d-flex align-items-center justify-content-center text-primary"
-                                            style={{ width: "35px", height: "35px" }}
-                                            onClick={() => { console.log("click") }}
-                                        >
-                                            <FontAwesomeIcon icon={faEdit} />
-                                        </button>
-                                    </div>
-                                </div>
-                            </Col>
+                            {
+                                userId && (
+                                    <Col className="d-flex align-items-center justify-content-center">
+                                        <div className="position-relative">
+                                            <Image src="https://res.cloudinary.com/dlrionk8h/image/upload/v1727174250/er5mtiiis4yruphmbobm.jpg" rounded style={{ width: "200px", height: "auto" }} />
+                                            <div className="position-absolute bottom-0 end-0">
+                                                <button
+                                                    className="btn btn-light btn-sm shadow-sm rounded-circle d-flex align-items-center justify-content-center text-primary"
+                                                    style={{ width: "35px", height: "35px" }}
+                                                    onClick={() => { console.log("click") }}
+                                                >
+                                                    <FontAwesomeIcon icon={faEdit} />
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </Col>
+                                )
+                            }
                             <Col>
                                 <Row>
                                     <h5 className="fw-semibold border-bottom pb-2 mb-3">Basic Information</h5>

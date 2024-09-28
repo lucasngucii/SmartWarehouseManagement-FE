@@ -105,7 +105,7 @@ export const SublierManagement: React.FC = () => {
                             <FontAwesomeIcon icon={faPencilAlt} />
                         </Button>
                         <Button
-                            onClick={() => handleDelete(supplier.id)}
+                            onClick={() => handleDelete(supplier!.id)}
                             variant="danger"
                         >
                             <FontAwesomeIcon icon={faTrash} />

@@ -1,9 +1,8 @@
 import axios from "axios";
 import { ResponseError } from "../../interface/ResponseError";
-import Supplier from "../../interface/Supplier";
+import FormDataSupplier from "../../interface/FormDataSupplier";
 
-const UpdateSupplierById = async (supplierID: string, data: Supplier): Promise<void> => {
-
+const UpdateSupplierById = async (supplierID: string, data: FormDataSupplier): Promise<void> => {
     try {
         const HOST = process.env.REACT_APP_HOST_BE;
         const token = localStorage.getItem('token');

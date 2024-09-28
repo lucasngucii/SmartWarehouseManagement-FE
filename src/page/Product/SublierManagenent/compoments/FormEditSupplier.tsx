@@ -9,6 +9,7 @@ import UpdateSupplierById from '../../../../services/supplier/UpdateSupplierById
 import PaginationType from '../../../../interface/Pagination';
 import GetSuppliers from '../../../../services/supplier/GetSuppliers';
 import CreateSupplier from '../../../../services/supplier/CreateSupplier';
+import FormDataTypes from '../../../../interface/FormDataSupplier';
 
 interface SupplierDetailProps {
     supplierId: string;
@@ -24,18 +25,14 @@ const FormEditSupplier: React.FC<SupplierDetailProps> = ({ supplierId, hideOverl
     const [globalError, setGlobalError] = useState<string>("");
     const [globalSuccess, setGlobalSuccess] = useState<string>("");
     const [isLoading, setIsLoading] = useState<boolean>(false);
-    const [formData, setFormData] = useState<Supplier>({
-        id: "",
+    const [formData, setFormData] = useState<FormDataTypes>({
         name: "",
         description: "",
         phone: "",
         email: "",
         address: "",
         supplierCode: "",
-        createdAt: "",
-        updatedAt: "",
         createdBy: "",
-        isDeleted: false,
         contactPerson: "",
         location: "",
         status: true,
@@ -44,18 +41,15 @@ const FormEditSupplier: React.FC<SupplierDetailProps> = ({ supplierId, hideOverl
         taxId: "",
         isActive: true
     });
-    const [formError, setFormError] = useState<Supplier>({
-        id: "",
+    const [formError, setFormError] = useState<FormDataTypes>({
+
         name: "",
         description: "",
         phone: "",
         email: "",
         address: "",
         supplierCode: "",
-        createdAt: "",
-        updatedAt: "",
         createdBy: "",
-        isDeleted: false,
         contactPerson: "",
         location: "",
         status: true,
@@ -64,18 +58,14 @@ const FormEditSupplier: React.FC<SupplierDetailProps> = ({ supplierId, hideOverl
         taxId: "",
         isActive: true
     });
-    const [dataDefault, setDataDefault] = useState<Supplier>({
-        id: "",
+    const [dataDefault, setDataDefault] = useState<FormDataTypes>({
         name: "",
         description: "",
         phone: "",
         email: "",
         address: "",
         supplierCode: "",
-        createdAt: "",
-        updatedAt: "",
         createdBy: "",
-        isDeleted: false,
         contactPerson: "",
         location: "",
         status: true,
@@ -174,7 +164,22 @@ const FormEditSupplier: React.FC<SupplierDetailProps> = ({ supplierId, hideOverl
             setIsLoading(true);
             GetSupplierById(supplierId)
                 .then((response) => {
-                    setFormData(response);
+                    setFormData({
+                        name: response.name,
+                        description: response.description,
+                        phone: response.phone,
+                        email: response.email,
+                        address: response.address,
+                        supplierCode: response.supplierCode,
+                        createdBy: response.createdBy,
+                        contactPerson: response.contactPerson,
+                        location: response.location,
+                        status: response.status,
+                        notes: response.notes,
+                        website: response.website,
+                        taxId: response.taxId,
+                        isActive: response.isActive
+                    });
                     setDataDefault(response);
                 }).catch((error) => {
                     console.error(error);

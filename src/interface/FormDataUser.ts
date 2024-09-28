@@ -9,5 +9,6 @@ export interface FormDataUser {
     address?: string;
     gender?: string;
     dateOfBirth?: string;
+    image?: string;
     confirmPassword?: string;
 }
