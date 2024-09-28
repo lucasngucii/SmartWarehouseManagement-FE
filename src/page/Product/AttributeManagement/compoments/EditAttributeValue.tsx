@@ -1,5 +1,5 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faArrowLeft, faEdit } from "@fortawesome/free-solid-svg-icons";
+import { faEdit } from "@fortawesome/free-solid-svg-icons";
 import { OverLay } from "../../../../compoments/OverLay/OverLay";
 import React from "react";
 import AddAttributeValue from "../../../../services/attribute/AddAttributeValue";
@@ -100,7 +100,10 @@ export const EditAttributeValue: React.FC<EditAttributeValueProps> = ({ hideOver
                         offset: response.offset,
                         totalElementOfPage: response.totalElementOfPage
                     });
-                    setEditAttributeValue(false);
+                    setGlobalSuccess("Create attribute value successfully");
+                    setTimeout(() => {
+                        hideOverlay();
+                    }, 1000)
                 }).catch((error) => {
                     console.error(error);
                     setGlobalError(error.message);
@@ -222,6 +225,7 @@ export const EditAttributeValue: React.FC<EditAttributeValueProps> = ({ hideOver
                                     disabled={!editAttributeValue && attributeDetailId !== ""}
                                     placeholder="Enter name"
                                 />
+                                <Form.Text className="text-danger">{error.name}</Form.Text>
                             </Form.Group>
                         </Col>
                         <Col md={6}>
@@ -236,6 +240,7 @@ export const EditAttributeValue: React.FC<EditAttributeValueProps> = ({ hideOver
                                     disabled={!editAttributeValue && attributeDetailId !== ""}
                                     placeholder="Enter code"
                                 />
+                                <Form.Text className="text-danger">{error.sizeCode}</Form.Text>
                             </Form.Group>
                         </Col>
                     </Row>
@@ -251,6 +256,7 @@ export const EditAttributeValue: React.FC<EditAttributeValueProps> = ({ hideOver
                             placeholder="Enter description"
                             rows={3}
                         />
+                        <Form.Text className="text-danger">{error.description}</Form.Text>
                     </Form.Group>
                     {editAttributeValue && attributeDetailId && (
                         <div className="d-flex gap-2">
@@ -283,7 +289,7 @@ export const EditAttributeValue: React.FC<EditAttributeValueProps> = ({ hideOver
                                     handleSubmit();
                                 }
                             }}
-                            disabled={loading}
+                            disabled={loading || (attributeDetailId === "" && globalSuccess !== "")}
                         >
                             Create
                         </Button>

@@ -169,10 +169,15 @@ export const SublierManagement: React.FC = () => {
                 />
             }
             {
-                showDetail && <FormEditSupplier updatePagination={updateSPagination} updateSuppliers={updateSuppliers} supplierId={supplierId} hideOverlay={() => {
-                    setShowDetail(false);
-                    setSupplierId("");
-                }} />
+                showDetail &&
+                <FormEditSupplier
+                    updatePagination={updateSPagination}
+                    updateSuppliers={updateSuppliers}
+                    supplierId={supplierId}
+                    hideOverlay={() => {
+                        setShowDetail(false);
+                        setSupplierId("");
+                    }} />
             }
         </div>
     );
