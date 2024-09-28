@@ -362,7 +362,10 @@ export const EditUserComponent: React.FC<EditUserComponentProps> = ({ hideOverla
                     })
                 return;
             } else {
-                RegisterAPI(formData)
+                const dataRequest = { ...formData }
+                delete dataRequest.confirmPassword;
+                delete dataRequest.image;
+                RegisterAPI(dataRequest)
                     .then(() => {
                         return GetAccountsAPI();
                     }).then((response) => {
