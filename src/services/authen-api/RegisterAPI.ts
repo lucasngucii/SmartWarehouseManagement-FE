@@ -1,10 +1,14 @@
 import axios from "axios";
 import { ResponseError } from "../../interface/ResponseError";
-import { FormDataUser } from "../../interface/FormDataUser";
+import DataTypeCreateUserAdmin from "../../interface/PageUser/FormEdit/DataTypeCreateUserAdmin";
 
-const RegisterAPI = async (data: FormDataUser): Promise<void> => {
+const RegisterAPI = async (data: DataTypeCreateUserAdmin | null): Promise<void> => {
 
     try {
+
+        if (!data) {
+            throw new Error("Data is empty.");
+        }
 
         const HOST = process.env.REACT_APP_HOST_BE;
         const token = localStorage.getItem("token");

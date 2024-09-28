@@ -16,9 +16,11 @@ import { faChevronLeft, faEdit, faSave } from "@fortawesome/free-solid-svg-icons
 import Gender from "../../../../enum/Gender";
 import ChangePasswordForm from "./ChangePasswordForm";
 import RegisterAPI from "../../../../services/authen-api/RegisterAPI";
-import { FormDataUser } from "../../../../interface/FormDataUser";
 import ValidatePassWord from "../../../../util/validatePassword";
 import ValidateUsername from "../../../../util/validateUsername";
+import DataTypeUpdateUserAdmin from "../../../../interface/PageUser/FormEdit/DataTypeUpdateUserAdmin";
+import { DataTypeFormUser } from "../../../../interface/PageUser/FormEdit/DataTypeFormUser";
+import DataTypeCreateUserAdmin from "../../../../interface/PageUser/FormEdit/DataTypeCreateUserAdmin";
 
 interface EditUserComponentProps {
     hideOverlay: () => void;
@@ -37,7 +39,8 @@ export const EditUserComponent: React.FC<EditUserComponentProps> = ({ hideOverla
     const [editUser, setEditUser] = React.useState<boolean>(false);
     const [changePassword, setChangePassword] = React.useState<boolean>(false);
     const [roles, setRoles] = React.useState<Role[]>([]);
-    const [dataDefault, setDataDefault] = React.useState<FormDataUser>({
+    const [fileAvatar, setFileAvatar] = React.useState<File | null>(null);
+    const [dataDefault, setDataDefault] = React.useState<DataTypeFormUser>({
         fullName: "",
         dateOfBirth: "",
         gender: "",
@@ -49,7 +52,7 @@ export const EditUserComponent: React.FC<EditUserComponentProps> = ({ hideOverla
         roleName: "",
         avatar: "",
     });
-    const [formData, setFormData] = React.useState<FormDataUser>({
+    const [formData, setFormData] = React.useState<DataTypeFormUser>({
         fullName: "",
         dateOfBirth: "",
         gender: "",
@@ -63,7 +66,7 @@ export const EditUserComponent: React.FC<EditUserComponentProps> = ({ hideOverla
         password: "",
         avatar: "",
     });
-    const [formError, setFormError] = React.useState<FormDataUser>({
+    const [formError, setFormError] = React.useState<DataTypeFormUser>({
         fullName: "",
         dateOfBirth: "",
         gender: "",
@@ -97,28 +100,12 @@ export const EditUserComponent: React.FC<EditUserComponentProps> = ({ hideOverla
             GetAccountById(userId)
                 .then((response) => {
                     setFormData({
-                        fullName: response.fullName,
-                        dateOfBirth: response.dateOfBirth,
-                        gender: response.gender,
-                        email: response.email,
-                        phoneNumber: response.phoneNumber,
-                        position: response.position,
-                        address: response.address,
-                        username: response.username,
+                        ...response,
                         roleName: response.role.name,
-                        avatar: response.avatar,
                     });
                     setDataDefault({
-                        fullName: response.fullName,
-                        dateOfBirth: response.dateOfBirth,
-                        gender: response.gender,
-                        email: response.email,
-                        phoneNumber: response.phoneNumber,
-                        position: response.position,
-                        address: response.address,
-                        username: response.username,
+                        ...response,
                         roleName: response.role.name,
-                        avatar: response.avatar,
                     });
                 }).catch((err) => {
                     console.error(err.message);
@@ -142,6 +129,7 @@ export const EditUserComponent: React.FC<EditUserComponentProps> = ({ hideOverla
     const handleChagleFile = (e: ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
         if (file) {
+            setFileAvatar(file);
             const reader = new FileReader();
             reader.onloadend = () => {
                 setFormData(preVal => ({
@@ -155,98 +143,84 @@ export const EditUserComponent: React.FC<EditUserComponentProps> = ({ hideOverla
 
     const validate1 = (): boolean => {
         let check = true;
-
         if (!formData.fullName) {
             check = false;
             setFormError(preVal => {
                 return { ...preVal, fullName: "Fullname is required" }
             })
         }
-
         if (!formData.dateOfBirth) {
             check = false;
             setFormError(preVal => {
                 return { ...preVal, dateOfBirth: "Date of birth is required" }
             })
         }
-
         if (!formData.gender) {
             check = false;
             setFormError(preVal => {
                 return { ...preVal, gender: "Gender is required" }
             })
         }
-
         if (!formData.roleName) {
             check = false;
             setFormError(preVal => {
                 return { ...preVal, role: "Role is required" }
             })
         }
-
         if (!formData.email) {
             check = false;
             setFormError(preVal => {
                 return { ...preVal, email: "Email is required" }
             })
         }
-
         if (!formData.phoneNumber) {
             check = false;
             setFormError(preVal => {
                 return { ...preVal, phoneNumber: "Phone is required" }
             })
         }
-
         if (!formData.position) {
             check = false;
             setFormError(preVal => {
                 return { ...preVal, position: "Position is required" }
             })
         }
-
         if (!formData.address) {
             check = false;
             setFormError(preVal => {
                 return { ...preVal, address: "Address is required" }
             })
         }
-
         if (!formData.username && !userId) {
             check = false;
             setFormError(preVal => {
                 return { ...preVal, username: "Username is required" }
             })
         }
-
         if (!formData.roleName) {
             check = false;
             setFormError(preVal => {
                 return { ...preVal, roleName: "Role is required" }
             })
         }
-
         if (!formData.password && !userId) {
             check = false;
             setFormError(preVal => {
                 return { ...preVal, password: "Password is required" }
             })
         }
-
         if (!formData.confirmPassword && !userId) {
             check = false;
             setFormError(preVal => {
                 return { ...preVal, confirmPassword: "Confirm password is required" }
             })
         }
-
         if (formData.password !== formData.confirmPassword && !userId) {
             check = false;
             setFormError(preVal => {
                 return { ...preVal, confirmPassword: "Confirm password is not match" }
             })
         }
-
         return check
     }
 
@@ -257,103 +231,144 @@ export const EditUserComponent: React.FC<EditUserComponentProps> = ({ hideOverla
         const checkPhone = validatePhone(formData.phoneNumber || "");
         const checkPassword = ValidatePassWord(formData.password || "");
         const checkUsername = ValidateUsername(formData.username || "");
-
         if (checkFullName) {
             check = false;
             setFormError(preVal => {
                 return { ...preVal, fullname: checkFullName }
             })
         }
-
         if (checkEmail) {
             check = false;
             setFormError(preVal => {
                 return { ...preVal, email: checkEmail }
             })
         }
-
         if (checkPhone) {
             check = false;
             setFormError(preVal => {
                 return { ...preVal, phone: checkPhone }
             })
         }
-
         if (checkPassword && !userId) {
             check = false;
             setFormError(preVal => {
                 return { ...preVal, password: checkPassword }
             })
         }
-
         if (checkUsername && !userId) {
             check = false;
             setFormError(preVal => {
                 return { ...preVal, username: checkUsername }
             })
         }
-
         return check
     }
 
     const checkChangeFormData = (): boolean => {
-
         let check = true;
-
-        if (formData.fullName !== dataDefault.fullName) {
-            check = false;
-        }
-
-        if (formData.dateOfBirth !== dataDefault.dateOfBirth) {
-            check = false;
-        }
-
-        if (formData.gender !== dataDefault.gender) {
-            check = false;
-        }
-
-        if (formData.email !== dataDefault.email) {
-            check = false;
-        }
-
-        if (formData.phoneNumber !== dataDefault.phoneNumber) {
-            check = false;
-        }
-
-        if (formData.position !== dataDefault.position) {
-            check = false;
-        }
-
-        if (formData.address !== dataDefault.address) {
-            check = false;
-        }
-
-        if (formData.roleName !== dataDefault.roleName) {
-            check = false;
-        }
-
-        if (formData.avatar !== dataDefault.avatar) {
-            check = false;
-        }
-
+        if (formData.fullName !== dataDefault.fullName) check = false
+        if (formData.dateOfBirth !== dataDefault.dateOfBirth) check = false
+        if (formData.gender !== dataDefault.gender) check = false
+        if (formData.email !== dataDefault.email) check = false
+        if (formData.phoneNumber !== dataDefault.phoneNumber) check = false
+        if (formData.position !== dataDefault.position) check = false
+        if (formData.address !== dataDefault.address) check = false
+        if (formData.roleName !== dataDefault.roleName) check = false
+        if (formData.avatar !== dataDefault.avatar) check = false
         return check;
+    }
 
+    const formartDataUpate = (): DataTypeUpdateUserAdmin => {
+        const dataRequest: DataTypeUpdateUserAdmin = {
+            email: formData.email,
+            password: formData.password,
+            fullName: formData.fullName,
+            phoneNumber: formData.phoneNumber,
+            roleName: formData.roleName,
+            position: formData.position,
+            address: formData.address,
+            avatar: fileAvatar,
+            dateOfBirth: formData.dateOfBirth,
+            gender: formData.gender,
+        }
+        if (formData.fullName === dataDefault.fullName) delete dataRequest.fullName;
+        if (formData.dateOfBirth === dataDefault.dateOfBirth) delete dataRequest.dateOfBirth;
+        if (formData.gender === dataDefault.gender) delete dataRequest.gender;
+        if (formData.email === dataDefault.email) delete dataRequest.email;
+        if (formData.phoneNumber === dataDefault.phoneNumber) delete dataRequest.phoneNumber;
+        if (formData.position === dataDefault.position) delete dataRequest.position;
+        if (formData.address === dataDefault.address) delete dataRequest.address;
+        if (formData.roleName === dataDefault.roleName) delete dataRequest.roleName;
+        if (formData.avatar === dataDefault.avatar && fileAvatar === null) delete dataRequest.avatar;
+        return dataRequest;
+    }
+
+    const formartDataRegister = (): DataTypeCreateUserAdmin | null => {
+        try {
+            if (!formData.email) throw new Error("Email is required");
+            if (!formData.password) throw new Error("Password is required");
+            if (!formData.fullName) throw new Error("Fullname is required");
+            if (!formData.phoneNumber) throw new Error("Phone number is required");
+            if (!formData.roleName) throw new Error("Role is required");
+            if (!formData.position) throw new Error("Position is required");
+            if (!formData.address) throw new Error("Address is required");
+            if (!formData.dateOfBirth) throw new Error("Date of birth is required");
+            if (!formData.gender) throw new Error("Gender is required");
+            if (!formData.username) throw new Error("Username is required");
+
+            const dataRequest: DataTypeCreateUserAdmin = {
+                email: formData.email,
+                password: formData.password,
+                fullName: formData.fullName,
+                phoneNumber: formData.phoneNumber,
+                roleName: formData.roleName,
+                position: formData.position,
+                address: formData.address,
+                dateOfBirth: formData.dateOfBirth,
+                gender: formData.gender,
+                username: formData.username,
+            }
+
+            return dataRequest;
+
+        } catch (error: Error | any) {
+            setGlobalError(error.message);
+            return null;
+        }
     }
 
     const handleSubmit = () => {
         if (validate1() && validate2()) {
             setIsLoadingSubmit(true);
             if (userId) {
-                const dataRequest = { ...formData }
-                delete dataRequest.username;
-                if (formData.roleName === dataDefault.roleName) delete dataRequest.roleName;
-                UpdateAccountAPI(userId, dataRequest)
-                    .then(() => {
-                        const newData = {
-                            ...formData,
-                        }
-                        delete newData.username;
-                        setDataDefault(newData);
+                UpdateAccountAPI(userId, formartDataUpate())
+                    .then((response) => {
+                        setDataDefault({
+                            fullName: response.fullName,
+                            dateOfBirth: response.dateOfBirth,
+                            address: response.address,
+                            email: response.email,
+                            avatar: response.avatar,
+                            gender: response.gender,
+                            phoneNumber: response.phoneNumber,
+                            position: response.position,
+                            roleName: response.role.name,
+                            username: response.username,
+                        });
+                        setFormData({
+                            fullName: response.fullName,
+                            dateOfBirth: response.dateOfBirth,
+                            address: response.address,
+                            email: response.email,
+                            avatar: response.avatar,
+                            confirmPassword: "",
+                            password: "",
+                            gender: response.gender,
+                            phoneNumber: response.phoneNumber,
+                            position: response.position,
+                            roleName: response.role.name,
+                            username: response.username,
+                        });
                         return GetAccountsAPI();
                     }).then((response) => {
                         updateUsers(response.data);
@@ -383,10 +398,7 @@ export const EditUserComponent: React.FC<EditUserComponentProps> = ({ hideOverla
                     })
                 return;
             } else {
-                const dataRequest = { ...formData }
-                delete dataRequest.confirmPassword;
-                delete dataRequest.avatar;
-                RegisterAPI(dataRequest)
+                RegisterAPI(formartDataRegister())
                     .then(() => {
                         return GetAccountsAPI();
                     }).then((response) => {

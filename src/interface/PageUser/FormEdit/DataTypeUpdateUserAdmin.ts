@@ -1,5 +1,4 @@
-export interface FormDataUser {
-    username?: string;
+export default interface DataTypeUpdateUserAdmin {
     email?: string;
     password?: string;
     fullName?: string;
@@ -9,6 +8,6 @@ export interface FormDataUser {
     address?: string;
     gender?: string;
     dateOfBirth?: string;
-    avatar?: string;
+    avatar?: File | null;
     confirmPassword?: string;
 }
