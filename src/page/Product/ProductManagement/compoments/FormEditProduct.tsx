@@ -17,6 +17,7 @@ import CreateProductDetail from "../../../../services/product/CreateProductDetai
 
 interface FormEditProductProps {
     handleClose: () => void;
+    productId?: string;
 }
 
 interface OptionType {
@@ -43,7 +44,7 @@ interface FormDataType {
 
 const Utils: string[] = ["kg", "g", "l", "ml", "unit", "box", "carton"];
 
-const FormEditProduct: React.FC<FormEditProductProps> = ({ handleClose }) => {
+const FormEditProduct: React.FC<FormEditProductProps> = ({ productId, handleClose }) => {
 
     const [globalError, setGlobalError] = React.useState<string>("");
     const [globalSuccess, setGlobalSuccess] = React.useState<string>("");
@@ -86,6 +87,33 @@ const FormEditProduct: React.FC<FormEditProductProps> = ({ handleClose }) => {
             [e.target.name]: e.target.value
         })
     }
+
+    // React.useEffect(() => {
+    //     if (productId) {
+    //         GetProductById(productId)
+    //             .then((data) => {
+    //                 setFormData({
+    //                     name: data.name,
+    //                     description: data.description,
+    //                     unit: data.unit,
+    //                     weight: data.weight.toString(),
+    //                     productCode: data.productCode,
+    //                     length: data.dimension.split("x")[0],
+    //                     width: data.dimension.split("x")[1],
+    //                     height: data.dimension.split("x")[2],
+    //                     color: { value: data.color.id, label: data.color.name },
+    //                     branch: { value: data.brand.id, label: data.brand.name },
+    //                     model: { value: data.material.id, label: data.material.name },
+    //                     size: { value: data.size.id, label: data.size.name },
+    //                     category: { value: data.category.id, label: data.category.name },
+    //                     supplier: { value: data.supplier.id, label: data.supplier.name },
+    //                 })
+    //             })
+    //             .catch((error) => {
+    //                 setGlobalError(error.message);
+    //             })
+    //     }
+    // }, [productId]);
 
     React.useEffect(() => {
         const id = setTimeout(() => {

@@ -139,7 +139,9 @@ export const ProductManagement: React.FC = () => {
             }
             {
                 showFormEdit &&
-                <FormEditProduct handleClose={() => setShowFormEdit(false)} />
+                <FormEditProduct
+                    handleClose={() => setShowFormEdit(false)}
+                />
             }
             {
                 showModelConfirmDelete &&

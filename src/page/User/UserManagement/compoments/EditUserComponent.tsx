@@ -29,6 +29,7 @@ interface EditUserComponentProps {
 
 export const EditUserComponent: React.FC<EditUserComponentProps> = ({ hideOverlay, userId, updateUsers, updatePagination }) => {
 
+    const file = React.useRef<HTMLInputElement>(null);
     const [isLoading, setIsLoading] = React.useState<boolean>(false);
     const [isLoadingSubmit, setIsLoadingSubmit] = React.useState<boolean>(false);
     const [globalError, setGlobalError] = React.useState<string>("");
@@ -46,7 +47,7 @@ export const EditUserComponent: React.FC<EditUserComponentProps> = ({ hideOverla
         address: "",
         username: "",
         roleName: "",
-        image: "",
+        avatar: "",
     });
     const [formData, setFormData] = React.useState<FormDataUser>({
         fullName: "",
@@ -60,7 +61,7 @@ export const EditUserComponent: React.FC<EditUserComponentProps> = ({ hideOverla
         username: "",
         confirmPassword: "",
         password: "",
-        image: "",
+        avatar: "",
     });
     const [formError, setFormError] = React.useState<FormDataUser>({
         fullName: "",
@@ -74,7 +75,7 @@ export const EditUserComponent: React.FC<EditUserComponentProps> = ({ hideOverla
         username: "",
         confirmPassword: "",
         password: "",
-        image: "",
+        avatar: "",
     });
     const gender: Gender[] = [Gender.Male, Gender.Female, Gender.Others];
 
@@ -105,6 +106,7 @@ export const EditUserComponent: React.FC<EditUserComponentProps> = ({ hideOverla
                         address: response.address,
                         username: response.username,
                         roleName: response.role.name,
+                        avatar: response.avatar,
                     });
                     setDataDefault({
                         fullName: response.fullName,
@@ -116,6 +118,7 @@ export const EditUserComponent: React.FC<EditUserComponentProps> = ({ hideOverla
                         address: response.address,
                         username: response.username,
                         roleName: response.role.name,
+                        avatar: response.avatar,
                     });
                 }).catch((err) => {
                     console.error(err.message);
@@ -135,6 +138,20 @@ export const EditUserComponent: React.FC<EditUserComponentProps> = ({ hideOverla
             [name]: ""
         }));
     };
+
+    const handleChagleFile = (e: ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files?.[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onloadend = () => {
+                setFormData(preVal => ({
+                    ...preVal,
+                    [e.target.name]: reader.result as string
+                }))
+            }
+            reader.readAsDataURL(file);
+        }
+    }
 
     const validate1 = (): boolean => {
         let check = true;
@@ -315,6 +332,10 @@ export const EditUserComponent: React.FC<EditUserComponentProps> = ({ hideOverla
             check = false;
         }
 
+        if (formData.avatar !== dataDefault.avatar) {
+            check = false;
+        }
+
         return check;
 
     }
@@ -364,7 +385,7 @@ export const EditUserComponent: React.FC<EditUserComponentProps> = ({ hideOverla
             } else {
                 const dataRequest = { ...formData }
                 delete dataRequest.confirmPassword;
-                delete dataRequest.image;
+                delete dataRequest.avatar;
                 RegisterAPI(dataRequest)
                     .then(() => {
                         return GetAccountsAPI();
@@ -460,12 +481,29 @@ export const EditUserComponent: React.FC<EditUserComponentProps> = ({ hideOverla
                                 userId && (
                                     <Col className="d-flex align-items-center justify-content-center">
                                         <div className="position-relative">
-                                            <Image src="https://res.cloudinary.com/dlrionk8h/image/upload/v1727174250/er5mtiiis4yruphmbobm.jpg" rounded style={{ width: "200px", height: "auto" }} />
+                                            <Image
+                                                src={formData?.avatar || "/images/default-avt.png"}
+                                                thumbnail
+                                                style={{ width: "200px", height: "auto" }}
+                                            />
+                                            <Form.Control
+                                                type="file"
+                                                className="d-none"
+                                                name="avatar"
+                                                onChange={handleChagleFile}
+                                                accept="image/*"
+                                                ref={file}
+                                            />
                                             <div className="position-absolute bottom-0 end-0">
                                                 <button
                                                     className="btn btn-light btn-sm shadow-sm rounded-circle d-flex align-items-center justify-content-center text-primary"
                                                     style={{ width: "35px", height: "35px" }}
-                                                    onClick={() => { console.log("click") }}
+                                                    onClick={() => {
+                                                        if (file.current) {
+                                                            file.current.click();
+                                                        }
+                                                    }}
+                                                    disabled={!editUser}
                                                 >
                                                     <FontAwesomeIcon icon={faEdit} />
                                                 </button>
