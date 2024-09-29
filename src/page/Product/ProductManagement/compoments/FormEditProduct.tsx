@@ -505,9 +505,20 @@ const FormEditProduct: React.FC<FormEditProductProps> = ({ productId, handleClos
                             {imagePreviews.map((image, index) => (
                                 <div className="position-relative">
                                     <Image key={index} src={image} alt="preview" thumbnail width={240} height={240} />
-                                    <CloseButton className="position-absolute top-0 end-0 bg-light" onClick={() => { handleRemoveImage(index) }} />
+                                    <CloseButton
+                                        className="position-absolute bg-light"
+                                        onClick={() => { handleRemoveImage(index) }}
+                                        style={{ top: "0.5rem", right: "0.5rem" }}
+                                    />
                                 </div>
                             ))}
+                            {
+                                imagePreviews.length === 0 &&
+                                <div className="d-flex flex-column align-items-center justify-content-center gap-2 text-secondary">
+                                    <FontAwesomeIcon icon={faImage} size="3x" />
+                                    <span>No images</span>
+                                </div>
+                            }
                         </div>
                     </Row>
                 </Form>
