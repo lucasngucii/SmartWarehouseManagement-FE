@@ -20,7 +20,7 @@ interface EditAttributeValueProps {
     updatePagination: (data: PaginationType) => void;
 }
 
-export const EditAttributeValue: React.FC<EditAttributeValueProps> = ({ hideOverlay, attributeDetailId, attributeId, updateAttributeValues, updatePagination }) => {
+export const FormEditAttributes: React.FC<EditAttributeValueProps> = ({ hideOverlay, attributeDetailId, attributeId, updateAttributeValues, updatePagination }) => {
 
     const [formData, setFormData] = React.useState<Attribute>({
         name: "",

@@ -1,7 +1,7 @@
 import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPencilAlt, faSearch, faTrash } from '@fortawesome/free-solid-svg-icons';
-import { Button, Form, Table } from 'react-bootstrap';
+import { faPencilAlt, faTrash } from '@fortawesome/free-solid-svg-icons';
+import { Button, Table } from 'react-bootstrap';
 import GetSuppliers from '../../services/supplier/GetSuppliers';
 import Supplier from '../../interface/Supplier';
 import PaginationType from '../../interface/Pagination';
@@ -9,8 +9,11 @@ import { NoData } from '../../compoments/NoData/NoData';
 import Pagination from '../../compoments/Pagination/Pagination';
 import ModelConfirmDeleteSupplier from './compoments/ModelConfirmDeleteSupplier';
 import FormEditSupplier from './compoments/FormEditSupplier';
+import SpinnerLoading from "../../compoments/Loading/SpinnerLoading";
+import ToastMessage from "../../compoments/Toast/ToastMessage";
+import ToastContainerMessage from "../../compoments/Toast/ToastContainerMessage";
 
-export const SublierManagement: React.FC = () => {
+export const SupplierManagement: React.FC = () => {
 
     const [suppliers, setSuppliers] = React.useState<Supplier[]>([]);
     const [isLoading, setIsLoading] = React.useState<boolean>(false);
@@ -45,22 +48,25 @@ export const SublierManagement: React.FC = () => {
     }, []);
 
     React.useEffect(() => {
-        setIsLoading(true);
-        GetSuppliers({ offset: pagination.offset })
-            .then((response) => {
-                setSuppliers(response.data);
-                setPagination({
-                    limit: response.limit,
-                    offset: response.offset,
-                    totalPage: response.totalPage,
-                    totalElementOfPage: response.totalElementOfPage
-                });
-            }).catch((error) => {
+        const id = setTimeout(() => {
+            setIsLoading(true);
+            GetSuppliers({ offset: pagination.offset })
+                .then((response) => {
+                    setSuppliers(response.data);
+                    setPagination({
+                        limit: response.limit,
+                        offset: response.offset,
+                        totalPage: response.totalPage,
+                        totalElementOfPage: response.totalElementOfPage
+                    });
+                }).catch((error) => {
                 console.error(error);
                 setGlobalError(error.message);
             }).finally(() => {
                 setIsLoading(false);
             });
+        }, 1000);
+        return () => clearTimeout(id);
     }, [pagination.offset]);
 
     const handleDelete = (id: string) => {
@@ -83,7 +89,7 @@ export const SublierManagement: React.FC = () => {
         setPagination(pagination);
     }
 
-    const sublierList = suppliers.map((supplier, index) => {
+    const supplierList = suppliers.map((supplier, index) => {
         return (
             <tr key={supplier.id}>
                 <td>{index + 1}</td>
@@ -118,20 +124,14 @@ export const SublierManagement: React.FC = () => {
     );
 
     return (
-        <div>
+        <div className={"position-relative w-100 h-100"}>
             <div className="d-flex justify-content-between align-items-center mb-3">
                 <div>
                     <h2 className={"h2 fw-bold"}>Supplier Management</h2>
                     <p className={"h6"}>Manage your suppliers here</p>
                 </div>
                 <div className="d-flex flex-row gap-5">
-                    <div className="d-flex flex-row gap-2">
-                        <Form.Control className="p-2" type="text" placeholder="Search" />
-                        <Button variant="secondary">
-                            <FontAwesomeIcon icon={faSearch} />
-                        </Button>
-                    </div>
-                    <Button onClick={() => { setShowDetail(true) }} variant="success fw-bold">+ NEW</Button>
+                    <Button onClick={() => { setShowDetail(true) }} variant="info fw-bold text-light">+ NEW</Button>
                 </div>
             </div>
             <Table striped hover bordered>
@@ -148,14 +148,14 @@ export const SublierManagement: React.FC = () => {
                     </tr>
                 </thead>
                 <tbody>
-                    {sublierList}
+                    {supplierList}
                 </tbody>
             </Table>
             {
                 suppliers.length > 0 && <Pagination currentPage={pagination?.offset} totalPages={pagination?.totalPage} onPageChange={handleChangePage} />
             }
             {
-                (suppliers.length === 0 || globalError) && !isLoading && <NoData message={globalError} />
+                (suppliers.length === 0 || globalError) && !isLoading && <NoData />
             }
             {
                 showConfirmDelete &&
@@ -179,6 +179,12 @@ export const SublierManagement: React.FC = () => {
                         setSupplierId("");
                     }} />
             }
+            {
+                isLoading && <SpinnerLoading />
+            }
+            <ToastContainerMessage>
+                <ToastMessage message={globalError} type={"danger"} setMessage={() => {setGlobalError("")}} />
+            </ToastContainerMessage>
         </div>
     );
 };

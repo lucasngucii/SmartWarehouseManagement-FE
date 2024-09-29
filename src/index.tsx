@@ -13,7 +13,7 @@ import { UserManagement } from "./page/User/UserManagement";
 import { SKUManagement } from "./page/SKU/SKUManagement";
 import { AttributeManagement } from "./page/Attribute/AttributeManagement";
 import { ProductManagement } from "./page/Product/ProductManagement";
-import { SublierManagement } from './page/Supplier/SupplierManagement';
+import { SupplierManagement } from './page/Supplier/SupplierManagement';
 
 const router = createBrowserRouter([
     {
@@ -38,7 +38,7 @@ const router = createBrowserRouter([
             },
             {
                 path: "management-supplier",
-                element: <SublierManagement />,
+                element: <SupplierManagement />,
             },
             {
                 path: "management-attribute",

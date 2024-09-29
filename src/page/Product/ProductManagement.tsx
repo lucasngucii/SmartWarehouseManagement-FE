@@ -8,6 +8,9 @@ import PaginationType from '../../interface/Pagination';
 import Pagination from '../../compoments/Pagination/Pagination';
 import ModelConfirmDeleteProduct from './compoments/ModelConfirmDeleteProduct';
 import FormEditProduct from './compoments/FormEditProduct';
+import {NoData} from "../../compoments/NoData/NoData";
+import ToastMessage from "../../compoments/Toast/ToastMessage";
+import ToastContainerMessage from "../../compoments/Toast/ToastContainerMessage";
 
 
 export const ProductManagement: React.FC = () => {
@@ -98,20 +101,14 @@ export const ProductManagement: React.FC = () => {
     })
 
     return (
-        <div>
+        <div className={"position-relative h-100 w-100"}>
             <div className="d-flex justify-content-between align-items-center mb-3">
                 <div>
                     <h2 className={"h2 fw-bold"}>Product Management</h2>
                     <p className={"h6"}>Manage your products here</p>
                 </div>
                 <div className="d-flex flex-row gap-3">
-                    <div className="d-flex flex-row gap-2">
-                        <Form.Control className="p-2" type="text" placeholder="Search" />
-                        <Button variant="secondary">
-                            <FontAwesomeIcon icon={faSearch} />
-                        </Button>
-                    </div>
-                    <Button onClick={() => setShowFormEdit(true)} variant="success fw-bold">+ NEW</Button>
+                    <Button onClick={() => setShowFormEdit(true)} variant="info text-light fw-bold">+ NEW</Button>
                 </div>
             </div>
             <Table striped bordered hover>
@@ -130,12 +127,14 @@ export const ProductManagement: React.FC = () => {
                 </tbody>
             </Table>
             {
-                products.length > 0 &&
-                <Pagination
-                    currentPage={pagination.offset}
-                    totalPages={pagination?.totalPage}
-                    onPageChange={handleChangePage}
-                />
+                products.length > 0 ?
+                    <Pagination
+                        currentPage={pagination.offset}
+                        totalPages={pagination?.totalPage}
+                        onPageChange={handleChangePage}
+                    />
+                    :
+                    <NoData />
             }
             {
                 showFormEdit &&
@@ -152,6 +151,9 @@ export const ProductManagement: React.FC = () => {
                     updatePagination={updatePagination}
                 />
             }
+            <ToastContainerMessage>
+                <ToastMessage message={globalError} type={"danger"} setMessage={() => {setGlobalError("")}} />
+            </ToastContainerMessage>
         </div>
     )
 }

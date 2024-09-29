@@ -1,5 +1,5 @@
 import React from "react";
-import { EditAttributeValue } from "./EditAttributeValue";
+import { FormEditAttributes } from "./FormEditAttributes";
 import { OverLay } from "../../../compoments/OverLay/OverLay";
 import AttributeDetailType from "../../../interface/AttributeDetail";
 import GetAttributeDetail from "../../../services/attribute/GetAttributeDetail";
@@ -7,10 +7,19 @@ import PaginationType from "../../../interface/Pagination";
 import Pagination from "../../../compoments/Pagination/Pagination";
 import { NoData } from "../../../compoments/NoData/NoData";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faChevronLeft, faPencilAlt, faSearch, faTrash } from "@fortawesome/free-solid-svg-icons";
+import {
+    faChevronLeft,
+    faCubes, faList,
+    faPalette,
+    faPencilAlt, faRuler,
+    faTag,
+    faTrash
+} from "@fortawesome/free-solid-svg-icons";
 import ModelConfirmDeleteAttributeValue from "./ModelConfirmDeleteAttributeValue";
-import { Button, Form, Table } from "react-bootstrap";
+import { Button, Table } from "react-bootstrap";
 import SpinnerLoading from "../../../compoments/Loading/SpinnerLoading";
+import ToastMessage from "../../../compoments/Toast/ToastMessage";
+import ToastContainerMessage from "../../../compoments/Toast/ToastContainerMessage";
 
 interface AttributeValueManagementProps {
     handleCancelEditAttribute: () => void;
@@ -93,15 +102,40 @@ export const AttributeValueManagement: React.FC<AttributeValueManagementProps> =
     const getAttributeName = (attributeId: number) => {
         switch (attributeId) {
             case 1:
-                return "Color";
+                return (
+                    <div className={"d-flex flex-row align-items-center gap-3"}>
+                        <FontAwesomeIcon icon={faPalette}/>
+                        <span className="d-block">Color</span>
+                    </div>
+                )
             case 2:
-                return "Material";
+                return (
+                    <div className={"d-flex flex-row align-items-center gap-3"}>
+                        <FontAwesomeIcon icon={faCubes}/>
+                        <span className="d-block">Model</span>
+                    </div>
+                )
             case 3:
-                return "Brand";
+                return (
+                    <div className={"d-flex flex-row align-items-center gap-3"}>
+                        <FontAwesomeIcon icon={faTag}/>
+                        <span className="d-block">Brand</span>
+                    </div>
+                )
             case 4:
-                return "Size";
+                return (
+                    <div className={"d-flex flex-row align-items-center gap-3"}>
+                        <FontAwesomeIcon icon={faRuler}/>
+                        <span className="d-block">Size</span>
+                    </div>
+                )
             case 5:
-                return "Category";
+                return (
+                    <div className={"d-flex flex-row align-items-center gap-3"}>
+                        <FontAwesomeIcon icon={faList}/>
+                        <span className="d-block">Category</span>
+                    </div>
+                )
             default:
                 return "";
         }
@@ -138,8 +172,8 @@ export const AttributeValueManagement: React.FC<AttributeValueManagementProps> =
 
     return (
         <OverLay className="disabled-padding">
-            <div className="attribute-detail-management">
-                <div className="d-flex justify-content-between align-items-center mb-3">
+            <div className="attribute-detail-management w-100 h-100 p-4 bg-light position-relative">
+                <div className="d-flex justify-content-between align-items-center mb-4">
                     <div className="d-flex flex-row align-items-center gap-2">
                         <button
                             onClick={handleCancelEditAttribute}
@@ -147,16 +181,10 @@ export const AttributeValueManagement: React.FC<AttributeValueManagementProps> =
                         >
                             <FontAwesomeIcon icon={faChevronLeft} />
                         </button>
-                        <h2 className="mb-0 fw-bold">{`Attribute Detail: "${getAttributeName(attributeId)}"`}</h2>
+                        <h2 className="mb-0 fw-bold">{getAttributeName(attributeId)}</h2>
                     </div>
                     <div className="d-flex flex-row gap-3">
-                        <div className="d-flex flex-row gap-2">
-                            <Form.Control className="p-2" type="search" placeholder="Search" />
-                            <Button variant="secondary">
-                                <FontAwesomeIcon icon={faSearch} />
-                            </Button>
-                        </div>
-                        <Button onClick={handleAddAttributeValue} variant="success fw-bold">NEW +</Button>
+                        <Button onClick={handleAddAttributeValue} variant="info text-light fw-bold">NEW +</Button>
                     </div>
                 </div>
                 <Table hover striped bordered>
@@ -177,14 +205,14 @@ export const AttributeValueManagement: React.FC<AttributeValueManagementProps> =
                     attributeValues.length > 0 && <Pagination currentPage={pagination?.offset} totalPages={pagination?.totalPage} onPageChange={handleChangePage} />
                 }
                 {
-                    (attributeValues.length === 0 || globalError) && !isLoading && <NoData message={globalError} />
+                    (attributeValues.length === 0 || globalError) && !isLoading && <NoData />
                 }
                 {
                     isLoading && <SpinnerLoading />
                 }
                 {
                     showEditAttributeValue &&
-                    <EditAttributeValue
+                    <FormEditAttributes
                         attributeId={attributeId}
                         attributeDetailId={attributeValueId}
                         hideOverlay={handleCancelEditAttributeValue}
@@ -202,6 +230,9 @@ export const AttributeValueManagement: React.FC<AttributeValueManagementProps> =
                         updatePagination={updatePagination}
                     />
                 }
+                <ToastContainerMessage>
+                    <ToastMessage message={globalError} type={"danger"} setMessage={() => {setGlobalError("")}} />
+                </ToastContainerMessage>
             </div>
         </OverLay>
     );

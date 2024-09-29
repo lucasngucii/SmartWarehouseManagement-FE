@@ -10,6 +10,8 @@ import PaginationType from "../../interface/Pagination";
 import {Button, Table} from "react-bootstrap";
 import {Account} from "../../interface/Account";
 import SpinnerLoading from "../../compoments/Loading/SpinnerLoading";
+import ToastMessage from "../../compoments/Toast/ToastMessage";
+import ToastContainerMessage from "../../compoments/Toast/ToastContainerMessage";
 
 export const UserManagement: React.FC = () => {
 
@@ -46,22 +48,25 @@ export const UserManagement: React.FC = () => {
     }, []);
 
     React.useEffect(() => {
-        setIsLoading(true);
-        GetAccountsAPI({offset: pagination.offset})
-            .then((response) => {
-                setUsers(response.data);
-                setPagination({
-                    totalPage: response.totalPage,
-                    limit: response.limit,
-                    offset: response.offset,
-                    totalElementOfPage: response.totalElementOfPage
-                });
-            }).catch((error) => {
-            console.error(error);
-            setGlobalError(error.message);
-        }).finally(() => {
-            setIsLoading(false);
-        });
+        const id = setTimeout(() => {
+            setIsLoading(true);
+            GetAccountsAPI({offset: pagination.offset})
+                .then((response) => {
+                    setUsers(response.data);
+                    setPagination({
+                        totalPage: response.totalPage,
+                        limit: response.limit,
+                        offset: response.offset,
+                        totalElementOfPage: response.totalElementOfPage
+                    });
+                }).catch((error) => {
+                console.error(error);
+                setGlobalError(error.message);
+            }).finally(() => {
+                setIsLoading(false);
+            });
+        }, 1000);
+        return () => clearTimeout(id);
     }, [pagination.offset]);
 
     const handleHideOverlayModelUser = () => {
@@ -128,7 +133,7 @@ export const UserManagement: React.FC = () => {
     );
 
     return (
-        <div>
+        <div className={"w-100 h-100 position-relative"}>
             <div className="d-flex justify-content-between align-items-center mb-3">
                 <div>
                     <h2 className={"h2 fw-bold"}>User Account Management</h2>
@@ -161,7 +166,7 @@ export const UserManagement: React.FC = () => {
                                                 onPageChange={handleChangePage}/>
             }
             {
-                (users.length === 0 || globalError) && !isLoading && <NoData message={globalError}/>
+                (users.length === 0 || globalError) && !isLoading && <NoData />
             }
             {
                 isLoading && <SpinnerLoading/>
@@ -184,6 +189,9 @@ export const UserManagement: React.FC = () => {
                     updatePagination={updatePagination}
                 />
             }
+            <ToastContainerMessage>
+                <ToastMessage message={globalError} type={"danger"} setMessage={() => {setGlobalError("")}} />
+            </ToastContainerMessage>
         </div>
     );
 }
