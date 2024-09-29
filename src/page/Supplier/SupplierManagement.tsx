@@ -2,11 +2,11 @@ import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPencilAlt, faSearch, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { Button, Form, Table } from 'react-bootstrap';
-import GetSuppliers from '../../../services/supplier/GetSuppliers';
-import Supplier from '../../../interface/Supplier';
-import PaginationType from '../../../interface/Pagination';
-import { NoData } from '../../../compoments/NoData/NoData';
-import Pagination from '../../../compoments/Pagination/Pagination';
+import GetSuppliers from '../../services/supplier/GetSuppliers';
+import Supplier from '../../interface/Supplier';
+import PaginationType from '../../interface/Pagination';
+import { NoData } from '../../compoments/NoData/NoData';
+import Pagination from '../../compoments/Pagination/Pagination';
 import ModelConfirmDeleteSupplier from './compoments/ModelConfirmDeleteSupplier';
 import FormEditSupplier from './compoments/FormEditSupplier';
 

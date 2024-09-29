@@ -1,12 +1,12 @@
-import React, { ChangeEvent } from "react";
-import { Alert, Button, Col, Container, Form, Image, InputGroup, Row } from "react-bootstrap";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faChevronLeft, faEdit, faSave } from "@fortawesome/free-solid-svg-icons";
+import React, {ChangeEvent} from "react";
+import {Alert, Button, Col, Container, Form, Image, InputGroup, Row, Spinner} from "react-bootstrap";
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import {faChevronLeft, faEdit, faSave} from "@fortawesome/free-solid-svg-icons";
 import ChangePasswordForm from "./ChangePasswordForm";
-import { Account } from "../../../interface/Account";
+import {Account} from "../../../interface/Account";
 import PaginationType from "../../../interface/Pagination";
-import { Role } from "../../../interface/Role";
-import { DataTypeFormUser } from "../../../interface/PageUser/FormEdit/DataTypeFormUser";
+import {Role} from "../../../interface/Role";
+import {DataTypeFormUser} from "../../../interface/PageUser/FormEdit/DataTypeFormUser";
 import Gender from "../../../enum/Gender";
 import GetRolesAPI from "../../../services/authen-api/GetRolesAPI";
 import GetAccountById from "../../../services/authen-api/GetAccountById";
@@ -20,7 +20,10 @@ import DataTypeCreateUserAdmin from "../../../interface/PageUser/FormEdit/DataTy
 import UpdateAccountAPI from "../../../services/authen-api/UpdateAccountAPI";
 import GetAccountsAPI from "../../../services/authen-api/GetAccountsAPI";
 import RegisterAPI from "../../../services/authen-api/RegisterAPI";
-import { OverLay } from "../../../compoments/OverLay/OverLay";
+import {OverLay} from "../../../compoments/OverLay/OverLay";
+import SpinnerLoadingOverLayer from "../../../compoments/Loading/SpinnerLoadingOverLay";
+import ToastMessage from "../../../compoments/Toast/ToastMessage";
+import ToastContainerMessage from "../../../compoments/Toast/ToastContainerMessage";
 
 interface EditUserComponentProps {
     hideOverlay: () => void;
@@ -29,7 +32,12 @@ interface EditUserComponentProps {
     updatePagination: (response: PaginationType) => void;
 }
 
-export const EditUserComponent: React.FC<EditUserComponentProps> = ({ hideOverlay, userId, updateUsers, updatePagination }) => {
+export const EditUserComponent: React.FC<EditUserComponentProps> = ({
+                                                                        hideOverlay,
+                                                                        userId,
+                                                                        updateUsers,
+                                                                        updatePagination
+                                                                    }) => {
 
     const file = React.useRef<HTMLInputElement>(null);
     const [isLoading, setIsLoading] = React.useState<boolean>(false);
@@ -88,11 +96,11 @@ export const EditUserComponent: React.FC<EditUserComponentProps> = ({ hideOverla
             .then((response) => {
                 setRoles(response);
             }).catch((err) => {
-                console.error(err.message);
-                setGlobalError(err.message);
-            }).finally(() => {
-                setIsLoading(false);
-            })
+            console.error(err.message);
+            setGlobalError(err.message);
+        }).finally(() => {
+            setIsLoading(false);
+        })
     }, [])
 
     React.useEffect(() => {
@@ -108,14 +116,14 @@ export const EditUserComponent: React.FC<EditUserComponentProps> = ({ hideOverla
                         roleName: response.role.name,
                     });
                 }).catch((err) => {
-                    console.error(err.message);
-                    setGlobalError(err.message);
-                })
+                console.error(err.message);
+                setGlobalError(err.message);
+            })
         }
     }, [userId])
 
     const handleChangeInput = (e: ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
-        const { name, value } = e.target;
+        const {name, value} = e.target;
         setFormData(preVal => ({
             ...preVal,
             [name]: value
@@ -146,79 +154,79 @@ export const EditUserComponent: React.FC<EditUserComponentProps> = ({ hideOverla
         if (!formData.fullName) {
             check = false;
             setFormError(preVal => {
-                return { ...preVal, fullName: "Fullname is required" }
+                return {...preVal, fullName: "Fullname is required"}
             })
         }
         if (!formData.dateOfBirth) {
             check = false;
             setFormError(preVal => {
-                return { ...preVal, dateOfBirth: "Date of birth is required" }
+                return {...preVal, dateOfBirth: "Date of birth is required"}
             })
         }
         if (!formData.gender) {
             check = false;
             setFormError(preVal => {
-                return { ...preVal, gender: "Gender is required" }
+                return {...preVal, gender: "Gender is required"}
             })
         }
         if (!formData.roleName) {
             check = false;
             setFormError(preVal => {
-                return { ...preVal, role: "Role is required" }
+                return {...preVal, role: "Role is required"}
             })
         }
         if (!formData.email) {
             check = false;
             setFormError(preVal => {
-                return { ...preVal, email: "Email is required" }
+                return {...preVal, email: "Email is required"}
             })
         }
         if (!formData.phoneNumber) {
             check = false;
             setFormError(preVal => {
-                return { ...preVal, phoneNumber: "Phone is required" }
+                return {...preVal, phoneNumber: "Phone is required"}
             })
         }
         if (!formData.position) {
             check = false;
             setFormError(preVal => {
-                return { ...preVal, position: "Position is required" }
+                return {...preVal, position: "Position is required"}
             })
         }
         if (!formData.address) {
             check = false;
             setFormError(preVal => {
-                return { ...preVal, address: "Address is required" }
+                return {...preVal, address: "Address is required"}
             })
         }
         if (!formData.username && !userId) {
             check = false;
             setFormError(preVal => {
-                return { ...preVal, username: "Username is required" }
+                return {...preVal, username: "Username is required"}
             })
         }
         if (!formData.roleName) {
             check = false;
             setFormError(preVal => {
-                return { ...preVal, roleName: "Role is required" }
+                return {...preVal, roleName: "Role is required"}
             })
         }
         if (!formData.password && !userId) {
             check = false;
             setFormError(preVal => {
-                return { ...preVal, password: "Password is required" }
+                return {...preVal, password: "Password is required"}
             })
         }
         if (!formData.confirmPassword && !userId) {
             check = false;
             setFormError(preVal => {
-                return { ...preVal, confirmPassword: "Confirm password is required" }
+                return {...preVal, confirmPassword: "Confirm password is required"}
             })
         }
         if (formData.password !== formData.confirmPassword && !userId) {
             check = false;
             setFormError(preVal => {
-                return { ...preVal, confirmPassword: "Confirm password is not match" }
+                return {...preVal, confirmPassword: "Confirm password is not match"}
             })
         }
         return check
@@ -234,31 +242,31 @@ export const EditUserComponent: React.FC<EditUserComponentProps> = ({ hideOverla
         if (checkFullName) {
             check = false;
             setFormError(preVal => {
-                return { ...preVal, fullname: checkFullName }
+                return {...preVal, fullname: checkFullName}
             })
         }
         if (checkEmail) {
             check = false;
             setFormError(preVal => {
-                return { ...preVal, email: checkEmail }
+                return {...preVal, email: checkEmail}
             })
         }
         if (checkPhone) {
             check = false;
             setFormError(preVal => {
-                return { ...preVal, phone: checkPhone }
+                return {...preVal, phone: checkPhone}
             })
         }
         if (checkPassword && !userId) {
             check = false;
             setFormError(preVal => {
-                return { ...preVal, password: checkPassword }
+                return {...preVal, password: checkPassword}
             })
         }
         if (checkUsername && !userId) {
             check = false;
             setFormError(preVal => {
-                return { ...preVal, username: checkUsername }
+                return {...preVal, username: checkUsername}
             })
         }
         return check
@@ -316,7 +324,7 @@ export const EditUserComponent: React.FC<EditUserComponentProps> = ({ hideOverla
             if (!formData.gender) throw new Error("Gender is required");
             if (!formData.username) throw new Error("Username is required");
 
-            const dataRequest: DataTypeCreateUserAdmin = {
+            return {
                 email: formData.email,
                 password: formData.password,
                 fullName: formData.fullName,
@@ -328,8 +336,6 @@ export const EditUserComponent: React.FC<EditUserComponentProps> = ({ hideOverla
                 gender: formData.gender,
                 username: formData.username,
             }
-
-            return dataRequest;
 
         } catch (error: Error | any) {
             setGlobalError(error.message);
@@ -371,98 +377,96 @@ export const EditUserComponent: React.FC<EditUserComponentProps> = ({ hideOverla
                         });
                         return GetAccountsAPI();
                     }).then((response) => {
-                        updateUsers(response.data);
-                        updatePagination({
-                            totalPage: response.totalPage,
-                            limit: response.limit,
-                            offset: response.offset,
-                            totalElementOfPage: response.totalElementOfPage
-                        })
-                        setGlobalSuccess("Update user successfully!");
-                        setEditUser(false);
-                    }).catch((err) => {
-                        const message: string = err.message.toLowerCase();
-                        if (message.includes("password")) {
-                            setFormError(preVal => {
-                                return { ...preVal, password: err.message }
-                            })
-                        } else if (message.includes("role")) {
-                            setFormError(preVal => {
-                                return { ...preVal, roleName: err.message }
-                            })
-                        } else {
-                            setGlobalError(err.message);
-                        }
-                    }).finally(() => {
-                        setIsLoadingSubmit(false);
+                    updateUsers(response.data);
+                    updatePagination({
+                        totalPage: response.totalPage,
+                        limit: response.limit,
+                        offset: response.offset,
+                        totalElementOfPage: response.totalElementOfPage
                     })
+                    setGlobalSuccess("Update user successfully!");
+                    setEditUser(false);
+                }).catch((err) => {
+                    const message: string = err.message.toLowerCase();
+                    if (message.includes("password")) {
+                        setFormError(preVal => {
+                            return {...preVal, password: err.message}
+                        })
+                    } else if (message.includes("role")) {
+                        setFormError(preVal => {
+                            return {...preVal, roleName: err.message}
+                        })
+                    } else {
+                        setGlobalError(err.message);
+                    }
+                }).finally(() => {
+                    setIsLoadingSubmit(false);
+                })
                 return;
             } else {
                 RegisterAPI(formartDataRegister())
                     .then(() => {
                         return GetAccountsAPI();
                     }).then((response) => {
-                        updateUsers(response.data);
-                        updatePagination({
-                            totalPage: response.totalPage,
-                            limit: response.limit,
-                            offset: response.offset,
-                            totalElementOfPage: response.totalElementOfPage
-                        })
-                        setGlobalSuccess("Create user successfully!");
-                        setTimeout(() => {
-                            hideOverlay();
-                        }, 1000);
-                    }).catch((err) => {
-                        const message: string = err.message.toLowerCase();
-                        if (message.includes("password")) {
-                            setFormError(preVal => {
-                                return { ...preVal, password: err.message }
-                            })
-                        } else if (message.includes("role")) {
-                            setFormError(preVal => {
-                                return { ...preVal, roleName: err.message }
-                            })
-                        } else if (message.includes("username")) {
-                            setFormError(preVal => {
-                                return { ...preVal, username: err.message }
-                            })
-                        } else {
-                            setGlobalError(err.message);
-                        }
-                    }).finally(() => {
-                        setIsLoadingSubmit(false);
+                    updateUsers(response.data);
+                    updatePagination({
+                        totalPage: response.totalPage,
+                        limit: response.limit,
+                        offset: response.offset,
+                        totalElementOfPage: response.totalElementOfPage
                     })
+                    setGlobalSuccess("Create user successfully!");
+                    setTimeout(() => {
+                        hideOverlay();
+                    }, 1000);
+                }).catch((err) => {
+                    const message: string = err.message.toLowerCase();
+                    if (message.includes("password")) {
+                        setFormError(preVal => {
+                            return {...preVal, password: err.message}
+                        })
+                    } else if (message.includes("role")) {
+                        setFormError(preVal => {
+                            return {...preVal, roleName: err.message}
+                        })
+                    } else if (message.includes("username")) {
+                        setFormError(preVal => {
+                            return {...preVal, username: err.message}
+                        })
+                    } else {
+                        setGlobalError(err.message);
+                    }
+                }).finally(() => {
+                    setIsLoadingSubmit(false);
+                })
             }
         }
     }
 
     return (
         <OverLay className="disabled-padding">
-            <Container fluid className="w-100 h-100 p-4 bg-light">
+            <Container fluid className="w-100 h-100 p-4 bg-light position-relative">
                 <div className="d-flex justify-content-between align-items-center mb-3">
                     <div className="d-flex flex-row align-items-center gap-2">
                         <button
                             onClick={() => hideOverlay()}
                             className="btn fs-3 px-3 text-primary"
                         >
-                            <FontAwesomeIcon icon={faChevronLeft} />
+                            <FontAwesomeIcon icon={faChevronLeft}/>
                         </button>
                         <h2 className="fw-bold mb-0">{userId ? "Edit User" : "New User"}</h2>
                     </div>
-                    {globalError && <Alert onClose={() => setGlobalError("")} variant="danger" dismissible>{globalError}</Alert>}
-                    {globalSuccess && <Alert onClose={() => setGlobalSuccess("")} variant="success" dismissible>{globalSuccess}</Alert>}
                     {
                         userId &&
-                            editUser ? (
+                        editUser ? (
                             <div className="d-flex flex-row gap-2">
                                 <button
-                                    disabled={isLoadingSubmit || checkChangeFormData()}
+                                    disabled={checkChangeFormData()}
                                     onClick={() => handleSubmit()}
                                     className="btn btn-primary d-flex align-items-center"
                                 >
-                                    <FontAwesomeIcon icon={faSave} className="me-2" />
-                                    {isLoadingSubmit ? "Saving..." : "Save"}
+                                    <FontAwesomeIcon icon={faSave} className="me-2"/>
+                                    Save
                                 </button>
                                 <button
                                     disabled={isLoadingSubmit}
@@ -481,12 +485,12 @@ export const EditUserComponent: React.FC<EditUserComponentProps> = ({ hideOverla
                                 onClick={() => setEditUser(true)}
                                 className="btn btn-danger fw-bold d-flex align-items-center"
                             >
-                                <FontAwesomeIcon icon={faEdit} className="me-2" /> Edit
+                                <FontAwesomeIcon icon={faEdit} className="me-2"/> Edit
                             </button>
                         )
                     }
                 </div>
-                <Row className="p-4">
+                <Row className="p-4 shadow mx-2 rounded">
                     <Col md={6}>
                         <Row className="p-3">
                             {
@@ -496,7 +500,7 @@ export const EditUserComponent: React.FC<EditUserComponentProps> = ({ hideOverla
                                             <Image
                                                 src={formData?.avatar || "/images/default-avt.png"}
                                                 thumbnail
-                                                style={{ width: "200px", height: "auto" }}
+                                                style={{width: "250px", height: "auto"}}
                                             />
                                             <Form.Control
                                                 type="file"
@@ -509,7 +513,7 @@ export const EditUserComponent: React.FC<EditUserComponentProps> = ({ hideOverla
                                             <div className="position-absolute bottom-0 end-0">
                                                 <button
                                                     className="btn btn-light btn-sm shadow-sm rounded-circle d-flex align-items-center justify-content-center text-primary"
-                                                    style={{ width: "35px", height: "35px" }}
+                                                    style={{width: "35px", height: "35px"}}
                                                     onClick={() => {
                                                         if (file.current) {
                                                             file.current.click();
@@ -517,7 +521,7 @@ export const EditUserComponent: React.FC<EditUserComponentProps> = ({ hideOverla
                                                     }}
                                                     disabled={!editUser}
                                                 >
-                                                    <FontAwesomeIcon icon={faEdit} />
+                                                    <FontAwesomeIcon icon={faEdit}/>
                                                 </button>
                                             </div>
                                         </div>
@@ -731,8 +735,9 @@ export const EditUserComponent: React.FC<EditUserComponentProps> = ({ hideOverla
                                             </InputGroup>
                                             <Form.Text className="text-danger">{formError.confirmPassword}</Form.Text>
                                         </Form.Group>
-                                        <Button variant="primary" onClick={() => handleSubmit()} className="form-control py-3 fw-bold">
-                                            {isLoadingSubmit ? "Creating..." : "Create"}
+                                        <Button variant="primary" onClick={() => handleSubmit()}
+                                                className="form-control py-3 fw-bold">
+                                            Create
                                         </Button>
                                     </>
                                 )
@@ -740,8 +745,17 @@ export const EditUserComponent: React.FC<EditUserComponentProps> = ({ hideOverla
                         </div>
                     </Col>
                 </Row>
-                {userId != null && changePassword && <ChangePasswordForm userId={userId} hideOver={() => setChangePassword(false)} />}
-            </Container >
-        </OverLay >
+                {
+                    userId != null &&
+                    changePassword &&
+                    <ChangePasswordForm userId={userId} hideOver={() => setChangePassword(false)}/>
+                }
+                {(isLoading || isLoadingSubmit) && <SpinnerLoadingOverLayer/>}
+                <ToastContainerMessage>
+                    <ToastMessage message={globalSuccess} type={"success"} setMessage={() => {setGlobalSuccess("")}} />
+                    <ToastMessage message={globalError} type={"danger"} setMessage={() => {setGlobalError("")}} />
+                </ToastContainerMessage>
+            </Container>
+        </OverLay>
     );
 }

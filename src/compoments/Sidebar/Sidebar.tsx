@@ -1,7 +1,7 @@
 import React from "react";
 import "./Sidebar.css";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faTachometerAlt, faWarehouse, faBox, faUser } from '@fortawesome/free-solid-svg-icons';
+import {faTachometerAlt, faWarehouse, faBox, faUser, faBarcode, faTruck} from '@fortawesome/free-solid-svg-icons';
 import { SidebarItem } from "./compoments/SidebarItem";
 import { SidebarNav } from "./compoments/SidebarNav";
 import { SidebarLogo } from "./compoments/SidebarLogo";
@@ -16,11 +16,11 @@ export const Sidebar: React.FC = () => {
                 <SidebarItem
                     href={"/"}
                     icon={<FontAwesomeIcon icon={faTachometerAlt} />}
-                    lable={"Dashboard"}
+                    label={"Dashboard"}
                 />
                 <SidebarItem
                     icon={<FontAwesomeIcon icon={faWarehouse} />}
-                    lable={"Inventory"}
+                    label={"Inventory"}
                     subItems={
                         [
                             { href: "/stock-entry", lable: "Stock Entry" },
@@ -29,20 +29,28 @@ export const Sidebar: React.FC = () => {
                 />
                 <SidebarItem
                     icon={<FontAwesomeIcon icon={faBox} />}
-                    lable={"Products"}
+                    label={"Product"}
                     subItems={
                         [
                             { href: "/product-management", lable: "Manage Product" },
-                            { href: "/management-sku", lable: "Manage SKU" },
-                            { href: "/management-sublier", lable: "Manage Supplier" },
                             { href: "/management-attribute", lable: "Manage Attributes" },
                         ]
                     }
                 />
                 <SidebarItem
+                    href={"/management-supplier"}
+                    icon={<FontAwesomeIcon icon={faTruck} />}
+                    label={"Supplier"}
+                />
+                <SidebarItem
+                    href={"/management-sku"}
+                    icon={<FontAwesomeIcon icon={faBarcode} />}
+                    label={"SKU"}
+                />
+                <SidebarItem
                     href={"/management-user"}
                     icon={<FontAwesomeIcon icon={faUser} />}
-                    lable={"Users"}
+                    label={"User"}
                 />
             </SidebarNav>
         </div>

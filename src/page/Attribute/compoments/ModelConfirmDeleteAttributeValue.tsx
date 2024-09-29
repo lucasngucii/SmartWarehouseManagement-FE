@@ -1,10 +1,10 @@
 import React from "react";
-import { RePulseLoader } from "../../../../compoments/Loading/PulseLoader";
-import { OverLay } from "../../../../compoments/OverLay/OverLay";
-import AttributeDetailType from "../../../../interface/AttributeDetail";
-import DeleteAttributeValue from "../../../../services/attribute/DeleteAttributeValue";
-import GetAttributeDetail from "../../../../services/attribute/GetAttributeDetail";
-import PaginationType from "../../../../interface/Pagination";
+import { OverLay } from "../../../compoments/OverLay/OverLay";
+import AttributeDetailType from "../../../interface/AttributeDetail";
+import DeleteAttributeValue from "../../../services/attribute/DeleteAttributeValue";
+import GetAttributeDetail from "../../../services/attribute/GetAttributeDetail";
+import PaginationType from "../../../interface/Pagination";
+import SpinnerLoading from "../../../compoments/Loading/SpinnerLoading";
 
 interface ModelConfirmDeleteAttributeValueProps {
     attributeId: number;
@@ -49,7 +49,7 @@ const ModelConfirmDeleteAttributeValue: React.FC<ModelConfirmDeleteAttributeValu
                 <span className="primary-message-error text-center">{globalError}</span>
                 {
                     isLoading ?
-                        <RePulseLoader loading={isLoading} />
+                        <SpinnerLoading />
                         :
                         <div className="model-buttons">
                             <button className="btn btn-secondary" onClick={closeModelConfirmDelete}>Cancel</button>

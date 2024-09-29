@@ -1,15 +1,15 @@
 import React, { useState } from 'react';
-import { OverLay } from '../../../../compoments/OverLay/OverLay';
+import { OverLay } from '../../../compoments/OverLay/OverLay';
 import { Alert, Button, Col, Container, Form, Row } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronLeft, faEdit, faSave } from '@fortawesome/free-solid-svg-icons';
-import GetSupplierById from '../../../../services/supplier/GetSupplierById';
-import Supplier from '../../../../interface/Supplier';
-import UpdateSupplierById from '../../../../services/supplier/UpdateSupplierById';
-import PaginationType from '../../../../interface/Pagination';
-import GetSuppliers from '../../../../services/supplier/GetSuppliers';
-import CreateSupplier from '../../../../services/supplier/CreateSupplier';
-import FormDataTypes from '../../../../interface/FormDataSupplier';
+import GetSupplierById from '../../../services/supplier/GetSupplierById';
+import Supplier from '../../../interface/Supplier';
+import UpdateSupplierById from '../../../services/supplier/UpdateSupplierById';
+import PaginationType from '../../../interface/Pagination';
+import GetSuppliers from '../../../services/supplier/GetSuppliers';
+import CreateSupplier from '../../../services/supplier/CreateSupplier';
+import FormDataTypes from '../../../interface/FormDataSupplier';
 
 interface SupplierDetailProps {
     supplierId: string;

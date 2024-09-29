@@ -1,16 +1,16 @@
 import React from "react";
 import { EditAttributeValue } from "./EditAttributeValue";
-import { OverLay } from "../../../../compoments/OverLay/OverLay";
-import AttributeDetailType from "../../../../interface/AttributeDetail";
-import GetAttributeDetail from "../../../../services/attribute/GetAttributeDetail";
-import PaginationType from "../../../../interface/Pagination";
-import Pagination from "../../../../compoments/Pagination/Pagination";
-import { NoData } from "../../../../compoments/NoData/NoData";
-import { RePulseLoader } from "../../../../compoments/Loading/PulseLoader";
+import { OverLay } from "../../../compoments/OverLay/OverLay";
+import AttributeDetailType from "../../../interface/AttributeDetail";
+import GetAttributeDetail from "../../../services/attribute/GetAttributeDetail";
+import PaginationType from "../../../interface/Pagination";
+import Pagination from "../../../compoments/Pagination/Pagination";
+import { NoData } from "../../../compoments/NoData/NoData";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronLeft, faPencilAlt, faSearch, faTrash } from "@fortawesome/free-solid-svg-icons";
 import ModelConfirmDeleteAttributeValue from "./ModelConfirmDeleteAttributeValue";
 import { Button, Form, Table } from "react-bootstrap";
+import SpinnerLoading from "../../../compoments/Loading/SpinnerLoading";
 
 interface AttributeValueManagementProps {
     handleCancelEditAttribute: () => void;
@@ -179,7 +179,9 @@ export const AttributeValueManagement: React.FC<AttributeValueManagementProps> =
                 {
                     (attributeValues.length === 0 || globalError) && !isLoading && <NoData message={globalError} />
                 }
-                <RePulseLoader loading={isLoading} />
+                {
+                    isLoading && <SpinnerLoading />
+                }
                 {
                     showEditAttributeValue &&
                     <EditAttributeValue

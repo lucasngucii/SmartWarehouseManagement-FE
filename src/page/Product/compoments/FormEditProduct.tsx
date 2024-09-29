@@ -1,17 +1,17 @@
 import React from "react";
-import { OverLay } from "../../../../compoments/OverLay/OverLay";
+import { OverLay } from "../../../compoments/OverLay/OverLay";
 import { Alert, Button, CloseButton, Col, Container, Form, Image, Row } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronLeft, faImage, faImages } from "@fortawesome/free-solid-svg-icons";
 import Select from 'react-select';
-import GetSizesByName from "../../../../services/size/GetSizesByName";
-import GetColorsByName from "../../../../services/color/GetColorsByName";
-import GetBrandsByName from "../../../../services/brand/GetBrandsByName";
-import GetMaterialsByName from "../../../../services/material/GetMaterialsByName";
-import GetCategoriesByName from "../../../../services/category/GetCategoriesByName";
-import GetSuppliersByName from "../../../../services/supplier/GetSuppliersByName";
-import DataTypeCreateProductAdmin from "../../../../interface/PageProduct/FormEdit/DataTypeCreateProductAdmin";
-import CreateProduct from "../../../../services/product/CreateProduct";
+import GetSizesByName from "../../../services/size/GetSizesByName";
+import GetColorsByName from "../../../services/color/GetColorsByName";
+import GetBrandsByName from "../../../services/brand/GetBrandsByName";
+import GetMaterialsByName from "../../../services/material/GetMaterialsByName";
+import GetCategoriesByName from "../../../services/category/GetCategoriesByName";
+import GetSuppliersByName from "../../../services/supplier/GetSuppliersByName";
+import DataTypeCreateProductAdmin from "../../../interface/PageProduct/FormEdit/DataTypeCreateProductAdmin";
+import CreateProduct from "../../../services/product/CreateProduct";
 
 interface FormEditProductProps {
     handleClose: () => void;
@@ -504,7 +504,13 @@ const FormEditProduct: React.FC<FormEditProductProps> = ({ productId, handleClos
                         <div className="d-flex flex-row flex-wrap gap-3 justify-content-center">
                             {imagePreviews.map((image, index) => (
                                 <div className="position-relative">
-                                    <Image key={index} src={image} alt="preview" thumbnail width={240} height={240} />
+                                    <Image
+                                        key={index}
+                                        src={image}
+                                        alt="preview"
+                                        thumbnail
+                                        style={{ width: "250px", height: "auto" }}
+                                    />
                                     <CloseButton
                                         className="position-absolute bg-light"
                                         onClick={() => { handleRemoveImage(index) }}

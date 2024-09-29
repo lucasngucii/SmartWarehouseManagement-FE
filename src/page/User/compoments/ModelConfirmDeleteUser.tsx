@@ -4,7 +4,7 @@ import PaginationType from "../../../interface/Pagination";
 import DeleteAccountAPI from "../../../services/authen-api/DeleteAccountAPI";
 import GetAccountsAPI from "../../../services/authen-api/GetAccountsAPI";
 import { OverLay } from "../../../compoments/OverLay/OverLay";
-import { RePulseLoader } from "../../../compoments/Loading/PulseLoader";
+import SpinnerLoading from "../../../compoments/Loading/SpinnerLoading";
 
 interface ModelConfirmDeleteUserProps {
     userId: string;
@@ -48,7 +48,7 @@ export const ModelConfirmDeleteUser: React.FC<ModelConfirmDeleteUserProps> = ({ 
                 <span className="primary-message-error text-center">{globalError}</span>
                 {
                     isLoading ?
-                        <RePulseLoader loading={isLoading} />
+                        <SpinnerLoading />
                         :
                         <div className="model-buttons">
                             <button className="btn btn-secondary" onClick={closeModelConfirmDelete}>Cancel</button>

@@ -1,16 +1,16 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEdit } from "@fortawesome/free-solid-svg-icons";
-import { OverLay } from "../../../../compoments/OverLay/OverLay";
+import { OverLay } from "../../../compoments/OverLay/OverLay";
 import React from "react";
-import AddAttributeValue from "../../../../services/attribute/AddAttributeValue";
-import Attribute from "../../../../interface/Attribute";
-import GetAttributeDetail from "../../../../services/attribute/GetAttributeDetail";
-import PaginationType from "../../../../interface/Pagination";
-import AttributeDetailType from "../../../../interface/AttributeDetail";
+import AddAttributeValue from "../../../services/attribute/AddAttributeValue";
+import Attribute from "../../../interface/Attribute";
+import GetAttributeDetail from "../../../services/attribute/GetAttributeDetail";
+import PaginationType from "../../../interface/Pagination";
+import AttributeDetailType from "../../../interface/AttributeDetail";
 import { Alert, Button, CloseButton, Col, Form, Row } from "react-bootstrap";
-import GetAttributeValueById from "../../../../services/attribute/GetAttributeValueById";
-import UpdateAttributeValue from "../../../../services/attribute/UpdateAttributeValue";
-import validateVietnamese from "../../../../util/validateVietnamese";
+import GetAttributeValueById from "../../../services/attribute/GetAttributeValueById";
+import UpdateAttributeValue from "../../../services/attribute/UpdateAttributeValue";
+import validateVietnamese from "../../../util/validateVietnamese";
 
 interface EditAttributeValueProps {
     hideOverlay: () => void;

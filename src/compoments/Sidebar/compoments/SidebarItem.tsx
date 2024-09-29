@@ -5,11 +5,11 @@ import { NavLink, useLocation } from "react-router-dom";
 interface SidebarItemProps {
     href?: string,
     icon: React.ReactNode,
-    lable: string,
+    label: string,
     subItems?: { href: string, lable: string }[]
 }
 
-export const SidebarItem: React.FC<SidebarItemProps> = ({ href, icon, lable, subItems }) => {
+export const SidebarItem: React.FC<SidebarItemProps> = ({ href, icon, label, subItems }) => {
 
     const location = useLocation();
     const [isOpen, setIsOpen] = React.useState(false);
@@ -44,7 +44,7 @@ export const SidebarItem: React.FC<SidebarItemProps> = ({ href, icon, lable, sub
                     <div className={"sidebar-icon"}>
                         {icon}
                     </div>
-                    <span>{lable}</span>
+                    <span>{label}</span>
                 </NavLink>
             </li>
         )
@@ -59,7 +59,7 @@ export const SidebarItem: React.FC<SidebarItemProps> = ({ href, icon, lable, sub
                 <div className={"sidebar-icon"}>
                     {icon}
                 </div>
-                <span>{lable}</span>
+                <span>{label}</span>
                 {subItems && (
                     <div className={`sidebar-toggle-icon ${isOpen ? "rotate" : ""}`}>
                         <FontAwesomeIcon icon={faChevronUp} />

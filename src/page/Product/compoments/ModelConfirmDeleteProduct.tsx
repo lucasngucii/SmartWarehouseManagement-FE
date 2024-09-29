@@ -1,11 +1,11 @@
 import React from "react";
-import { OverLay } from "../../../../compoments/OverLay/OverLay";
-import { RePulseLoader } from "../../../../compoments/Loading/PulseLoader";
-import PaginationType from "../../../../interface/Pagination";
-import { Product } from "../../../../interface/Entity/Product";
-import GetProducts from "../../../../services/product/GetProducts";
+import { OverLay } from "../../../compoments/OverLay/OverLay";
+import PaginationType from "../../../interface/Pagination";
+import { Product } from "../../../interface/Entity/Product";
+import GetProducts from "../../../services/product/GetProducts";
 import { Alert } from "react-bootstrap";
-import DeleteProductById from "../../../../services/product/DeleteProductById";
+import DeleteProductById from "../../../services/product/DeleteProductById";
+import SpinnerLoading from "../../../compoments/Loading/SpinnerLoading";
 
 interface ModelConfirmDeleteUserProps {
     productId: string;
@@ -52,7 +52,7 @@ const ModelConfirmDeleteProduct: React.FC<ModelConfirmDeleteUserProps> = ({ prod
                 <p>Are you sure you want to delete this product?</p>
                 {
                     isLoading ?
-                        <RePulseLoader loading={isLoading} />
+                        <SpinnerLoading />
                         :
                         <div className="model-buttons">
                             <button className="btn btn-secondary" onClick={closeModelConfirmDelete}>Cancel</button>
