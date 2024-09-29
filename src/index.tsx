@@ -9,7 +9,7 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { Dashboard } from "./page/Dashboard/Dashboard";
 import { Login } from "./compoments/Login/Login";
-import { UserManagement } from "./page/User/UserManagement/./UserManagement";
+import { UserManagement } from "./page/User/UserManagement";
 import { SKUManagement } from "./page/Product/SKUManagement/SKUManagement";
 import { AttributeManagement } from "./page/Product/AttributeManagement/AttributeManagement";
 import { ProductManagement } from "./page/Product/ProductManagement/ProductManagement";

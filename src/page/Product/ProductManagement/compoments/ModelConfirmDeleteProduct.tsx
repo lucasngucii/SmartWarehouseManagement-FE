@@ -2,7 +2,7 @@ import React from "react";
 import { OverLay } from "../../../../compoments/OverLay/OverLay";
 import { RePulseLoader } from "../../../../compoments/Loading/PulseLoader";
 import PaginationType from "../../../../interface/Pagination";
-import { Product } from "../../../../interface/Product";
+import { Product } from "../../../../interface/Entity/Product";
 import GetProducts from "../../../../services/product/GetProducts";
 import { Alert } from "react-bootstrap";
 import DeleteProductById from "../../../../services/product/DeleteProductById";

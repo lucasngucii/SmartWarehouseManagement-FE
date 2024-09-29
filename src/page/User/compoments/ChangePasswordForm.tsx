@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { Form, Button, Alert, Container, CloseButton } from 'react-bootstrap';
-import { OverLay } from '../../../../compoments/OverLay/OverLay';
-import ValidatePassWord from '../../../../util/validatePassword';
-import UpdateAccountAPI from '../../../../services/authen-api/UpdateAccountAPI';
+import ValidatePassWord from '../../../util/validatePassword';
+import UpdateAccountAPI from '../../../services/authen-api/UpdateAccountAPI';
+import { OverLay } from '../../../compoments/OverLay/OverLay';
 
 interface ChangePasswordFormProps {
   userId: string;

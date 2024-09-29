@@ -1,8 +1,8 @@
 import React from "react";
 import { OverLay } from "../../../../compoments/OverLay/OverLay";
-import { Alert, Col, Container, Form, Row } from "react-bootstrap";
+import { Alert, Button, CloseButton, Col, Container, Form, Image, Row } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faChevronLeft } from "@fortawesome/free-solid-svg-icons";
+import { faChevronLeft, faImage, faImages } from "@fortawesome/free-solid-svg-icons";
 import Select from 'react-select';
 import GetSizesByName from "../../../../services/size/GetSizesByName";
 import GetColorsByName from "../../../../services/color/GetColorsByName";
@@ -10,10 +10,8 @@ import GetBrandsByName from "../../../../services/brand/GetBrandsByName";
 import GetMaterialsByName from "../../../../services/material/GetMaterialsByName";
 import GetCategoriesByName from "../../../../services/category/GetCategoriesByName";
 import GetSuppliersByName from "../../../../services/supplier/GetSuppliersByName";
-import CreateProductHeader from "../../../../services/product/CreateProductHeader";
-import ProductHeader from "../../../../interface/ProductHeader";
-import ProductDetail from "../../../../interface/ProductDetail";
-import CreateProductDetail from "../../../../services/product/CreateProductDetail";
+import DataTypeCreateProductAdmin from "../../../../interface/PageProduct/FormEdit/DataTypeCreateProductAdmin";
+import CreateProduct from "../../../../services/product/CreateProduct";
 
 interface FormEditProductProps {
     handleClose: () => void;
@@ -46,6 +44,7 @@ const Utils: string[] = ["kg", "g", "l", "ml", "unit", "box", "carton"];
 
 const FormEditProduct: React.FC<FormEditProductProps> = ({ productId, handleClose }) => {
 
+    const uploadRef = React.useRef<HTMLInputElement>(null);
     const [globalError, setGlobalError] = React.useState<string>("");
     const [globalSuccess, setGlobalSuccess] = React.useState<string>("");
     const [loading, setLoading] = React.useState<boolean>(false);
@@ -56,6 +55,8 @@ const FormEditProduct: React.FC<FormEditProductProps> = ({ productId, handleClos
     const [size, setSize] = React.useState<string>("");
     const [category, setCategory] = React.useState<string>("");
     const [supplier, setSupplier] = React.useState<string>("");
+    const [images, setImages] = React.useState<File[]>([]);
+    const [imagePreviews, setImagePreviews] = React.useState<string[]>([]);
 
     const [colors, setColors] = React.useState<OptionType[]>([]);
     const [branches, setBranches] = React.useState<OptionType[]>([]);
@@ -88,33 +89,6 @@ const FormEditProduct: React.FC<FormEditProductProps> = ({ productId, handleClos
         })
     }
 
-    // React.useEffect(() => {
-    //     if (productId) {
-    //         GetProductById(productId)
-    //             .then((data) => {
-    //                 setFormData({
-    //                     name: data.name,
-    //                     description: data.description,
-    //                     unit: data.unit,
-    //                     weight: data.weight.toString(),
-    //                     productCode: data.productCode,
-    //                     length: data.dimension.split("x")[0],
-    //                     width: data.dimension.split("x")[1],
-    //                     height: data.dimension.split("x")[2],
-    //                     color: { value: data.color.id, label: data.color.name },
-    //                     branch: { value: data.brand.id, label: data.brand.name },
-    //                     model: { value: data.material.id, label: data.material.name },
-    //                     size: { value: data.size.id, label: data.size.name },
-    //                     category: { value: data.category.id, label: data.category.name },
-    //                     supplier: { value: data.supplier.id, label: data.supplier.name },
-    //                 })
-    //             })
-    //             .catch((error) => {
-    //                 setGlobalError(error.message);
-    //             })
-    //     }
-    // }, [productId]);
-
     React.useEffect(() => {
         const id = setTimeout(() => {
             GetColorsByName(color)
@@ -125,7 +99,6 @@ const FormEditProduct: React.FC<FormEditProductProps> = ({ productId, handleClos
                     setGlobalError(error.message);
                 });
         }, 1000);
-
         return () => clearTimeout(id);
     }, [color]);
 
@@ -139,7 +112,6 @@ const FormEditProduct: React.FC<FormEditProductProps> = ({ productId, handleClos
                     setGlobalError(error.message);
                 });
         }, 1000);
-
         return () => clearTimeout(id);
     }, [branch]);
 
@@ -153,7 +125,6 @@ const FormEditProduct: React.FC<FormEditProductProps> = ({ productId, handleClos
                     setGlobalError(error.message);
                 });
         }, 1000);
-
         return () => clearTimeout(id);
     }, [model]);
 
@@ -167,7 +138,6 @@ const FormEditProduct: React.FC<FormEditProductProps> = ({ productId, handleClos
                     setGlobalError(error.message);
                 });
         }, 1000);
-
         return () => clearTimeout(id);
     }, [size]);
 
@@ -181,7 +151,6 @@ const FormEditProduct: React.FC<FormEditProductProps> = ({ productId, handleClos
                     setGlobalError(error.message);
                 });
         }, 1000);
-
         return () => clearTimeout(id);
     }, [category]);
 
@@ -195,20 +164,16 @@ const FormEditProduct: React.FC<FormEditProductProps> = ({ productId, handleClos
                     setGlobalError(error.message);
                 });
         }, 1000);
-
         return () => clearTimeout(id);
     }, [supplier]);
 
-    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-        e.preventDefault();
-        const dataHeader: ProductHeader = {
+    const formartData = (): DataTypeCreateProductAdmin => {
+        return {
             name: formData.name,
             unit: formData.unit,
             categoryId: formData.category!.value,
             description: formData.description,
             productCode: formData.productCode,
-        }
-        const dataDetail: ProductDetail = {
             supplierId: formData.supplier!.value,
             colorId: formData.color!.value,
             sizeId: formData.size!.value,
@@ -216,14 +181,14 @@ const FormEditProduct: React.FC<FormEditProductProps> = ({ productId, handleClos
             brandId: formData.branch!.value,
             dimension: `${formData.length}x${formData.width}x${formData.height}`,
             weight: Number(formData.weight),
-            description: formData.description,
+            image: images,
         }
+    }
 
+    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
         setLoading(true);
-        CreateProductHeader(dataHeader)
-            .then((data) => {
-                return CreateProductDetail(data.id, dataDetail);
-            })
+        CreateProduct(formartData())
             .then(() => {
                 setGlobalSuccess("Create product success");
                 setTimeout(() => {
@@ -236,6 +201,25 @@ const FormEditProduct: React.FC<FormEditProductProps> = ({ productId, handleClos
             .finally(() => {
                 setLoading(false);
             })
+    }
+
+    const handleChangeFile = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const files: FileList | null = e.target.files;
+        if (files !== null) {
+            const listFiles: File[] = [];
+            for (let i = 0; i < files.length; i++) {
+                listFiles.push(files[i]);
+                imagePreviews.push(URL.createObjectURL(files[i]));
+            }
+            setImages(listFiles);
+        }
+    }
+
+    const handleRemoveImage = (index: number) => {
+        const newImages = images.filter((_, i) => i !== index);
+        const newPreviews = imagePreviews.filter((_, i) => i !== index);
+        setImages(newImages);
+        setImagePreviews(newPreviews);
     }
 
     return (
@@ -255,7 +239,7 @@ const FormEditProduct: React.FC<FormEditProductProps> = ({ productId, handleClos
                     {globalSuccess && <Alert onClose={() => setGlobalSuccess("")} variant="success" dismissible>{globalSuccess}</Alert>}
                 </div>
                 <Form onSubmit={handleSubmit}>
-                    <Row className="p-4">
+                    <Row className="px-4">
                         <Col md={6} className="p-3">
                             <h5 className="fw-semibold border-bottom pb-2 mb-3">Product Details</h5>
                             <Form.Group className="mb-3">
@@ -490,9 +474,41 @@ const FormEditProduct: React.FC<FormEditProductProps> = ({ productId, handleClos
                                     type="submit"
                                     className="btn btn-primary fw-bold py-3"
                                     value={loading ? "Loading..." : "Create"}
+                                    disabled={loading}
                                 />
                             </Row>
                         </Col>
+                    </Row>
+                    <Row className="p-3">
+                        <div className="border-bottom pb-2 mb-3 d-flex justify-content-between">
+                            <h5 className="fw-semibold d-flex align-items-center">
+                                <FontAwesomeIcon icon={faImages} className="me-2" />
+                                Images
+                            </h5>
+                            <Button
+                                variant="outline-primary"
+                                className="fw-semibold"
+                                onClick={() => { uploadRef.current?.click() }}
+                            >+ Add Images</Button>
+                        </div>
+                        <Form.Group className="mb-3">
+                            <Form.Control
+                                ref={uploadRef}
+                                type="file"
+                                placeholder="Enter name supplier"
+                                className="py-3 d-none"
+                                multiple
+                                onChange={handleChangeFile}
+                            />
+                        </Form.Group>
+                        <div className="d-flex flex-row flex-wrap gap-3 justify-content-center">
+                            {imagePreviews.map((image, index) => (
+                                <div className="position-relative">
+                                    <Image key={index} src={image} alt="preview" thumbnail width={240} height={240} />
+                                    <CloseButton className="position-absolute top-0 end-0 bg-light" onClick={() => { handleRemoveImage(index) }} />
+                                </div>
+                            ))}
+                        </div>
                     </Row>
                 </Form>
             </Container >

@@ -1,5 +1,5 @@
 import axios from "axios";
-import { Product } from "../../interface/Product";
+import { Product } from "../../interface/Entity/Product";
 import { ResponseError } from "../../interface/ResponseError";
 import Order from "../../enum/Order";
 

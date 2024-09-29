@@ -2,14 +2,14 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPencilAlt, faSearch, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { EditUserComponent } from "./compoments/EditUserComponent";
 import React from "react";
-import { RePulseLoader } from "../../../compoments/Loading/PulseLoader";
-import { NoData } from "../../../compoments/NoData/NoData";
+import { RePulseLoader } from "../../compoments/Loading/PulseLoader";
+import { NoData } from "../../compoments/NoData/NoData";
 import { ModelConfirmDeleteUser } from "./compoments/ModelConfirmDeleteUser";
-import GetAccountsAPI from "../../../services/authen-api/GetAccountsAPI";
-import Pagination from "../../../compoments/Pagination/Pagination";
-import PaginationType from "../../../interface/Pagination";
+import GetAccountsAPI from "../../services/authen-api/GetAccountsAPI";
+import Pagination from "../../compoments/Pagination/Pagination";
+import PaginationType from "../../interface/Pagination";
 import { Button, Form, Table } from "react-bootstrap";
-import { Account } from "../../../interface/Account";
+import { Account } from "../../interface/Account";
 
 export const UserManagement: React.FC = () => {
 

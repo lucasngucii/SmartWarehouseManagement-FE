@@ -1,5 +1,5 @@
 import React from 'react'
-import { Product } from '../../../interface/Product'
+import { Product } from '../../../interface/Entity/Product'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faInfoCircle, faSearch, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { Button, Form, Table } from 'react-bootstrap';

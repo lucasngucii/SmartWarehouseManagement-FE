@@ -1,10 +1,10 @@
 import React from "react";
-import { OverLay } from "../../../../compoments/OverLay/OverLay";
-import { Account } from "../../../../interface/Account";
-import { RePulseLoader } from "../../../../compoments/Loading/PulseLoader";
-import DeleteAccountAPI from "../../../../services/authen-api/DeleteAccountAPI";
-import GetAccountsAPI from "../../../../services/authen-api/GetAccountsAPI";
-import PaginationType from "../../../../interface/Pagination";
+import { Account } from "../../../interface/Account";
+import PaginationType from "../../../interface/Pagination";
+import DeleteAccountAPI from "../../../services/authen-api/DeleteAccountAPI";
+import GetAccountsAPI from "../../../services/authen-api/GetAccountsAPI";
+import { OverLay } from "../../../compoments/OverLay/OverLay";
+import { RePulseLoader } from "../../../compoments/Loading/PulseLoader";
 
 interface ModelConfirmDeleteUserProps {
     userId: string;

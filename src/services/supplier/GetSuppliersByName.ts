@@ -8,7 +8,7 @@ interface Supplier {
 }
 
 const GetSuppliersByName = async (name: string): Promise<Supplier[]> => {
-
+    console.log(name)
     try {
         const HOST = process.env.REACT_APP_HOST_BE;
         const token = localStorage.getItem('token');
@@ -22,6 +22,7 @@ const GetSuppliersByName = async (name: string): Promise<Supplier[]> => {
         });
         return response.data.data;
     } catch (error) {
+        console.error(error);
         if (axios.isAxiosError(error) && error.response) {
             const data = error.response.data as ResponseError;
             throw new Error(data.message || "An unexpected error occurred.");
