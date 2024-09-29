@@ -1,4 +1,4 @@
-export default function ValidatePassWord(password: string): string {
+export default function ValidatePassword(password: string): string {
     const passwordRegexString = process.env.REACT_APP_PASSWORD_REGEX;
 
     if (!passwordRegexString) {

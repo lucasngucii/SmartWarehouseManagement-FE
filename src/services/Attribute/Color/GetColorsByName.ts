@@ -1,13 +1,13 @@
 import axios from "axios";
-import { ResponseError } from "../../interface/ResponseError";
+import { ResponseError } from "../../../interface/ResponseError";
 
-interface Size {
+interface Color {
     id: string;
     name: string;
     description: string;
 }
 
-const GetSizesByName = async (name: string): Promise<Size[]> => {
+const GetColorsByName = async (name: string): Promise<Color[]> => {
 
     try {
         const HOST = process.env.REACT_APP_HOST_BE;
@@ -15,7 +15,7 @@ const GetSizesByName = async (name: string): Promise<Size[]> => {
 
         if (!token) throw new Error('Token not found');
 
-        const response = await axios.get(`${HOST}/sizes/name?name=${name}`, {
+        const response = await axios.get(`${HOST}/colors/name?name=${name}`, {
             headers: {
                 'Authorization': `Bearer ${token}`
             }
@@ -31,4 +31,4 @@ const GetSizesByName = async (name: string): Promise<Size[]> => {
     }
 }
 
-export default GetSizesByName;
+export default GetColorsByName;

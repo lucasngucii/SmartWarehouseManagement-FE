@@ -3,7 +3,7 @@ import { Product } from '../../interface/Entity/Product'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faInfoCircle, faSearch, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { Button, Form, Table } from 'react-bootstrap';
-import GetProducts from '../../services/product/GetProducts';
+import GetProducts from '../../services/Product/GetProducts';
 import PaginationType from '../../interface/Pagination';
 import Pagination from '../../compoments/Pagination/Pagination';
 import ModelConfirmDeleteProduct from './compoments/ModelConfirmDeleteProduct';

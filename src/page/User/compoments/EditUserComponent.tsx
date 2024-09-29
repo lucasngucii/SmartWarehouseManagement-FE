@@ -8,18 +8,18 @@ import PaginationType from "../../../interface/Pagination";
 import {Role} from "../../../interface/Role";
 import {DataTypeFormUser} from "../../../interface/PageUser/FormEdit/DataTypeFormUser";
 import Gender from "../../../enum/Gender";
-import GetRolesAPI from "../../../services/authen-api/GetRolesAPI";
-import GetAccountById from "../../../services/authen-api/GetAccountById";
-import validateFullname from "../../../util/validateFullName";
-import validateEmail from "../../../util/validateEmail";
-import validatePhone from "../../../util/validatePhone";
-import ValidatePassWord from "../../../util/validatePassword";
-import ValidateUsername from "../../../util/validateUsername";
+import GetRolesAPI from "../../../services/Authen/GetRolesAPI";
+import GetAccountById from "../../../services/Authen/GetAccountById";
+import validateFullName from "../../../util/Validate/ValidateFullName";
+import validateEmail from "../../../util/Validate/ValidateEmail";
+import validatePhone from "../../../util/Validate/ValidatePhone";
+import ValidatePassword from "../../../util/Validate/ValidatePassword";
+import ValidateUsername from "../../../util/Validate/ValidateUsername";
 import DataTypeUpdateUserAdmin from "../../../interface/PageUser/FormEdit/DataTypeUpdateUserAdmin";
 import DataTypeCreateUserAdmin from "../../../interface/PageUser/FormEdit/DataTypeCreateUserAdmin";
-import UpdateAccountAPI from "../../../services/authen-api/UpdateAccountAPI";
-import GetAccountsAPI from "../../../services/authen-api/GetAccountsAPI";
-import RegisterAPI from "../../../services/authen-api/RegisterAPI";
+import UpdateAccountAPI from "../../../services/Authen/UpdateAccountAPI";
+import GetAccountsAPI from "../../../services/Authen/GetAccountsAPI";
+import RegisterAPI from "../../../services/Authen/RegisterAPI";
 import {OverLay} from "../../../compoments/OverLay/OverLay";
 import SpinnerLoadingOverLayer from "../../../compoments/Loading/SpinnerLoadingOverLay";
 import ToastMessage from "../../../compoments/Toast/ToastMessage";
@@ -234,10 +234,10 @@ export const EditUserComponent: React.FC<EditUserComponentProps> = ({
 
     const validate2 = (): boolean => {
         let check = true;
-        const checkFullName = validateFullname(formData.fullName || "");
+        const checkFullName = validateFullName(formData.fullName || "");
         const checkEmail = validateEmail(formData.email || "");
         const checkPhone = validatePhone(formData.phoneNumber || "");
-        const checkPassword = ValidatePassWord(formData.password || "");
+        const checkPassword = ValidatePassword(formData.password || "");
         const checkUsername = ValidateUsername(formData.username || "");
         if (checkFullName) {
             check = false;

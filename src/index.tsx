@@ -7,7 +7,7 @@ import {
 } from "react-router-dom";
 import App from './App';
 import reportWebVitals from './reportWebVitals';
-import { Dashboard } from "./page/Dashboard/Dashboard";
+import ProtectedDashboard from "./page/Dashboard/Dashboard";
 import { Login } from "./compoments/Login/Login";
 import { UserManagement } from "./page/User/UserManagement";
 import { SKUManagement } from "./page/SKU/SKUManagement";
@@ -26,26 +26,26 @@ const router = createBrowserRouter([
         children: [
             {
                 index: true,
-                element: <Dashboard />,
+                element: <ProtectedDashboard />,
             },
             {
                 path: "management-user",
                 element: <UserManagement />,
             },
             {
-                path: "management-sku",
+                path: "management-SKU",
                 element: <SKUManagement />,
             },
             {
-                path: "management-supplier",
+                path: "management-Supplier",
                 element: <SupplierManagement />,
             },
             {
-                path: "management-attribute",
+                path: "management-Attribute",
                 element: <AttributeManagement />,
             },
             {
-                path: "product-management",
+                path: "Product-management",
                 element: <ProductManagement />,
             }
         ]

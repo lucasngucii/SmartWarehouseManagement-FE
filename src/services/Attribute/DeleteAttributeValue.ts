@@ -1,6 +1,6 @@
 import axios from "axios";
 import { ResponseError } from "../../interface/ResponseError";
-import returnNameAttribute from "../../util/returnNameAttribute";
+import returnNameAttribute from "../../util/ReturnNameAttribute";
 
 const DeleteAttributeValue = async (id: number, attributeValueId: string): Promise<void> => {
 

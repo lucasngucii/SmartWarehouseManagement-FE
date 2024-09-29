@@ -4,7 +4,7 @@ import {EditUserComponent} from "./compoments/EditUserComponent";
 import React from "react";
 import {NoData} from "../../compoments/NoData/NoData";
 import {ModelConfirmDeleteUser} from "./compoments/ModelConfirmDeleteUser";
-import GetAccountsAPI from "../../services/authen-api/GetAccountsAPI";
+import GetAccountsAPI from "../../services/Authen/GetAccountsAPI";
 import Pagination from "../../compoments/Pagination/Pagination";
 import PaginationType from "../../interface/Pagination";
 import {Button, Table} from "react-bootstrap";

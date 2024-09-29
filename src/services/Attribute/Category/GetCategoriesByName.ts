@@ -1,13 +1,13 @@
 import axios from "axios";
-import { ResponseError } from "../../interface/ResponseError";
+import { ResponseError } from "../../../interface/ResponseError";
 
-interface Brand {
+interface Category {
     id: string;
     name: string;
     description: string;
 }
 
-const GetBrandsByName = async (name: string): Promise<Brand[]> => {
+const GetCategoriesByName = async (name: string): Promise<Category[]> => {
 
     try {
         const HOST = process.env.REACT_APP_HOST_BE;
@@ -15,7 +15,7 @@ const GetBrandsByName = async (name: string): Promise<Brand[]> => {
 
         if (!token) throw new Error('Token not found');
 
-        const response = await axios.get(`${HOST}/brands/name?name=${name}`, {
+        const response = await axios.get(`${HOST}/categories/name?name=${name}`, {
             headers: {
                 'Authorization': `Bearer ${token}`
             }
@@ -31,4 +31,4 @@ const GetBrandsByName = async (name: string): Promise<Brand[]> => {
     }
 }
 
-export default GetBrandsByName;
+export default GetCategoriesByName;

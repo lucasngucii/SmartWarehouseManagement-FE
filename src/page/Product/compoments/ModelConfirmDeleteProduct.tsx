@@ -2,9 +2,9 @@ import React from "react";
 import { OverLay } from "../../../compoments/OverLay/OverLay";
 import PaginationType from "../../../interface/Pagination";
 import { Product } from "../../../interface/Entity/Product";
-import GetProducts from "../../../services/product/GetProducts";
+import GetProducts from "../../../services/Product/GetProducts";
 import { Alert } from "react-bootstrap";
-import DeleteProductById from "../../../services/product/DeleteProductById";
+import DeleteProductById from "../../../services/Product/DeleteProductById";
 import SpinnerLoading from "../../../compoments/Loading/SpinnerLoading";
 
 interface ModelConfirmDeleteUserProps {

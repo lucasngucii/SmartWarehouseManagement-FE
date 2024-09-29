@@ -1,8 +1,8 @@
 import React from "react";
 import { OverLay } from "../../../compoments/OverLay/OverLay";
 import AttributeDetailType from "../../../interface/AttributeDetail";
-import DeleteAttributeValue from "../../../services/attribute/DeleteAttributeValue";
-import GetAttributeDetail from "../../../services/attribute/GetAttributeDetail";
+import DeleteAttributeValue from "../../../services/Attribute/DeleteAttributeValue";
+import GetAttributeDetail from "../../../services/Attribute/GetAttributeDetail";
 import PaginationType from "../../../interface/Pagination";
 import SpinnerLoading from "../../../compoments/Loading/SpinnerLoading";
 

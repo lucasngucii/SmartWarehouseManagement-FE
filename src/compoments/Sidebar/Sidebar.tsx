@@ -32,18 +32,18 @@ export const Sidebar: React.FC = () => {
                     label={"Product"}
                     subItems={
                         [
-                            { href: "/product-management", lable: "Manage Product" },
-                            { href: "/management-attribute", lable: "Manage Attributes" },
+                            { href: "/Product-management", lable: "Manage Product" },
+                            { href: "/management-Attribute", lable: "Manage Attributes" },
                         ]
                     }
                 />
                 <SidebarItem
-                    href={"/management-supplier"}
+                    href={"/management-Supplier"}
                     icon={<FontAwesomeIcon icon={faTruck} />}
                     label={"Supplier"}
                 />
                 <SidebarItem
-                    href={"/management-sku"}
+                    href={"/management-SKU"}
                     icon={<FontAwesomeIcon icon={faBarcode} />}
                     label={"SKU"}
                 />

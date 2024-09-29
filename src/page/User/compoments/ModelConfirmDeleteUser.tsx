@@ -1,8 +1,8 @@
 import React from "react";
 import { Account } from "../../../interface/Account";
 import PaginationType from "../../../interface/Pagination";
-import DeleteAccountAPI from "../../../services/authen-api/DeleteAccountAPI";
-import GetAccountsAPI from "../../../services/authen-api/GetAccountsAPI";
+import DeleteAccountAPI from "../../../services/Authen/DeleteAccountAPI";
+import GetAccountsAPI from "../../../services/Authen/GetAccountsAPI";
 import { OverLay } from "../../../compoments/OverLay/OverLay";
 import SpinnerLoading from "../../../compoments/Loading/SpinnerLoading";
 

@@ -1,7 +1,7 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import LoginAPI from "../../services/authen-api/LoginAPI";
-import GetProfileByTokenAPI from "../../services/authen-api/GetProfileByTokenAPI";
+import LoginAPI from "../../services/Authen/LoginAPI";
+import GetProfileByTokenAPI from "../../services/Authen/GetProfileByTokenAPI";
 import { Button, Col, Container, Form, Row } from "react-bootstrap";
 
 interface formDataType {

@@ -2,7 +2,7 @@ import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPencilAlt, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { Button, Table } from 'react-bootstrap';
-import GetSuppliers from '../../services/supplier/GetSuppliers';
+import GetSuppliers from '../../services/Supplier/GetSuppliers';
 import Supplier from '../../interface/Supplier';
 import PaginationType from '../../interface/Pagination';
 import { NoData } from '../../compoments/NoData/NoData';

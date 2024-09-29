@@ -4,14 +4,16 @@ import { Alert, Button, CloseButton, Col, Container, Form, Image, Row } from "re
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronLeft, faImage, faImages } from "@fortawesome/free-solid-svg-icons";
 import Select from 'react-select';
-import GetSizesByName from "../../../services/size/GetSizesByName";
-import GetColorsByName from "../../../services/color/GetColorsByName";
-import GetBrandsByName from "../../../services/brand/GetBrandsByName";
-import GetMaterialsByName from "../../../services/material/GetMaterialsByName";
-import GetCategoriesByName from "../../../services/category/GetCategoriesByName";
-import GetSuppliersByName from "../../../services/supplier/GetSuppliersByName";
+import GetSizesByName from "../../../services/Attribute/Size/GetSizesByName";
+import GetColorsByName from "../../../services/Attribute/Color/GetColorsByName";
+import GetBrandsByName from "../../../services/Attribute/Brand/GetBrandsByName";
+import GetMaterialsByName from "../../../services/Attribute/Material/GetMaterialsByName";
+import GetCategoriesByName from "../../../services/Attribute/Category/GetCategoriesByName";
+import GetSuppliersByName from "../../../services/Supplier/GetSuppliersByName";
 import DataTypeCreateProductAdmin from "../../../interface/PageProduct/FormEdit/DataTypeCreateProductAdmin";
-import CreateProduct from "../../../services/product/CreateProduct";
+import CreateProduct from "../../../services/Product/CreateProduct";
+import ToastMessage from "../../../compoments/Toast/ToastMessage";
+import ToastContainerMessage from "../../../compoments/Toast/ToastContainerMessage";
 
 interface FormEditProductProps {
     handleClose: () => void;
@@ -190,7 +192,7 @@ const FormEditProduct: React.FC<FormEditProductProps> = ({ productId, handleClos
         setLoading(true);
         CreateProduct(formartData())
             .then(() => {
-                setGlobalSuccess("Create product success");
+                setGlobalSuccess("Create Product success");
                 setTimeout(() => {
                     handleClose();
                 }, 1000);
@@ -224,7 +226,7 @@ const FormEditProduct: React.FC<FormEditProductProps> = ({ productId, handleClos
 
     return (
         <OverLay className="disabled-padding">
-            <Container fluid className="bg-light h-100 w-100 p-4" >
+            <Container fluid className="bg-light h-100 w-100 p-4 position-relative">
                 <div className="d-flex justify-content-between align-items-center mb-3">
                     <div className="d-flex flex-row align-items-center gap-2">
                         <button
@@ -235,8 +237,6 @@ const FormEditProduct: React.FC<FormEditProductProps> = ({ productId, handleClos
                         </button>
                         <h2 className="fw-bold mb-0">{"New Product"}</h2>
                     </div>
-                    {globalError && <Alert onClose={() => setGlobalError("")} variant="danger" dismissible>{globalError}</Alert>}
-                    {globalSuccess && <Alert onClose={() => setGlobalSuccess("")} variant="success" dismissible>{globalSuccess}</Alert>}
                 </div>
                 <Form onSubmit={handleSubmit}>
                     <Row className="px-4">
@@ -528,6 +528,10 @@ const FormEditProduct: React.FC<FormEditProductProps> = ({ productId, handleClos
                         </div>
                     </Row>
                 </Form>
+                <ToastContainerMessage position={"top-end"}>
+                    <ToastMessage message={globalError} type={"danger"} setMessage={() => {setGlobalError("")}} />
+                    <ToastMessage message={globalSuccess} type={"success"} setMessage={() => {setGlobalSuccess("")}} />
+                </ToastContainerMessage>
             </Container >
         </OverLay >
     )

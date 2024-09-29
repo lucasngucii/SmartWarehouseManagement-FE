@@ -5,8 +5,8 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUser, faBell, faChevronDown } from '@fortawesome/free-solid-svg-icons';
 import { DropDownMenu } from "./compoments/DropDownMenu";
 import { ModelClose } from "./compoments/ModelClose";
-import GetProfile from "../../util/getProfile";
-import LogoutAPI from "../../services/authen-api/LogoutAPI";
+import GetProfile from "../../util/GetProfile";
+import LogoutAPI from "../../services/Authen/LogoutAPI";
 
 const ContentHeader: React.FC = () => {
 
@@ -72,10 +72,10 @@ const ContentHeader: React.FC = () => {
             <div className='header-date'>{currentDate}</div>
             <div className='header-icons'>
                 <FontAwesomeIcon icon={faBell} className="header-icon" title="Notifications" />
-                <div className="account-container" onClick={toggleDropdown} ref={dropdownRef}>
-                    <div className='user-info'>
+                <div className="account-container shadow" onClick={toggleDropdown} ref={dropdownRef}>
+                    <div className='user-info gap-2'>
                         <FontAwesomeIcon icon={faUser} className="header-icon" title="User" />
-                        <span className='account-username'>{myProfile?.username || "John Doe"}</span>
+                        <span className='account-username text-nowrap'>{myProfile?.username || "John Doe"}</span>
                         <FontAwesomeIcon icon={faChevronDown} title="Options" />
                     </div>
                     {dropdownOpen && <DropDownMenu openModelLogout={openModelLogout} />}

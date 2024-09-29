@@ -2,15 +2,15 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEdit } from "@fortawesome/free-solid-svg-icons";
 import { OverLay } from "../../../compoments/OverLay/OverLay";
 import React from "react";
-import AddAttributeValue from "../../../services/attribute/AddAttributeValue";
+import AddAttributeValue from "../../../services/Attribute/AddAttributeValue";
 import Attribute from "../../../interface/Attribute";
-import GetAttributeDetail from "../../../services/attribute/GetAttributeDetail";
+import GetAttributeDetail from "../../../services/Attribute/GetAttributeDetail";
 import PaginationType from "../../../interface/Pagination";
 import AttributeDetailType from "../../../interface/AttributeDetail";
 import { Alert, Button, CloseButton, Col, Form, Row } from "react-bootstrap";
-import GetAttributeValueById from "../../../services/attribute/GetAttributeValueById";
-import UpdateAttributeValue from "../../../services/attribute/UpdateAttributeValue";
-import validateVietnamese from "../../../util/validateVietnamese";
+import GetAttributeValueById from "../../../services/Attribute/GetAttributeValueById";
+import UpdateAttributeValue from "../../../services/Attribute/UpdateAttributeValue";
+import validateVietnamese from "../../../util/Validate/ValidateVietnamese";
 
 interface EditAttributeValueProps {
     hideOverlay: () => void;
@@ -80,7 +80,7 @@ export const FormEditAttributes: React.FC<EditAttributeValueProps> = ({ hideOver
                         offset: response.offset,
                         totalElementOfPage: response.totalElementOfPage
                     });
-                    setGlobalSuccess("Update attribute value successfully");
+                    setGlobalSuccess("Update Attribute value successfully");
                     setEditAttributeValue(false);
                 }).catch((error) => {
                     console.error(error);
@@ -100,7 +100,7 @@ export const FormEditAttributes: React.FC<EditAttributeValueProps> = ({ hideOver
                         offset: response.offset,
                         totalElementOfPage: response.totalElementOfPage
                     });
-                    setGlobalSuccess("Create attribute value successfully");
+                    setGlobalSuccess("Create Attribute value successfully");
                     setTimeout(() => {
                         hideOverlay();
                     }, 1000)

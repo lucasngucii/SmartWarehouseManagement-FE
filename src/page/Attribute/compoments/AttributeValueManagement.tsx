@@ -2,7 +2,7 @@ import React from "react";
 import { FormEditAttributes } from "./FormEditAttributes";
 import { OverLay } from "../../../compoments/OverLay/OverLay";
 import AttributeDetailType from "../../../interface/AttributeDetail";
-import GetAttributeDetail from "../../../services/attribute/GetAttributeDetail";
+import GetAttributeDetail from "../../../services/Attribute/GetAttributeDetail";
 import PaginationType from "../../../interface/Pagination";
 import Pagination from "../../../compoments/Pagination/Pagination";
 import { NoData } from "../../../compoments/NoData/NoData";

@@ -1,4 +1,4 @@
-export default function validateFullname(fullName: string): string {
+export default function validateFullName(fullName: string): string {
     const fullNameRegexString = process.env.REACT_APP_FULLNAME_REGEX;
 
     if (!fullNameRegexString) {

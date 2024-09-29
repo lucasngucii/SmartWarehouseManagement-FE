@@ -1,13 +1,13 @@
 import axios from "axios";
-import { ResponseError } from "../../interface/ResponseError";
+import { ResponseError } from "../../../interface/ResponseError";
 
-interface Material {
+interface Brand {
     id: string;
     name: string;
     description: string;
 }
 
-const GetMaterialsByName = async (name: string): Promise<Material[]> => {
+const GetBrandsByName = async (name: string): Promise<Brand[]> => {
 
     try {
         const HOST = process.env.REACT_APP_HOST_BE;
@@ -15,7 +15,7 @@ const GetMaterialsByName = async (name: string): Promise<Material[]> => {
 
         if (!token) throw new Error('Token not found');
 
-        const response = await axios.get(`${HOST}/materials/name?name=${name}`, {
+        const response = await axios.get(`${HOST}/brands/name?name=${name}`, {
             headers: {
                 'Authorization': `Bearer ${token}`
             }
@@ -31,4 +31,4 @@ const GetMaterialsByName = async (name: string): Promise<Material[]> => {
     }
 }
 
-export default GetMaterialsByName;
+export default GetBrandsByName;

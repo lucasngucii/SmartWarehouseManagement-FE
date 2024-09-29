@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Form, Button, Alert, Container, CloseButton } from 'react-bootstrap';
-import ValidatePassWord from '../../../util/validatePassword';
-import UpdateAccountAPI from '../../../services/authen-api/UpdateAccountAPI';
+import ValidatePassword from '../../../util/Validate/ValidatePassword';
+import UpdateAccountAPI from '../../../services/Authen/UpdateAccountAPI';
 import { OverLay } from '../../../compoments/OverLay/OverLay';
 
 interface ChangePasswordFormProps {
@@ -23,8 +23,8 @@ const ChangePasswordForm: React.FC<ChangePasswordFormProps> = ({ userId, hideOve
     if (newPassword !== confirmPassword) {
       setErrorMessage('Confirmation password does not match.');
       setSuccessMessage('');
-    } else if (ValidatePassWord(newPassword)) {
-      setErrorMessage(ValidatePassWord(newPassword));
+    } else if (ValidatePassword(newPassword)) {
+      setErrorMessage(ValidatePassword(newPassword));
       setSuccessMessage('');
     } else {
       setIsLoading(true);

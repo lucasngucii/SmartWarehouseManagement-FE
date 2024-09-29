@@ -1,7 +1,7 @@
 import axios from "axios";
 import AttributeDetailType from "../../interface/AttributeDetail";
 import { ResponseError } from "../../interface/ResponseError";
-import returnNameAttribute from "../../util/returnNameAttribute";
+import returnNameAttribute from "../../util/ReturnNameAttribute";
 import Order from "../../enum/Order";
 
 interface GetAttributeDetailResponse {

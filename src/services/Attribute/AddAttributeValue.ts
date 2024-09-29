@@ -1,6 +1,6 @@
 import axios from "axios";
 import { ResponseError } from "../../interface/ResponseError";
-import returnNameAttribute from "../../util/returnNameAttribute";
+import returnNameAttribute from "../../util/ReturnNameAttribute";
 import Attribute from "../../interface/Attribute";
 
 const AddAttributeValue = async (id: number, data: Attribute): Promise<void> => {

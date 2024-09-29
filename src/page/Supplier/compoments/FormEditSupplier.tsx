@@ -3,12 +3,12 @@ import { OverLay } from '../../../compoments/OverLay/OverLay';
 import { Alert, Button, Col, Container, Form, Row } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronLeft, faEdit, faSave } from '@fortawesome/free-solid-svg-icons';
-import GetSupplierById from '../../../services/supplier/GetSupplierById';
+import GetSupplierById from '../../../services/Supplier/GetSupplierById';
 import Supplier from '../../../interface/Supplier';
-import UpdateSupplierById from '../../../services/supplier/UpdateSupplierById';
+import UpdateSupplierById from '../../../services/Supplier/UpdateSupplierById';
 import PaginationType from '../../../interface/Pagination';
-import GetSuppliers from '../../../services/supplier/GetSuppliers';
-import CreateSupplier from '../../../services/supplier/CreateSupplier';
+import GetSuppliers from '../../../services/Supplier/GetSuppliers';
+import CreateSupplier from '../../../services/Supplier/CreateSupplier';
 import FormDataTypes from '../../../interface/FormDataSupplier';
 
 interface SupplierDetailProps {
@@ -215,7 +215,7 @@ const FormEditSupplier: React.FC<SupplierDetailProps> = ({ supplierId, hideOverl
                             totalElementOfPage: response.totalElementOfPage,
                             totalPage: response.totalPage
                         });
-                        setGlobalSuccess("Update supplier successfully");
+                        setGlobalSuccess("Update Supplier successfully");
                         setDataDefault(formData);
                         setIsEditing(false);
                     }).catch((error) => {
@@ -250,7 +250,7 @@ const FormEditSupplier: React.FC<SupplierDetailProps> = ({ supplierId, hideOverl
                             totalElementOfPage: response.totalElementOfPage,
                             totalPage: response.totalPage
                         });
-                        setGlobalSuccess("Create supplier successfully");
+                        setGlobalSuccess("Create Supplier successfully");
                         setTimeout(() => {
                             hideOverlay();
                         }, 1000);
