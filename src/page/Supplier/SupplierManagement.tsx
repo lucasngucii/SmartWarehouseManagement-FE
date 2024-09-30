@@ -41,11 +41,11 @@ export const SupplierManagement: React.FC = () => {
                 });
             }).catch((error) => {
                 console.error(error);
-
+                dispatch({type: ActionTypeEnum.ERROR, message: error.message});
             }).finally(() => {
                 setIsLoading(false);
             });
-    }, []);
+    }, [dispatch]);
 
     React.useEffect(() => {
         const id = setTimeout(() => {

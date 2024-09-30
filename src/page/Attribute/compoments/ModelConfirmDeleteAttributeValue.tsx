@@ -35,6 +35,7 @@ const ModelConfirmDeleteAttributeValue: React.FC<ModelConfirmDeleteAttributeValu
                     totalElementOfPage: response.totalElementOfPage
                 });
                 closeModelConfirmDelete();
+                dispatch({type: ActionTypeEnum.SUCCESS, message: "Delete attribute value successfully"});
             }).catch((error) => {
                 console.error(error);
                 dispatch({type: ActionTypeEnum.ERROR, message: error.message});

@@ -1,13 +1,13 @@
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faEdit } from "@fortawesome/free-solid-svg-icons";
-import { OverLay } from "../../../compoments/OverLay/OverLay";
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import {faEdit} from "@fortawesome/free-solid-svg-icons";
+import {OverLay} from "../../../compoments/OverLay/OverLay";
 import React from "react";
 import AddAttributeValue from "../../../services/Attribute/AddAttributeValue";
 import Attribute from "../../../interface/Attribute";
 import GetAttributeDetail from "../../../services/Attribute/GetAttributeDetail";
 import PaginationType from "../../../interface/Pagination";
 import AttributeDetailType from "../../../interface/AttributeDetail";
-import { Button, CloseButton, Col, Form, Row } from "react-bootstrap";
+import {Button, CloseButton, Col, Form, Row} from "react-bootstrap";
 import GetAttributeValueById from "../../../services/Attribute/GetAttributeValueById";
 import UpdateAttributeValue from "../../../services/Attribute/UpdateAttributeValue";
 import validateVietnamese from "../../../util/Validate/ValidateVietnamese";
@@ -22,7 +22,13 @@ interface EditAttributeValueProps {
     updatePagination: (data: PaginationType) => void;
 }
 
-export const FormEditAttributes: React.FC<EditAttributeValueProps> = ({ hideOverlay, attributeDetailId, attributeId, updateAttributeValues, updatePagination }) => {
+export const FormEditAttributes: React.FC<EditAttributeValueProps> = ({
+                                                                          hideOverlay,
+                                                                          attributeDetailId,
+                                                                          attributeId,
+                                                                          updateAttributeValues,
+                                                                          updatePagination
+                                                                      }) => {
 
     const dispatch = useDispatchMessage();
     const [formData, setFormData] = React.useState<Attribute>({
@@ -40,6 +46,7 @@ export const FormEditAttributes: React.FC<EditAttributeValueProps> = ({ hideOver
 
     React.useEffect(() => {
         if (attributeDetailId) {
+            setLoading(true);
             GetAttributeValueById(attributeId, attributeDetailId)
                 .then((response) => {
                     setFormData({
@@ -48,9 +55,11 @@ export const FormEditAttributes: React.FC<EditAttributeValueProps> = ({ hideOver
                         sizeCode: response.sizeCode || response.brandCode || response.colorCode || response.materialCode || response.categoryCode
                     });
                 }).catch((error) => {
-                    console.error(error);
-                    dispatch({type: ActionTypeEnum.ERROR, message: error.message});
-                });
+                console.error(error);
+                dispatch({type: ActionTypeEnum.ERROR, message: error.message});
+            }).finally(() => {
+                setLoading(false);
+            });
         }
     }, [attributeDetailId, attributeId, dispatch]);
 
@@ -72,45 +81,45 @@ export const FormEditAttributes: React.FC<EditAttributeValueProps> = ({ hideOver
         if (attributeDetailId) {
             UpdateAttributeValue(attributeId, attributeDetailId, formData)
                 .then(() => {
-                    return GetAttributeDetail({ id: attributeId });
+                    return GetAttributeDetail({id: attributeId});
                 }).then((response) => {
-                    updateAttributeValues(response.data);
-                    updatePagination({
-                        totalPage: response.totalPage,
-                        limit: response.limit,
-                        offset: response.offset,
-                        totalElementOfPage: response.totalElementOfPage
-                    });
-                    dispatch({type: ActionTypeEnum.SUCCESS, message: "Update Attribute value successfully"});
-                    setEditAttributeValue(false);
-                }).catch((error) => {
-                    console.error(error);
-                    dispatch({type: ActionTypeEnum.ERROR, message: error.message});
-                }).finally(() => {
-                    setLoading(false);
-                })
+                updateAttributeValues(response.data);
+                updatePagination({
+                    totalPage: response.totalPage,
+                    limit: response.limit,
+                    offset: response.offset,
+                    totalElementOfPage: response.totalElementOfPage
+                });
+                dispatch({type: ActionTypeEnum.SUCCESS, message: "Update Attribute value successfully"});
+                setEditAttributeValue(false);
+            }).catch((error) => {
+                console.error(error);
+                dispatch({type: ActionTypeEnum.ERROR, message: error.message});
+            }).finally(() => {
+                setLoading(false);
+            })
         } else {
             AddAttributeValue(attributeId, formData)
                 .then(() => {
-                    return GetAttributeDetail({ id: attributeId });
+                    return GetAttributeDetail({id: attributeId});
                 }).then((response) => {
-                    updateAttributeValues(response.data);
-                    updatePagination({
-                        totalPage: response.totalPage,
-                        limit: response.limit,
-                        offset: response.offset,
-                        totalElementOfPage: response.totalElementOfPage
-                    });
-                    dispatch({type: ActionTypeEnum.SUCCESS, message: "Add Attribute value successfully"});
-                    setTimeout(() => {
-                        hideOverlay();
-                    }, 1000)
-                }).catch((error) => {
-                    console.error(error);
-                    dispatch({type: ActionTypeEnum.ERROR, message: error.message});
-                }).finally(() => {
-                    setLoading(false);
-                })
+                updateAttributeValues(response.data);
+                updatePagination({
+                    totalPage: response.totalPage,
+                    limit: response.limit,
+                    offset: response.offset,
+                    totalElementOfPage: response.totalElementOfPage
+                });
+                dispatch({type: ActionTypeEnum.SUCCESS, message: "Add Attribute value successfully"});
+                setTimeout(() => {
+                    hideOverlay();
+                }, 1000)
+            }).catch((error) => {
+                console.error(error);
+                dispatch({type: ActionTypeEnum.ERROR, message: error.message});
+            }).finally(() => {
+                setLoading(false);
+            })
         }
     }
 
@@ -181,12 +190,12 @@ export const FormEditAttributes: React.FC<EditAttributeValueProps> = ({ hideOver
 
     return (
         <OverLay className="disabled-padding">
-            <div className="edit-attribute-value p-4 bg-light rounded">
+            <div className="p-4 bg-light rounded" style={{width: "750px"}}>
                 <div className="d-flex justify-content-between align-items-center mb-4">
                     <h2 className="fw-bold mb-0">
                         {`${attributeDetailId ? "Edit" : "Add"} Value`}
                     </h2>
-                    <CloseButton onClick={() => hideOverlay()} />
+                    <CloseButton onClick={() => hideOverlay()}/>
                 </div>
 
                 <div className="border rounded shadow-sm p-4 mb-4">
@@ -198,7 +207,7 @@ export const FormEditAttributes: React.FC<EditAttributeValueProps> = ({ hideOver
                                 disabled={editAttributeValue}
                                 onClick={() => setEditAttributeValue(true)}
                             >
-                                <FontAwesomeIcon icon={faEdit} className="me-1" />  Edit
+                                <FontAwesomeIcon icon={faEdit} className="me-1"/> Edit
                             </button>
                         )}
                     </div>
@@ -274,13 +283,14 @@ export const FormEditAttributes: React.FC<EditAttributeValueProps> = ({ hideOver
 
                     {!attributeDetailId && (
                         <Button
-                            variant="primary" type="submit" className="w-100 py-3 rounded" style={{ fontWeight: 'bold', letterSpacing: '1px' }}
+                            variant="primary" type="submit" className="w-100 py-3 rounded"
+                            style={{fontWeight: 'bold', letterSpacing: '1px'}}
                             onClick={() => {
                                 if (validate1() && validate2()) {
                                     handleSubmit();
                                 }
                             }}
-                            disabled={loading || (attributeDetailId === "")}
+                            disabled={loading || (attributeDetailId !== "")}
                         >
                             Create
                         </Button>
