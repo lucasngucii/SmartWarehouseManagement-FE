@@ -1,7 +1,7 @@
 import React from 'react'
 import { Product } from '../../interface/Entity/Product'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faInfoCircle, faTrash } from '@fortawesome/free-solid-svg-icons';
+import {faPencilAlt, faTrash} from '@fortawesome/free-solid-svg-icons';
 import { Button, Table } from 'react-bootstrap';
 import GetProducts from '../../services/Product/GetProducts';
 import PaginationType from '../../interface/Pagination';
@@ -79,16 +79,17 @@ export const ProductManagement: React.FC = () => {
                     <div className='d-flex gap-2'>
                         <Button
                             onClick={() => {
-
+                                setProductId(product.id)
+                                setShowFormEdit(true)
                             }}
                             variant="primary"
                         >
-                            <FontAwesomeIcon icon={faInfoCircle} />
+                            <FontAwesomeIcon icon={faPencilAlt}/>
                         </Button>
                         <Button
                             onClick={() => {
-                                setShowModelConfirmDelete(true)
                                 setProductId(product.id)
+                                setShowModelConfirmDelete(true)
                             }}
                             variant="danger"
                         >
@@ -139,7 +140,11 @@ export const ProductManagement: React.FC = () => {
             {
                 showFormEdit &&
                 <FormEditProduct
-                    handleClose={() => setShowFormEdit(false)}
+                    handleClose={() => {
+                        setShowFormEdit(false)
+                        setProductId("")
+                    }}
+                    productId={productId}
                 />
             }
             {

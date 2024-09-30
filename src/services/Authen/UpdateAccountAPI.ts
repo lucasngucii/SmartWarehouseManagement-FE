@@ -1,6 +1,6 @@
 import axios from "axios";
 import { ResponseError } from "../../interface/ResponseError";
-import DataTypeUpdateUserAdmin from "../../interface/PageUser/FormEdit/DataTypeUpdateUserAdmin";
+import DataTypeUpdateUserAdmin from "../../interface/PageUser/DataTypeUpdateUserAdmin";
 import User from "../../interface/Entity/User";
 
 const UpdateAccountAPI = async (userId: string, dataUpdateUser: DataTypeUpdateUserAdmin): Promise<User> => {

@@ -1,6 +1,6 @@
 import React from "react";
 import PaginationType from "../../../interface/Pagination";
-import Supplier from "../../../interface/Supplier";
+import Supplier from "../../../interface/Entity/Supplier";
 import DeleteSupplierById from "../../../services/Supplier/DeleteSupplierById";
 import GetSuppliers from "../../../services/Supplier/GetSuppliers";
 import { OverLay } from "../../../compoments/OverLay/OverLay";

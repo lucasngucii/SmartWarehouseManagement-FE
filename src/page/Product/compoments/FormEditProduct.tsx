@@ -1,8 +1,8 @@
 import React from "react";
-import { OverLay } from "../../../compoments/OverLay/OverLay";
-import { Button, CloseButton, Col, Container, Form, Image, Row } from "react-bootstrap";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faChevronLeft, faImage, faImages } from "@fortawesome/free-solid-svg-icons";
+import {OverLay} from "../../../compoments/OverLay/OverLay";
+import {Button, CloseButton, Col, Container, Form, Image, Row} from "react-bootstrap";
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import {faChevronLeft, faEdit, faImage, faImages} from "@fortawesome/free-solid-svg-icons";
 import Select from 'react-select';
 import GetSizesByName from "../../../services/Attribute/Size/GetSizesByName";
 import GetColorsByName from "../../../services/Attribute/Color/GetColorsByName";
@@ -10,10 +10,14 @@ import GetBrandsByName from "../../../services/Attribute/Brand/GetBrandsByName";
 import GetMaterialsByName from "../../../services/Attribute/Material/GetMaterialsByName";
 import GetCategoriesByName from "../../../services/Attribute/Category/GetCategoriesByName";
 import GetSuppliersByName from "../../../services/Supplier/GetSuppliersByName";
-import DataTypeCreateProductAdmin from "../../../interface/PageProduct/FormEdit/DataTypeCreateProductAdmin";
+import DataTypeCreateProductAdmin from "../../../interface/PageProduct/DataTypeCreateProductAdmin";
 import CreateProduct from "../../../services/Product/CreateProduct";
 import {useDispatchMessage} from "../../../Context/ContextMessage";
 import ActionTypeEnum from "../../../enum/ActionTypeEnum";
+import GetProductById from "../../../services/Product/GetProductById";
+import SpinnerLoadingOverLay from "../../../compoments/Loading/SpinnerLoadingOverLay";
+import {Product} from "../../../interface/Entity/Product";
+import DeepEqual from "../../../util/DeepEqual";
 
 interface FormEditProductProps {
     handleClose: () => void;
@@ -42,13 +46,24 @@ interface FormDataType {
     supplier: OptionType | null;
 }
 
+interface TypeImagePreview {
+    key: string,
+    url: string
+}
+
+interface  TypeImageUpload {
+    key: string,
+    file: File
+}
+
 const Utils: string[] = ["kg", "g", "l", "ml", "unit", "box", "carton"];
 
-const FormEditProduct: React.FC<FormEditProductProps> = ({ productId, handleClose }) => {
+const FormEditProduct: React.FC<FormEditProductProps> = ({productId, handleClose}) => {
 
     const dispatch = useDispatchMessage();
     const uploadRef = React.useRef<HTMLInputElement>(null);
     const [loading, setLoading] = React.useState<boolean>(false);
+    const [isEdit, setIsEdit] = React.useState<boolean>(false);
 
     const [color, setColor] = React.useState<string>("");
     const [branch, setBranch] = React.useState<string>("");
@@ -56,8 +71,9 @@ const FormEditProduct: React.FC<FormEditProductProps> = ({ productId, handleClos
     const [size, setSize] = React.useState<string>("");
     const [category, setCategory] = React.useState<string>("");
     const [supplier, setSupplier] = React.useState<string>("");
-    const [images, setImages] = React.useState<File[]>([]);
-    const [imagePreviews, setImagePreviews] = React.useState<string[]>([]);
+    const [images, setImages] = React.useState<TypeImageUpload[]>([]);
+    const [imagePreviewsDefault, setImagePreviewsDefault] = React.useState<TypeImagePreview[]>([]);
+    const [imagePreviews, setImagePreviews] = React.useState<TypeImagePreview[]>([]);
 
     const [colors, setColors] = React.useState<OptionType[]>([]);
     const [branches, setBranches] = React.useState<OptionType[]>([]);
@@ -66,6 +82,22 @@ const FormEditProduct: React.FC<FormEditProductProps> = ({ productId, handleClos
     const [categories, setCategories] = React.useState<OptionType[]>([]);
     const [suppliers, setSuppliers] = React.useState<OptionType[]>([]);
 
+    const [dataDefault, setDataDefault] = React.useState<FormDataType>({
+        name: "",
+        description: "",
+        unit: "",
+        weight: "",
+        productCode: "",
+        length: "",
+        width: "",
+        height: "",
+        color: null,
+        branch: null,
+        model: null,
+        size: null,
+        category: null,
+        supplier: null,
+    });
     const [formData, setFormData] = React.useState<FormDataType>({
         name: "",
         description: "",
@@ -90,11 +122,90 @@ const FormEditProduct: React.FC<FormEditProductProps> = ({ productId, handleClos
         })
     }
 
+    const FormatDataGet = (data: Product): FormDataType => {
+        return {
+            name: data.name,
+            description: data.description,
+            unit: data.unit,
+            weight: data.productDetails!.sku.weight.toString(),
+            productCode: data.productCode,
+            length: data.productDetails!.sku.dimension.split("x")[0],
+            width: data.productDetails!.sku.dimension.split("x")[1],
+            height: data.productDetails!.sku.dimension.split("x")[2],
+            color: {value: data!.productDetails!.sku.color.id, label: data!.productDetails!.sku.color.name},
+            branch: {
+                value: data!.productDetails!.sku.brand.id,
+                label: data!.productDetails!.sku.brand.name
+            },
+            model: {
+                value: data!.productDetails!.sku.material.id,
+                label: data!.productDetails!.sku.material.name
+            },
+            size: {value: data!.productDetails!.sku.size.id, label: data!.productDetails!.sku.size.name},
+            category: {value: data.category!.id, label: data.category!.name},
+            supplier: {value: data.productDetails!.supplier.id, label: data.productDetails!.supplier.name},
+        }
+    }
+
+    const CheckDataChange = (): boolean => {
+        let isChange = false;
+        Object.keys(formData).forEach((key) => {
+            console.log(typeof formData[key as keyof FormDataType] === "object")
+            console.log(typeof dataDefault[key as keyof FormDataType] === "object")
+            if ((typeof formData[key as keyof FormDataType] === "object") && (typeof dataDefault[key as keyof FormDataType] === "object")) {
+                if (!DeepEqual(formData[key as keyof FormDataType], dataDefault[key as keyof FormDataType])) isChange = true;
+            } else {
+                if (formData[key as keyof FormDataType] !== dataDefault[key as keyof FormDataType]) isChange = true;
+            }
+        });
+        return isChange;
+    }
+
+    // const checkImagePreviewsChange = (): boolean => {
+    //     let isChange = false;
+    //     if (imagePreviews.length !== imagePreviewsDefault.length) {
+    //         isChange = true;
+    //     } else {
+    //         imagePreviews.forEach((image) => {
+    //             if (!imagePreviewsDefault.find((imageDefault) => imageDefault.url === image.url)) {
+    //                 isChange = true;
+    //             }
+    //         });
+    //     }
+    //     return isChange;
+    // }
+
+    React.useEffect(() => {
+        if (productId) {
+            GetProductById(productId)
+                .then((data) => {
+                    setFormData(FormatDataGet(data));
+                    setDataDefault(FormatDataGet(data));
+                    setImagePreviews(data.productDetails?.images.map((image) => {
+                        return {
+                            key: crypto.randomUUID().toString(),
+                            url: image.url
+                        }
+                    }) || []);
+                    setImagePreviewsDefault(data.productDetails?.images.map((image) => {
+                        return {
+                            key: crypto.randomUUID().toString(),
+                            url: image.url
+                        }
+                    }) || []);
+                }).catch((error) => {
+                dispatch({type: ActionTypeEnum.ERROR, message: error.message});
+            }).finally(() => {
+                setLoading(false);
+            })
+        }
+    }, [productId, dispatch])
+
     React.useEffect(() => {
         const id = setTimeout(() => {
             GetColorsByName(color)
                 .then((data) => {
-                    setColors(data.map((size) => ({ value: size.id, label: size.name })));
+                    setColors(data.map((size) => ({value: size.id, label: size.name})));
                 })
                 .catch((error) => {
                     dispatch({type: ActionTypeEnum.ERROR, message: error.message});
@@ -107,7 +218,7 @@ const FormEditProduct: React.FC<FormEditProductProps> = ({ productId, handleClos
         const id = setTimeout(() => {
             GetBrandsByName(branch)
                 .then((data) => {
-                    setBranches(data.map((size) => ({ value: size.id, label: size.name })));
+                    setBranches(data.map((size) => ({value: size.id, label: size.name})));
                 })
                 .catch((error) => {
                     dispatch({type: ActionTypeEnum.ERROR, message: error.message});
@@ -120,7 +231,7 @@ const FormEditProduct: React.FC<FormEditProductProps> = ({ productId, handleClos
         const id = setTimeout(() => {
             GetMaterialsByName(model)
                 .then((data) => {
-                    setModels(data.map((size) => ({ value: size.id, label: size.name })));
+                    setModels(data.map((size) => ({value: size.id, label: size.name})));
                 })
                 .catch((error) => {
                     dispatch({type: ActionTypeEnum.ERROR, message: error.message});
@@ -133,7 +244,7 @@ const FormEditProduct: React.FC<FormEditProductProps> = ({ productId, handleClos
         const id = setTimeout(() => {
             GetSizesByName(size)
                 .then((data) => {
-                    setSizes(data.map((size) => ({ value: size.id, label: size.name })));
+                    setSizes(data.map((size) => ({value: size.id, label: size.name})));
                 })
                 .catch((error) => {
                     dispatch({type: ActionTypeEnum.ERROR, message: error.message});
@@ -146,7 +257,7 @@ const FormEditProduct: React.FC<FormEditProductProps> = ({ productId, handleClos
         const id = setTimeout(() => {
             GetCategoriesByName(category)
                 .then((data) => {
-                    setCategories(data.map((size) => ({ value: size.id, label: size.name })));
+                    setCategories(data.map((size) => ({value: size.id, label: size.name})));
                 })
                 .catch((error) => {
                     dispatch({type: ActionTypeEnum.ERROR, message: error.message});
@@ -159,7 +270,7 @@ const FormEditProduct: React.FC<FormEditProductProps> = ({ productId, handleClos
         const id = setTimeout(() => {
             GetSuppliersByName(supplier)
                 .then((data) => {
-                    setSuppliers(data.map((size) => ({ value: size.id, label: size.name })));
+                    setSuppliers(data.map((size) => ({value: size.id, label: size.name})));
                 })
                 .catch((error) => {
                     dispatch({type: ActionTypeEnum.ERROR, message: error.message});
@@ -168,7 +279,11 @@ const FormEditProduct: React.FC<FormEditProductProps> = ({ productId, handleClos
         return () => clearTimeout(id);
     }, [supplier, dispatch]);
 
-    const formartData = (): DataTypeCreateProductAdmin => {
+    const getListImage = (): File[] => {
+        return images.map((image) => image.file);
+    }
+
+    const formatDataCreate = (): DataTypeCreateProductAdmin => {
         return {
             name: formData.name,
             unit: formData.unit,
@@ -182,14 +297,13 @@ const FormEditProduct: React.FC<FormEditProductProps> = ({ productId, handleClos
             brandId: formData.branch!.value,
             dimension: `${formData.length}x${formData.width}x${formData.height}`,
             weight: Number(formData.weight),
-            image: images,
+            image: getListImage(),
         }
     }
 
-    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-        e.preventDefault();
+    const handleSubmit = () => {
         setLoading(true);
-        CreateProduct(formartData())
+        CreateProduct(formatDataCreate())
             .then(() => {
                 dispatch({type: ActionTypeEnum.SUCCESS, message: "Create product success"});
                 setTimeout(() => {
@@ -207,18 +321,22 @@ const FormEditProduct: React.FC<FormEditProductProps> = ({ productId, handleClos
     const handleChangeFile = (e: React.ChangeEvent<HTMLInputElement>) => {
         const files: FileList | null = e.target.files;
         if (files !== null) {
-            const listFiles: File[] = [];
             for (let i = 0; i < files.length; i++) {
-                listFiles.push(files[i]);
-                imagePreviews.push(URL.createObjectURL(files[i]));
+                const keyRandom = crypto.randomUUID().toString();
+                imagePreviews.push({
+                    key: keyRandom,
+                    url: URL.createObjectURL(files[i])
+                });
+                setImages((preState) => {
+                    return [...preState, {key: keyRandom, file: files[i]}];
+                });
             }
-            setImages(listFiles);
         }
     }
 
-    const handleRemoveImage = (index: number) => {
-        const newImages = images.filter((_, i) => i !== index);
-        const newPreviews = imagePreviews.filter((_, i) => i !== index);
+    const handleRemoveImage = (key: string) => {
+        const newImages = images.filter((image) => image.key !== key);
+        const newPreviews = imagePreviews.filter((image) => image.key !== key);
         setImages(newImages);
         setImagePreviews(newPreviews);
     }
@@ -232,303 +350,355 @@ const FormEditProduct: React.FC<FormEditProductProps> = ({ productId, handleClos
                             onClick={() => handleClose()}
                             className="btn fs-3 px-3 text-primary"
                         >
-                            <FontAwesomeIcon icon={faChevronLeft} />
+                            <FontAwesomeIcon icon={faChevronLeft}/>
                         </button>
-                        <h2 className="fw-bold mb-0">{"New Product"}</h2>
+                        <h2 className="fw-bold mb-0">{`${productId ? "Edit Product" : "New Product"}`}</h2>
                     </div>
-                </div>
-                <Form onSubmit={handleSubmit}>
-                    <Row className="px-4">
-                        <Col md={6} className="p-3">
-                            <h5 className="fw-semibold border-bottom pb-2 mb-3">Product Details</h5>
-                            <Form.Group className="mb-3">
-                                <Form.Label>Product Name</Form.Label>
-                                <Form.Control
-                                    type="text"
-                                    placeholder="Enter product name"
-                                    className="py-3"
-                                    name="name"
-                                    onChange={handleChangeInput}
-                                    required
-                                    value={formData.name}
-                                />
-                            </Form.Group>
-                            <Form.Group className="mb-3">
-                                <div className="d-flex flex-column">
-                                    <Form.Label>Description</Form.Label>
-                                    <textarea
-                                        className="form-control py-3"
-                                        placeholder="Enter description"
-                                        cols={3}
-                                        name="description"
-                                        onChange={handleChangeInput}
-                                        required
-                                        value={formData.description}
-                                    />
+                    {
+                        productId ?
+                            isEdit ?
+                                <div className={"d-flex gap-2"}>
+                                    <Button
+                                        variant="primary"
+                                        className="fw-semibold"
+                                        onClick={() => {}}
+                                        disabled={!CheckDataChange()}
+                                    >Save</Button>
+                                    <Button
+                                        variant="secondary"
+                                        className="fw-semibold"
+                                        onClick={() => {
+                                            setIsEdit(false);
+                                            setFormData(dataDefault);
+                                            setImagePreviews(imagePreviewsDefault);
+                                        }}
+                                    >Cancel</Button>
                                 </div>
-                            </Form.Group>
-                            <Row>
-                                <Col md={6}>
-                                    <Form.Group className="mb-3">
-                                        <Form.Label>Unit</Form.Label>
-                                        <Form.Select
-                                            className="py-3"
-                                            name="unit"
-                                            onChange={handleChangeInput}
-                                            required
-                                            value={formData.unit}
-                                        >
-                                            <option value={""} >Select unit...</option>
-                                            {Utils.map((unit) => (
-                                                <option key={unit} value={unit}>{unit}</option>
-                                            ))}
-                                        </Form.Select>
-                                    </Form.Group>
-                                </Col>
-                                <Col md={6}>
-                                    <Form.Group className="mb-3">
-                                        <Form.Label>Weight</Form.Label>
-                                        <Form.Control
-                                            type="number"
-                                            placeholder="Enter weight"
-                                            className="py-3"
-                                            name="weight"
-                                            onChange={handleChangeInput}
-                                            value={formData.weight}
-                                            required
-                                        />
-                                    </Form.Group>
-                                </Col>
-                            </Row>
-                            <Form.Group className="mb-3">
-                                <Form.Label>Product Code</Form.Label>
-                                <Form.Control
-                                    type="text"
-                                    placeholder="Enter product code"
-                                    className="py-3"
-                                    name="productCode"
-                                    onChange={handleChangeInput}
-                                    required
-                                    value={formData.productCode}
-                                />
-                            </Form.Group>
-                            <Form.Group className="mb-3">
-                                <Form.Label>Demension</Form.Label>
-                                <div className="d-flex flex-row gap-3 align-items-center">
-                                    <Form.Control
-                                        type="number"
-                                        placeholder="Enter Lenght"
-                                        className="py-3"
-                                        name="length"
-                                        onChange={handleChangeInput}
-                                        value={formData.length}
-                                        required
-                                    />
-                                    <span>X</span>
-                                    <Form.Control
-                                        type="number"
-                                        placeholder="Enter Width"
-                                        className="py-3"
-                                        name="width"
-                                        onChange={handleChangeInput}
-                                        value={formData.width}
-                                        required
-                                    />
-                                    <span>X</span>
-                                    <Form.Control
-                                        type="number"
-                                        placeholder="Enter Height"
-                                        className="py-3"
-                                        name="height"
-                                        onChange={handleChangeInput}
-                                        value={formData.height}
-                                        required
-                                    />
-                                </div>
-                            </Form.Group>
-                        </Col>
-                        <Col md={6}>
-                            <Row className="p-3">
-                                <h5 className="fw-semibold border-bottom pb-2 mb-3">Product Attributes</h5>
-                                <Col md={6}>
-                                    <Form.Group className="mb-3">
-                                        <Form.Label>Color</Form.Label>
-                                        <Select
-                                            placeholder="Enter name color"
-                                            isClearable
-                                            styles={{
-                                                control: (provided) => ({
-                                                    ...provided,
-                                                    padding: "0.5rem 0px",
-                                                }),
-                                            }}
-                                            onInputChange={setColor}
-                                            value={formData.color}
-                                            onChange={(value) => setFormData({ ...formData, color: value })}
-                                            options={colors}
-                                            required
-                                        />
-                                    </Form.Group>
-                                    <Form.Group className="mb-3">
-                                        <Form.Label>Model</Form.Label>
-                                        <Select
-                                            placeholder="Enter name model"
-                                            isClearable
-                                            styles={{
-                                                control: (provided) => ({
-                                                    ...provided,
-                                                    padding: "0.5rem 0px",
-                                                }),
-                                            }}
-                                            onInputChange={setModel}
-                                            value={formData.model}
-                                            onChange={(value) => setFormData({ ...formData, model: value })}
-                                            options={models}
-                                            required
-                                        />
-                                    </Form.Group>
-                                </Col>
-                                <Col md={6}>
-                                    <Form.Group className="mb-3">
-                                        <Form.Label>Branch</Form.Label>
-                                        <Select
-                                            placeholder="Enter name branch"
-                                            isClearable
-                                            styles={{
-                                                control: (provided) => ({
-                                                    ...provided,
-                                                    padding: "0.5rem 0px",
-                                                }),
-                                            }}
-                                            onInputChange={setBranch}
-                                            value={formData.branch}
-                                            onChange={(value) => setFormData({ ...formData, branch: value })}
-                                            options={branches}
-                                            required
-                                        />
-                                    </Form.Group>
-                                    <Form.Group className="mb-3">
-                                        <Form.Label>Size</Form.Label>
-                                        <Select
-                                            placeholder="Enter name size"
-                                            isClearable
-                                            styles={{
-                                                control: (provided) => ({
-                                                    ...provided,
-                                                    padding: "0.5rem 0px",
-                                                }),
-                                            }}
-                                            onInputChange={setSize}
-                                            value={formData.size}
-                                            onChange={(value) => setFormData({ ...formData, size: value })}
-                                            options={sizes}
-                                            required
-                                        />
-                                    </Form.Group>
-                                </Col>
-                            </Row>
-                            <Row className="p-3">
-                                <h5 className="fw-semibold border-bottom pb-2 mb-3">Classification And Supplier</h5>
-                                <Col md={6}>
-                                    <Form.Group className="mb-3">
-                                        <Form.Label>Category</Form.Label>
-                                        <Select
-                                            placeholder="Enter name category"
-                                            isClearable
-                                            styles={{
-                                                control: (provided) => ({
-                                                    ...provided,
-                                                    padding: "0.5rem 0px",
-                                                }),
-                                            }}
-                                            onInputChange={setCategory}
-                                            value={formData.category}
-                                            onChange={(value) => setFormData({ ...formData, category: value })}
-                                            options={categories}
-                                            required
-                                        />
-                                    </Form.Group>
-                                </Col>
-                                <Col md={6}>
-                                    <Form.Group className="mb-3">
-                                        <Form.Label>Supplier</Form.Label>
-                                        <Select
-                                            placeholder="Enter name supplier"
-                                            isClearable
-                                            styles={{
-                                                control: (provided) => ({
-                                                    ...provided,
-                                                    padding: "0.5rem 0px",
-                                                }),
-                                            }}
-                                            onInputChange={setSupplier}
-                                            value={formData.supplier}
-                                            onChange={(value) => setFormData({ ...formData, supplier: value })}
-                                            options={suppliers}
-                                            required
-                                        />
-                                    </Form.Group>
-                                </Col>
-                                <Form.Control
-                                    type="submit"
-                                    className="btn btn-primary fw-bold py-3"
-                                    value={loading ? "Loading..." : "Create"}
-                                    disabled={loading}
-                                />
-                            </Row>
-                        </Col>
-                    </Row>
-                    <Row className="p-3">
-                        <div className="border-bottom pb-2 mb-3 d-flex justify-content-between">
-                            <h5 className="fw-semibold d-flex align-items-center">
-                                <FontAwesomeIcon icon={faImages} className="me-2" />
-                                Images
-                            </h5>
+                                :
+                                <Button
+                                    variant="danger"
+                                    className="fw-semibold"
+                                    onClick={() => setIsEdit(true)}
+                                >
+                                    <FontAwesomeIcon icon={faEdit} className={"me-2"}/>
+                                    Edit
+                                </Button>
+                            :
                             <Button
-                                variant="outline-primary"
+                                variant="primary"
                                 className="fw-semibold"
-                                onClick={() => { uploadRef.current?.click() }}
-                            >+ Add Images</Button>
-                        </div>
+                                onClick={handleSubmit}
+                            >Create</Button>
+                    }
+                </div>
+                <Row className="px-4">
+                    <Col md={6} className="p-3">
+                        <h5 className="fw-semibold border-bottom pb-2 mb-3">Product Details</h5>
                         <Form.Group className="mb-3">
+                            <Form.Label>Product Name</Form.Label>
                             <Form.Control
-                                ref={uploadRef}
-                                type="file"
-                                placeholder="Enter name supplier"
-                                className="py-3 d-none"
-                                multiple
-                                onChange={handleChangeFile}
+                                type="text"
+                                placeholder="Enter product name"
+                                className="py-3"
+                                name="name"
+                                onChange={handleChangeInput}
+                                required
+                                disabled={productId !== "" && !isEdit}
+                                value={formData.name}
                             />
                         </Form.Group>
-                        <div className="d-flex flex-row flex-wrap gap-3 justify-content-center">
-                            {imagePreviews.map((image, index) => (
-                                <div className="position-relative">
-                                    <Image
-                                        key={index}
-                                        src={image}
-                                        alt="preview"
-                                        thumbnail
-                                        style={{ width: "250px", height: "auto" }}
+                        <Form.Group className="mb-3">
+                            <div className="d-flex flex-column">
+                                <Form.Label>Description</Form.Label>
+                                <textarea
+                                    className="form-control py-3"
+                                    placeholder="Enter description"
+                                    cols={3}
+                                    name="description"
+                                    onChange={handleChangeInput}
+                                    required
+                                    disabled={productId !== "" && !isEdit}
+                                    value={formData.description}
+                                />
+                            </div>
+                        </Form.Group>
+                        <Row>
+                            <Col md={6}>
+                                <Form.Group className="mb-3">
+                                    <Form.Label>Unit</Form.Label>
+                                    <Form.Select
+                                        className="py-3"
+                                        name="unit"
+                                        onChange={handleChangeInput}
+                                        required
+                                        value={formData.unit}
+                                        disabled={productId !== "" && !isEdit}
+                                    >
+                                        <option value={""}>Select unit...</option>
+                                        {Utils.map((unit) => (
+                                            <option key={unit} value={unit}>{unit}</option>
+                                        ))}
+                                    </Form.Select>
+                                </Form.Group>
+                            </Col>
+                            <Col md={6}>
+                                <Form.Group className="mb-3">
+                                    <Form.Label>Weight</Form.Label>
+                                    <Form.Control
+                                        type="number"
+                                        placeholder="Enter weight"
+                                        className="py-3"
+                                        name="weight"
+                                        onChange={handleChangeInput}
+                                        value={formData.weight}
+                                        required
+                                        disabled={productId !== "" && !isEdit}
                                     />
-                                    <CloseButton
-                                        className="position-absolute bg-light"
-                                        onClick={() => { handleRemoveImage(index) }}
-                                        style={{ top: "0.5rem", right: "0.5rem" }}
+                                </Form.Group>
+                            </Col>
+                        </Row>
+                        <Form.Group className="mb-3">
+                            <Form.Label>Product Code</Form.Label>
+                            <Form.Control
+                                type="text"
+                                placeholder="Enter product code"
+                                className="py-3"
+                                name="productCode"
+                                onChange={handleChangeInput}
+                                required
+                                value={formData.productCode}
+                                disabled={productId !== "" && !isEdit}
+                            />
+                        </Form.Group>
+                        <Form.Group className="mb-3">
+                            <Form.Label>Demension</Form.Label>
+                            <div className="d-flex flex-row gap-3 align-items-center">
+                                <Form.Control
+                                    type="number"
+                                    placeholder="Enter Lenght"
+                                    className="py-3"
+                                    name="length"
+                                    onChange={handleChangeInput}
+                                    value={formData.length}
+                                    required
+                                    disabled={productId !== "" && !isEdit}
+                                />
+                                <span>X</span>
+                                <Form.Control
+                                    type="number"
+                                    placeholder="Enter Width"
+                                    className="py-3"
+                                    name="width"
+                                    onChange={handleChangeInput}
+                                    value={formData.width}
+                                    required
+                                    disabled={productId !== "" && !isEdit}
+                                />
+                                <span>X</span>
+                                <Form.Control
+                                    type="number"
+                                    placeholder="Enter Height"
+                                    className="py-3"
+                                    name="height"
+                                    onChange={handleChangeInput}
+                                    value={formData.height}
+                                    required
+                                    disabled={productId !== "" && !isEdit}
+                                />
+                            </div>
+                        </Form.Group>
+                    </Col>
+                    <Col md={6}>
+                        <Row className="p-3">
+                            <h5 className="fw-semibold border-bottom pb-2 mb-3">Product Attributes</h5>
+                            <Col md={6}>
+                                <Form.Group className="mb-3">
+                                    <Form.Label>Color</Form.Label>
+                                    <Select
+                                        placeholder="Enter name color"
+                                        isClearable
+                                        styles={{
+                                            control: (provided) => ({
+                                                ...provided,
+                                                padding: "0.5rem 0px",
+                                            }),
+                                        }}
+                                        onInputChange={setColor}
+                                        value={formData.color}
+                                        onChange={(value) => setFormData({...formData, color: value})}
+                                        options={colors}
+                                        required
+                                        isDisabled={productId !== "" && !isEdit}
                                     />
-                                </div>
-                            ))}
-                            {
-                                imagePreviews.length === 0 &&
-                                <div className="d-flex flex-column align-items-center justify-content-center gap-2 text-secondary">
-                                    <FontAwesomeIcon icon={faImage} size="3x" />
-                                    <span>No images</span>
-                                </div>
-                            }
-                        </div>
-                    </Row>
-                </Form>
-            </Container >
-        </OverLay >
+                                </Form.Group>
+                                <Form.Group className="mb-3">
+                                    <Form.Label>Model</Form.Label>
+                                    <Select
+                                        placeholder="Enter name model"
+                                        isClearable
+                                        styles={{
+                                            control: (provided) => ({
+                                                ...provided,
+                                                padding: "0.5rem 0px",
+                                            }),
+                                        }}
+                                        onInputChange={setModel}
+                                        value={formData.model}
+                                        onChange={(value) => setFormData({...formData, model: value})}
+                                        options={models}
+                                        required
+                                        isDisabled={productId !== "" && !isEdit}
+                                    />
+                                </Form.Group>
+                            </Col>
+                            <Col md={6}>
+                                <Form.Group className="mb-3">
+                                    <Form.Label>Branch</Form.Label>
+                                    <Select
+                                        placeholder="Enter name branch"
+                                        isClearable
+                                        styles={{
+                                            control: (provided) => ({
+                                                ...provided,
+                                                padding: "0.5rem 0px",
+                                            }),
+                                        }}
+                                        onInputChange={setBranch}
+                                        value={formData.branch}
+                                        onChange={(value) => setFormData({...formData, branch: value})}
+                                        options={branches}
+                                        required
+                                        isDisabled={productId !== "" && !isEdit}
+                                    />
+                                </Form.Group>
+                                <Form.Group className="mb-3">
+                                    <Form.Label>Size</Form.Label>
+                                    <Select
+                                        placeholder="Enter name size"
+                                        isClearable
+                                        styles={{
+                                            control: (provided) => ({
+                                                ...provided,
+                                                padding: "0.5rem 0px",
+                                            }),
+                                        }}
+                                        onInputChange={setSize}
+                                        value={formData.size}
+                                        onChange={(value) => setFormData({...formData, size: value})}
+                                        options={sizes}
+                                        required
+                                        isDisabled={productId !== "" && !isEdit}
+                                    />
+                                </Form.Group>
+                            </Col>
+                        </Row>
+                        <Row className="p-3">
+                            <h5 className="fw-semibold border-bottom pb-2 mb-3">Classification And Supplier</h5>
+                            <Col md={6}>
+                                <Form.Group className="mb-3">
+                                    <Form.Label>Category</Form.Label>
+                                    <Select
+                                        placeholder="Enter name category"
+                                        isClearable
+                                        styles={{
+                                            control: (provided) => ({
+                                                ...provided,
+                                                padding: "0.5rem 0px",
+                                            }),
+                                        }}
+                                        onInputChange={setCategory}
+                                        value={formData.category}
+                                        onChange={(value) => setFormData({...formData, category: value})}
+                                        options={categories}
+                                        required
+                                        isDisabled={productId !== "" && !isEdit}
+                                    />
+                                </Form.Group>
+                            </Col>
+                            <Col md={6}>
+                                <Form.Group className="mb-3">
+                                    <Form.Label>Supplier</Form.Label>
+                                    <Select
+                                        placeholder="Enter name supplier"
+                                        isClearable
+                                        styles={{
+                                            control: (provided) => ({
+                                                ...provided,
+                                                padding: "0.5rem 0px",
+                                            }),
+                                        }}
+                                        onInputChange={setSupplier}
+                                        value={formData.supplier}
+                                        onChange={(value) => setFormData({...formData, supplier: value})}
+                                        options={suppliers}
+                                        required
+                                        isDisabled={productId !== "" && !isEdit}
+                                    />
+                                </Form.Group>
+                            </Col>
+                        </Row>
+                    </Col>
+                </Row>
+                <Row className="p-3">
+                    <div className="border-bottom pb-2 mb-3 d-flex justify-content-between">
+                        <h5 className="fw-semibold d-flex align-items-center">
+                            <FontAwesomeIcon icon={faImages} className="me-2"/>
+                            Images
+                        </h5>
+                        <Button
+                            variant="outline-primary"
+                            className="fw-semibold"
+                            onClick={() => {
+                                uploadRef.current?.click()
+                            }}
+                            disabled={productId !== "" && !isEdit}
+                        >+ Add Images</Button>
+                    </div>
+                    <Form.Group className="mb-3">
+                        <Form.Control
+                            ref={uploadRef}
+                            type="file"
+                            placeholder="Enter name supplier"
+                            className="py-3 d-none"
+                            multiple
+                            onChange={handleChangeFile}
+                            disabled={productId !== "" && !isEdit}
+                        />
+                    </Form.Group>
+                    <div className="d-flex flex-row flex-wrap gap-3 justify-content-center">
+                        {imagePreviews.map((image) => (
+                            <div className="position-relative" key={image.key}>
+                                <Image
+                                    src={image.url}
+                                    alt="preview"
+                                    thumbnail
+                                    style={{width: "250px", height: "auto"}}
+                                />
+                                <CloseButton
+                                    className="position-absolute bg-light"
+                                    onClick={() => {
+                                        handleRemoveImage(image.key)
+                                    }}
+                                    style={{top: "0.5rem", right: "0.5rem"}}
+                                    disabled={productId !== "" && !isEdit}
+                                />
+                            </div>
+                        ))}
+                        {
+                            imagePreviews.length === 0 &&
+                            <div
+                                className="d-flex flex-column align-items-center justify-content-center gap-2 text-secondary">
+                                <FontAwesomeIcon icon={faImage} size="3x"/>
+                                <span>No images</span>
+                            </div>
+                        }
+                    </div>
+                </Row>
+            </Container>
+            {
+                loading && <SpinnerLoadingOverLay/>
+            }
+        </OverLay>
     )
 }
 

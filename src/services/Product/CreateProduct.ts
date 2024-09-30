@@ -1,5 +1,5 @@
 import axios from "axios";
-import DataTypeCreateProductAdmin from "../../interface/PageProduct/FormEdit/DataTypeCreateProductAdmin";
+import DataTypeCreateProductAdmin from "../../interface/PageProduct/DataTypeCreateProductAdmin";
 import { ResponseError } from "../../interface/ResponseError";
 
 const CreateProduct = async (product: DataTypeCreateProductAdmin): Promise<void> => {

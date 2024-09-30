@@ -1,6 +1,6 @@
 import axios from "axios";
 import { ResponseError } from "../../interface/ResponseError";
-import DataTypeCreateUserAdmin from "../../interface/PageUser/FormEdit/DataTypeCreateUserAdmin";
+import DataTypeCreateUserAdmin from "../../interface/PageUser/DataTypeCreateUserAdmin";
 
 const RegisterAPI = async (data: DataTypeCreateUserAdmin | null): Promise<void> => {
 

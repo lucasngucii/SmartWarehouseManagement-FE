@@ -1,3 +1,6 @@
+import Category from "./Category";
+import ProductDetails from "./ProductDetails";
+
 export interface Product {
     id: string,
     createAt: string,
@@ -8,4 +11,6 @@ export interface Product {
     description: string,
     productCode: string,
     unit: string
+    category?: Category;
+    productDetails?: ProductDetails;
 }

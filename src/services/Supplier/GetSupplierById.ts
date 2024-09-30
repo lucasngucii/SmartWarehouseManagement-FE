@@ -1,6 +1,6 @@
 import axios from "axios";
 import { ResponseError } from "../../interface/ResponseError";
-import Supplier from "../../interface/Supplier";
+import Supplier from "../../interface/Entity/Supplier";
 
 const GetSupplierById = async (supplierID: string): Promise<Supplier> => {
     try {

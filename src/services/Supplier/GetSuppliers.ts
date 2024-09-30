@@ -1,6 +1,6 @@
 import axios from "axios";
 import { ResponseError } from "../../interface/ResponseError";
-import Supplier from "../../interface/Supplier";
+import Supplier from "../../interface/Entity/Supplier";
 import Order from "../../enum/Order";
 
 interface GetSuppliersResponse {

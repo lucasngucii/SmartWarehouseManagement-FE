@@ -8,7 +8,6 @@ interface Supplier {
 }
 
 const GetSuppliersByName = async (name: string): Promise<Supplier[]> => {
-    console.log(name)
     try {
         const HOST = process.env.REACT_APP_HOST_BE;
         const token = localStorage.getItem('token');

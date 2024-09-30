@@ -4,7 +4,7 @@ import { Button, Col, Container, Form, Row } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronLeft, faEdit, faSave } from '@fortawesome/free-solid-svg-icons';
 import GetSupplierById from '../../../services/Supplier/GetSupplierById';
-import Supplier from '../../../interface/Supplier';
+import Supplier from '../../../interface/Entity/Supplier';
 import UpdateSupplierById from '../../../services/Supplier/UpdateSupplierById';
 import PaginationType from '../../../interface/Pagination';
 import GetSuppliers from '../../../services/Supplier/GetSuppliers';
