@@ -18,6 +18,8 @@ import GetProductById from "../../../services/Product/GetProductById";
 import SpinnerLoadingOverLay from "../../../compoments/Loading/SpinnerLoadingOverLay";
 import {Product} from "../../../interface/Entity/Product";
 import DeepEqual from "../../../util/DeepEqual";
+import DataTypeUpdateProductAdmin from "../../../interface/PageProduct/DataTypeUpdateProductAdmin";
+import UpdateProductByProductId from "../../../services/Product/UpdateProductByProductId";
 
 interface FormEditProductProps {
     handleClose: () => void;
@@ -132,16 +134,16 @@ const FormEditProduct: React.FC<FormEditProductProps> = ({productId, handleClose
             length: data.productDetails!.sku.dimension.split("x")[0],
             width: data.productDetails!.sku.dimension.split("x")[1],
             height: data.productDetails!.sku.dimension.split("x")[2],
-            color: {value: data!.productDetails!.sku.color.id, label: data!.productDetails!.sku.color.name},
+            color: {value: data.productDetails!.sku.color.id, label: data.productDetails!.sku.color.name},
             branch: {
-                value: data!.productDetails!.sku.brand.id,
+                value: data.productDetails!.sku.brand.id,
                 label: data!.productDetails!.sku.brand.name
             },
             model: {
-                value: data!.productDetails!.sku.material.id,
-                label: data!.productDetails!.sku.material.name
+                value: data.productDetails!.sku.material.id,
+                label: data.productDetails!.sku.material.name
             },
-            size: {value: data!.productDetails!.sku.size.id, label: data!.productDetails!.sku.size.name},
+            size: {value: data.productDetails!.sku.size.id, label: data.productDetails!.sku.size.name},
             category: {value: data.category!.id, label: data.category!.name},
             supplier: {value: data.productDetails!.supplier.id, label: data.productDetails!.supplier.name},
         }
@@ -150,8 +152,6 @@ const FormEditProduct: React.FC<FormEditProductProps> = ({productId, handleClose
     const CheckDataChange = (): boolean => {
         let isChange = false;
         Object.keys(formData).forEach((key) => {
-            console.log(typeof formData[key as keyof FormDataType] === "object")
-            console.log(typeof dataDefault[key as keyof FormDataType] === "object")
             if ((typeof formData[key as keyof FormDataType] === "object") && (typeof dataDefault[key as keyof FormDataType] === "object")) {
                 if (!DeepEqual(formData[key as keyof FormDataType], dataDefault[key as keyof FormDataType])) isChange = true;
             } else {
@@ -160,20 +160,6 @@ const FormEditProduct: React.FC<FormEditProductProps> = ({productId, handleClose
         });
         return isChange;
     }
-
-    // const checkImagePreviewsChange = (): boolean => {
-    //     let isChange = false;
-    //     if (imagePreviews.length !== imagePreviewsDefault.length) {
-    //         isChange = true;
-    //     } else {
-    //         imagePreviews.forEach((image) => {
-    //             if (!imagePreviewsDefault.find((imageDefault) => imageDefault.url === image.url)) {
-    //                 isChange = true;
-    //             }
-    //         });
-    //     }
-    //     return isChange;
-    // }
 
     React.useEffect(() => {
         if (productId) {
@@ -301,21 +287,76 @@ const FormEditProduct: React.FC<FormEditProductProps> = ({productId, handleClose
         }
     }
 
+    const formatDataUpdate = (): DataTypeUpdateProductAdmin => {
+
+        const dataUpdate: DataTypeUpdateProductAdmin = {
+            name: formData.name,
+            unit: formData.unit,
+            categoryId: formData.category!.value,
+            description: formData.description,
+            productCode: formData.productCode,
+            supplierId: formData.supplier!.value,
+            colorId: formData.color!.value,
+            sizeId: formData.size!.value,
+            materialId: formData.model!.value,
+            brandId: formData.branch!.value,
+            dimension: `${formData.length}x${formData.width}x${formData.height}`,
+            weight: Number(formData.weight),
+        }
+
+        if (formData.name === dataDefault.name) delete dataUpdate.name;
+        if (formData.unit === dataDefault.unit) delete dataUpdate.unit;
+        if(DeepEqual(formData.category, dataDefault.category)) delete dataUpdate.categoryId;
+        if (formData.description === dataDefault.description) delete dataUpdate.description;
+        if (formData.productCode === dataDefault.productCode) delete dataUpdate.productCode;
+        if (DeepEqual(formData.supplier, dataDefault.supplier)) delete dataUpdate.supplierId;
+        if (DeepEqual(formData.color, dataDefault.color)) delete dataUpdate.colorId;
+        if (DeepEqual(formData.size, dataDefault.size)) delete dataUpdate.sizeId;
+        if (DeepEqual(formData.model, dataDefault.model)) delete dataUpdate.materialId;
+        if (formData.length === dataDefault.length && formData.width === dataDefault.width && formData.height === dataDefault.height) delete dataUpdate.dimension;
+        if (formData.weight === dataDefault.weight) delete dataUpdate.weight;
+
+        return dataUpdate;
+    }
+
     const handleSubmit = () => {
         setLoading(true);
-        CreateProduct(formatDataCreate())
-            .then(() => {
-                dispatch({type: ActionTypeEnum.SUCCESS, message: "Create product success"});
-                setTimeout(() => {
-                    handleClose();
-                }, 1000);
-            })
-            .catch((error) => {
-                dispatch({type: ActionTypeEnum.ERROR, message: error.message});
-            })
-            .finally(() => {
+        if (!productId) {
+            CreateProduct(formatDataCreate())
+                .then(() => {
+                    dispatch({type: ActionTypeEnum.SUCCESS, message: "Create product success"});
+                    setTimeout(() => {
+                        handleClose();
+                    }, 1000);
+                })
+                .catch((error) => {
+                    dispatch({type: ActionTypeEnum.ERROR, message: error.message});
+                })
+                .finally(() => {
+                    setLoading(false);
+                })
+        } else {
+            const dataUpdate = formatDataUpdate();
+            if (Object.keys(dataUpdate).length === 0) {
+                dispatch({type: ActionTypeEnum.ERROR, message: "No data change"});
                 setLoading(false);
-            })
+            } else {
+                UpdateProductByProductId(productId, dataUpdate)
+                    .then((response) => {
+                        console.log(response);
+                        setFormData(FormatDataGet(response));
+                        setDataDefault(FormatDataGet(response));
+                        dispatch({type: ActionTypeEnum.SUCCESS, message: "Update product success"});
+                        setIsEdit(false);
+                    })
+                    .catch((error) => {
+                        dispatch({type: ActionTypeEnum.ERROR, message: error.message});
+                    })
+                    .finally(() => {
+                        setLoading(false);
+                    })
+            }
+        }
     }
 
     const handleChangeFile = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -335,10 +376,14 @@ const FormEditProduct: React.FC<FormEditProductProps> = ({productId, handleClose
     }
 
     const handleRemoveImage = (key: string) => {
-        const newImages = images.filter((image) => image.key !== key);
-        const newPreviews = imagePreviews.filter((image) => image.key !== key);
-        setImages(newImages);
-        setImagePreviews(newPreviews);
+        if(productId){
+
+        }else {
+            const newImages = images.filter((image) => image.key !== key);
+            const newPreviews = imagePreviews.filter((image) => image.key !== key);
+            setImages(newImages);
+            setImagePreviews(newPreviews);
+        }
     }
 
     return (
@@ -361,7 +406,7 @@ const FormEditProduct: React.FC<FormEditProductProps> = ({productId, handleClose
                                     <Button
                                         variant="primary"
                                         className="fw-semibold"
-                                        onClick={() => {}}
+                                        onClick={() => {handleSubmit()}}
                                         disabled={!CheckDataChange()}
                                     >Save</Button>
                                     <Button
