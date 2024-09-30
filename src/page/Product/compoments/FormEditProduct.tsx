@@ -224,8 +224,8 @@ const FormEditProduct: React.FC<FormEditProductProps> = ({ productId, handleClos
     }
 
     return (
-        <OverLay className="disabled-padding">
-            <Container fluid className="bg-light h-100 w-100 p-4 position-relative">
+        <OverLay className="disabled-padding bg-light p-4">
+            <Container fluid className="h-100 w-100 position-relative shadow p-3 rounded">
                 <div className="d-flex justify-content-between align-items-center mb-3">
                     <div className="d-flex flex-row align-items-center gap-2">
                         <button

@@ -440,8 +440,8 @@ export const EditUserComponent: React.FC<EditUserComponentProps> = ({
     }
 
     return (
-        <OverLay className="disabled-padding">
-            <Container fluid className="w-100 h-100 p-4 bg-light position-relative">
+        <OverLay className="disabled-padding bg-light p-4">
+            <Container fluid className="w-100 h-100 position-relative shadow p-3 rounded">
                 <div className="d-flex justify-content-between align-items-center mb-3">
                     <div className="d-flex flex-row align-items-center gap-2">
                         <button
@@ -486,7 +486,7 @@ export const EditUserComponent: React.FC<EditUserComponentProps> = ({
                         )
                     }
                 </div>
-                <Row className="p-4 shadow mx-2 rounded">
+                <Row className="mx-2 rounded">
                     <Col md={6}>
                         <Row className="p-3">
                             {

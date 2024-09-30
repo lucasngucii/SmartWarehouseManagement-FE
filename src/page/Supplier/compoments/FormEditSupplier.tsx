@@ -286,8 +286,8 @@ const FormEditSupplier: React.FC<SupplierDetailProps> = ({ supplierId, hideOverl
     }
 
     return (
-        <OverLay className='disabled-padding'>
-            <Container fluid className='bg-light w-100 h-100 p-4'>
+        <OverLay className='disabled-padding p-4 bg-light'>
+            <Container fluid className='w-100 h-100 shadow-lg rounded p-3'>
                 <div className="d-flex justify-content-between align-items-center mb-3">
                     <div className="d-flex flex-row align-items-center gap-2">
                         <button

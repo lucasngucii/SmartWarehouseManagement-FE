@@ -189,8 +189,8 @@ export const FormEditAttributes: React.FC<EditAttributeValueProps> = ({
     }
 
     return (
-        <OverLay className="disabled-padding">
-            <div className="p-4 bg-light rounded" style={{width: "750px"}}>
+        <OverLay className="disabled-padding bg-light">
+            <div className="rounded p-4 shadow" style={{width: "800px"}}>
                 <div className="d-flex justify-content-between align-items-center mb-4">
                     <h2 className="fw-bold mb-0">
                         {`${attributeDetailId ? "Edit" : "Add"} Value`}
