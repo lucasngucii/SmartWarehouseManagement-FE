@@ -1,6 +1,6 @@
 import React from "react";
 import { OverLay } from "../../../compoments/OverLay/OverLay";
-import { Alert, Button, CloseButton, Col, Container, Form, Image, Row } from "react-bootstrap";
+import { Button, CloseButton, Col, Container, Form, Image, Row } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronLeft, faImage, faImages } from "@fortawesome/free-solid-svg-icons";
 import Select from 'react-select';
@@ -12,8 +12,8 @@ import GetCategoriesByName from "../../../services/Attribute/Category/GetCategor
 import GetSuppliersByName from "../../../services/Supplier/GetSuppliersByName";
 import DataTypeCreateProductAdmin from "../../../interface/PageProduct/FormEdit/DataTypeCreateProductAdmin";
 import CreateProduct from "../../../services/Product/CreateProduct";
-import ToastMessage from "../../../compoments/Toast/ToastMessage";
-import ToastContainerMessage from "../../../compoments/Toast/ToastContainerMessage";
+import {useDispatchMessage} from "../../../Context/ContextMessage";
+import ActionTypeEnum from "../../../enum/ActionTypeEnum";
 
 interface FormEditProductProps {
     handleClose: () => void;
@@ -46,9 +46,8 @@ const Utils: string[] = ["kg", "g", "l", "ml", "unit", "box", "carton"];
 
 const FormEditProduct: React.FC<FormEditProductProps> = ({ productId, handleClose }) => {
 
+    const dispatch = useDispatchMessage();
     const uploadRef = React.useRef<HTMLInputElement>(null);
-    const [globalError, setGlobalError] = React.useState<string>("");
-    const [globalSuccess, setGlobalSuccess] = React.useState<string>("");
     const [loading, setLoading] = React.useState<boolean>(false);
 
     const [color, setColor] = React.useState<string>("");
@@ -98,11 +97,11 @@ const FormEditProduct: React.FC<FormEditProductProps> = ({ productId, handleClos
                     setColors(data.map((size) => ({ value: size.id, label: size.name })));
                 })
                 .catch((error) => {
-                    setGlobalError(error.message);
+                    dispatch({type: ActionTypeEnum.ERROR, message: error.message});
                 });
         }, 1000);
         return () => clearTimeout(id);
-    }, [color]);
+    }, [color, dispatch]);
 
     React.useEffect(() => {
         const id = setTimeout(() => {
@@ -111,11 +110,11 @@ const FormEditProduct: React.FC<FormEditProductProps> = ({ productId, handleClos
                     setBranches(data.map((size) => ({ value: size.id, label: size.name })));
                 })
                 .catch((error) => {
-                    setGlobalError(error.message);
+                    dispatch({type: ActionTypeEnum.ERROR, message: error.message});
                 });
         }, 1000);
         return () => clearTimeout(id);
-    }, [branch]);
+    }, [branch, dispatch]);
 
     React.useEffect(() => {
         const id = setTimeout(() => {
@@ -124,11 +123,11 @@ const FormEditProduct: React.FC<FormEditProductProps> = ({ productId, handleClos
                     setModels(data.map((size) => ({ value: size.id, label: size.name })));
                 })
                 .catch((error) => {
-                    setGlobalError(error.message);
+                    dispatch({type: ActionTypeEnum.ERROR, message: error.message});
                 });
         }, 1000);
         return () => clearTimeout(id);
-    }, [model]);
+    }, [model, dispatch]);
 
     React.useEffect(() => {
         const id = setTimeout(() => {
@@ -137,11 +136,11 @@ const FormEditProduct: React.FC<FormEditProductProps> = ({ productId, handleClos
                     setSizes(data.map((size) => ({ value: size.id, label: size.name })));
                 })
                 .catch((error) => {
-                    setGlobalError(error.message);
+                    dispatch({type: ActionTypeEnum.ERROR, message: error.message});
                 });
         }, 1000);
         return () => clearTimeout(id);
-    }, [size]);
+    }, [size, dispatch]);
 
     React.useEffect(() => {
         const id = setTimeout(() => {
@@ -150,11 +149,11 @@ const FormEditProduct: React.FC<FormEditProductProps> = ({ productId, handleClos
                     setCategories(data.map((size) => ({ value: size.id, label: size.name })));
                 })
                 .catch((error) => {
-                    setGlobalError(error.message);
+                    dispatch({type: ActionTypeEnum.ERROR, message: error.message});
                 });
         }, 1000);
         return () => clearTimeout(id);
-    }, [category]);
+    }, [category, dispatch]);
 
     React.useEffect(() => {
         const id = setTimeout(() => {
@@ -163,11 +162,11 @@ const FormEditProduct: React.FC<FormEditProductProps> = ({ productId, handleClos
                     setSuppliers(data.map((size) => ({ value: size.id, label: size.name })));
                 })
                 .catch((error) => {
-                    setGlobalError(error.message);
+                    dispatch({type: ActionTypeEnum.ERROR, message: error.message});
                 });
         }, 1000);
         return () => clearTimeout(id);
-    }, [supplier]);
+    }, [supplier, dispatch]);
 
     const formartData = (): DataTypeCreateProductAdmin => {
         return {
@@ -192,13 +191,13 @@ const FormEditProduct: React.FC<FormEditProductProps> = ({ productId, handleClos
         setLoading(true);
         CreateProduct(formartData())
             .then(() => {
-                setGlobalSuccess("Create Product success");
+                dispatch({type: ActionTypeEnum.SUCCESS, message: "Create product success"});
                 setTimeout(() => {
                     handleClose();
                 }, 1000);
             })
             .catch((error) => {
-                setGlobalError(error.message);
+                dispatch({type: ActionTypeEnum.ERROR, message: error.message});
             })
             .finally(() => {
                 setLoading(false);
@@ -528,10 +527,6 @@ const FormEditProduct: React.FC<FormEditProductProps> = ({ productId, handleClos
                         </div>
                     </Row>
                 </Form>
-                <ToastContainerMessage position={"top-end"}>
-                    <ToastMessage message={globalError} type={"danger"} setMessage={() => {setGlobalError("")}} />
-                    <ToastMessage message={globalSuccess} type={"success"} setMessage={() => {setGlobalSuccess("")}} />
-                </ToastContainerMessage>
             </Container >
         </OverLay >
     )

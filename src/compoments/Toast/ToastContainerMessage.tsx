@@ -9,7 +9,7 @@ interface ToastContainerProps {
 
 const ToastContainerMessage: React.FC<ToastContainerProps> = ({children, position}) => {
     return (
-        <ToastContainer position={position ? position : "middle-end"} className="p-3" style={{ zIndex: 3000 }}>
+        <ToastContainer position={position ? position : "top-end"} className="p-3" style={{ zIndex: 3000 }}>
             {children}
         </ToastContainer>
     )

@@ -7,10 +7,12 @@ import Attribute from "../../../interface/Attribute";
 import GetAttributeDetail from "../../../services/Attribute/GetAttributeDetail";
 import PaginationType from "../../../interface/Pagination";
 import AttributeDetailType from "../../../interface/AttributeDetail";
-import { Alert, Button, CloseButton, Col, Form, Row } from "react-bootstrap";
+import { Button, CloseButton, Col, Form, Row } from "react-bootstrap";
 import GetAttributeValueById from "../../../services/Attribute/GetAttributeValueById";
 import UpdateAttributeValue from "../../../services/Attribute/UpdateAttributeValue";
 import validateVietnamese from "../../../util/Validate/ValidateVietnamese";
+import {useDispatchMessage} from "../../../Context/ContextMessage";
+import ActionTypeEnum from "../../../enum/ActionTypeEnum";
 
 interface EditAttributeValueProps {
     hideOverlay: () => void;
@@ -22,6 +24,7 @@ interface EditAttributeValueProps {
 
 export const FormEditAttributes: React.FC<EditAttributeValueProps> = ({ hideOverlay, attributeDetailId, attributeId, updateAttributeValues, updatePagination }) => {
 
+    const dispatch = useDispatchMessage();
     const [formData, setFormData] = React.useState<Attribute>({
         name: "",
         description: "",
@@ -33,8 +36,6 @@ export const FormEditAttributes: React.FC<EditAttributeValueProps> = ({ hideOver
         sizeCode: ""
     });
     const [loading, setLoading] = React.useState(false);
-    const [globalError, setGlobalError] = React.useState("");
-    const [globalSuccess, setGlobalSuccess] = React.useState("");
     const [editAttributeValue, setEditAttributeValue] = React.useState(false);
 
     React.useEffect(() => {
@@ -48,10 +49,10 @@ export const FormEditAttributes: React.FC<EditAttributeValueProps> = ({ hideOver
                     });
                 }).catch((error) => {
                     console.error(error);
-                    setGlobalError(error.message);
+                    dispatch({type: ActionTypeEnum.ERROR, message: error.message});
                 });
         }
-    }, [attributeDetailId, attributeId]);
+    }, [attributeDetailId, attributeId, dispatch]);
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLTextAreaElement>) => {
         setFormData({
@@ -80,11 +81,11 @@ export const FormEditAttributes: React.FC<EditAttributeValueProps> = ({ hideOver
                         offset: response.offset,
                         totalElementOfPage: response.totalElementOfPage
                     });
-                    setGlobalSuccess("Update Attribute value successfully");
+                    dispatch({type: ActionTypeEnum.SUCCESS, message: "Update Attribute value successfully"});
                     setEditAttributeValue(false);
                 }).catch((error) => {
                     console.error(error);
-                    setGlobalError(error.message);
+                    dispatch({type: ActionTypeEnum.ERROR, message: error.message});
                 }).finally(() => {
                     setLoading(false);
                 })
@@ -100,13 +101,13 @@ export const FormEditAttributes: React.FC<EditAttributeValueProps> = ({ hideOver
                         offset: response.offset,
                         totalElementOfPage: response.totalElementOfPage
                     });
-                    setGlobalSuccess("Create Attribute value successfully");
+                    dispatch({type: ActionTypeEnum.SUCCESS, message: "Add Attribute value successfully"});
                     setTimeout(() => {
                         hideOverlay();
                     }, 1000)
                 }).catch((error) => {
                     console.error(error);
-                    setGlobalError(error.message);
+                    dispatch({type: ActionTypeEnum.ERROR, message: error.message});
                 }).finally(() => {
                     setLoading(false);
                 })
@@ -181,16 +182,6 @@ export const FormEditAttributes: React.FC<EditAttributeValueProps> = ({ hideOver
     return (
         <OverLay className="disabled-padding">
             <div className="edit-attribute-value p-4 bg-light rounded">
-                {globalError && (
-                    <Alert variant="danger" onClose={() => { setGlobalError("") }} dismissible>
-                        {globalError}
-                    </Alert>
-                )}
-                {globalSuccess && (
-                    <Alert variant="success" onClose={() => { setGlobalSuccess("") }} dismissible>
-                        {globalSuccess}
-                    </Alert>
-                )}
                 <div className="d-flex justify-content-between align-items-center mb-4">
                     <h2 className="fw-bold mb-0">
                         {`${attributeDetailId ? "Edit" : "Add"} Value`}
@@ -289,7 +280,7 @@ export const FormEditAttributes: React.FC<EditAttributeValueProps> = ({ hideOver
                                     handleSubmit();
                                 }
                             }}
-                            disabled={loading || (attributeDetailId === "" && globalSuccess !== "")}
+                            disabled={loading || (attributeDetailId === "")}
                         >
                             Create
                         </Button>

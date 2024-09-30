@@ -1,21 +1,21 @@
 import React from 'react'
 import { Product } from '../../interface/Entity/Product'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faInfoCircle, faSearch, faTrash } from '@fortawesome/free-solid-svg-icons';
-import { Button, Form, Table } from 'react-bootstrap';
+import { faInfoCircle, faTrash } from '@fortawesome/free-solid-svg-icons';
+import { Button, Table } from 'react-bootstrap';
 import GetProducts from '../../services/Product/GetProducts';
 import PaginationType from '../../interface/Pagination';
 import Pagination from '../../compoments/Pagination/Pagination';
 import ModelConfirmDeleteProduct from './compoments/ModelConfirmDeleteProduct';
 import FormEditProduct from './compoments/FormEditProduct';
 import {NoData} from "../../compoments/NoData/NoData";
-import ToastMessage from "../../compoments/Toast/ToastMessage";
-import ToastContainerMessage from "../../compoments/Toast/ToastContainerMessage";
+import {useDispatchMessage} from "../../Context/ContextMessage";
+import ActionTypeEnum from "../../enum/ActionTypeEnum";
 
 
 export const ProductManagement: React.FC = () => {
 
-    const [globalError, setGlobalError] = React.useState<string>("")
+    const dispatch = useDispatchMessage();
     const [showFormEdit, setShowFormEdit] = React.useState<boolean>(false)
     const [showModelConfirmDelete, setShowModelConfirmDelete] = React.useState<boolean>(false)
     const [productId, setProductId] = React.useState<string>("")
@@ -47,7 +47,7 @@ export const ProductManagement: React.FC = () => {
                 })
             }).catch((error) => {
                 console.error(error)
-                setGlobalError(error.message)
+                dispatch({type: ActionTypeEnum.ERROR, message: error.message})
             })
     }
 
@@ -63,9 +63,9 @@ export const ProductManagement: React.FC = () => {
                 })
             }).catch((error) => {
                 console.error(error)
-                setGlobalError(error.message)
+                dispatch({type: ActionTypeEnum.ERROR, message: error.message})
             })
-    }, [])
+    }, [dispatch])
 
     const renderProducts = products.map((product, index) => {
         return (
@@ -151,9 +151,6 @@ export const ProductManagement: React.FC = () => {
                     updatePagination={updatePagination}
                 />
             }
-            <ToastContainerMessage>
-                <ToastMessage message={globalError} type={"danger"} setMessage={() => {setGlobalError("")}} />
-            </ToastContainerMessage>
         </div>
     )
 }

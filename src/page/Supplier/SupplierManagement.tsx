@@ -10,14 +10,14 @@ import Pagination from '../../compoments/Pagination/Pagination';
 import ModelConfirmDeleteSupplier from './compoments/ModelConfirmDeleteSupplier';
 import FormEditSupplier from './compoments/FormEditSupplier';
 import SpinnerLoading from "../../compoments/Loading/SpinnerLoading";
-import ToastMessage from "../../compoments/Toast/ToastMessage";
-import ToastContainerMessage from "../../compoments/Toast/ToastContainerMessage";
+import {useDispatchMessage} from "../../Context/ContextMessage";
+import ActionTypeEnum from "../../enum/ActionTypeEnum";
 
 export const SupplierManagement: React.FC = () => {
 
+    const dispatch = useDispatchMessage();
     const [suppliers, setSuppliers] = React.useState<Supplier[]>([]);
     const [isLoading, setIsLoading] = React.useState<boolean>(false);
-    const [globalError, setGlobalError] = React.useState<string>("");
     const [showDetail, setShowDetail] = React.useState(false);
     const [showConfirmDelete, setShowConfirmDelete] = React.useState(false);
     const [supplierId, setSupplierId] = React.useState<string>("");
@@ -41,7 +41,7 @@ export const SupplierManagement: React.FC = () => {
                 });
             }).catch((error) => {
                 console.error(error);
-                setGlobalError(error.message);
+
             }).finally(() => {
                 setIsLoading(false);
             });
@@ -61,13 +61,13 @@ export const SupplierManagement: React.FC = () => {
                     });
                 }).catch((error) => {
                 console.error(error);
-                setGlobalError(error.message);
+                dispatch({type: ActionTypeEnum.ERROR, message: error.message});
             }).finally(() => {
                 setIsLoading(false);
             });
         }, 1000);
         return () => clearTimeout(id);
-    }, [pagination.offset]);
+    }, [pagination.offset, dispatch]);
 
     const handleDelete = (id: string) => {
         setSupplierId(id);
@@ -155,7 +155,7 @@ export const SupplierManagement: React.FC = () => {
                 suppliers.length > 0 && <Pagination currentPage={pagination?.offset} totalPages={pagination?.totalPage} onPageChange={handleChangePage} />
             }
             {
-                (suppliers.length === 0 || globalError) && !isLoading && <NoData />
+                (suppliers.length === 0) && !isLoading && <NoData />
             }
             {
                 showConfirmDelete &&
@@ -182,9 +182,6 @@ export const SupplierManagement: React.FC = () => {
             {
                 isLoading && <SpinnerLoading />
             }
-            <ToastContainerMessage>
-                <ToastMessage message={globalError} type={"danger"} setMessage={() => {setGlobalError("")}} />
-            </ToastContainerMessage>
         </div>
     );
 };

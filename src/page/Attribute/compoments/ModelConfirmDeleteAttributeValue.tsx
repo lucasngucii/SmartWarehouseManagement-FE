@@ -5,6 +5,8 @@ import DeleteAttributeValue from "../../../services/Attribute/DeleteAttributeVal
 import GetAttributeDetail from "../../../services/Attribute/GetAttributeDetail";
 import PaginationType from "../../../interface/Pagination";
 import SpinnerLoading from "../../../compoments/Loading/SpinnerLoading";
+import {useDispatchMessage} from "../../../Context/ContextMessage";
+import ActionTypeEnum from "../../../enum/ActionTypeEnum";
 
 interface ModelConfirmDeleteAttributeValueProps {
     attributeId: number;
@@ -16,8 +18,8 @@ interface ModelConfirmDeleteAttributeValueProps {
 
 const ModelConfirmDeleteAttributeValue: React.FC<ModelConfirmDeleteAttributeValueProps> = ({ attributeId, attributeValueId, closeModelConfirmDelete, updateAttributeValues, updatePagination }) => {
 
+    const dispatch = useDispatchMessage();
     const [isLoading, setIsLoading] = React.useState(false);
-    const [globalError, setGlobalError] = React.useState<string>("");
 
     const handelDeleteAttributeValue = () => {
         setIsLoading(true);
@@ -35,7 +37,7 @@ const ModelConfirmDeleteAttributeValue: React.FC<ModelConfirmDeleteAttributeValu
                 closeModelConfirmDelete();
             }).catch((error) => {
                 console.error(error);
-                setGlobalError(error.message);
+                dispatch({type: ActionTypeEnum.ERROR, message: error.message});
             }).finally(() => {
                 setIsLoading(false);
             })
@@ -46,7 +48,6 @@ const ModelConfirmDeleteAttributeValue: React.FC<ModelConfirmDeleteAttributeValu
             <div className="global-model">
                 <h2 className="h2 fw-bold">Confirm Delete</h2>
                 <p>Are you sure you want to delete this attribute value?</p>
-                <span className="primary-message-error text-center">{globalError}</span>
                 {
                     isLoading ?
                         <SpinnerLoading />

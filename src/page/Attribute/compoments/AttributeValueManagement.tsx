@@ -18,8 +18,8 @@ import {
 import ModelConfirmDeleteAttributeValue from "./ModelConfirmDeleteAttributeValue";
 import { Button, Table } from "react-bootstrap";
 import SpinnerLoading from "../../../compoments/Loading/SpinnerLoading";
-import ToastMessage from "../../../compoments/Toast/ToastMessage";
-import ToastContainerMessage from "../../../compoments/Toast/ToastContainerMessage";
+import {useDispatchMessage} from "../../../Context/ContextMessage";
+import ActionTypeEnum from "../../../enum/ActionTypeEnum";
 
 interface AttributeValueManagementProps {
     handleCancelEditAttribute: () => void;
@@ -28,8 +28,8 @@ interface AttributeValueManagementProps {
 
 export const AttributeValueManagement: React.FC<AttributeValueManagementProps> = ({ handleCancelEditAttribute, attributeId }) => {
 
+    const dispatch = useDispatchMessage();
     const [attributeValues, setAttributeValues] = React.useState<AttributeDetailType[]>([]);
-    const [globalError, setGlobalError] = React.useState("");
     const [attributeValueId, setAttributeValueId] = React.useState<string>("");
     const [isLoading, setIsLoading] = React.useState(false);
     const [showEditAttributeValue, setShowEditAttributeValue] = React.useState(false);
@@ -54,11 +54,11 @@ export const AttributeValueManagement: React.FC<AttributeValueManagementProps> =
                 });
             }).catch((error) => {
                 console.error(error);
-                setGlobalError(error.message);
+                dispatch({type: ActionTypeEnum.ERROR, message: error.message});
             }).finally(() => {
                 setIsLoading(false);
             })
-    }, [attributeId, pagination.offset]);
+    }, [attributeId, pagination.offset, dispatch]);
 
     const handleCancelEditAttributeValue = () => {
         setAttributeValueId("")
@@ -205,7 +205,7 @@ export const AttributeValueManagement: React.FC<AttributeValueManagementProps> =
                     attributeValues.length > 0 && <Pagination currentPage={pagination?.offset} totalPages={pagination?.totalPage} onPageChange={handleChangePage} />
                 }
                 {
-                    (attributeValues.length === 0 || globalError) && !isLoading && <NoData />
+                    (attributeValues.length === 0) && !isLoading && <NoData />
                 }
                 {
                     isLoading && <SpinnerLoading />
@@ -230,9 +230,6 @@ export const AttributeValueManagement: React.FC<AttributeValueManagementProps> =
                         updatePagination={updatePagination}
                     />
                 }
-                <ToastContainerMessage>
-                    <ToastMessage message={globalError} type={"danger"} setMessage={() => {setGlobalError("")}} />
-                </ToastContainerMessage>
             </div>
         </OverLay>
     );

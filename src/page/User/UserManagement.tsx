@@ -10,17 +10,17 @@ import PaginationType from "../../interface/Pagination";
 import {Button, Table} from "react-bootstrap";
 import {Account} from "../../interface/Account";
 import SpinnerLoading from "../../compoments/Loading/SpinnerLoading";
-import ToastMessage from "../../compoments/Toast/ToastMessage";
-import ToastContainerMessage from "../../compoments/Toast/ToastContainerMessage";
+import {useDispatchMessage} from "../../Context/ContextMessage";
+import ActionTypeEnum from "../../enum/ActionTypeEnum";
 
 export const UserManagement: React.FC = () => {
 
+    const dispatch = useDispatchMessage();
     const [users, setUsers] = React.useState<Account[]>([]);
     const [isLoading, setIsLoading] = React.useState(false);
     const [showOverlayModelUser, setShowOverlayModelUser] = React.useState(false);
     const [showOverlayModelDelete, setShowOverlayModelDelete] = React.useState(false);
     const [userId, setUserId] = React.useState<string>("");
-    const [globalError, setGlobalError] = React.useState<string>("");
     const [pagination, setPagination] = React.useState<PaginationType>({
         totalPage: 0,
         limit: 0,
@@ -41,11 +41,11 @@ export const UserManagement: React.FC = () => {
                 });
             }).catch((error) => {
             console.error(error);
-            setGlobalError(error.message);
+            dispatch({type: ActionTypeEnum.ERROR, message: error.message});
         }).finally(() => {
             setIsLoading(false);
         });
-    }, []);
+    }, [dispatch]);
 
     React.useEffect(() => {
         const id = setTimeout(() => {
@@ -61,13 +61,13 @@ export const UserManagement: React.FC = () => {
                     });
                 }).catch((error) => {
                 console.error(error);
-                setGlobalError(error.message);
+                dispatch({type: ActionTypeEnum.ERROR, message: error.message});
             }).finally(() => {
                 setIsLoading(false);
             });
         }, 1000);
         return () => clearTimeout(id);
-    }, [pagination.offset]);
+    }, [pagination.offset, dispatch]);
 
     const handleHideOverlayModelUser = () => {
         setShowOverlayModelUser(false);
@@ -133,7 +133,7 @@ export const UserManagement: React.FC = () => {
     );
 
     return (
-        <div className={"w-100 h-100 position-relative"}>
+        <div className={"w-100 h-100"}>
             <div className="d-flex justify-content-between align-items-center mb-3">
                 <div>
                     <h2 className={"h2 fw-bold"}>User Account Management</h2>
@@ -166,7 +166,7 @@ export const UserManagement: React.FC = () => {
                                                 onPageChange={handleChangePage}/>
             }
             {
-                (users.length === 0 || globalError) && !isLoading && <NoData />
+                (users.length === 0) && !isLoading && <NoData/>
             }
             {
                 isLoading && <SpinnerLoading/>
@@ -189,9 +189,6 @@ export const UserManagement: React.FC = () => {
                     updatePagination={updatePagination}
                 />
             }
-            <ToastContainerMessage>
-                <ToastMessage message={globalError} type={"danger"} setMessage={() => {setGlobalError("")}} />
-            </ToastContainerMessage>
         </div>
     );
 }

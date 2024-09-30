@@ -1,5 +1,5 @@
 import React, {ChangeEvent} from "react";
-import {Alert, Button, Col, Container, Form, Image, InputGroup, Row, Spinner} from "react-bootstrap";
+import {Button, Col, Container, Form, Image, InputGroup, Row} from "react-bootstrap";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faChevronLeft, faEdit, faSave} from "@fortawesome/free-solid-svg-icons";
 import ChangePasswordForm from "./ChangePasswordForm";
@@ -22,8 +22,8 @@ import GetAccountsAPI from "../../../services/Authen/GetAccountsAPI";
 import RegisterAPI from "../../../services/Authen/RegisterAPI";
 import {OverLay} from "../../../compoments/OverLay/OverLay";
 import SpinnerLoadingOverLayer from "../../../compoments/Loading/SpinnerLoadingOverLay";
-import ToastMessage from "../../../compoments/Toast/ToastMessage";
-import ToastContainerMessage from "../../../compoments/Toast/ToastContainerMessage";
+import {useDispatchMessage} from "../../../Context/ContextMessage";
+import ActionTypeEnum from "../../../enum/ActionTypeEnum";
 
 interface EditUserComponentProps {
     hideOverlay: () => void;
@@ -38,12 +38,10 @@ export const EditUserComponent: React.FC<EditUserComponentProps> = ({
                                                                         updateUsers,
                                                                         updatePagination
                                                                     }) => {
-
+    const dispatch = useDispatchMessage();
     const file = React.useRef<HTMLInputElement>(null);
     const [isLoading, setIsLoading] = React.useState<boolean>(false);
     const [isLoadingSubmit, setIsLoadingSubmit] = React.useState<boolean>(false);
-    const [globalError, setGlobalError] = React.useState<string>("");
-    const [globalSuccess, setGlobalSuccess] = React.useState<string>("");
     const [editUser, setEditUser] = React.useState<boolean>(false);
     const [changePassword, setChangePassword] = React.useState<boolean>(false);
     const [roles, setRoles] = React.useState<Role[]>([]);
@@ -97,11 +95,11 @@ export const EditUserComponent: React.FC<EditUserComponentProps> = ({
                 setRoles(response);
             }).catch((err) => {
             console.error(err.message);
-            setGlobalError(err.message);
+            dispatch({type: ActionTypeEnum.ERROR, message: err.message});
         }).finally(() => {
             setIsLoading(false);
         })
-    }, [])
+    }, [dispatch])
 
     React.useEffect(() => {
         if (userId) {
@@ -117,10 +115,10 @@ export const EditUserComponent: React.FC<EditUserComponentProps> = ({
                     });
                 }).catch((err) => {
                 console.error(err.message);
-                setGlobalError(err.message);
+                dispatch({type: ActionTypeEnum.ERROR, message: err.message});
             })
         }
-    }, [userId])
+    }, [userId, dispatch])
 
     const handleChangeInput = (e: ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
         const {name, value} = e.target;
@@ -323,7 +321,6 @@ export const EditUserComponent: React.FC<EditUserComponentProps> = ({
             if (!formData.dateOfBirth) throw new Error("Date of birth is required");
             if (!formData.gender) throw new Error("Gender is required");
             if (!formData.username) throw new Error("Username is required");
-
             return {
                 email: formData.email,
                 password: formData.password,
@@ -336,9 +333,8 @@ export const EditUserComponent: React.FC<EditUserComponentProps> = ({
                 gender: formData.gender,
                 username: formData.username,
             }
-
-        } catch (error: Error | any) {
-            setGlobalError(error.message);
+        } catch (error: any) {
+            dispatch({type: ActionTypeEnum.ERROR, message: error.message});
             return null;
         }
     }
@@ -384,7 +380,7 @@ export const EditUserComponent: React.FC<EditUserComponentProps> = ({
                         offset: response.offset,
                         totalElementOfPage: response.totalElementOfPage
                     })
-                    setGlobalSuccess("Update user successfully!");
+                    dispatch({type: ActionTypeEnum.SUCCESS, message: "Update user successfully!"});
                     setEditUser(false);
                 }).catch((err) => {
                     const message: string = err.message.toLowerCase();
@@ -397,7 +393,7 @@ export const EditUserComponent: React.FC<EditUserComponentProps> = ({
                             return {...preVal, roleName: err.message}
                         })
                     } else {
-                        setGlobalError(err.message);
+                        dispatch({type: ActionTypeEnum.ERROR, message: err.message});
                     }
                 }).finally(() => {
                     setIsLoadingSubmit(false);
@@ -415,7 +411,7 @@ export const EditUserComponent: React.FC<EditUserComponentProps> = ({
                         offset: response.offset,
                         totalElementOfPage: response.totalElementOfPage
                     })
-                    setGlobalSuccess("Create user successfully!");
+                    dispatch({type: ActionTypeEnum.SUCCESS, message: "Create user successfully!"});
                     setTimeout(() => {
                         hideOverlay();
                     }, 1000);
@@ -434,7 +430,7 @@ export const EditUserComponent: React.FC<EditUserComponentProps> = ({
                             return {...preVal, username: err.message}
                         })
                     } else {
-                        setGlobalError(err.message);
+                        dispatch({type: ActionTypeEnum.ERROR, message: err.message});
                     }
                 }).finally(() => {
                     setIsLoadingSubmit(false);
@@ -751,10 +747,10 @@ export const EditUserComponent: React.FC<EditUserComponentProps> = ({
                     <ChangePasswordForm userId={userId} hideOver={() => setChangePassword(false)}/>
                 }
                 {(isLoading || isLoadingSubmit) && <SpinnerLoadingOverLayer/>}
-                <ToastContainerMessage>
-                    <ToastMessage message={globalSuccess} type={"success"} setMessage={() => {setGlobalSuccess("")}} />
-                    <ToastMessage message={globalError} type={"danger"} setMessage={() => {setGlobalError("")}} />
-                </ToastContainerMessage>
+                {/*<ToastContainerMessage>*/}
+                {/*    <ToastMessage message={globalSuccess} type={"success"} setMessage={() => {setGlobalSuccess("")}} />*/}
+                {/*    <ToastMessage message={globalError} type={"danger"} setMessage={() => {setGlobalError("")}} />*/}
+                {/*</ToastContainerMessage>*/}
             </Container>
         </OverLay>
     );

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { OverLay } from '../../../compoments/OverLay/OverLay';
-import { Alert, Button, Col, Container, Form, Row } from 'react-bootstrap';
+import { Button, Col, Container, Form, Row } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronLeft, faEdit, faSave } from '@fortawesome/free-solid-svg-icons';
 import GetSupplierById from '../../../services/Supplier/GetSupplierById';
@@ -10,6 +10,8 @@ import PaginationType from '../../../interface/Pagination';
 import GetSuppliers from '../../../services/Supplier/GetSuppliers';
 import CreateSupplier from '../../../services/Supplier/CreateSupplier';
 import FormDataTypes from '../../../interface/FormDataSupplier';
+import {useDispatchMessage} from "../../../Context/ContextMessage";
+import ActionTypeEnum from "../../../enum/ActionTypeEnum";
 
 interface SupplierDetailProps {
     supplierId: string;
@@ -20,10 +22,9 @@ interface SupplierDetailProps {
 
 const FormEditSupplier: React.FC<SupplierDetailProps> = ({ supplierId, hideOverlay, updatePagination, updateSuppliers }) => {
 
+    const dispatch = useDispatchMessage();
     const [isEditing, setIsEditing] = useState(false);
     const [isSaving, setIsSaving] = useState(false);
-    const [globalError, setGlobalError] = useState<string>("");
-    const [globalSuccess, setGlobalSuccess] = useState<string>("");
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const [formData, setFormData] = useState<FormDataTypes>({
         name: "",
@@ -42,7 +43,6 @@ const FormEditSupplier: React.FC<SupplierDetailProps> = ({ supplierId, hideOverl
         isActive: true
     });
     const [formError, setFormError] = useState<FormDataTypes>({
-
         name: "",
         description: "",
         phone: "",
@@ -183,12 +183,12 @@ const FormEditSupplier: React.FC<SupplierDetailProps> = ({ supplierId, hideOverl
                     setDataDefault(response);
                 }).catch((error) => {
                     console.error(error);
-                    setGlobalError(error.message);
+                    dispatch({type: ActionTypeEnum.ERROR, message: error.message});
                 }).finally(() => {
                     setIsLoading(false);
                 });
         }
-    }, [supplierId]);
+    }, [supplierId, dispatch]);
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         const { name, value } = e.target;
@@ -215,12 +215,12 @@ const FormEditSupplier: React.FC<SupplierDetailProps> = ({ supplierId, hideOverl
                             totalElementOfPage: response.totalElementOfPage,
                             totalPage: response.totalPage
                         });
-                        setGlobalSuccess("Update Supplier successfully");
+                        dispatch({type: ActionTypeEnum.SUCCESS, message: "Update Supplier successfully"});
                         setDataDefault(formData);
                         setIsEditing(false);
                     }).catch((error) => {
                         console.error(error);
-                        setGlobalError(error.message);
+                        dispatch({type: ActionTypeEnum.ERROR, message: error.message});
                     }).finally(() => {
                         setIsSaving(false);
                     });
@@ -250,13 +250,13 @@ const FormEditSupplier: React.FC<SupplierDetailProps> = ({ supplierId, hideOverl
                             totalElementOfPage: response.totalElementOfPage,
                             totalPage: response.totalPage
                         });
-                        setGlobalSuccess("Create Supplier successfully");
+                        dispatch({type: ActionTypeEnum.SUCCESS, message: "Create Supplier successfully"});
                         setTimeout(() => {
                             hideOverlay();
                         }, 1000);
                     }).catch((error) => {
                         console.error(error);
-                        setGlobalError(error.message);
+                        dispatch({type: ActionTypeEnum.ERROR, message: error.message});
                     }).finally(() => {
                         setIsSaving(false);
                     });
@@ -298,8 +298,6 @@ const FormEditSupplier: React.FC<SupplierDetailProps> = ({ supplierId, hideOverl
                         </button>
                         <h2 className="fw-bold mb-0">{`${supplierId ? "Edit" : "New"}`} Supplier</h2>
                     </div>
-                    {globalError && <Alert onClose={() => setGlobalError("")} variant="danger" dismissible>{globalError}</Alert>}
-                    {globalSuccess && <Alert onClose={() => setGlobalSuccess("")} variant="success" dismissible>{globalSuccess}</Alert>}
                     {supplierId && isEditing ? (
                         <div className="d-flex flex-row gap-2">
                             <button
@@ -560,7 +558,7 @@ const FormEditSupplier: React.FC<SupplierDetailProps> = ({ supplierId, hideOverl
                                 supplierId === "" &&
                                 <Button
                                     onClick={handleSubmit}
-                                    disabled={isSaving || (supplierId !== "" && globalSuccess !== "")}
+                                    disabled={isSaving || (supplierId !== "")}
                                     variant="primary"
                                     className='form-control fw-bold py-3'>
                                     {isSaving ? "Creating..." : "Create"}
