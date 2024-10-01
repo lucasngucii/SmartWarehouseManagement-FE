@@ -7,17 +7,19 @@ import Supplier from '../../interface/Entity/Supplier';
 import PaginationType from '../../interface/Pagination';
 import { NoData } from '../../compoments/NoData/NoData';
 import Pagination from '../../compoments/Pagination/Pagination';
-import ModelConfirmDeleteSupplier from './compoments/ModelConfirmDeleteSupplier';
 import FormEditSupplier from './compoments/FormEditSupplier';
 import SpinnerLoading from "../../compoments/Loading/SpinnerLoading";
 import {useDispatchMessage} from "../../Context/ContextMessage";
 import ActionTypeEnum from "../../enum/ActionTypeEnum";
+import DeleteSupplierById from "../../services/Supplier/DeleteSupplierById";
+import ModelConfirmDelete from "../../compoments/ModelConfirm/ModelConfirmDelete";
 
 export const SupplierManagement: React.FC = () => {
 
     const dispatch = useDispatchMessage();
     const [suppliers, setSuppliers] = React.useState<Supplier[]>([]);
     const [isLoading, setIsLoading] = React.useState<boolean>(false);
+    const [isLoadingDelete, setIsLoadingDelete] = React.useState<boolean>(false);
     const [showDetail, setShowDetail] = React.useState(false);
     const [showConfirmDelete, setShowConfirmDelete] = React.useState(false);
     const [supplierId, setSupplierId] = React.useState<string>("");
@@ -69,6 +71,34 @@ export const SupplierManagement: React.FC = () => {
         return () => clearTimeout(id);
     }, [pagination.offset, dispatch]);
 
+    const handelDeleteSupplier = () => {
+        if(supplierId) {
+            setIsLoadingDelete(true);
+            DeleteSupplierById(supplierId)
+                .then(() => {
+                    return GetSuppliers();
+                }).then((response) => {
+                updateSuppliers(response.data);
+                updatePagination({
+                    totalPage: response.totalPage,
+                    limit: response.limit,
+                    offset: response.offset,
+                    totalElementOfPage: response.totalElementOfPage
+                });
+                setShowConfirmDelete(false);
+                setSupplierId("");
+                dispatch({type: ActionTypeEnum.SUCCESS, message: "Delete supplier successfully"});
+            }).catch((error) => {
+                console.error(error);
+                dispatch({type: ActionTypeEnum.ERROR, message: error.message});
+            }).finally(() => {
+                setIsLoadingDelete(false);
+            })
+        }else {
+            dispatch({type: ActionTypeEnum.ERROR, message: "Supplier delete failed"});
+        }
+    }
+
     const handleDelete = (id: string) => {
         setSupplierId(id);
         setShowConfirmDelete(true);
@@ -85,7 +115,7 @@ export const SupplierManagement: React.FC = () => {
         setSuppliers(suppliers);
     }
 
-    const updateSPagination = (pagination: PaginationType) => {
+    const updatePagination = (pagination: PaginationType) => {
         setPagination(pagination);
     }
 
@@ -159,19 +189,20 @@ export const SupplierManagement: React.FC = () => {
             }
             {
                 showConfirmDelete &&
-                <ModelConfirmDeleteSupplier
-                    supplierId={supplierId}
-                    closeModelConfirmDelete={() => {
-                        setShowConfirmDelete(false)
+                <ModelConfirmDelete
+                    message={"Are you sure delete this supplier?"}
+                    onConfirm={handelDeleteSupplier}
+                    onClose={() => {
+                        setShowConfirmDelete(false);
+                        setSupplierId("");
                     }}
-                    updateSuppliers={updateSuppliers}
-                    updatePagination={updateSPagination}
+                    loading={isLoadingDelete}
                 />
             }
             {
                 showDetail &&
                 <FormEditSupplier
-                    updatePagination={updateSPagination}
+                    updatePagination={updatePagination}
                     updateSuppliers={updateSuppliers}
                     supplierId={supplierId}
                     hideOverlay={() => {

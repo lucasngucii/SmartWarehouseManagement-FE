@@ -1,21 +1,25 @@
 import React from 'react'
-import { Product } from '../../interface/Entity/Product'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import {Product} from '../../interface/Entity/Product'
+import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import {faPencilAlt, faTrash} from '@fortawesome/free-solid-svg-icons';
-import { Button, Table } from 'react-bootstrap';
+import {Button, Table} from 'react-bootstrap';
 import GetProducts from '../../services/Product/GetProducts';
 import PaginationType from '../../interface/Pagination';
 import Pagination from '../../compoments/Pagination/Pagination';
-import ModelConfirmDeleteProduct from './compoments/ModelConfirmDeleteProduct';
 import FormEditProduct from './compoments/FormEditProduct';
 import {NoData} from "../../compoments/NoData/NoData";
 import {useDispatchMessage} from "../../Context/ContextMessage";
 import ActionTypeEnum from "../../enum/ActionTypeEnum";
+import DeleteProductById from "../../services/Product/DeleteProductById";
+import ModelConfirmDelete from "../../compoments/ModelConfirm/ModelConfirmDelete";
+import SpinnerLoading from "../../compoments/Loading/SpinnerLoading";
 
 
 export const ProductManagement: React.FC = () => {
 
     const dispatch = useDispatchMessage();
+    const [isLoading, setIsLoading] = React.useState<boolean>(false)
+    const [isLoadingDelete, setIsLoadingDelete] = React.useState<boolean>(false)
     const [showFormEdit, setShowFormEdit] = React.useState<boolean>(false)
     const [showModelConfirmDelete, setShowModelConfirmDelete] = React.useState<boolean>(false)
     const [productId, setProductId] = React.useState<string>("")
@@ -36,7 +40,8 @@ export const ProductManagement: React.FC = () => {
     }
 
     const handleChangePage = (page: number) => {
-        GetProducts({ offset: page })
+        setIsLoading(true)
+        GetProducts({offset: page})
             .then((response) => {
                 setProducts(response.data)
                 setPagination({
@@ -46,12 +51,15 @@ export const ProductManagement: React.FC = () => {
                     totalElementOfPage: response.totalElementOfPage
                 })
             }).catch((error) => {
-                console.error(error)
-                dispatch({type: ActionTypeEnum.ERROR, message: error.message})
-            })
+            console.error(error)
+            dispatch({type: ActionTypeEnum.ERROR, message: error.message})
+        }).finally(() => {
+            setIsLoading(false)
+        })
     }
 
     React.useEffect(() => {
+        setIsLoading(true)
         GetProducts()
             .then((response) => {
                 setProducts(response.data)
@@ -62,10 +70,40 @@ export const ProductManagement: React.FC = () => {
                     totalElementOfPage: response.totalElementOfPage
                 })
             }).catch((error) => {
-                console.error(error)
-                dispatch({type: ActionTypeEnum.ERROR, message: error.message})
-            })
+            console.error(error)
+            dispatch({type: ActionTypeEnum.ERROR, message: error.message})
+        }).finally(() => {
+            setIsLoading(false)
+        })
     }, [dispatch])
+
+    const handleDeleteAccount = () => {
+        if (productId) {
+            setIsLoadingDelete(true);
+            DeleteProductById(productId)
+                .then(() => {
+                    return GetProducts();
+                }).then((response) => {
+                updateProducts(response.data);
+                updatePagination({
+                    totalPage: response.totalPage,
+                    limit: response.limit,
+                    offset: response.offset,
+                    totalElementOfPage: response.totalElementOfPage
+                });
+                setShowModelConfirmDelete(false);
+                setProductId("");
+                dispatch({type: ActionTypeEnum.SUCCESS, message: "Delete product successfully"});
+            }).catch((error) => {
+                console.error(error);
+                dispatch({type: ActionTypeEnum.ERROR, message: error.message});
+            }).finally(() => {
+                setIsLoadingDelete(false);
+            })
+        } else {
+            dispatch({type: ActionTypeEnum.ERROR, message: "Product delete failed"});
+        }
+    }
 
     const renderProducts = products.map((product, index) => {
         return (
@@ -93,7 +131,7 @@ export const ProductManagement: React.FC = () => {
                             }}
                             variant="danger"
                         >
-                            <FontAwesomeIcon icon={faTrash} />
+                            <FontAwesomeIcon icon={faTrash}/>
                         </Button>
                     </div>
                 </td>
@@ -114,28 +152,31 @@ export const ProductManagement: React.FC = () => {
             </div>
             <Table striped bordered hover>
                 <thead>
-                    <tr>
-                        <th>#</th>
-                        <th>Product Name</th>
-                        <th>Description</th>
-                        <th>Code</th>
-                        <th>Unit</th>
-                        <th>Actions</th>
-                    </tr>
+                <tr>
+                    <th>#</th>
+                    <th>Product Name</th>
+                    <th>Description</th>
+                    <th>Code</th>
+                    <th>Unit</th>
+                    <th>Actions</th>
+                </tr>
                 </thead>
                 <tbody>
-                    {renderProducts}
+                {renderProducts}
                 </tbody>
             </Table>
             {
-                products.length > 0 ?
+                isLoading && <SpinnerLoading/>
+            }
+            {
+                (products.length > 0) ?
                     <Pagination
                         currentPage={pagination.offset}
                         totalPages={pagination?.totalPage}
                         onPageChange={handleChangePage}
                     />
                     :
-                    <NoData />
+                    (!isLoading && <NoData/>) || null
             }
             {
                 showFormEdit &&
@@ -149,11 +190,14 @@ export const ProductManagement: React.FC = () => {
             }
             {
                 showModelConfirmDelete &&
-                <ModelConfirmDeleteProduct
-                    productId={productId}
-                    closeModelConfirmDelete={() => setShowModelConfirmDelete(false)}
-                    updateProducts={updateProducts}
-                    updatePagination={updatePagination}
+                <ModelConfirmDelete
+                    message={"Are you sure delete this product?"}
+                    onConfirm={handleDeleteAccount}
+                    onClose={() => {
+                        setShowModelConfirmDelete(false)
+                        setProductId("")
+                    }}
+                    loading={isLoadingDelete}
                 />
             }
         </div>

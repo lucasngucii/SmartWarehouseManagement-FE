@@ -3,7 +3,6 @@ import {faPencilAlt, faTrash} from "@fortawesome/free-solid-svg-icons";
 import {EditUserComponent} from "./compoments/EditUserComponent";
 import React from "react";
 import {NoData} from "../../compoments/NoData/NoData";
-import {ModelConfirmDeleteUser} from "./compoments/ModelConfirmDeleteUser";
 import GetAccountsAPI from "../../services/Authen/GetAccountsAPI";
 import Pagination from "../../compoments/Pagination/Pagination";
 import PaginationType from "../../interface/Pagination";
@@ -12,12 +11,15 @@ import {Account} from "../../interface/Account";
 import SpinnerLoading from "../../compoments/Loading/SpinnerLoading";
 import {useDispatchMessage} from "../../Context/ContextMessage";
 import ActionTypeEnum from "../../enum/ActionTypeEnum";
+import ModelConfirmDelete from "../../compoments/ModelConfirm/ModelConfirmDelete";
+import DeleteAccountAPI from "../../services/Authen/DeleteAccountAPI";
 
 export const UserManagement: React.FC = () => {
 
     const dispatch = useDispatchMessage();
     const [users, setUsers] = React.useState<Account[]>([]);
     const [isLoading, setIsLoading] = React.useState(false);
+    const [isLoadingDelete, setIsLoadingDelete] = React.useState(false);
     const [showOverlayModelUser, setShowOverlayModelUser] = React.useState(false);
     const [showOverlayModelDelete, setShowOverlayModelDelete] = React.useState(false);
     const [userId, setUserId] = React.useState<string>("");
@@ -68,6 +70,33 @@ export const UserManagement: React.FC = () => {
         }, 1000);
         return () => clearTimeout(id);
     }, [pagination.offset, dispatch]);
+
+    const handleDeleteAccount = () => {
+        if (userId) {
+            setIsLoadingDelete(true);
+            DeleteAccountAPI(userId)
+                .then(() => {
+                    return GetAccountsAPI();
+                }).then((response) => {
+                setUsers(response.data);
+                updatePagination({
+                    totalPage: response.totalPage,
+                    limit: response.limit,
+                    offset: response.offset,
+                    totalElementOfPage: response.totalElementOfPage
+                });
+                dispatch({type: ActionTypeEnum.SUCCESS, message: "Delete user successfully"});
+                handleHideOverlayModelDelete();
+            }).catch((error) => {
+                console.error(error);
+                dispatch({type: ActionTypeEnum.ERROR, message: error.message});
+            }).finally(() => {
+                setIsLoadingDelete(false);
+            })
+        } else {
+            dispatch({type: ActionTypeEnum.ERROR, message: "User delete failed"});
+        }
+    }
 
     const handleHideOverlayModelUser = () => {
         setShowOverlayModelUser(false);
@@ -182,13 +211,13 @@ export const UserManagement: React.FC = () => {
             }
             {
                 showOverlayModelDelete &&
-                <ModelConfirmDeleteUser
-                    userId={userId}
-                    closeModelConfirmDelete={handleHideOverlayModelDelete}
-                    updateUsers={updateUsers}
-                    updatePagination={updatePagination}
+                <ModelConfirmDelete
+                    message={"Are you sure delete this user ?"}
+                    onConfirm={handleDeleteAccount}
+                    onClose={handleHideOverlayModelDelete}
+                    loading={isLoadingDelete}
                 />
             }
         </div>
-    );
+    )
 }

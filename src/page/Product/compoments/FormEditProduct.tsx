@@ -20,6 +20,8 @@ import {Product} from "../../../interface/Entity/Product";
 import DeepEqual from "../../../util/DeepEqual";
 import DataTypeUpdateProductAdmin from "../../../interface/PageProduct/DataTypeUpdateProductAdmin";
 import UpdateProductByProductId from "../../../services/Product/UpdateProductByProductId";
+import DeleteImageByProductId from "../../../services/Product/DeleteImageByProductId";
+import ModelConfirmDelete from "../../../compoments/ModelConfirm/ModelConfirmDelete";
 
 interface FormEditProductProps {
     handleClose: () => void;
@@ -53,7 +55,7 @@ interface TypeImagePreview {
     url: string
 }
 
-interface  TypeImageUpload {
+interface TypeImageUpload {
     key: string,
     file: File
 }
@@ -65,7 +67,10 @@ const FormEditProduct: React.FC<FormEditProductProps> = ({productId, handleClose
     const dispatch = useDispatchMessage();
     const uploadRef = React.useRef<HTMLInputElement>(null);
     const [loading, setLoading] = React.useState<boolean>(false);
+    const [showModelConfirmDeleteImage, setShowModelConfirmDeleteImage] = React.useState<boolean>(false);
     const [isEdit, setIsEdit] = React.useState<boolean>(false);
+
+    const [keyImageDelete, setKeyImageDelete] = React.useState<string>("");
 
     const [color, setColor] = React.useState<string>("");
     const [branch, setBranch] = React.useState<string>("");
@@ -306,7 +311,7 @@ const FormEditProduct: React.FC<FormEditProductProps> = ({productId, handleClose
 
         if (formData.name === dataDefault.name) delete dataUpdate.name;
         if (formData.unit === dataDefault.unit) delete dataUpdate.unit;
-        if(DeepEqual(formData.category, dataDefault.category)) delete dataUpdate.categoryId;
+        if (DeepEqual(formData.category, dataDefault.category)) delete dataUpdate.categoryId;
         if (formData.description === dataDefault.description) delete dataUpdate.description;
         if (formData.productCode === dataDefault.productCode) delete dataUpdate.productCode;
         if (DeepEqual(formData.supplier, dataDefault.supplier)) delete dataUpdate.supplierId;
@@ -376,14 +381,37 @@ const FormEditProduct: React.FC<FormEditProductProps> = ({productId, handleClose
     }
 
     const handleRemoveImage = (key: string) => {
-        if(productId){
+        if (productId) {
+            const image = imagePreviews.find((image) => image.key === key);
+            if (image) {
+                setLoading(true);
+                DeleteImageByProductId(productId, image.url)
+                    .then(() => {
+                        const newPreviews = imagePreviews.filter((image) => image.key !== key);
+                        setImagePreviews(newPreviews);
+                        setImagePreviewsDefault(newPreviews);
+                    })
+                    .catch((error) => {
+                        dispatch({type: ActionTypeEnum.ERROR, message: error.message});
 
-        }else {
+                    }).finally(() => {
+                    setLoading(false);
+                })
+            } else {
+                dispatch({type: ActionTypeEnum.ERROR, message: "Image not found"});
+            }
+        } else {
             const newImages = images.filter((image) => image.key !== key);
             const newPreviews = imagePreviews.filter((image) => image.key !== key);
             setImages(newImages);
             setImagePreviews(newPreviews);
         }
+    }
+
+    const handleConfirmDeleteImage = () => {
+        handleRemoveImage(keyImageDelete);
+        setShowModelConfirmDeleteImage(false);
+        setKeyImageDelete("");
     }
 
     return (
@@ -406,7 +434,9 @@ const FormEditProduct: React.FC<FormEditProductProps> = ({productId, handleClose
                                     <Button
                                         variant="primary"
                                         className="fw-semibold"
-                                        onClick={() => {handleSubmit()}}
+                                        onClick={() => {
+                                            handleSubmit()
+                                        }}
                                         disabled={!CheckDataChange()}
                                     >Save</Button>
                                     <Button
@@ -722,7 +752,12 @@ const FormEditProduct: React.FC<FormEditProductProps> = ({productId, handleClose
                                 <CloseButton
                                     className="position-absolute bg-light"
                                     onClick={() => {
-                                        handleRemoveImage(image.key)
+                                        if(!productId) {
+                                            handleRemoveImage(image.key)
+                                        }else {
+                                            setKeyImageDelete(image.key);
+                                            setShowModelConfirmDeleteImage(true);
+                                        }
                                     }}
                                     style={{top: "0.5rem", right: "0.5rem"}}
                                     disabled={productId !== "" && !isEdit}
@@ -742,6 +777,18 @@ const FormEditProduct: React.FC<FormEditProductProps> = ({productId, handleClose
             </Container>
             {
                 loading && <SpinnerLoadingOverLay/>
+            }
+            {
+                showModelConfirmDeleteImage &&
+                <ModelConfirmDelete
+                    message={"Are you sure delete this image"}
+                    onConfirm={handleConfirmDeleteImage}
+                    onClose={() => {
+                        setShowModelConfirmDeleteImage(false)
+                        setKeyImageDelete("");
+                    }}
+                    loading={loading}
+                />
             }
         </OverLay>
     )

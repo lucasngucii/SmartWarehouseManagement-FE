@@ -15,11 +15,12 @@ import {
     faTag,
     faTrash
 } from "@fortawesome/free-solid-svg-icons";
-import ModelConfirmDeleteAttributeValue from "./ModelConfirmDeleteAttributeValue";
 import { Button, Table } from "react-bootstrap";
 import SpinnerLoading from "../../../compoments/Loading/SpinnerLoading";
 import {useDispatchMessage} from "../../../Context/ContextMessage";
 import ActionTypeEnum from "../../../enum/ActionTypeEnum";
+import DeleteAttributeValue from "../../../services/Attribute/DeleteAttributeValue";
+import ModelConfirmDelete from "../../../compoments/ModelConfirm/ModelConfirmDelete";
 
 interface AttributeValueManagementProps {
     handleCancelEditAttribute: () => void;
@@ -32,6 +33,7 @@ export const AttributeValueManagement: React.FC<AttributeValueManagementProps> =
     const [attributeValues, setAttributeValues] = React.useState<AttributeDetailType[]>([]);
     const [attributeValueId, setAttributeValueId] = React.useState<string>("");
     const [isLoading, setIsLoading] = React.useState(false);
+    const [isLoadingDelete, setIsLoadingDelete] = React.useState(false);
     const [showEditAttributeValue, setShowEditAttributeValue] = React.useState(false);
     const [showModelConfirmDelete, setShowModelConfirmDelete] = React.useState(false);
     const [pagination, setPagination] = React.useState<PaginationType>({
@@ -59,6 +61,34 @@ export const AttributeValueManagement: React.FC<AttributeValueManagementProps> =
                 setIsLoading(false);
             })
     }, [attributeId, pagination.offset, dispatch]);
+
+    const handelDeleteAttributeValue = () => {
+        if(attributeValueId) {
+            setIsLoadingDelete(true);
+            DeleteAttributeValue(attributeId, attributeValueId)
+                .then(() => {
+                    return GetAttributeDetail({ id: attributeId });
+                }).then((response) => {
+                updateAttributeValues(response.data);
+                updatePagination({
+                    totalPage: response.totalPage,
+                    limit: response.limit,
+                    offset: response.offset,
+                    totalElementOfPage: response.totalElementOfPage
+                });
+                setAttributeValueId("");
+                setShowModelConfirmDelete(false);
+                dispatch({type: ActionTypeEnum.SUCCESS, message: "Delete attribute value successfully"});
+            }).catch((error) => {
+                console.error(error);
+                dispatch({type: ActionTypeEnum.ERROR, message: error.message});
+            }).finally(() => {
+                setIsLoadingDelete(false);
+            })
+        }else {
+            dispatch({type: ActionTypeEnum.ERROR, message: "Attribute value delete failed"});
+        }
+    }
 
     const handleCancelEditAttributeValue = () => {
         setAttributeValueId("")
@@ -220,17 +250,15 @@ export const AttributeValueManagement: React.FC<AttributeValueManagementProps> =
                         updateAttributeValues={updateAttributeValues}
                     />
                 }
-                {
-                    showModelConfirmDelete &&
-                    <ModelConfirmDeleteAttributeValue
-                        attributeId={attributeId}
-                        attributeValueId={attributeValueId}
-                        closeModelConfirmDelete={handleCancelModelConfirmDelete}
-                        updateAttributeValues={updateAttributeValues}
-                        updatePagination={updatePagination}
-                    />
-                }
             </div>
+            {
+                showModelConfirmDelete &&
+                <ModelConfirmDelete
+                    message={"Are you sure delete this value ?"}
+                    onConfirm={handelDeleteAttributeValue}
+                    onClose={handleCancelModelConfirmDelete}
+                    loading={isLoadingDelete} />
+            }
         </OverLay>
     );
 };
