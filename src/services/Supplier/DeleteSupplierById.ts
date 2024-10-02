@@ -1,10 +1,16 @@
 import axios from "axios";
 import { ResponseError } from "../../interface/ResponseError";
+import {checkTokenExpired} from "../../util/DecodeJWT";
 
 const DeleteSupplierById = async (supplierID: string): Promise<void> => {
     try {
         const HOST = process.env.REACT_APP_HOST_BE;
         const token = localStorage.getItem('token');
+        const END_SESSION_ENDPOINT = process.env.REACT_APP_END_SESSION_ENDPOINT;
+        if (!token || checkTokenExpired(token)) {
+            localStorage.removeItem('token');
+            window.location.href = END_SESSION_ENDPOINT as string;
+        }
         const response = await axios.delete(`${HOST}/suppliers/${supplierID}`, {
             headers: {
                 'Authorization': `Bearer ${token}`

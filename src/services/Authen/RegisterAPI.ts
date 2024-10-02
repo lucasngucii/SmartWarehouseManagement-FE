@@ -1,20 +1,20 @@
 import axios from "axios";
 import { ResponseError } from "../../interface/ResponseError";
 import DataTypeCreateUserAdmin from "../../interface/PageUser/DataTypeCreateUserAdmin";
+import {checkTokenExpired} from "../../util/DecodeJWT";
 
 const RegisterAPI = async (data: DataTypeCreateUserAdmin | null): Promise<void> => {
 
     try {
 
-        if (!data) {
-            throw new Error("Data is empty.");
-        }
+        if (!data) throw new Error("Data is empty.");
 
         const HOST = process.env.REACT_APP_HOST_BE;
         const token = localStorage.getItem("token");
-
-        if (!token) {
-            throw new Error("Not found session token.");
+        const END_SESSION_ENDPOINT = process.env.REACT_APP_END_SESSION_ENDPOINT;
+        if (!token || checkTokenExpired(token)) {
+            localStorage.removeItem('token');
+            window.location.href = END_SESSION_ENDPOINT as string;
         }
 
         const response = await axios.post(`${HOST}/auth/register`, data, {

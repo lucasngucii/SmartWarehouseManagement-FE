@@ -3,6 +3,7 @@ import AttributeDetailType from "../../interface/AttributeDetail";
 import { ResponseError } from "../../interface/ResponseError";
 import returnNameAttribute from "../../util/ReturnNameAttribute";
 import Order from "../../enum/Order";
+import {checkTokenExpired} from "../../util/DecodeJWT";
 
 interface GetAttributeDetailResponse {
     data: AttributeDetailType[];
@@ -25,9 +26,10 @@ const GetAttributeDetail = async (data: GetAttributeDetailProps): Promise<GetAtt
     try {
         const HOST = process.env.REACT_APP_HOST_BE;
         const token = localStorage.getItem("token");
-
-        if (!token) {
-            throw new Error("Token is not found");
+        const END_SESSION_ENDPOINT = process.env.REACT_APP_END_SESSION_ENDPOINT;
+        if (!token || checkTokenExpired(token)) {
+            localStorage.removeItem('token');
+            window.location.href = END_SESSION_ENDPOINT as string;
         }
 
         if (returnNameAttribute(data.id) === "") {

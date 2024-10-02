@@ -1,14 +1,16 @@
 import axios from "axios";
 import { ResponseError } from "../../interface/ResponseError";
 import { Account } from "../../interface/Account";
+import {checkTokenExpired} from "../../util/DecodeJWT";
 
 const GetAccountById = async (userId: string): Promise<Account> => {
     try {
         const HOST = process.env.REACT_APP_HOST_BE;
         const token = localStorage.getItem('token');
-
-        if (!token) {
-            throw new Error("Token not found.");
+        const END_SESSION_ENDPOINT = process.env.REACT_APP_END_SESSION_ENDPOINT;
+        if (!token || checkTokenExpired(token)) {
+            localStorage.removeItem('token');
+            window.location.href = END_SESSION_ENDPOINT as string;
         }
 
         const response = await axios.get(`${HOST}/account/ad/${userId}`, {

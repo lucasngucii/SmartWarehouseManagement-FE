@@ -2,20 +2,20 @@ import axios from "axios";
 import { ResponseError } from "../../interface/ResponseError";
 import returnNameAttribute from "../../util/ReturnNameAttribute";
 import AttributeDetailType from "../../interface/AttributeDetail";
+import {checkTokenExpired} from "../../util/DecodeJWT";
 
 const GetAttributeValueById = async (id: number, attributeValueId: string): Promise<AttributeDetailType> => {
 
     try {
         const HOST = process.env.REACT_APP_HOST_BE;
         const token = localStorage.getItem("token");
-
-        if (!token) {
-            throw new Error("Token is not found");
+        const END_SESSION_ENDPOINT = process.env.REACT_APP_END_SESSION_ENDPOINT;
+        if (!token || checkTokenExpired(token)) {
+            localStorage.removeItem('token');
+            window.location.href = END_SESSION_ENDPOINT as string;
         }
 
-        if (returnNameAttribute(id) === "") {
-            throw new Error("Attribute is not found");
-        }
+        if (returnNameAttribute(id) === "") throw new Error("Attribute is not found")
 
         const response = await axios.get(`${HOST}/${returnNameAttribute(id)}/${attributeValueId}`, {
             headers: {

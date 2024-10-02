@@ -2,6 +2,7 @@ import axios from "axios";
 import {ResponseError} from "../../interface/ResponseError";
 import SKU from "../../interface/Entity/SKU";
 import Order from "../../enum/Order";
+import {checkTokenExpired} from "../../util/DecodeJWT";
 
 interface GetSKUsResponse {
     data: SKU[];
@@ -22,8 +23,11 @@ const GetSKUs = async (data?: GetSKUsProps): Promise<GetSKUsResponse> => {
     try {
         const HOST = process.env.REACT_APP_HOST_BE;
         const token = localStorage.getItem('token');
-
-        if(!token) throw new Error('Token not found');
+        const END_SESSION_ENDPOINT = process.env.REACT_APP_END_SESSION_ENDPOINT;
+        if (!token || checkTokenExpired(token)) {
+            localStorage.removeItem('token');
+            window.location.href = END_SESSION_ENDPOINT as string;
+        }
 
         const response = await axios.get(`${HOST}/sku?limit=${data?.limit || 10}&offset=${data?.offset || 1}&order=${data?.order || Order.ASC}&orderBy=skuCode`, {
             headers: {

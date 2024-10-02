@@ -1,15 +1,18 @@
 import axios from "axios";
 import { ResponseError } from "../../interface/ResponseError";
 import returnNameAttribute from "../../util/ReturnNameAttribute";
+import {checkTokenExpired} from "../../util/DecodeJWT";
 
 const DeleteAttributeValue = async (id: number, attributeValueId: string): Promise<void> => {
 
     try {
+        const END_SESSION_ENDPOINT = process.env.REACT_APP_END_SESSION_ENDPOINT;
         const HOST = process.env.REACT_APP_HOST_BE;
         const token = localStorage.getItem("token");
 
-        if (!token) {
-            throw new Error("Token is not found");
+        if (!token || checkTokenExpired(token)) {
+            localStorage.removeItem('token');
+            window.location.href = END_SESSION_ENDPOINT as string;
         }
 
         if (returnNameAttribute(id) === "") {

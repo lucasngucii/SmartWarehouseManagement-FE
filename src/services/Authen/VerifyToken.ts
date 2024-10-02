@@ -1,5 +1,6 @@
 import axios from "axios";
 import {ResponseError} from "../../interface/ResponseError";
+import {checkTokenExpired} from "../../util/DecodeJWT";
 
 interface VerifyTokenResponse {
     userId: string;
@@ -14,8 +15,11 @@ const VerifyToken = async (): Promise<VerifyTokenResponse> => {
     try {
         const HOST = process.env.REACT_APP_API_HOST;
         const token = localStorage.getItem("token");
-
-        if(!token) throw new Error("Token is not defined");
+        const END_SESSION_ENDPOINT = process.env.REACT_APP_END_SESSION_ENDPOINT;
+        if (!token || checkTokenExpired(token)) {
+            localStorage.removeItem('token');
+            window.location.href = END_SESSION_ENDPOINT as string;
+        }
 
         const response = await axios.post(`${HOST}/auth/verify-token`, {}, {
             headers: {
