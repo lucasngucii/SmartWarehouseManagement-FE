@@ -22,6 +22,8 @@ import DataTypeUpdateProductAdmin from "../../../interface/PageProduct/DataTypeU
 import UpdateProductByProductId from "../../../services/Product/UpdateProductByProductId";
 import DeleteImageByProductId from "../../../services/Product/DeleteImageByProductId";
 import ModelConfirmDelete from "../../../compoments/ModelConfirm/ModelConfirmDelete";
+import '../css/FormEditProduct.css'
+import AddImagesProduct from "../../../services/Product/AddImagesProduct";
 
 interface FormEditProductProps {
     handleClose: () => void;
@@ -69,6 +71,7 @@ const FormEditProduct: React.FC<FormEditProductProps> = ({productId, handleClose
     const [loading, setLoading] = React.useState<boolean>(false);
     const [showModelConfirmDeleteImage, setShowModelConfirmDeleteImage] = React.useState<boolean>(false);
     const [isEdit, setIsEdit] = React.useState<boolean>(false);
+    const [reload, setReload] = React.useState<boolean>(false);
 
     const [keyImageDelete, setKeyImageDelete] = React.useState<string>("");
 
@@ -190,7 +193,7 @@ const FormEditProduct: React.FC<FormEditProductProps> = ({productId, handleClose
                 setLoading(false);
             })
         }
-    }, [productId, dispatch])
+    }, [productId, dispatch, reload])
 
     React.useEffect(() => {
         const id = setTimeout(() => {
@@ -348,7 +351,6 @@ const FormEditProduct: React.FC<FormEditProductProps> = ({productId, handleClose
             } else {
                 UpdateProductByProductId(productId, dataUpdate)
                     .then((response) => {
-                        console.log(response);
                         setFormData(FormatDataGet(response));
                         setDataDefault(FormatDataGet(response));
                         dispatch({type: ActionTypeEnum.SUCCESS, message: "Update product success"});
@@ -425,11 +427,28 @@ const FormEditProduct: React.FC<FormEditProductProps> = ({productId, handleClose
     }
 
     const handleCheckImageChangeData = (): boolean => {
-        // console.log(imagePreviews);
-        // console.log("--------------------------")
-        // console.log(imagePreviewsDefault);
         return !DeepEqual(imagePreviews, imagePreviewsDefault);
     }
+
+    const handleAddNewImage = () => {
+        if (images.length > 0) {
+            setLoading(true);
+            AddImagesProduct(productId!, getListImage())
+                .then(() => {
+                    setReload(!reload);
+                    setImages([]);
+                    dispatch({ type: ActionTypeEnum.SUCCESS, message: "Add image success" });
+                })
+                .catch((error) => {
+                    dispatch({ type: ActionTypeEnum.ERROR, message: error.message });
+                })
+                .finally(() => {
+                    setLoading(false);
+                });
+        } else {
+            dispatch({ type: ActionTypeEnum.ERROR, message: "No image to add" });
+        }
+    };
 
     return (
         <OverLay className="disabled-padding bg-light p-4">
@@ -761,14 +780,13 @@ const FormEditProduct: React.FC<FormEditProductProps> = ({productId, handleClose
                             accept={"image/*"}
                         />
                     </Form.Group>
-                    <div className="d-flex flex-row flex-wrap gap-3 justify-content-center mb-4">
+                    <div className="masonry mb-4">
                         {imagePreviews.map((image) => (
-                            <div className="position-relative" key={image.key}>
+                            <div className="position-relative image-box" key={image.key}>
                                 <Image
                                     src={image.url}
                                     alt="preview"
                                     thumbnail
-                                    style={{width: "250px", height: "auto"}}
                                 />
                                 <CloseButton
                                     className="position-absolute bg-light"
@@ -796,19 +814,22 @@ const FormEditProduct: React.FC<FormEditProductProps> = ({productId, handleClose
                                 }
                             </div>
                         ))}
-                        {
-                            imagePreviews.length === 0 &&
-                            <div
-                                className="d-flex flex-column align-items-center justify-content-center gap-2 text-secondary">
-                                <FontAwesomeIcon icon={faImage} size="3x"/>
-                                <span>No images</span>
-                            </div>
-                        }
                     </div>
                     {
-                        handleCheckImageChangeData() &&
+                        imagePreviews.length === 0 &&
+                        <div
+                            className="d-flex flex-column align-items-center justify-content-center gap-2 text-secondary">
+                            <FontAwesomeIcon icon={faImage} size="3x"/>
+                            <span>No images</span>
+                        </div>
+                    }
+                    {
+                        handleCheckImageChangeData() && images.length > 0 &&
                         <div className={"d-flex justify-content-end gap-2"}>
-                            <div className={"btn btn-primary"}>
+                            <div
+                                onClick={handleAddNewImage}
+                                className={"btn btn-primary"}
+                            >
                                 Upload
                             </div>
                             <div

@@ -1,0 +1,11 @@
+.masonry {
+    width: 100%;
+    column-count: 4;
+    column-gap: 10px;
+}
+
+.masonry .image-box {
+    width: 100%;
+    margin-bottom: 10px;
+}
+
