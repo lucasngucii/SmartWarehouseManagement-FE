@@ -414,6 +414,23 @@ const FormEditProduct: React.FC<FormEditProductProps> = ({productId, handleClose
         setKeyImageDelete("");
     }
 
+    const checkImageNew = (key: string): boolean => {
+        let isNewImage = false;
+        images.forEach((img) => {
+            if (img.key === key) {
+                isNewImage = true;
+            }
+        })
+        return isNewImage;
+    }
+
+    const handleCheckImageChangeData = (): boolean => {
+        // console.log(imagePreviews);
+        // console.log("--------------------------")
+        // console.log(imagePreviewsDefault);
+        return !DeepEqual(imagePreviews, imagePreviewsDefault);
+    }
+
     return (
         <OverLay className="disabled-padding bg-light p-4">
             <Container fluid className="h-100 w-100 position-relative shadow p-3 rounded">
@@ -445,7 +462,10 @@ const FormEditProduct: React.FC<FormEditProductProps> = ({productId, handleClose
                                         onClick={() => {
                                             setIsEdit(false);
                                             setFormData(dataDefault);
-                                            setImagePreviews(imagePreviewsDefault);
+                                            setImagePreviews(imagePreviewsDefault.map((image) => {
+                                                return image;
+                                            }));
+                                            setImages([]);
                                         }}
                                     >Cancel</Button>
                                 </div>
@@ -738,9 +758,10 @@ const FormEditProduct: React.FC<FormEditProductProps> = ({productId, handleClose
                             multiple
                             onChange={handleChangeFile}
                             disabled={productId !== "" && !isEdit}
+                            accept={"image/*"}
                         />
                     </Form.Group>
-                    <div className="d-flex flex-row flex-wrap gap-3 justify-content-center">
+                    <div className="d-flex flex-row flex-wrap gap-3 justify-content-center mb-4">
                         {imagePreviews.map((image) => (
                             <div className="position-relative" key={image.key}>
                                 <Image
@@ -752,16 +773,27 @@ const FormEditProduct: React.FC<FormEditProductProps> = ({productId, handleClose
                                 <CloseButton
                                     className="position-absolute bg-light"
                                     onClick={() => {
-                                        if(!productId) {
+                                        if (!productId) {
                                             handleRemoveImage(image.key)
-                                        }else {
+                                        } else {
                                             setKeyImageDelete(image.key);
-                                            setShowModelConfirmDeleteImage(true);
+                                            if (checkImageNew(image.key)) {
+                                                const newImages = images.filter((img) => img.key !== image.key);
+                                                const newPreviews = imagePreviews.filter((img) => img.key !== image.key);
+                                                setImages(newImages);
+                                                setImagePreviews(newPreviews);
+                                            } else {
+                                                setShowModelConfirmDeleteImage(true);
+                                            }
                                         }
                                     }}
                                     style={{top: "0.5rem", right: "0.5rem"}}
                                     disabled={productId !== "" && !isEdit}
                                 />
+                                {
+                                    checkImageNew(image.key) &&
+                                    <span className="badge text-bg-danger position-absolute top-0 start-0">New</span>
+                                }
                             </div>
                         ))}
                         {
@@ -773,6 +805,25 @@ const FormEditProduct: React.FC<FormEditProductProps> = ({productId, handleClose
                             </div>
                         }
                     </div>
+                    {
+                        handleCheckImageChangeData() &&
+                        <div className={"d-flex justify-content-end gap-2"}>
+                            <div className={"btn btn-primary"}>
+                                Upload
+                            </div>
+                            <div
+                                onClick={() => {
+                                    setImagePreviews(imagePreviewsDefault.map((image) => {
+                                        return image;
+                                    }));
+                                    setImages([]);
+                                }}
+                                className={"btn btn-secondary"}
+                            >
+                                Cancel
+                            </div>
+                        </div>
+                    }
                 </Row>
             </Container>
             {
