@@ -368,16 +368,22 @@ const FormEditProduct: React.FC<FormEditProductProps> = ({productId, handleClose
 
     const handleChangeFile = (e: React.ChangeEvent<HTMLInputElement>) => {
         const files: FileList | null = e.target.files;
+        const maxFileSize = 10 * 1024 * 1024;
         if (files !== null) {
             for (let i = 0; i < files.length; i++) {
-                const keyRandom = crypto.randomUUID().toString();
-                imagePreviews.push({
-                    key: keyRandom,
-                    url: URL.createObjectURL(files[i])
-                });
-                setImages((preState) => {
-                    return [...preState, {key: keyRandom, file: files[i]}];
-                });
+                if (files[i].size > maxFileSize) {
+                    dispatch({type: ActionTypeEnum.ERROR, message: "Your file is more than 10MB"});
+                    break;
+                } else {
+                    const keyRandom = crypto.randomUUID().toString();
+                    imagePreviews.push({
+                        key: keyRandom,
+                        url: URL.createObjectURL(files[i])
+                    });
+                    setImages((preState) => {
+                        return [...preState, {key: keyRandom, file: files[i]}];
+                    });
+                }
             }
         }
     }
