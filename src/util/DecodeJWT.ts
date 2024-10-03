@@ -24,4 +24,9 @@ export const checkTokenExpired = (token: string): boolean => {
     return decodeToken.exp < Date.now() / 1000;
 }
 
+export const checkIsAdmin = (token: string): boolean => {
+    const decodeToken = jwtDecode<JWTDecode>(token);
+    return decodeToken.role === "admin";
+}
+
 export default decodeJWT;

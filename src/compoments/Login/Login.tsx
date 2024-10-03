@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import LoginAPI from "../../services/Authen/LoginAPI";
 import GetProfileByTokenAPI from "../../services/Authen/GetProfileByTokenAPI";
 import { Button, Col, Container, Form, Row } from "react-bootstrap";
+import {checkTokenExpired} from "../../util/DecodeJWT";
 
 interface formDataType {
     username: string;
@@ -14,7 +15,7 @@ interface ErrorsType {
     password: string;
 }
 
-export const Login: React.FC = () => {
+const Login: React.FC = () => {
 
     const navigate = useNavigate();
 
@@ -28,6 +29,21 @@ export const Login: React.FC = () => {
         password: ""
     });
     const [loading, setLoading] = React.useState<boolean>(false);
+
+    React.useEffect(() => {
+        const token = localStorage.getItem("token");
+        if (token) {
+            if(checkTokenExpired(token)){
+                localStorage.removeItem("token");
+                localStorage.removeItem("profile");
+                navigate("/session-expired");
+            }else {
+                navigate("/");
+            }
+        } else {
+            navigate("/login");
+        }
+    }, [navigate]);
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setGlobalError("");
@@ -117,3 +133,5 @@ export const Login: React.FC = () => {
         </Container>
     );
 }
+
+export default Login;

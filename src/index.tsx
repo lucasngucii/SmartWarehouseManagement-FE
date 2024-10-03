@@ -8,7 +8,7 @@ import {
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import ProtectedDashboard from "./page/Dashboard/Dashboard";
-import { Login } from "./compoments/Login/Login";
+import Login from "./compoments/Login/Login";
 import { UserManagement } from "./page/User/UserManagement";
 import { SKUManagement } from "./page/SKU/SKUManagement";
 import { AttributeManagement } from "./page/Attribute/AttributeManagement";
@@ -16,6 +16,7 @@ import { ProductManagement } from "./page/Product/ProductManagement";
 import { SupplierManagement } from './page/Supplier/SupplierManagement';
 import ErrorPage from "./page/Error/ErrorPage";
 import SessionExpiredPage from "./page/SessionExpired/SessionExpiredPage";
+import StockEntry from "./page/StockEntry/StockEntry";
 
 const router = createBrowserRouter([
     {
@@ -49,6 +50,10 @@ const router = createBrowserRouter([
             {
                 path: "Product-management",
                 element: <ProductManagement />,
+            },
+            {
+                path: "stock-entry",
+                element: <StockEntry />,
             }
         ]
     },
