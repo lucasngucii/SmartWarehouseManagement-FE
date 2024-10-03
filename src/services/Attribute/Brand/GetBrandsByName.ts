@@ -11,13 +11,15 @@ interface Brand {
 const GetBrandsByName = async (name: string): Promise<Brand[]> => {
 
     try {
-        const END_SESSION_ENDPOINT = process.env.REACT_APP_END_SESSION_ENDPOINT;
         const HOST = process.env.REACT_APP_HOST_BE;
         const token = localStorage.getItem('token');
 
-        if (!token || checkTokenExpired(token)) {
+        if (!token) {
+            window.location.href = "/login";
+        } else if (checkTokenExpired(token)) {
             localStorage.removeItem('token');
-            window.location.href = END_SESSION_ENDPOINT as string;
+            localStorage.removeItem('profile');
+            window.location.href = "/session-expired";
         }
 
         const response = await axios.get(`${HOST}/brands/name?name=${name}`, {

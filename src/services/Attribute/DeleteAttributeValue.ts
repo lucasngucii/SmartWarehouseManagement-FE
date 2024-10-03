@@ -6,13 +6,15 @@ import {checkTokenExpired} from "../../util/DecodeJWT";
 const DeleteAttributeValue = async (id: number, attributeValueId: string): Promise<void> => {
 
     try {
-        const END_SESSION_ENDPOINT = process.env.REACT_APP_END_SESSION_ENDPOINT;
         const HOST = process.env.REACT_APP_HOST_BE;
         const token = localStorage.getItem("token");
 
-        if (!token || checkTokenExpired(token)) {
+        if (!token) {
+            window.location.href = "/login";
+        } else if (checkTokenExpired(token)) {
             localStorage.removeItem('token');
-            window.location.href = END_SESSION_ENDPOINT as string;
+            localStorage.removeItem('profile');
+            window.location.href = "/session-expired";
         }
 
         if (returnNameAttribute(id) === "") {

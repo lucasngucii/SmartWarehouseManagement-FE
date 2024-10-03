@@ -6,10 +6,13 @@ const DeleteAccountAPI = async (userId: string) => {
     try {
         const HOST = process.env.REACT_APP_HOST_BE;
         const token = localStorage.getItem('token');
-        const END_SESSION_ENDPOINT = process.env.REACT_APP_END_SESSION_ENDPOINT;
-        if (!token || checkTokenExpired(token)) {
+
+        if (!token) {
+            window.location.href = "/login";
+        } else if (checkTokenExpired(token)) {
             localStorage.removeItem('token');
-            window.location.href = END_SESSION_ENDPOINT as string;
+            localStorage.removeItem('profile');
+            window.location.href = "/session-expired";
         }
 
         await axios.put(`${HOST}/account/ad/delete/${userId}`, {}, {
