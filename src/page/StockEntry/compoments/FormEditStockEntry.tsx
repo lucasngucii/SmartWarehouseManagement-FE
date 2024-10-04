@@ -147,9 +147,9 @@ const FormEditStockEntry: React.FC<FormEditStockEntryProps> = ({handleClose}) =>
                     <FormGroup className={"mt-3"}>
                         <Form.Label>Description</Form.Label>
                         <textarea
-                            className={"form-control"}
+                            className={"form-control py-3"}
                             placeholder="Enter description..."
-                            rows={5}
+                            rows={4}
                         />
                     </FormGroup>
                 </Row>

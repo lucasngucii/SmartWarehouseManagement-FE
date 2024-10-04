@@ -13,9 +13,9 @@ import {
     faPalette,
     faPencilAlt, faRuler,
     faTag,
-    faTrash
+    faTrash, faUndo
 } from "@fortawesome/free-solid-svg-icons";
-import { Button, Table } from "react-bootstrap";
+import {Button, FormControl, FormSelect, Table} from "react-bootstrap";
 import SpinnerLoading from "../../../compoments/Loading/SpinnerLoading";
 import {useDispatchMessage} from "../../../Context/ContextMessage";
 import ActionTypeEnum from "../../../enum/ActionTypeEnum";
@@ -26,6 +26,8 @@ interface AttributeValueManagementProps {
     handleCancelEditAttribute: () => void;
     attributeId: number;
 }
+
+const TypeFind = ["Name", "Description", "Size Code"];
 
 export const AttributeValueManagement: React.FC<AttributeValueManagementProps> = ({ handleCancelEditAttribute, attributeId }) => {
 
@@ -209,7 +211,7 @@ export const AttributeValueManagement: React.FC<AttributeValueManagementProps> =
                             onClick={handleCancelEditAttribute}
                             className="btn fs-3 px-3 text-primary"
                         >
-                            <FontAwesomeIcon icon={faChevronLeft} />
+                            <FontAwesomeIcon icon={faChevronLeft}/>
                         </button>
                         <h2 className="mb-0 fw-bold">{getAttributeName(attributeId)}</h2>
                     </div>
@@ -217,28 +219,48 @@ export const AttributeValueManagement: React.FC<AttributeValueManagementProps> =
                         <Button onClick={handleAddAttributeValue} variant="info text-light fw-bold">NEW +</Button>
                     </div>
                 </div>
+                <div className={"d-flex flex-row gap-5 mb-3 justify-content-end"}>
+                    <div className={"d-flex flex-row gap-2"}>
+                        <div style={{width: "150px"}}>
+                            <FormSelect>
+                                {
+                                    TypeFind.map((type, index) => {
+                                        return <option key={index} value={type}>{type}</option>
+                                    })
+                                }
+                            </FormSelect>
+                        </div>
+                        <FormControl type="text" placeholder="Search name..." style={{width: "350px"}}/>
+                        <Button onClick={() => {
+                        }}>
+                            <FontAwesomeIcon icon={faUndo}/>
+                        </Button>
+                    </div>
+                </div>
                 <Table hover striped bordered>
                     <thead>
-                        <tr>
-                            <th>#</th>
-                            <th>Name</th>
-                            <th>Description</th>
-                            <th>Size Code</th>
-                            <th>Action</th>
-                        </tr>
+                    <tr>
+                        <th>#</th>
+                        <th>Name</th>
+                        <th>Description</th>
+                        <th>Size Code</th>
+                        <th>Action</th>
+                    </tr>
                     </thead>
                     <tbody>
-                        {renderAttributeValues}
+                    {renderAttributeValues}
                     </tbody>
                 </Table>
                 {
-                    attributeValues.length > 0 && <Pagination currentPage={pagination?.offset} totalPages={pagination?.totalPage} onPageChange={handleChangePage} />
+                    attributeValues.length > 0 &&
+                    <Pagination currentPage={pagination?.offset} totalPages={pagination?.totalPage}
+                                onPageChange={handleChangePage}/>
                 }
                 {
-                    (attributeValues.length === 0) && !isLoading && <NoData />
+                    (attributeValues.length === 0) && !isLoading && <NoData/>
                 }
                 {
-                    isLoading && <SpinnerLoading />
+                    isLoading && <SpinnerLoading/>
                 }
                 {
                     showEditAttributeValue &&
@@ -257,7 +279,7 @@ export const AttributeValueManagement: React.FC<AttributeValueManagementProps> =
                     message={"Are you sure delete this value ?"}
                     onConfirm={handelDeleteAttributeValue}
                     onClose={handleCancelModelConfirmDelete}
-                    loading={isLoadingDelete} />
+                    loading={isLoadingDelete}/>
             }
         </OverLay>
     );

@@ -1,8 +1,8 @@
 import React from 'react'
 import {Product} from '../../interface/Entity/Product'
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
-import {faPencilAlt, faTrash} from '@fortawesome/free-solid-svg-icons';
-import {Button, Table} from 'react-bootstrap';
+import {faPencilAlt, faTrash, faUndo} from '@fortawesome/free-solid-svg-icons';
+import {Button, FormControl, FormSelect, Table} from 'react-bootstrap';
 import GetProducts from '../../services/Product/GetProducts';
 import PaginationType from '../../interface/Pagination';
 import Pagination from '../../compoments/Pagination/Pagination';
@@ -14,6 +14,7 @@ import DeleteProductById from "../../services/Product/DeleteProductById";
 import ModelConfirmDelete from "../../compoments/ModelConfirm/ModelConfirmDelete";
 import SpinnerLoading from "../../compoments/Loading/SpinnerLoading";
 
+const TypeFind = ["Name", "Product Code"];
 
 export const ProductManagement: React.FC = () => {
 
@@ -148,6 +149,24 @@ export const ProductManagement: React.FC = () => {
                 </div>
                 <div className="d-flex flex-row gap-3">
                     <Button onClick={() => setShowFormEdit(true)} variant="info text-light fw-bold">+ NEW</Button>
+                </div>
+            </div>
+            <div className={"d-flex flex-row gap-5 mb-3 justify-content-end"}>
+                <div className={"d-flex flex-row gap-2"}>
+                    <div style={{width: "150px"}}>
+                        <FormSelect>
+                            {
+                                TypeFind.map((type, index) => {
+                                    return <option key={index} value={type}>{type}</option>
+                                })
+                            }
+                        </FormSelect>
+                    </div>
+                    <FormControl type="text" placeholder="Search name..." style={{width: "350px"}}/>
+                    <Button onClick={() => {
+                    }}>
+                        <FontAwesomeIcon icon={faUndo}/>
+                    </Button>
                 </div>
             </div>
             <Table striped bordered hover>

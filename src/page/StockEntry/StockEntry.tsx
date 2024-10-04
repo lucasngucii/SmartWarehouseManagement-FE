@@ -1,4 +1,4 @@
-import {Button, Table} from "react-bootstrap";
+import {Button, FormControl, FormSelect, Table} from "react-bootstrap";
 import React from "react";
 import Pagination from "../../compoments/Pagination/Pagination";
 import {NoData} from "../../compoments/NoData/NoData";
@@ -9,6 +9,10 @@ import GetStockEntries from "../../services/StockEntry/GetStockEntries";
 import {useDispatchMessage} from "../../Context/ContextMessage";
 import ActionTypeEnum from "../../enum/ActionTypeEnum";
 import FormEditStockEntry from "./compoments/FormEditStockEntry";
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import {faUndo} from "@fortawesome/free-solid-svg-icons";
+
+const TypeFind = ["Receive Code", "Receive By"];
 
 const StockEntry: React.FC = () => {
 
@@ -62,6 +66,24 @@ const StockEntry: React.FC = () => {
                     }} variant="info text-light fw-bold">+ NEW</Button>
                 </div>
             </div>
+            <div className={"d-flex flex-row gap-5 mb-3 justify-content-end"}>
+                <div className={"d-flex flex-row gap-2"}>
+                    <div style={{width: "150px"}}>
+                        <FormSelect>
+                            {
+                                TypeFind.map((type, index) => {
+                                    return <option key={index} value={type}>{type}</option>
+                                })
+                            }
+                        </FormSelect>
+                    </div>
+                    <FormControl type="text" placeholder="Search name..." style={{width: "350px"}}/>
+                    <Button onClick={() => {
+                    }}>
+                        <FontAwesomeIcon icon={faUndo}/>
+                    </Button>
+                </div>
+            </div>
             <Table striped bordered hover>
                 <thead>
                 <tr>
@@ -91,7 +113,9 @@ const StockEntry: React.FC = () => {
             {
                 showFormEdit &&
                 <FormEditStockEntry
-                    handleClose={() => {setShowFormEdit(false)}}
+                    handleClose={() => {
+                        setShowFormEdit(false)
+                    }}
                 />
             }
         </div>

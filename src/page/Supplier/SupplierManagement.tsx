@@ -1,7 +1,7 @@
 import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPencilAlt, faTrash } from '@fortawesome/free-solid-svg-icons';
-import { Button, Table } from 'react-bootstrap';
+import {faPencilAlt, faTrash, faUndo} from '@fortawesome/free-solid-svg-icons';
+import {Button, FormControl, FormSelect, Table} from 'react-bootstrap';
 import GetSuppliers from '../../services/Supplier/GetSuppliers';
 import Supplier from '../../interface/Entity/Supplier';
 import PaginationType from '../../interface/Pagination';
@@ -13,6 +13,8 @@ import {useDispatchMessage} from "../../Context/ContextMessage";
 import ActionTypeEnum from "../../enum/ActionTypeEnum";
 import DeleteSupplierById from "../../services/Supplier/DeleteSupplierById";
 import ModelConfirmDelete from "../../compoments/ModelConfirm/ModelConfirmDelete";
+
+const TypeFind = ["Name", "Phone", "Email", "Supplier Code"];
 
 export const SupplierManagement: React.FC = () => {
 
@@ -161,31 +163,52 @@ export const SupplierManagement: React.FC = () => {
                     <p className={"h6"}>Manage your suppliers here</p>
                 </div>
                 <div className="d-flex flex-row gap-5">
-                    <Button onClick={() => { setShowDetail(true) }} variant="info fw-bold text-light">+ NEW</Button>
+                    <Button onClick={() => {
+                        setShowDetail(true)
+                    }} variant="info fw-bold text-light">+ NEW</Button>
+                </div>
+            </div>
+            <div className={"d-flex flex-row gap-5 mb-3 justify-content-end"}>
+                <div className={"d-flex flex-row gap-2"}>
+                    <div style={{width: "150px"}}>
+                        <FormSelect>
+                            {
+                                TypeFind.map((type, index) => {
+                                    return <option key={index} value={type}>{type}</option>
+                                })
+                            }
+                        </FormSelect>
+                    </div>
+                    <FormControl type="text" placeholder="Search name..." style={{width: "350px"}}/>
+                    <Button onClick={() => {
+                    }}>
+                        <FontAwesomeIcon icon={faUndo}/>
+                    </Button>
                 </div>
             </div>
             <Table striped hover bordered>
                 <thead>
-                    <tr>
-                        <th>#</th>
-                        <th>Name</th>
-                        <th>Description</th>
-                        <th>Phone</th>
-                        <th>Supplier Code</th>
-                        <th>Address</th>
-                        <th>Email</th>
-                        <th>Action</th>
-                    </tr>
+                <tr>
+                    <th>#</th>
+                    <th>Name</th>
+                    <th>Description</th>
+                    <th>Phone</th>
+                    <th>Supplier Code</th>
+                    <th>Address</th>
+                    <th>Email</th>
+                    <th>Action</th>
+                </tr>
                 </thead>
                 <tbody>
-                    {supplierList}
+                {supplierList}
                 </tbody>
             </Table>
             {
-                suppliers.length > 0 && <Pagination currentPage={pagination?.offset} totalPages={pagination?.totalPage} onPageChange={handleChangePage} />
+                suppliers.length > 0 && <Pagination currentPage={pagination?.offset} totalPages={pagination?.totalPage}
+                                                    onPageChange={handleChangePage}/>
             }
             {
-                (suppliers.length === 0) && !isLoading && <NoData />
+                (suppliers.length === 0) && !isLoading && <NoData/>
             }
             {
                 showConfirmDelete &&
@@ -208,10 +231,10 @@ export const SupplierManagement: React.FC = () => {
                     hideOverlay={() => {
                         setShowDetail(false);
                         setSupplierId("");
-                    }} />
+                    }}/>
             }
             {
-                isLoading && <SpinnerLoading />
+                isLoading && <SpinnerLoading/>
             }
         </div>
     );

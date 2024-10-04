@@ -1,6 +1,6 @@
 import React from "react";
 import "./SKUManagement.css";
-import {Table} from "react-bootstrap";
+import {Button, FormControl, FormSelect, Table} from "react-bootstrap";
 import SKU from "../../interface/Entity/SKU";
 import GetSKUs from "../../services/SKU/GetSKUs";
 import PaginationType from "../../interface/Pagination";
@@ -9,7 +9,12 @@ import ActionTypeEnum from "../../enum/ActionTypeEnum";
 import Pagination from "../../compoments/Pagination/Pagination";
 import {NoData} from "../../compoments/NoData/NoData";
 import SpinnerLoading from "../../compoments/Loading/SpinnerLoading";
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import {faUndo} from "@fortawesome/free-solid-svg-icons";
 
+const TypeFind = [
+    "batch code"
+]
 
 export const SKUManagement: React.FC = () => {
 
@@ -35,10 +40,10 @@ export const SKUManagement: React.FC = () => {
                     totalElementOfPage: data.totalElementOfPage
                 })
             }).catch((error) => {
-                dispatch({type: ActionTypeEnum.ERROR, message: error.message});
-            }).finally(() => {
-                setIsLoading(false);
-            });
+            dispatch({type: ActionTypeEnum.ERROR, message: error.message});
+        }).finally(() => {
+            setIsLoading(false);
+        });
     }, [dispatch]);
 
     React.useEffect(() => {
@@ -85,16 +90,16 @@ export const SKUManagement: React.FC = () => {
             <Table hover bordered striped>
                 <thead>
                 <tr>
-                <th>#</th>
-                        <th>SKU Code</th>
-                        <th>Batch Code</th>
-                        <th>Weight</th>
-                        <th>Dimension</th>
-                        <th>Description</th>
-                    </tr>
+                    <th>#</th>
+                    <th>SKU Code</th>
+                    <th>Batch Code</th>
+                    <th>Weight</th>
+                    <th>Dimension</th>
+                    <th>Description</th>
+                </tr>
                 </thead>
                 <tbody>
-                    {listSku}
+                {listSku}
                 </tbody>
             </Table>
             {
