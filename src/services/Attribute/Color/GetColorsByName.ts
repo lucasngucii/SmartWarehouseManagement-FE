@@ -29,6 +29,11 @@ const GetColorsByName = async (name: string): Promise<Color[]> => {
         return response.data.data;
     } catch (error) {
         if (axios.isAxiosError(error) && error.response) {
+            if(error.response.status === 401) {
+                localStorage.removeItem('token');
+                localStorage.removeItem('profile');
+                window.location.href = "/session-expired";
+            }
             const data = error.response.data as ResponseError;
             throw new Error(data.message || "An unexpected error occurred.");
         } else {
