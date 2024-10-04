@@ -8,6 +8,7 @@ import ReceiveHeader from "../../interface/Entity/ReceiveHeader";
 import GetStockEntries from "../../services/StockEntry/GetStockEntries";
 import {useDispatchMessage} from "../../Context/ContextMessage";
 import ActionTypeEnum from "../../enum/ActionTypeEnum";
+import FormEditStockEntry from "./compoments/FormEditStockEntry";
 
 const StockEntry: React.FC = () => {
 
@@ -20,6 +21,7 @@ const StockEntry: React.FC = () => {
         offset: 0,
         totalElementOfPage: 0
     });
+    const [showFormEdit, setShowFormEdit] = React.useState<boolean>(false);
 
     React.useEffect(() => {
         setIsLoading(true);
@@ -56,7 +58,7 @@ const StockEntry: React.FC = () => {
                 </div>
                 <div className="d-flex flex-row gap-3">
                     <Button onClick={() => {
-
+                        setShowFormEdit(true);
                     }} variant="info text-light fw-bold">+ NEW</Button>
                 </div>
             </div>
@@ -85,6 +87,12 @@ const StockEntry: React.FC = () => {
             }
             {
                 isLoading && <SpinnerLoading/>
+            }
+            {
+                showFormEdit &&
+                <FormEditStockEntry
+                    handleClose={() => {setShowFormEdit(false)}}
+                />
             }
         </div>
     );

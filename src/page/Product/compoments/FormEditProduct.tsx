@@ -24,15 +24,11 @@ import DeleteImageByProductId from "../../../services/Product/DeleteImageByProdu
 import ModelConfirmDelete from "../../../compoments/ModelConfirm/ModelConfirmDelete";
 import '../css/FormEditProduct.css'
 import AddImagesProduct from "../../../services/Product/AddImagesProduct";
+import OptionType from "../../../interface/OptionType";
 
 interface FormEditProductProps {
     handleClose: () => void;
     productId?: string;
-}
-
-interface OptionType {
-    value: string;
-    label: string;
 }
 
 interface FormDataType {
@@ -337,7 +333,7 @@ const FormEditProduct: React.FC<FormEditProductProps> = ({productId, handleClose
                 .catch((error) => {
                     dispatch({type: ActionTypeEnum.ERROR, message: error.message});
                 });
-        }, 1000);
+        }, 500);
         return () => clearTimeout(id);
     }, [color, dispatch]);
 
@@ -350,7 +346,7 @@ const FormEditProduct: React.FC<FormEditProductProps> = ({productId, handleClose
                 .catch((error) => {
                     dispatch({type: ActionTypeEnum.ERROR, message: error.message});
                 });
-        }, 1000);
+        }, 500);
         return () => clearTimeout(id);
     }, [branch, dispatch]);
 
@@ -363,7 +359,7 @@ const FormEditProduct: React.FC<FormEditProductProps> = ({productId, handleClose
                 .catch((error) => {
                     dispatch({type: ActionTypeEnum.ERROR, message: error.message});
                 });
-        }, 1000);
+        }, 500);
         return () => clearTimeout(id);
     }, [model, dispatch]);
 
@@ -376,7 +372,7 @@ const FormEditProduct: React.FC<FormEditProductProps> = ({productId, handleClose
                 .catch((error) => {
                     dispatch({type: ActionTypeEnum.ERROR, message: error.message});
                 });
-        }, 1000);
+        }, 500);
         return () => clearTimeout(id);
     }, [size, dispatch]);
 
@@ -389,7 +385,7 @@ const FormEditProduct: React.FC<FormEditProductProps> = ({productId, handleClose
                 .catch((error) => {
                     dispatch({type: ActionTypeEnum.ERROR, message: error.message});
                 });
-        }, 1000);
+        }, 500);
         return () => clearTimeout(id);
     }, [category, dispatch]);
 
@@ -402,7 +398,7 @@ const FormEditProduct: React.FC<FormEditProductProps> = ({productId, handleClose
                 .catch((error) => {
                     dispatch({type: ActionTypeEnum.ERROR, message: error.message});
                 });
-        }, 1000);
+        }, 500);
         return () => clearTimeout(id);
     }, [supplier, dispatch]);
 

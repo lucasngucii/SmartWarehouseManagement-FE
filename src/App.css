@@ -48,28 +48,6 @@ body {
     gap: 20px;
 }
 
-.form-search {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 10px;
-}
-
-.form-search .form-input {
-    width: 100%;
-    padding: 12px 20px;
-    font-size: 16px;
-    color: #333333;
-    border: 1px solid #e0e0e0;
-    border-radius: 4px;
-    outline: none;
-    transition: border-color 0.3s ease;
-}
-
-.form-search .form-input:focus {
-    border-color: #3498db;
-}
-
 /* CSS cho nút ở phần content-header-right */
 .content-header-right .add-button {
     padding: 12px 20px;
@@ -96,46 +74,6 @@ body {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
-/* back button */
-.back-button {
-    background-color: #ffffff;
-    color: #3498db;
-    padding: 10px 0;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 22px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    transition: transform 0.2s ease, background-color 0.2s ease, color 0.2s ease;
-}
-
-.back-button:hover {
-    transform: scale(1.1);
-}
-
-.back-button:active {
-    transform: scale(0.95);
-}
-
-/*button close*/
-.button-close {
-    position: absolute;
-    top: 15px;
-    right: 25px;
-    background: none;
-    border: none;
-    font-size: 20px;
-    cursor: pointer;
-    color: #333333;
-}
-
-.button-close:hover {
-    color: #555555;
-}
-
 /*modal*/
 .global-model {
     display: flex;
@@ -152,4 +90,15 @@ body {
 .global-model .model-buttons {
     display: flex;
     gap: 40px;
+}
+
+/*table*/
+.table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.table th,
+.table td {
+    vertical-align: middle;
 }

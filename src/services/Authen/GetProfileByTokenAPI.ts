@@ -1,18 +1,8 @@
 import axios from "axios";
 import { ResponseError } from "../../interface/ResponseError";
-import { Permission } from "../../interface/Permission";
+import {Profile} from "../../interface/Profile";
 
-interface GetProfileByTokenAPIResponse {
-    id: string;
-    username: string;
-    fullName: string;
-    email: string;
-    phoneNumber: string;
-    status: boolean;
-    role: Permission;
-}
-
-const GetProfileByTokenAPI = async (token: string): Promise<GetProfileByTokenAPIResponse> => {
+const GetProfileByTokenAPI = async (token: string): Promise<Profile> => {
     try {
         const HOST = process.env.REACT_APP_HOST_BE;
         const response = await axios.get(`${HOST}/account/profile`, {

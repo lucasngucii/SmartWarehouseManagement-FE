@@ -1,10 +1,11 @@
 import { Permission } from "./Permission";
 
 export interface Profile {
-    id: number;
-    fullName: string;
+    id: string;
     username: string;
+    fullName: string;
     email: string;
-    role: Permission;
+    phoneNumber: string;
     status: boolean;
+    role: Permission;
 }
