@@ -1,12 +1,12 @@
-import React, {ChangeEvent} from "react";
-import {Button, Col, Container, Form, Image, InputGroup, Row} from "react-bootstrap";
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faChevronLeft, faEdit, faSave} from "@fortawesome/free-solid-svg-icons";
+import React, { ChangeEvent } from "react";
+import { Button, Col, Container, Form, Image, InputGroup, Row } from "react-bootstrap";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faChevronLeft, faEdit, faSave } from "@fortawesome/free-solid-svg-icons";
 import ChangePasswordForm from "./ChangePasswordForm";
-import {Account} from "../../../interface/Account";
+import { Account } from "../../../interface/Account";
 import PaginationType from "../../../interface/Pagination";
-import {Role} from "../../../interface/Role";
-import {DataTypeFormUser} from "../../../interface/PageUser/DataTypeFormUser";
+import { Role } from "../../../interface/Role";
+import { DataTypeFormUser } from "../../../interface/PageUser/DataTypeFormUser";
 import Gender from "../../../enum/Gender";
 import GetRolesAPI from "../../../services/Authen/GetRolesAPI";
 import GetAccountById from "../../../services/Authen/GetAccountById";
@@ -20,9 +20,9 @@ import DataTypeCreateUserAdmin from "../../../interface/PageUser/DataTypeCreateU
 import UpdateAccountAPI from "../../../services/Authen/UpdateAccountAPI";
 import GetAccountsAPI from "../../../services/Authen/GetAccountsAPI";
 import RegisterAPI from "../../../services/Authen/RegisterAPI";
-import {OverLay} from "../../../compoments/OverLay/OverLay";
+import { OverLay } from "../../../compoments/OverLay/OverLay";
 import SpinnerLoadingOverLayer from "../../../compoments/Loading/SpinnerLoadingOverLay";
-import {useDispatchMessage} from "../../../Context/ContextMessage";
+import { useDispatchMessage } from "../../../Context/ContextMessage";
 import ActionTypeEnum from "../../../enum/ActionTypeEnum";
 
 interface EditUserComponentProps {
@@ -33,11 +33,11 @@ interface EditUserComponentProps {
 }
 
 export const EditUserComponent: React.FC<EditUserComponentProps> = ({
-                                                                        hideOverlay,
-                                                                        userId,
-                                                                        updateUsers,
-                                                                        updatePagination
-                                                                    }) => {
+    hideOverlay,
+    userId,
+    updateUsers,
+    updatePagination
+}) => {
     const dispatch = useDispatchMessage();
     const file = React.useRef<HTMLInputElement>(null);
     const [isLoading, setIsLoading] = React.useState<boolean>(false);
@@ -72,20 +72,6 @@ export const EditUserComponent: React.FC<EditUserComponentProps> = ({
         password: "",
         avatar: "",
     });
-    const [formError, setFormError] = React.useState<DataTypeFormUser>({
-        fullName: "",
-        dateOfBirth: "",
-        gender: "",
-        email: "",
-        phoneNumber: "",
-        position: "",
-        address: "",
-        roleName: "",
-        username: "",
-        confirmPassword: "",
-        password: "",
-        avatar: "",
-    });
     const gender: Gender[] = [Gender.Male, Gender.Female, Gender.Others];
 
     React.useEffect(() => {
@@ -94,11 +80,11 @@ export const EditUserComponent: React.FC<EditUserComponentProps> = ({
             .then((response) => {
                 setRoles(response);
             }).catch((err) => {
-            console.error(err.message);
-            dispatch({type: ActionTypeEnum.ERROR, message: err.message});
-        }).finally(() => {
-            setIsLoading(false);
-        })
+                console.error(err.message);
+                dispatch({ type: ActionTypeEnum.ERROR, message: err.message });
+            }).finally(() => {
+                setIsLoading(false);
+            })
     }, [dispatch])
 
     React.useEffect(() => {
@@ -114,21 +100,17 @@ export const EditUserComponent: React.FC<EditUserComponentProps> = ({
                         roleName: response.role.name,
                     });
                 }).catch((err) => {
-                console.error(err.message);
-                dispatch({type: ActionTypeEnum.ERROR, message: err.message});
-            })
+                    console.error(err.message);
+                    dispatch({ type: ActionTypeEnum.ERROR, message: err.message });
+                })
         }
     }, [userId, dispatch])
 
     const handleChangeInput = (e: ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
-        const {name, value} = e.target;
+        const { name, value } = e.target;
         setFormData(preVal => ({
             ...preVal,
             [name]: value
-        }));
-        setFormError(preVal => ({
-            ...preVal,
-            [name]: ""
         }));
     };
 
@@ -148,126 +130,88 @@ export const EditUserComponent: React.FC<EditUserComponentProps> = ({
     }
 
     const validate1 = (): boolean => {
-        let check = true;
         if (!formData.fullName) {
-            check = false;
-            setFormError(preVal => {
-                return {...preVal, fullName: "Fullname is required"}
-            })
+            dispatch({ type: ActionTypeEnum.ERROR, message: "Fullname is required" });
+            return false;
         }
         if (!formData.dateOfBirth) {
-            check = false;
-            setFormError(preVal => {
-                return {...preVal, dateOfBirth: "Date of birth is required"}
-            })
+            dispatch({ type: ActionTypeEnum.ERROR, message: "Date of birth is required" });
+            return false;
         }
         if (!formData.gender) {
-            check = false;
-            setFormError(preVal => {
-                return {...preVal, gender: "Gender is required"}
-            })
+            dispatch({ type: ActionTypeEnum.ERROR, message: "Gender is required" });
+            return false;
         }
         if (!formData.roleName) {
-            check = false;
-            setFormError(preVal => {
-                return {...preVal, role: "Role is required"}
-            })
+            dispatch({ type: ActionTypeEnum.ERROR, message: "Role is required" });
+            return false;
         }
         if (!formData.email) {
-            check = false;
-            setFormError(preVal => {
-                return {...preVal, email: "Email is required"}
-            })
+            dispatch({ type: ActionTypeEnum.ERROR, message: "Email is required" });
+            return false;
         }
         if (!formData.phoneNumber) {
-            check = false;
-            setFormError(preVal => {
-                return {...preVal, phoneNumber: "Phone is required"}
-            })
+            dispatch({ type: ActionTypeEnum.ERROR, message: "Phone number is required" });
+            return false;
         }
         if (!formData.position) {
-            check = false;
-            setFormError(preVal => {
-                return {...preVal, position: "Position is required"}
-            })
+            dispatch({ type: ActionTypeEnum.ERROR, message: "Position is required" });
+            return false;
         }
         if (!formData.address) {
-            check = false;
-            setFormError(preVal => {
-                return {...preVal, address: "Address is required"}
-            })
+            dispatch({ type: ActionTypeEnum.ERROR, message: "Address is required" });
+            return false;
         }
         if (!formData.username && !userId) {
-            check = false;
-            setFormError(preVal => {
-                return {...preVal, username: "Username is required"}
-            })
+            dispatch({ type: ActionTypeEnum.ERROR, message: "Username is required" });
+            return false;
         }
         if (!formData.roleName) {
-            check = false;
-            setFormError(preVal => {
-                return {...preVal, roleName: "Role is required"}
-            })
+            dispatch({ type: ActionTypeEnum.ERROR, message: "Role is required" });
+            return false;
         }
         if (!formData.password && !userId) {
-            check = false;
-            setFormError(preVal => {
-                return {...preVal, password: "Password is required"}
-            })
+            dispatch({ type: ActionTypeEnum.ERROR, message: "Password is required" });
+            return false;
         }
         if (!formData.confirmPassword && !userId) {
-            check = false;
-            setFormError(preVal => {
-                return {...preVal, confirmPassword: "Confirm password is required"}
-            })
+            dispatch({ type: ActionTypeEnum.ERROR, message: "Confirm password is required" });
+            return false;
         }
         if (formData.password !== formData.confirmPassword && !userId) {
-            check = false;
-            setFormError(preVal => {
-                return {...preVal, confirmPassword: "Confirm password is not match"}
-            })
+            dispatch({ type: ActionTypeEnum.ERROR, message: "Password and confirm password not match" });
+            return false;
         }
-        return check
+        return true;
     }
 
     const validate2 = (): boolean => {
-        let check = true;
         const checkFullName = validateFullName(formData.fullName || "");
         const checkEmail = validateEmail(formData.email || "");
         const checkPhone = validatePhone(formData.phoneNumber || "");
         const checkPassword = ValidatePassword(formData.password || "");
         const checkUsername = ValidateUsername(formData.username || "");
         if (checkFullName) {
-            check = false;
-            setFormError(preVal => {
-                return {...preVal, fullname: checkFullName}
-            })
+            dispatch({ type: ActionTypeEnum.ERROR, message: checkFullName });
+            return false;
         }
         if (checkEmail) {
-            check = false;
-            setFormError(preVal => {
-                return {...preVal, email: checkEmail}
-            })
+            dispatch({ type: ActionTypeEnum.ERROR, message: checkEmail });
+            return false;
         }
         if (checkPhone) {
-            check = false;
-            setFormError(preVal => {
-                return {...preVal, phone: checkPhone}
-            })
+            dispatch({ type: ActionTypeEnum.ERROR, message: checkPhone });
+            return false;
         }
         if (checkPassword && !userId) {
-            check = false;
-            setFormError(preVal => {
-                return {...preVal, password: checkPassword}
-            })
+            dispatch({ type: ActionTypeEnum.ERROR, message: checkPassword });
+            return false;
         }
         if (checkUsername && !userId) {
-            check = false;
-            setFormError(preVal => {
-                return {...preVal, username: checkUsername}
-            })
+            dispatch({ type: ActionTypeEnum.ERROR, message: checkUsername });
+            return false;
         }
-        return check
+        return true;
     }
 
     const checkChangeFormData = (): boolean => {
@@ -334,7 +278,7 @@ export const EditUserComponent: React.FC<EditUserComponentProps> = ({
                 username: formData.username,
             }
         } catch (error: any) {
-            dispatch({type: ActionTypeEnum.ERROR, message: error.message});
+            dispatch({ type: ActionTypeEnum.ERROR, message: error.message });
             return null;
         }
     }
@@ -373,68 +317,42 @@ export const EditUserComponent: React.FC<EditUserComponentProps> = ({
                         });
                         return GetAccountsAPI();
                     }).then((response) => {
-                    updateUsers(response.data);
-                    updatePagination({
-                        totalPage: response.totalPage,
-                        limit: response.limit,
-                        offset: response.offset,
-                        totalElementOfPage: response.totalElementOfPage
+                        updateUsers(response.data);
+                        updatePagination({
+                            totalPage: response.totalPage,
+                            limit: response.limit,
+                            offset: response.offset,
+                            totalElementOfPage: response.totalElementOfPage
+                        })
+                        dispatch({ type: ActionTypeEnum.SUCCESS, message: "Update user successfully!" });
+                        setEditUser(false);
+                    }).catch((err) => {
+                        dispatch({ type: ActionTypeEnum.ERROR, message: err.message });
+                    }).finally(() => {
+                        setIsLoadingSubmit(false);
                     })
-                    dispatch({type: ActionTypeEnum.SUCCESS, message: "Update user successfully!"});
-                    setEditUser(false);
-                }).catch((err) => {
-                    const message: string = err.message.toLowerCase();
-                    if (message.includes("password")) {
-                        setFormError(preVal => {
-                            return {...preVal, password: err.message}
-                        })
-                    } else if (message.includes("role")) {
-                        setFormError(preVal => {
-                            return {...preVal, roleName: err.message}
-                        })
-                    } else {
-                        dispatch({type: ActionTypeEnum.ERROR, message: err.message});
-                    }
-                }).finally(() => {
-                    setIsLoadingSubmit(false);
-                })
                 return;
             } else {
                 RegisterAPI(formartDataRegister())
                     .then(() => {
                         return GetAccountsAPI();
                     }).then((response) => {
-                    updateUsers(response.data);
-                    updatePagination({
-                        totalPage: response.totalPage,
-                        limit: response.limit,
-                        offset: response.offset,
-                        totalElementOfPage: response.totalElementOfPage
+                        updateUsers(response.data);
+                        updatePagination({
+                            totalPage: response.totalPage,
+                            limit: response.limit,
+                            offset: response.offset,
+                            totalElementOfPage: response.totalElementOfPage
+                        })
+                        dispatch({ type: ActionTypeEnum.SUCCESS, message: "Create user successfully!" });
+                        setTimeout(() => {
+                            hideOverlay();
+                        }, 1000);
+                    }).catch((err) => {
+                        dispatch({ type: ActionTypeEnum.ERROR, message: err.message });
+                    }).finally(() => {
+                        setIsLoadingSubmit(false);
                     })
-                    dispatch({type: ActionTypeEnum.SUCCESS, message: "Create user successfully!"});
-                    setTimeout(() => {
-                        hideOverlay();
-                    }, 1000);
-                }).catch((err) => {
-                    const message: string = err.message.toLowerCase();
-                    if (message.includes("password")) {
-                        setFormError(preVal => {
-                            return {...preVal, password: err.message}
-                        })
-                    } else if (message.includes("role")) {
-                        setFormError(preVal => {
-                            return {...preVal, roleName: err.message}
-                        })
-                    } else if (message.includes("username")) {
-                        setFormError(preVal => {
-                            return {...preVal, username: err.message}
-                        })
-                    } else {
-                        dispatch({type: ActionTypeEnum.ERROR, message: err.message});
-                    }
-                }).finally(() => {
-                    setIsLoadingSubmit(false);
-                })
             }
         }
     }
@@ -448,20 +366,20 @@ export const EditUserComponent: React.FC<EditUserComponentProps> = ({
                             onClick={() => hideOverlay()}
                             className="btn fs-3 px-3 text-primary"
                         >
-                            <FontAwesomeIcon icon={faChevronLeft}/>
+                            <FontAwesomeIcon icon={faChevronLeft} />
                         </button>
                         <h2 className="fw-bold mb-0">{userId ? "Edit User" : "New User"}</h2>
                     </div>
                     {
                         userId &&
-                        editUser ? (
+                            editUser ? (
                             <div className="d-flex flex-row gap-2">
                                 <button
                                     disabled={checkChangeFormData()}
                                     onClick={() => handleSubmit()}
                                     className="btn btn-primary d-flex align-items-center"
                                 >
-                                    <FontAwesomeIcon icon={faSave} className="me-2"/>
+                                    <FontAwesomeIcon icon={faSave} className="me-2" />
                                     Save
                                 </button>
                                 <button
@@ -481,7 +399,7 @@ export const EditUserComponent: React.FC<EditUserComponentProps> = ({
                                 onClick={() => setEditUser(true)}
                                 className="btn btn-danger fw-bold d-flex align-items-center"
                             >
-                                <FontAwesomeIcon icon={faEdit} className="me-2"/> Edit
+                                <FontAwesomeIcon icon={faEdit} className="me-2" /> Edit
                             </button>
                         )
                     }
@@ -496,7 +414,7 @@ export const EditUserComponent: React.FC<EditUserComponentProps> = ({
                                             <Image
                                                 src={formData?.avatar || "/images/default-avt.png"}
                                                 thumbnail
-                                                style={{width: "250px", height: "auto"}}
+                                                style={{ width: "250px", height: "auto" }}
                                             />
                                             <Form.Control
                                                 type="file"
@@ -509,7 +427,7 @@ export const EditUserComponent: React.FC<EditUserComponentProps> = ({
                                             <div className="position-absolute bottom-0 end-0">
                                                 <button
                                                     className="btn btn-light btn-sm shadow-sm rounded-circle d-flex align-items-center justify-content-center text-primary"
-                                                    style={{width: "35px", height: "35px"}}
+                                                    style={{ width: "35px", height: "35px" }}
                                                     onClick={() => {
                                                         if (file.current) {
                                                             file.current.click();
@@ -517,7 +435,7 @@ export const EditUserComponent: React.FC<EditUserComponentProps> = ({
                                                     }}
                                                     disabled={!editUser}
                                                 >
-                                                    <FontAwesomeIcon icon={faEdit}/>
+                                                    <FontAwesomeIcon icon={faEdit} />
                                                 </button>
                                             </div>
                                         </div>
@@ -538,7 +456,6 @@ export const EditUserComponent: React.FC<EditUserComponentProps> = ({
                                             onChange={handleChangeInput}
                                             disabled={userId !== "" && !editUser}
                                         />
-                                        <Form.Text className="text-danger">{formError.fullName}</Form.Text>
                                     </Form.Group>
                                     <Col>
                                         <Form.Group className="mb-3">
@@ -551,7 +468,6 @@ export const EditUserComponent: React.FC<EditUserComponentProps> = ({
                                                 disabled={userId !== "" && !editUser}
                                                 onChange={handleChangeInput}
                                             />
-                                            <Form.Text className="text-danger">{formError.dateOfBirth}</Form.Text>
                                         </Form.Group>
                                     </Col>
                                     <Col>
@@ -569,7 +485,6 @@ export const EditUserComponent: React.FC<EditUserComponentProps> = ({
                                                     <option key={index} value={item}>{item}</option>
                                                 ))}
                                             </Form.Select>
-                                            <Form.Text className="text-danger">{formError.gender}</Form.Text>
                                         </Form.Group>
                                     </Col>
                                 </Row>
@@ -590,7 +505,6 @@ export const EditUserComponent: React.FC<EditUserComponentProps> = ({
                                             disabled={userId !== "" && !editUser}
                                             placeholder="Enter email"
                                         />
-                                        <Form.Text className="text-danger">{formError.email}</Form.Text>
                                     </Form.Group>
                                 </Col>
                                 <Col>
@@ -605,7 +519,6 @@ export const EditUserComponent: React.FC<EditUserComponentProps> = ({
                                             disabled={userId !== "" && !editUser}
                                             placeholder="Enter phone number"
                                         />
-                                        <Form.Text className="text-danger">{formError.phoneNumber}</Form.Text>
                                     </Form.Group>
                                 </Col>
                             </Row>
@@ -620,7 +533,6 @@ export const EditUserComponent: React.FC<EditUserComponentProps> = ({
                                     disabled={userId !== "" && !editUser}
                                     placeholder="Enter position"
                                 />
-                                <Form.Text className="text-danger">{formError.position}</Form.Text>
                             </Form.Group>
                             <Form.Group className="mb-3">
                                 <Form.Label>Address</Form.Label>
@@ -633,7 +545,6 @@ export const EditUserComponent: React.FC<EditUserComponentProps> = ({
                                     disabled={userId !== "" && !editUser}
                                     placeholder="Enter address"
                                 />
-                                <Form.Text className="text-danger">{formError.address}</Form.Text>
                             </Form.Group>
                         </div>
                     </Col>
@@ -653,7 +564,6 @@ export const EditUserComponent: React.FC<EditUserComponentProps> = ({
                                             placeholder="Enter username"
                                             onChange={handleChangeInput}
                                         />
-                                        <Form.Text className="text-danger">{formError.username}</Form.Text>
                                     </Form.Group>
                                 </Col>
                                 <Col>
@@ -671,7 +581,6 @@ export const EditUserComponent: React.FC<EditUserComponentProps> = ({
                                                 <option key={index} value={item.name}>{item.name}</option>
                                             ))}
                                         </Form.Select>
-                                        <Form.Text className="text-danger">{formError.roleName}</Form.Text>
                                     </Form.Group>
                                 </Col>
                             </Row>
@@ -697,7 +606,6 @@ export const EditUserComponent: React.FC<EditUserComponentProps> = ({
                                                 </button>
                                             </InputGroup.Text>
                                         </InputGroup>
-                                        <Form.Text className="text-danger">{formError.password}</Form.Text>
                                     </Form.Group>
                                 ) : (
                                     <>
@@ -714,7 +622,6 @@ export const EditUserComponent: React.FC<EditUserComponentProps> = ({
                                                     onChange={handleChangeInput}
                                                 />
                                             </InputGroup>
-                                            <Form.Text className="text-danger">{formError.password}</Form.Text>
                                         </Form.Group>
                                         <Form.Group className="mb-3">
                                             <Form.Label>Confirm Password</Form.Label>
@@ -729,10 +636,9 @@ export const EditUserComponent: React.FC<EditUserComponentProps> = ({
                                                     onChange={handleChangeInput}
                                                 />
                                             </InputGroup>
-                                            <Form.Text className="text-danger">{formError.confirmPassword}</Form.Text>
                                         </Form.Group>
                                         <Button variant="primary" onClick={() => handleSubmit()}
-                                                className="form-control py-3 fw-bold">
+                                            className="form-control py-3 fw-bold">
                                             Create
                                         </Button>
                                     </>
@@ -744,9 +650,9 @@ export const EditUserComponent: React.FC<EditUserComponentProps> = ({
                 {
                     userId != null &&
                     changePassword &&
-                    <ChangePasswordForm userId={userId} hideOver={() => setChangePassword(false)}/>
+                    <ChangePasswordForm userId={userId} hideOver={() => setChangePassword(false)} />
                 }
-                {(isLoading || isLoadingSubmit) && <SpinnerLoadingOverLayer/>}
+                {(isLoading || isLoadingSubmit) && <SpinnerLoadingOverLayer />}
                 {/*<ToastContainerMessage>*/}
                 {/*    <ToastMessage message={globalSuccess} type={"success"} setMessage={() => {setGlobalSuccess("")}} />*/}
                 {/*    <ToastMessage message={globalError} type={"danger"} setMessage={() => {setGlobalError("")}} />*/}

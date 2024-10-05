@@ -1,13 +1,13 @@
 import React from "react";
-import {Toast} from "react-bootstrap";
+import { Toast } from "react-bootstrap";
 
 interface ToastProps {
     message: string;
-    type: "success" | "danger";
+    type: "success" | "danger" | "warning" | "info";
     setMessage: () => void;
 }
 
-const ToastMessage: React.FC<ToastProps> = ({type, message, setMessage}) => {
+const ToastMessage: React.FC<ToastProps> = ({ type, message, setMessage }) => {
     return (
         <Toast
             onClose={() => setMessage()} show={message !== ""} delay={3000} autohide

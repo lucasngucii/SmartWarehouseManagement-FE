@@ -1,21 +1,32 @@
 import React from "react";
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faChevronLeft, faPlus, faTrash} from "@fortawesome/free-solid-svg-icons";
-import {Col, Container, Form, FormGroup, Row, Table} from "react-bootstrap";
-import {OverLay} from "../../../compoments/OverLay/OverLay";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faChevronLeft, faPlus, faTrash } from "@fortawesome/free-solid-svg-icons";
+import { Button, Col, Container, Form, FormGroup, Nav, Row, Table } from "react-bootstrap";
+import { OverLay } from "../../../compoments/OverLay/OverLay";
 import Select from "react-select";
 import GetProfile from "../../../util/GetProfile";
 import OptionType from "../../../interface/OptionType";
 import GetSuppliersByName from "../../../services/Supplier/GetSuppliersByName";
-import {useDispatchMessage} from "../../../Context/ContextMessage";
+import { useDispatchMessage } from "../../../Context/ContextMessage";
 import ActionTypeEnum from "../../../enum/ActionTypeEnum";
 import GetSupplierById from "../../../services/Supplier/GetSupplierById";
+import ProductHeader from "../../../interface/Entity/ProductHeader";
+import GetProductsBySupplier from "../../../services/Product/GetProductsBySupplier";
+import { NoData } from "../../../compoments/NoData/NoData";
+import SpinnerLoading from "../../../compoments/Loading/SpinnerLoading";
 
 interface FormEditStockEntryProps {
     handleClose: () => void;
 }
 
-const FormEditStockEntry: React.FC<FormEditStockEntryProps> = ({handleClose}) => {
+interface ProductItem {
+    productId: string;
+    name: string;
+    quantity: number;
+    price: number;
+}
+
+const FormEditStockEntry: React.FC<FormEditStockEntryProps> = ({ handleClose }) => {
 
     const profile = GetProfile();
     const dispatch = useDispatchMessage();
@@ -28,6 +39,12 @@ const FormEditStockEntry: React.FC<FormEditStockEntryProps> = ({handleClose}) =>
     const [address, setAddress] = React.useState("");
     const [phoneNumber, setPhoneNumber] = React.useState("");
 
+    const [products, setProducts] = React.useState<ProductHeader[]>([]);
+    const [productItems, setProductItems] = React.useState<ProductItem[]>([]);
+    const [loadingProducts, setLoadingProducts] = React.useState(false);
+    const [showProductList, setShowProductList] = React.useState(true);
+
+
     React.useEffect(() => {
         const id = setTimeout(() => {
             setLoadingSuppliers(true);
@@ -38,10 +55,10 @@ const FormEditStockEntry: React.FC<FormEditStockEntryProps> = ({handleClose}) =>
                         label: supplier.name,
                     })));
                 }).catch((err) => {
-                dispatch({type: ActionTypeEnum.ERROR, message: err.message});
-            }).finally(() => {
-                setLoadingSuppliers(false);
-            })
+                    dispatch({ type: ActionTypeEnum.ERROR, message: err.message });
+                }).finally(() => {
+                    setLoadingSuppliers(false);
+                })
         }, 500)
 
         return () => clearTimeout(id);
@@ -49,15 +66,172 @@ const FormEditStockEntry: React.FC<FormEditStockEntryProps> = ({handleClose}) =>
 
     React.useEffect(() => {
         if (supplierSelected) {
+            setLoadingProducts(true);
+            GetProductsBySupplier(supplierSelected.value)
+                .then((res) => {
+                    console.log(res);
+                    setProducts(res.data);
+                }).catch((err) => {
+                    dispatch({ type: ActionTypeEnum.ERROR, message: err.message });
+                }).finally(() => {
+                    setLoadingProducts(false);
+                })
+        }
+    }, [supplierSelected, dispatch])
+
+    React.useEffect(() => {
+        if (supplierSelected) {
             GetSupplierById(supplierSelected.value)
                 .then((res) => {
                     setAddress(res.address);
                     setPhoneNumber(res.phone);
+                    setProductItems([]);
                 }).catch((err) => {
-                dispatch({type: ActionTypeEnum.ERROR, message: err.message});
+                    dispatch({ type: ActionTypeEnum.ERROR, message: err.message });
+                })
+        }
+    }, [supplierSelected, dispatch])
+
+    const handleAddItem = (productId: string) => {
+        const product = products.find((product) => product.id === productId);
+        if (product) {
+            setProductItems((preValue) => {
+                const isExist = preValue.find((item) => item.productId === productId);
+                if (isExist) {
+                    return preValue.map((item) => {
+                        if (item.productId === productId) {
+                            return {
+                                ...item,
+                                quantity: item.quantity + 1
+                            }
+                        }
+                        return item;
+                    })
+                }
+                return [...preValue, {
+                    productId: productId,
+                    name: product.name,
+                    quantity: 1,
+                    price: 1
+                }]
             })
         }
-    })
+    }
+
+    const handleDeleteItem = (productId: string) => {
+        setProductItems(productItems.filter((product) => product.productId !== productId));
+    }
+
+    const listProductItems = () => {
+        return productItems.map((product, index) => (
+            <tr className={"text-center"}>
+                <td>{index + 1}</td>
+                <td>{product.name}</td>
+                <td style={{ verticalAlign: "middle" }}> {/* Căn giữa theo chiều dọc */}
+                    <Form.Control
+                        type="number"
+                        value={product.quantity}
+                        step={0.01}
+                        min={0}
+                        defaultValue={0}
+                        style={{ width: "150px", margin: "0 auto" }}
+                        onChange={(e) => {
+                            let value = parseFloat(e.target.value);
+                            if (e.target.value === "" || isNaN(value)) {
+                                value = 0;
+                            }
+                            setProductItems(productItems.map((item) => {
+                                if (item.productId === product.productId) {
+                                    return {
+                                        ...item,
+                                        quantity: value
+                                    };
+                                }
+                                return item;
+                            }));
+                        }}
+                    />
+                </td>
+                <td style={{ verticalAlign: "middle" }}>
+                    <Form.Control
+                        type="number"
+                        value={product.price}
+                        style={{ width: "150px", margin: "0 auto" }}
+                        step={0.01}
+                        min={0}
+                        defaultValue={0}
+                        onChange={(e) => {
+                            let value = parseFloat(e.target.value);
+                            if (e.target.value === "" || isNaN(value)) {
+                                value = 0;
+                            }
+                            setProductItems(productItems.map((item) => {
+                                if (item.productId === product.productId) {
+                                    return {
+                                        ...item,
+                                        price: value
+                                    };
+                                }
+                                return item;
+                            }));
+                        }}
+                    />
+                </td>
+                <td style={{ minWidth: "150px" }}>
+                    ${(product.price * product.quantity).toFixed(2) || 0}
+                </td>
+                <td>
+                    <button onClick={() => { handleDeleteItem(product.productId) }} className={"btn btn-danger"}>
+                        <FontAwesomeIcon icon={faTrash} />
+                    </button>
+                </td>
+            </tr>
+
+        ))
+    }
+
+    const listProducts = () => {
+        return products.map((product, index) => (
+            <tr key={product.id} className={"text-center"} style={{ verticalAlign: "middle" }}>
+                <td>{index + 1}</td>
+                <td>
+                    <img src="https://via.placeholder.com/50" alt="product" className={"img-fluid"}
+                        width={80} height={80} />
+                </td>
+                <td>{product.name}</td>
+                <td>
+                    {
+                        productItems.find((item) => item.productId === product.id) ? (
+                            <span className={"badge bg-success py-2"}>Added</span>
+                        ) : (
+                            <button onClick={() => { handleAddItem(product.id) }} className={"btn btn-primary"}>
+                                <FontAwesomeIcon icon={faPlus} />
+                            </button>
+                        )
+                    }
+                </td>
+            </tr>
+        ))
+    }
+
+    const handleSubmit = () => {
+
+        if (supplierSelected === null) {
+            dispatch({ type: ActionTypeEnum.ERROR, message: "Please select a supplier." });
+            return;
+        }
+
+        if (productItems.length === 0) {
+            dispatch({ type: ActionTypeEnum.ERROR, message: "Please select a product." });
+            return;
+        }
+
+        if (productItems.some((item) => item.quantity === 0 || item.price === 0)) {
+            dispatch({ type: ActionTypeEnum.ERROR, message: "Quantity and price must be greater than 0." });
+            return;
+        }
+
+    }
 
     return (
         <OverLay className="disabled-padding bg-light p-4">
@@ -70,9 +244,20 @@ const FormEditStockEntry: React.FC<FormEditStockEntryProps> = ({handleClose}) =>
                             }}
                             className="btn fs-3 px-3 text-primary"
                         >
-                            <FontAwesomeIcon icon={faChevronLeft}/>
+                            <FontAwesomeIcon icon={faChevronLeft} />
                         </button>
                         <h2 className="fw-bold mb-0">New Stock Entry</h2>
+                    </div>
+                    <div>
+                        <Button
+                            onClick={() => {
+                                handleSubmit();
+                            }}
+                            variant="primary"
+                            className="px-4"
+                        >
+                            Create
+                        </Button>
                     </div>
                 </div>
                 <Row className={"p-3"}>
@@ -154,227 +339,81 @@ const FormEditStockEntry: React.FC<FormEditStockEntryProps> = ({handleClose}) =>
                     </FormGroup>
                 </Row>
                 <Row className={"p-3"}>
-                    <div className={"d-flex flex-row justify-content-between gap-2"}>
-                    <div className={"border p-2"} style={{flex: 1}}>
-                            <h5 className={"fw-bold p-3"}>Stock Entry Items</h5>
-                            <Table striped bordered hover responsive>
-                                <thead>
-                                <tr>
-                                    <th>#</th>
-                                    <th>Product Name</th>
-                                    <th>Quantity</th>
-                                    <th>Price</th>
-                                    <th>Total</th>
-                                    <th>Action</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                <tr className={"text-center"}>
-                                    <td>1</td>
-                                    <td>Product 1</td>
-                                    <td>
-                                        <Form.Control
-                                            type="number"
-                                            value={1}
-                                            className={"form-control"}
-                                            style={{width: "100px"}}
-                                        />
-                                    </td>
-                                    <td>$10</td>
-                                    <td>$100</td>
-                                    <td>
-                                        <button className={"btn btn-danger"}>
-                                            <FontAwesomeIcon icon={faTrash} />
-                                        </button>
-                                    </td>
-                                </tr>
-                                <tr className={"text-center"}>
-                                    <td>1</td>
-                                    <td>Product 1</td>
-                                    <td>
-                                        <Form.Control
-                                            type="number"
-                                            value={1}
-                                            className={"form-control"}
-                                            style={{width: "100px"}}
-                                        />
-                                    </td>
-                                    <td>$10</td>
-                                    <td>$100</td>
-                                    <td>
-                                        <button className={"btn btn-danger"}>
-                                            <FontAwesomeIcon icon={faTrash} />
-                                        </button>
-                                    </td>
-                                </tr>
-                                <tr className={"text-center"} style={{verticalAlign: "middle"}}>
-                                    <td>1</td>
-                                    <td>Product 1</td>
-                                    <td>
-                                        <Form.Control
-                                            type="number"
-                                            value={1}
-                                            className={"form-control"}
-                                            style={{width: "100px"}}
-                                        />
-                                    </td>
-                                    <td>$10</td>
-                                    <td>$100</td>
-                                    <td>
-                                        <button className={"btn btn-danger"}>
-                                            <FontAwesomeIcon icon={faTrash} />
-                                        </button>
-                                    </td>
-                                </tr>
-                                <tr className={"text-center"} style={{verticalAlign: "middle"}}>
-                                    <td>1</td>
-                                    <td>Product 1</td>
-                                    <td>
-                                        <Form.Control
-                                            type="number"
-                                            value={1}
-                                            className={"form-control"}
-                                            style={{width: "100px"}}
-                                        />
-                                    </td>
-                                    <td>$10</td>
-                                    <td>$100</td>
-                                    <td>
-                                        <button className={"btn btn-danger"}>
-                                            <FontAwesomeIcon icon={faTrash} />
-                                        </button>
-                                    </td>
-                                </tr>
-                                <tr className={"text-center"} style={{verticalAlign: "middle"}}>
-                                    <td>1</td>
-                                    <td>Product 1</td>
-                                    <td>
-                                        <Form.Control
-                                            type="number"
-                                            value={1}
-                                            className={"form-control"}
-                                            style={{width: "100px"}}
-                                        />
-                                    </td>
-                                    <td>$10</td>
-                                    <td>$100</td>
-                                    <td>
-                                        <button className={"btn btn-danger"}>
-                                            <FontAwesomeIcon icon={faTrash} />
-                                        </button>
-                                    </td>
-                                </tr>
-                                </tbody>
-                            </Table>
+                    <div>
+                        <div className="d-flex justify-content-around w-100 gap-2">
+
                         </div>
-                        <div className={"border p-2"} style={{flex: 1}}>
+                        <div className={"border p-2"} style={{ flex: 1 }}>
                             <div className={"mb-3"}>
-                                <h5 className={"fw-bold p-3"}>Supplier Product List</h5>
-                                <div>
-                                    <Form.Control
-                                        type="text"
-                                        placeholder="Search product name"
-                                        className={"form-control p-3"}
-                                    />
+                                <div className="d-flex justify-content-around gap-2">
+                                    <Button
+                                        onClick={() => setShowProductList(true)}
+                                        variant="outline-primary"
+                                        className={"w-100 p-2"}
+                                    >
+                                        Supplier Product List
+                                    </Button>
+                                    <Button
+                                        onClick={() => setShowProductList(false)}
+                                        variant="outline-primary"
+                                        className={"w-100 p-2"}
+                                    >
+                                        Stock Entry Items
+                                    </Button>
                                 </div>
                             </div>
-                            <Table striped bordered hover responsive>
-                                <thead>
-                                <tr>
-                                    <th>#</th>
-                                    <th>Image</th>
-                                    <th>Product Name</th>
-                                    <th>Price</th>
-                                    <th>Action</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                <tr className={"text-center"} style={{verticalAlign: "middle"}}>
-                                    <td>1</td>
-                                    <td>
-                                        <img src="https://via.placeholder.com/50" alt="product" className={"img-fluid"}
-                                             width={80} height={80}/>
-                                    </td>
-                                    <td>OMO</td>
-                                    <td>$10</td>
-                                    <td>
-                                        <button className={"btn btn-success"}>
-                                            <FontAwesomeIcon icon={faPlus}/>
-                                        </button>
-                                    </td>
-                                </tr>
-                                <tr className={"text-center"} style={{verticalAlign: "middle"}}>
-                                    <td>1</td>
-                                    <td>
-                                        <img src="https://via.placeholder.com/50" alt="product" className={"img-fluid"}
-                                             width={80} height={80}/>
-                                    </td>
-                                    <td>OMO</td>
-                                    <td>$10</td>
-                                    <td>
-                                        <button className={"btn btn-success"}>
-                                            <FontAwesomeIcon icon={faPlus}/>
-                                        </button>
-                                    </td>
-                                </tr>
-                                <tr className={"text-center"} style={{verticalAlign: "middle"}}>
-                                    <td>1</td>
-                                    <td>
-                                        <img src="https://via.placeholder.com/50" alt="product" className={"img-fluid"}
-                                             width={80} height={80}/>
-                                    </td>
-                                    <td>OMO</td>
-                                    <td>$10</td>
-                                    <td>
-                                        <button className={"btn btn-success"}>
-                                            <FontAwesomeIcon icon={faPlus}/>
-                                        </button>
-                                    </td>
-                                </tr>
-                                <tr className={"text-center"} style={{verticalAlign: "middle"}}>
-                                    <td>1</td>
-                                    <td>
-                                        <img src="https://via.placeholder.com/50" alt="product" className={"img-fluid"}
-                                             width={80} height={80}/>
-                                    </td>
-                                    <td>OMO</td>
-                                    <td>$10</td>
-                                    <td>
-                                        <button className={"btn btn-success"}>
-                                            <FontAwesomeIcon icon={faPlus}/>
-                                        </button>
-                                    </td>
-                                </tr>
-                                <tr className={"text-center"} style={{verticalAlign: "middle"}}>
-                                    <td>1</td>
-                                    <td>
-                                        <img src="https://via.placeholder.com/50" alt="product" className={"img-fluid"}
-                                             width={80} height={80}/>
-                                    </td>
-                                    <td>OMO</td>
-                                    <td>$10</td>
-                                    <td>
-                                        <button className={"btn btn-success"}>
-                                            <FontAwesomeIcon icon={faPlus}/>
-                                        </button>
-                                    </td>
-                                </tr>
-                                <tr className={"text-center"} style={{verticalAlign: "middle"}}>
-                                    <td>1</td>
-                                    <td>
-                                        <img src="https://via.placeholder.com/50" alt="product" className={"img-fluid"}
-                                             width={80} height={80}/>
-                                    </td>
-                                    <td>OMO</td>
-                                    <td>$10</td>
-                                    <td>
-                                        <button className={"btn btn-success"}>
-                                            <FontAwesomeIcon icon={faPlus}/>
-                                        </button>
-                                    </td>
-                                </tr>
-                                </tbody>
-                            </Table>
+                            {
+                                showProductList ? (
+                                    <>
+                                        <Table striped bordered hover responsive>
+                                            <thead>
+                                                <tr style={{ textAlign: "center" }}>
+                                                    <th>#</th>
+                                                    <th>Image</th>
+                                                    <th>Product Name</th>
+                                                    <th>Action</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {listProducts()}
+                                            </tbody>
+                                        </Table>
+                                        {
+                                            products.length === 0 && !loadingProducts && (
+                                                <NoData />
+                                            )
+                                        }
+                                        {
+                                            loadingProducts && (
+                                                <SpinnerLoading />
+                                            )
+                                        }
+                                    </>
+                                ) : (
+                                    <>
+                                        <Table striped bordered hover responsive>
+                                            <thead>
+                                                <tr style={{ textAlign: "center" }}>
+                                                    <th>#</th>
+                                                    <th>Product Name</th>
+                                                    <th>Quantity</th>
+                                                    <th>Price</th>
+                                                    <th>Total</th>
+                                                    <th>Action</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {listProductItems()}
+                                            </tbody>
+                                        </Table>
+                                        {
+                                            productItems.length === 0 && !loadingProducts && (
+                                                <NoData />
+                                            )
+                                        }
+                                    </>
+                                )
+                            }
                         </div>
                     </div>
                 </Row>

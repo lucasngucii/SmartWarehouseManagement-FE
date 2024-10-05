@@ -8,6 +8,8 @@ interface ContextMessageProps {
 interface InitUseReducerType {
     success: string,
     error: string,
+    warning: string,
+    info: string,
 }
 
 interface ActionType {
@@ -15,14 +17,16 @@ interface ActionType {
     message: string,
 }
 
-const message = React.createContext<InitUseReducerType>({success:"", error: ""});
-const dispatchMessage = React.createContext<React.Dispatch<ActionType>>(() => {});
+const message = React.createContext<InitUseReducerType>({ success: "", error: "", warning: "", info: "" });
+const dispatchMessage = React.createContext<React.Dispatch<ActionType>>(() => { });
 
-const ContextMessage: React.FC<ContextMessageProps> = ({children}) => {
+const ContextMessage: React.FC<ContextMessageProps> = ({ children }) => {
 
     const initialState: InitUseReducerType = {
         success: "",
-        error: ""
+        error: "",
+        warning: "",
+        info: "",
     };
 
     const reducer = (state: InitUseReducerType, action: ActionType) => {
@@ -36,6 +40,16 @@ const ContextMessage: React.FC<ContextMessageProps> = ({children}) => {
                 return {
                     ...state,
                     error: action.message
+                };
+            case ActionTypeEnum.WARNING:
+                return {
+                    ...state,
+                    warning: action.message
+                };
+            case ActionTypeEnum.INFO:
+                return {
+                    ...state,
+                    info: action.message
                 };
             default:
                 return state;

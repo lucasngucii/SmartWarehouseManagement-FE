@@ -1,7 +1,7 @@
 import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {faPencilAlt, faTrash, faUndo} from '@fortawesome/free-solid-svg-icons';
-import {Button, FormControl, FormSelect, Table} from 'react-bootstrap';
+import { faPencilAlt, faTrash, faUndo } from '@fortawesome/free-solid-svg-icons';
+import { Button, FormControl, FormSelect, Table } from 'react-bootstrap';
 import GetSuppliers from '../../services/Supplier/GetSuppliers';
 import Supplier from '../../interface/Entity/Supplier';
 import PaginationType from '../../interface/Pagination';
@@ -9,7 +9,7 @@ import { NoData } from '../../compoments/NoData/NoData';
 import Pagination from '../../compoments/Pagination/Pagination';
 import FormEditSupplier from './compoments/FormEditSupplier';
 import SpinnerLoading from "../../compoments/Loading/SpinnerLoading";
-import {useDispatchMessage} from "../../Context/ContextMessage";
+import { useDispatchMessage } from "../../Context/ContextMessage";
 import ActionTypeEnum from "../../enum/ActionTypeEnum";
 import DeleteSupplierById from "../../services/Supplier/DeleteSupplierById";
 import ModelConfirmDelete from "../../compoments/ModelConfirm/ModelConfirmDelete";
@@ -45,7 +45,7 @@ export const SupplierManagement: React.FC = () => {
                 });
             }).catch((error) => {
                 console.error(error);
-                dispatch({type: ActionTypeEnum.ERROR, message: error.message});
+                dispatch({ type: ActionTypeEnum.ERROR, message: error.message });
             }).finally(() => {
                 setIsLoading(false);
             });
@@ -64,40 +64,40 @@ export const SupplierManagement: React.FC = () => {
                         totalElementOfPage: response.totalElementOfPage
                     });
                 }).catch((error) => {
-                console.error(error);
-                dispatch({type: ActionTypeEnum.ERROR, message: error.message});
-            }).finally(() => {
-                setIsLoading(false);
-            });
+                    console.error(error);
+                    dispatch({ type: ActionTypeEnum.ERROR, message: error.message });
+                }).finally(() => {
+                    setIsLoading(false);
+                });
         }, 1000);
         return () => clearTimeout(id);
     }, [pagination.offset, dispatch]);
 
     const handelDeleteSupplier = () => {
-        if(supplierId) {
+        if (supplierId) {
             setIsLoadingDelete(true);
             DeleteSupplierById(supplierId)
                 .then(() => {
                     return GetSuppliers();
                 }).then((response) => {
-                updateSuppliers(response.data);
-                updatePagination({
-                    totalPage: response.totalPage,
-                    limit: response.limit,
-                    offset: response.offset,
-                    totalElementOfPage: response.totalElementOfPage
-                });
-                setShowConfirmDelete(false);
-                setSupplierId("");
-                dispatch({type: ActionTypeEnum.SUCCESS, message: "Delete supplier successfully"});
-            }).catch((error) => {
-                console.error(error);
-                dispatch({type: ActionTypeEnum.ERROR, message: error.message});
-            }).finally(() => {
-                setIsLoadingDelete(false);
-            })
-        }else {
-            dispatch({type: ActionTypeEnum.ERROR, message: "Supplier delete failed"});
+                    updateSuppliers(response.data);
+                    updatePagination({
+                        totalPage: response.totalPage,
+                        limit: response.limit,
+                        offset: response.offset,
+                        totalElementOfPage: response.totalElementOfPage
+                    });
+                    setShowConfirmDelete(false);
+                    setSupplierId("");
+                    dispatch({ type: ActionTypeEnum.SUCCESS, message: "Delete supplier successfully" });
+                }).catch((error) => {
+                    console.error(error);
+                    dispatch({ type: ActionTypeEnum.ERROR, message: error.message });
+                }).finally(() => {
+                    setIsLoadingDelete(false);
+                })
+        } else {
+            dispatch({ type: ActionTypeEnum.ERROR, message: "Supplier delete failed" });
         }
     }
 
@@ -170,7 +170,7 @@ export const SupplierManagement: React.FC = () => {
             </div>
             <div className={"d-flex flex-row gap-5 mb-3 justify-content-end"}>
                 <div className={"d-flex flex-row gap-2"}>
-                    <div style={{width: "150px"}}>
+                    <div style={{ width: "150px" }}>
                         <FormSelect>
                             {
                                 TypeFind.map((type, index) => {
@@ -179,36 +179,36 @@ export const SupplierManagement: React.FC = () => {
                             }
                         </FormSelect>
                     </div>
-                    <FormControl type="text" placeholder="Search name..." style={{width: "350px"}}/>
+                    <FormControl type="text" placeholder="Search name..." style={{ width: "350px" }} />
                     <Button onClick={() => {
                     }}>
-                        <FontAwesomeIcon icon={faUndo}/>
+                        <FontAwesomeIcon icon={faUndo} />
                     </Button>
                 </div>
             </div>
             <Table striped hover bordered>
                 <thead>
-                <tr>
-                    <th>#</th>
-                    <th>Name</th>
-                    <th>Description</th>
-                    <th>Phone</th>
-                    <th>Supplier Code</th>
-                    <th>Address</th>
-                    <th>Email</th>
-                    <th>Action</th>
-                </tr>
+                    <tr>
+                        <th>#</th>
+                        <th>Name</th>
+                        <th>Description</th>
+                        <th>Phone</th>
+                        <th>Supplier Code</th>
+                        <th>Address</th>
+                        <th>Email</th>
+                        <th>Action</th>
+                    </tr>
                 </thead>
                 <tbody>
-                {supplierList}
+                    {supplierList}
                 </tbody>
             </Table>
             {
                 suppliers.length > 0 && <Pagination currentPage={pagination?.offset} totalPages={pagination?.totalPage}
-                                                    onPageChange={handleChangePage}/>
+                    onPageChange={handleChangePage} />
             }
             {
-                (suppliers.length === 0) && !isLoading && <NoData/>
+                (suppliers.length === 0) && !isLoading && <NoData />
             }
             {
                 showConfirmDelete &&
@@ -231,10 +231,10 @@ export const SupplierManagement: React.FC = () => {
                     hideOverlay={() => {
                         setShowDetail(false);
                         setSupplierId("");
-                    }}/>
+                    }} />
             }
             {
-                isLoading && <SpinnerLoading/>
+                isLoading && <SpinnerLoading />
             }
         </div>
     );

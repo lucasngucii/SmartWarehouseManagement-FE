@@ -10,7 +10,7 @@ import PaginationType from '../../../interface/Pagination';
 import GetSuppliers from '../../../services/Supplier/GetSuppliers';
 import CreateSupplier from '../../../services/Supplier/CreateSupplier';
 import FormDataTypes from '../../../interface/FormDataSupplier';
-import {useDispatchMessage} from "../../../Context/ContextMessage";
+import { useDispatchMessage } from "../../../Context/ContextMessage";
 import ActionTypeEnum from "../../../enum/ActionTypeEnum";
 
 interface SupplierDetailProps {
@@ -27,22 +27,6 @@ const FormEditSupplier: React.FC<SupplierDetailProps> = ({ supplierId, hideOverl
     const [isSaving, setIsSaving] = useState(false);
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const [formData, setFormData] = useState<FormDataTypes>({
-        name: "",
-        description: "",
-        phone: "",
-        email: "",
-        address: "",
-        supplierCode: "",
-        createdBy: "",
-        contactPerson: "",
-        location: "",
-        status: true,
-        notes: "",
-        website: "",
-        taxId: "",
-        isActive: true
-    });
-    const [formError, setFormError] = useState<FormDataTypes>({
         name: "",
         description: "",
         phone: "",
@@ -76,87 +60,52 @@ const FormEditSupplier: React.FC<SupplierDetailProps> = ({ supplierId, hideOverl
     });
 
     const validate1 = () => {
-
-        let isError = false;
-
         if (!formData.name) {
-            isError = true;
-            setFormError((preValue) => {
-                return { ...preValue, name: "Name is required" };
-            });
+            dispatch({ type: ActionTypeEnum.ERROR, message: "Name is required" });
+            return true;
         }
-
         if (!formData.phone) {
-            isError = true;
-            setFormError((preValue) => {
-                return { ...preValue, phone: "Phone is required" };
-            })
+            dispatch({ type: ActionTypeEnum.ERROR, message: "Phone is required" });
+            return true;
         }
-
         if (!formData.email) {
-            isError = true;
-            setFormError((preValue) => {
-                return { ...preValue, email: "Email is required" };
-            })
+            dispatch({ type: ActionTypeEnum.ERROR, message: "Email is required" });
+            return true;
         }
-
         if (!formData.address) {
-            isError = true;
-            setFormError((preValue) => {
-                return { ...preValue, address: "Address is required" };
-            })
+            dispatch({ type: ActionTypeEnum.ERROR, message: "Address is required" });
+            return true;
         }
-
         if (!formData.website) {
-            isError = true;
-            setFormError((preValue) => {
-                return { ...preValue, website: "Website is required" };
-            })
+            dispatch({ type: ActionTypeEnum.ERROR, message: "Website is required" });
+            return true;
         }
-
         if (!formData.contactPerson) {
-            isError = true;
-            setFormError((preValue) => {
-                return { ...preValue, contactPerson: "Contact person is required" };
-            })
+            dispatch({ type: ActionTypeEnum.ERROR, message: "Contact person is required" });
+            return true;
         }
-
         if (!formData.supplierCode) {
-            isError = true;
-            setFormError((preValue) => {
-                return { ...preValue, supplierCode: "Supplier code is required" };
-            })
+            dispatch({ type: ActionTypeEnum.ERROR, message: "Supplier code is required" });
+            return true;
         }
-
         if (!formData.location) {
-            isError = true;
-            setFormError((preValue) => {
-                return { ...preValue, location: "Location is required" };
-            })
+            dispatch({ type: ActionTypeEnum.ERROR, message: "Location is required" });
+            return true;
         }
-
         if (!formData.taxId) {
-            isError = true;
-            setFormError((preValue) => {
-                return { ...preValue, taxId: "Tax id is required" };
-            })
+            dispatch({ type: ActionTypeEnum.ERROR, message: "Tax id is required" });
+            return true;
         }
-
         if (!formData.notes) {
-            isError = true;
-            setFormError((preValue) => {
-                return { ...preValue, notes: "Notes is required" };
-            })
+            dispatch({ type: ActionTypeEnum.ERROR, message: "Notes is required" });
+            return true;
         }
-
         if (!formData.description) {
-            isError = true;
-            setFormError((preValue) => {
-                return { ...preValue, description: "Description is required" };
-            })
+            dispatch({ type: ActionTypeEnum.ERROR, message: "Description is required" });
+            return true;
         }
 
-        return isError;
+        return false;
     }
 
     React.useEffect(() => {
@@ -183,7 +132,7 @@ const FormEditSupplier: React.FC<SupplierDetailProps> = ({ supplierId, hideOverl
                     setDataDefault(response);
                 }).catch((error) => {
                     console.error(error);
-                    dispatch({type: ActionTypeEnum.ERROR, message: error.message});
+                    dispatch({ type: ActionTypeEnum.ERROR, message: error.message });
                 }).finally(() => {
                     setIsLoading(false);
                 });
@@ -215,12 +164,12 @@ const FormEditSupplier: React.FC<SupplierDetailProps> = ({ supplierId, hideOverl
                             totalElementOfPage: response.totalElementOfPage,
                             totalPage: response.totalPage
                         });
-                        dispatch({type: ActionTypeEnum.SUCCESS, message: "Update Supplier successfully"});
+                        dispatch({ type: ActionTypeEnum.SUCCESS, message: "Update Supplier successfully" });
                         setDataDefault(formData);
                         setIsEditing(false);
                     }).catch((error) => {
                         console.error(error);
-                        dispatch({type: ActionTypeEnum.ERROR, message: error.message});
+                        dispatch({ type: ActionTypeEnum.ERROR, message: error.message });
                     }).finally(() => {
                         setIsSaving(false);
                     });
@@ -250,13 +199,13 @@ const FormEditSupplier: React.FC<SupplierDetailProps> = ({ supplierId, hideOverl
                             totalElementOfPage: response.totalElementOfPage,
                             totalPage: response.totalPage
                         });
-                        dispatch({type: ActionTypeEnum.SUCCESS, message: "Create Supplier successfully"});
+                        dispatch({ type: ActionTypeEnum.SUCCESS, message: "Create Supplier successfully" });
                         setTimeout(() => {
                             hideOverlay();
                         }, 1000);
                     }).catch((error) => {
                         console.error(error);
-                        dispatch({type: ActionTypeEnum.ERROR, message: error.message});
+                        dispatch({ type: ActionTypeEnum.ERROR, message: error.message });
                     }).finally(() => {
                         setIsSaving(false);
                     });
@@ -346,7 +295,6 @@ const FormEditSupplier: React.FC<SupplierDetailProps> = ({ supplierId, hideOverl
                                         required
                                         placeholder='Enter supplier name'
                                     />
-                                    <Form.Text className="text-danger">{formError.name}</Form.Text>
                                 </Form.Group>
                                 <Col md={6}>
                                     <Form.Group className="mb-3">
@@ -361,7 +309,6 @@ const FormEditSupplier: React.FC<SupplierDetailProps> = ({ supplierId, hideOverl
                                             required
                                             placeholder='Enter phone number'
                                         />
-                                        <Form.Text className="text-danger">{formError.phone}</Form.Text>
                                     </Form.Group>
                                 </Col>
                                 <Col md={6}>
@@ -377,7 +324,6 @@ const FormEditSupplier: React.FC<SupplierDetailProps> = ({ supplierId, hideOverl
                                             required
                                             placeholder='Enter email'
                                         />
-                                        <Form.Text className="text-danger">{formError.email}</Form.Text>
                                     </Form.Group>
                                 </Col>
                                 <Form.Group className="mb-3">
@@ -392,7 +338,6 @@ const FormEditSupplier: React.FC<SupplierDetailProps> = ({ supplierId, hideOverl
                                         required
                                         placeholder='Enter address'
                                     />
-                                    <Form.Text className="text-danger">{formError.address}</Form.Text>
                                 </Form.Group>
                                 <Form.Group className="mb-3">
                                     <Form.Label>Website</Form.Label>
@@ -406,7 +351,6 @@ const FormEditSupplier: React.FC<SupplierDetailProps> = ({ supplierId, hideOverl
                                         required
                                         placeholder='Enter website'
                                     />
-                                    <Form.Text className="text-danger">{formError.website}</Form.Text>
                                 </Form.Group>
                             </Row>
                         </div>
@@ -426,7 +370,6 @@ const FormEditSupplier: React.FC<SupplierDetailProps> = ({ supplierId, hideOverl
                                             required
                                             placeholder='Enter contact person'
                                         />
-                                        <Form.Text className="text-danger">{formError.contactPerson}</Form.Text>
                                     </Form.Group>
                                 </Col>
                                 <Col md={6}>
@@ -442,7 +385,6 @@ const FormEditSupplier: React.FC<SupplierDetailProps> = ({ supplierId, hideOverl
                                             required
                                             placeholder='Enter supplier code'
                                         />
-                                        <Form.Text className="text-danger">{formError.supplierCode}</Form.Text>
                                     </Form.Group>
                                 </Col>
                             </Row>
@@ -463,7 +405,6 @@ const FormEditSupplier: React.FC<SupplierDetailProps> = ({ supplierId, hideOverl
                                     required
                                     placeholder='Enter location'
                                 />
-                                <Form.Text className="text-danger">{formError.location}</Form.Text>
                             </Form.Group>
                         </div>
                         <div className="p-3 gap-3 rounded mb-1">
@@ -483,7 +424,6 @@ const FormEditSupplier: React.FC<SupplierDetailProps> = ({ supplierId, hideOverl
                                             <option value="true">Đang Cung Cấp</option>
                                             <option value="false">Ngừng Cung Cấp</option>
                                         </Form.Select>
-                                        <Form.Text className="text-danger">{formError.status}</Form.Text>
                                     </Form.Group>
                                 </Col>
                                 <Col md={6}>
@@ -500,7 +440,6 @@ const FormEditSupplier: React.FC<SupplierDetailProps> = ({ supplierId, hideOverl
                                             <option value="true">Active</option>
                                             <option value="false">Disable</option>
                                         </Form.Select>
-                                        <Form.Text className="text-danger">{formError.isActive}</Form.Text>
                                     </Form.Group>
                                 </Col>
                             </Row>
@@ -521,7 +460,6 @@ const FormEditSupplier: React.FC<SupplierDetailProps> = ({ supplierId, hideOverl
                                             required
                                             placeholder='Enter tax id'
                                         />
-                                        <Form.Text className="text-danger">{formError.taxId}</Form.Text>
                                     </Form.Group>
                                 </Col>
                                 <Col md={6}>
@@ -537,7 +475,6 @@ const FormEditSupplier: React.FC<SupplierDetailProps> = ({ supplierId, hideOverl
                                             required
                                             placeholder='Enter notes'
                                         />
-                                        <Form.Text className="text-danger">{formError.notes}</Form.Text>
                                     </Form.Group>
                                 </Col>
                                 <Form.Group className="mb-3">
@@ -551,7 +488,6 @@ const FormEditSupplier: React.FC<SupplierDetailProps> = ({ supplierId, hideOverl
                                         placeholder="Enter description"
                                         rows={3}
                                     />
-                                    <Form.Text className="text-danger">{formError.description}</Form.Text>
                                 </Form.Group>
                             </Row>
                             {

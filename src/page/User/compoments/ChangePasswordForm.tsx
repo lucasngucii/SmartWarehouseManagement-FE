@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
-import { Form, Button, Alert, Container, CloseButton } from 'react-bootstrap';
+import { Form, Button, Container, CloseButton } from 'react-bootstrap';
 import ValidatePassword from '../../../util/Validate/ValidatePassword';
 import UpdateAccountAPI from '../../../services/Authen/UpdateAccountAPI';
 import { OverLay } from '../../../compoments/OverLay/OverLay';
+import { useDispatchMessage } from '../../../Context/ContextMessage';
+import ActionTypeEnum from '../../../enum/ActionTypeEnum';
 
 interface ChangePasswordFormProps {
   userId: string;
@@ -11,33 +13,26 @@ interface ChangePasswordFormProps {
 
 const ChangePasswordForm: React.FC<ChangePasswordFormProps> = ({ userId, hideOver }) => {
 
+  const dispatch = useDispatchMessage();
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [newPassword, setNewPassword] = useState<string>('');
   const [confirmPassword, setConfirmPassword] = useState<string>('');
-  const [errorMessage, setErrorMessage] = useState<string>('');
-  const [successMessage, setSuccessMessage] = useState<string>('');
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     if (newPassword !== confirmPassword) {
-      setErrorMessage('Confirmation password does not match.');
-      setSuccessMessage('');
+      dispatch({ type: ActionTypeEnum.ERROR, message: 'Password and confirm password do not match!' });
     } else if (ValidatePassword(newPassword)) {
-      setErrorMessage(ValidatePassword(newPassword));
-      setSuccessMessage('');
+      dispatch({ type: ActionTypeEnum.ERROR, message: ValidatePassword(newPassword) });
     } else {
       setIsLoading(true);
       UpdateAccountAPI(userId, { password: newPassword })
         .then(() => {
-          setErrorMessage('');
-          setSuccessMessage('Your password has been changed successfully!');
-          setTimeout(() => {
-            hideOver();
-          }, 2000);
+          dispatch({ type: ActionTypeEnum.SUCCESS, message: 'Change password successfully!' });
+          hideOver();
         }).catch((error) => {
-          setErrorMessage(error.message);
-          setSuccessMessage('');
+          dispatch({ type: ActionTypeEnum.ERROR, message: error.message });
         }).finally(() => {
           setNewPassword('');
           setConfirmPassword('');
@@ -56,8 +51,6 @@ const ChangePasswordForm: React.FC<ChangePasswordFormProps> = ({ userId, hideOve
         />
         <h2 className="text-center fw-bold">Change Password</h2>
         <Form onSubmit={handleSubmit}>
-          {errorMessage && <Alert variant="danger">{errorMessage}</Alert>}
-          {successMessage && <Alert variant="success">{successMessage}</Alert>}
           <Form.Group controlId="formNewPassword" className="mb-3">
             <Form.Label>New Password</Form.Label>
             <Form.Control
@@ -82,7 +75,7 @@ const ChangePasswordForm: React.FC<ChangePasswordFormProps> = ({ userId, hideOve
             />
           </Form.Group>
 
-          <Button disabled={isLoading || successMessage !== ""} variant="primary" type="submit" className="w-100 py-3 rounded" style={{ fontWeight: 'bold', letterSpacing: '1px' }}>
+          <Button disabled={isLoading} variant="primary" type="submit" className="w-100 py-3 rounded" style={{ fontWeight: 'bold', letterSpacing: '1px' }}>
             {isLoading ? 'Loading...' : 'Change Password'}
           </Button>
         </Form>

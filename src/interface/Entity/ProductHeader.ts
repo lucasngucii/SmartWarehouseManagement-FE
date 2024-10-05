@@ -1,7 +1,10 @@
 export default interface ProductHeader {
+    id: string;
+    create_at: string;
+    update_at: string;
+    isDeleted: boolean;
     name: string;
     unit: string;
-    categoryId: string;
     description: string;
     productCode: string;
 }

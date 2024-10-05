@@ -1,8 +1,8 @@
 import React from "react";
-import {OverLay} from "../../../compoments/OverLay/OverLay";
-import {Button, CloseButton, Col, Container, Form, Image, Row} from "react-bootstrap";
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faChevronLeft, faEdit, faImage, faImages} from "@fortawesome/free-solid-svg-icons";
+import { OverLay } from "../../../compoments/OverLay/OverLay";
+import { Button, CloseButton, Col, Container, Form, Image, Row } from "react-bootstrap";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faChevronLeft, faEdit, faImage, faImages } from "@fortawesome/free-solid-svg-icons";
 import Select from 'react-select';
 import GetSizesByName from "../../../services/Attribute/Size/GetSizesByName";
 import GetColorsByName from "../../../services/Attribute/Color/GetColorsByName";
@@ -12,11 +12,11 @@ import GetCategoriesByName from "../../../services/Attribute/Category/GetCategor
 import GetSuppliersByName from "../../../services/Supplier/GetSuppliersByName";
 import DataTypeCreateProductAdmin from "../../../interface/PageProduct/DataTypeCreateProductAdmin";
 import CreateProduct from "../../../services/Product/CreateProduct";
-import {useDispatchMessage} from "../../../Context/ContextMessage";
+import { useDispatchMessage } from "../../../Context/ContextMessage";
 import ActionTypeEnum from "../../../enum/ActionTypeEnum";
 import GetProductById from "../../../services/Product/GetProductById";
 import SpinnerLoadingOverLay from "../../../compoments/Loading/SpinnerLoadingOverLay";
-import {Product} from "../../../interface/Entity/Product";
+import { Product } from "../../../interface/Entity/Product";
 import DeepEqual from "../../../util/DeepEqual";
 import DataTypeUpdateProductAdmin from "../../../interface/PageProduct/DataTypeUpdateProductAdmin";
 import UpdateProductByProductId from "../../../services/Product/UpdateProductByProductId";
@@ -48,21 +48,6 @@ interface FormDataType {
     supplier: OptionType | null;
 }
 
-interface FormDataError {
-    name: string;
-    description: string;
-    unit: string;
-    weight: string;
-    productCode: string;
-    dimension: string;
-    color: string;
-    branch: string;
-    model: string;
-    size: string;
-    category: string;
-    supplier: string;
-}
-
 interface TypeImagePreview {
     key: string,
     url: string
@@ -75,7 +60,7 @@ interface TypeImageUpload {
 
 const Utils: string[] = ["kg", "g", "l", "ml", "unit", "box", "carton"];
 
-const FormEditProduct: React.FC<FormEditProductProps> = ({productId, handleClose}) => {
+const FormEditProduct: React.FC<FormEditProductProps> = ({ productId, handleClose }) => {
 
     const dispatch = useDispatchMessage();
     const uploadRef = React.useRef<HTMLInputElement>(null);
@@ -135,20 +120,6 @@ const FormEditProduct: React.FC<FormEditProductProps> = ({productId, handleClose
         category: null,
         supplier: null,
     })
-    const [formError, setFormError] = React.useState<FormDataError>({
-        name: "",
-        description: "",
-        unit: "",
-        weight: "",
-        productCode: "",
-        dimension: "",
-        color: "",
-        branch: "",
-        model: "",
-        size: "",
-        category: "",
-        supplier: "",
-    })
 
     const handleChangeInput = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
         setFormData({
@@ -167,7 +138,7 @@ const FormEditProduct: React.FC<FormEditProductProps> = ({productId, handleClose
             length: data.productDetails!.sku.dimension.split("x")[0],
             width: data.productDetails!.sku.dimension.split("x")[1],
             height: data.productDetails!.sku.dimension.split("x")[2],
-            color: {value: data.productDetails!.sku.color.id, label: data.productDetails!.sku.color.name},
+            color: { value: data.productDetails!.sku.color.id, label: data.productDetails!.sku.color.name },
             branch: {
                 value: data.productDetails!.sku.brand.id,
                 label: data!.productDetails!.sku.brand.name
@@ -176,114 +147,70 @@ const FormEditProduct: React.FC<FormEditProductProps> = ({productId, handleClose
                 value: data.productDetails!.sku.material.id,
                 label: data.productDetails!.sku.material.name
             },
-            size: {value: data.productDetails!.sku.size.id, label: data.productDetails!.sku.size.name},
-            category: {value: data.category!.id, label: data.category!.name},
-            supplier: {value: data.productDetails!.supplier.id, label: data.productDetails!.supplier.name},
+            size: { value: data.productDetails!.sku.size.id, label: data.productDetails!.sku.size.name },
+            category: { value: data.category!.id, label: data.category!.name },
+            supplier: { value: data.productDetails!.supplier.id, label: data.productDetails!.supplier.name },
         }
     }
 
     const validate1 = (): boolean => {
-        let isError = false;
-
         if (formData.name === "") {
-            setFormError((preState) => {
-                return {...preState, name: "Name is required"};
-            });
-            isError = true;
+            dispatch({ type: ActionTypeEnum.ERROR, message: "Name is required" });
+            return true;
         }
-
         if (formData.description === "") {
-            setFormError((preState) => {
-                return {...preState, description: "Description is required"};
-            });
-            isError = true;
+            dispatch({ type: ActionTypeEnum.ERROR, message: "Description is required" });
+            return true;
         }
-
         if (formData.unit === "") {
-            setFormError((preState) => {
-                return {...preState, unit: "Unit is required"};
-            });
-            isError = true;
+            dispatch({ type: ActionTypeEnum.ERROR, message: "Unit is required" });
+            return true;
         }
-
         if (formData.weight === "") {
-            setFormError((preState) => {
-                return {...preState, weight: "Weight is required"};
-            });
-            isError = true;
+            dispatch({ type: ActionTypeEnum.ERROR, message: "Weight is required" });
+            return true;
         }
-
         if (formData.productCode === "") {
-            setFormError((preState) => {
-                return {...preState, productCode: "Product code is required"};
-            });
-            isError = true;
+            dispatch({ type: ActionTypeEnum.ERROR, message: "Product code is required" });
+            return true;
         }
-
         if (formData.length === "") {
-            setFormError((preState) => {
-                return {...preState, dimension: "Length is required"};
-            });
-            isError = true;
+            dispatch({ type: ActionTypeEnum.ERROR, message: "Length is required" });
+            return true;
         }
-
         if (formData.width === "") {
-            setFormError((preState) => {
-                return {...preState, dimension: "Width is required"};
-            });
-            isError = true;
+            dispatch({ type: ActionTypeEnum.ERROR, message: "Width is required" });
+            return true;
         }
-
         if (formData.height === "") {
-            setFormError((preState) => {
-                return {...preState, dimension: "Height is required"};
-            });
-            isError = true;
+            dispatch({ type: ActionTypeEnum.ERROR, message: "Height is required" });
+            return true;
         }
-
         if (formData.color === null) {
-            setFormError((preState) => {
-                return {...preState, color: "Color is required"};
-            });
-            isError = true;
+            dispatch({ type: ActionTypeEnum.ERROR, message: "Color is required" });
+            return true;
         }
-
         if (formData.branch === null) {
-            setFormError((preState) => {
-                return {...preState, branch: "Branch is required"};
-            });
-            isError = true;
+            dispatch({ type: ActionTypeEnum.ERROR, message: "Branch is required" });
+            return true;
         }
-
         if (formData.model === null) {
-            setFormError((preState) => {
-                return {...preState, model: "Model is required"};
-            });
-            isError = true;
+            dispatch({ type: ActionTypeEnum.ERROR, message: "Model is required" });
+            return true;
         }
-
         if (formData.size === null) {
-            setFormError((preState) => {
-                return {...preState, size: "Size is required"};
-            });
-            isError = true;
+            dispatch({ type: ActionTypeEnum.ERROR, message: "Size is required" });
+            return true;
         }
-
         if (formData.category === null) {
-            setFormError((preState) => {
-                return {...preState, category: "Category is required"};
-            });
-            isError = true;
+            dispatch({ type: ActionTypeEnum.ERROR, message: "Category is required" });
+            return true;
         }
-
         if (formData.supplier === null) {
-            setFormError((preState) => {
-                return {...preState, supplier: "Supplier is required"};
-            });
-            isError = true;
+            dispatch({ type: ActionTypeEnum.ERROR, message: "Supplier is required" });
+            return true;
         }
-
-        return isError;
+        return false;
     }
 
     const CheckDataChange = (): boolean => {
@@ -317,10 +244,10 @@ const FormEditProduct: React.FC<FormEditProductProps> = ({productId, handleClose
                         }
                     }) || []);
                 }).catch((error) => {
-                dispatch({type: ActionTypeEnum.ERROR, message: error.message});
-            }).finally(() => {
-                setLoading(false);
-            })
+                    dispatch({ type: ActionTypeEnum.ERROR, message: error.message });
+                }).finally(() => {
+                    setLoading(false);
+                })
         }
     }, [productId, dispatch, reload])
 
@@ -328,10 +255,10 @@ const FormEditProduct: React.FC<FormEditProductProps> = ({productId, handleClose
         const id = setTimeout(() => {
             GetColorsByName(color)
                 .then((data) => {
-                    setColors(data.map((size) => ({value: size.id, label: size.name})));
+                    setColors(data.map((size) => ({ value: size.id, label: size.name })));
                 })
                 .catch((error) => {
-                    dispatch({type: ActionTypeEnum.ERROR, message: error.message});
+                    dispatch({ type: ActionTypeEnum.ERROR, message: error.message });
                 });
         }, 500);
         return () => clearTimeout(id);
@@ -341,10 +268,10 @@ const FormEditProduct: React.FC<FormEditProductProps> = ({productId, handleClose
         const id = setTimeout(() => {
             GetBrandsByName(branch)
                 .then((data) => {
-                    setBranches(data.map((size) => ({value: size.id, label: size.name})));
+                    setBranches(data.map((size) => ({ value: size.id, label: size.name })));
                 })
                 .catch((error) => {
-                    dispatch({type: ActionTypeEnum.ERROR, message: error.message});
+                    dispatch({ type: ActionTypeEnum.ERROR, message: error.message });
                 });
         }, 500);
         return () => clearTimeout(id);
@@ -354,10 +281,10 @@ const FormEditProduct: React.FC<FormEditProductProps> = ({productId, handleClose
         const id = setTimeout(() => {
             GetMaterialsByName(model)
                 .then((data) => {
-                    setModels(data.map((size) => ({value: size.id, label: size.name})));
+                    setModels(data.map((size) => ({ value: size.id, label: size.name })));
                 })
                 .catch((error) => {
-                    dispatch({type: ActionTypeEnum.ERROR, message: error.message});
+                    dispatch({ type: ActionTypeEnum.ERROR, message: error.message });
                 });
         }, 500);
         return () => clearTimeout(id);
@@ -367,10 +294,10 @@ const FormEditProduct: React.FC<FormEditProductProps> = ({productId, handleClose
         const id = setTimeout(() => {
             GetSizesByName(size)
                 .then((data) => {
-                    setSizes(data.map((size) => ({value: size.id, label: size.name})));
+                    setSizes(data.map((size) => ({ value: size.id, label: size.name })));
                 })
                 .catch((error) => {
-                    dispatch({type: ActionTypeEnum.ERROR, message: error.message});
+                    dispatch({ type: ActionTypeEnum.ERROR, message: error.message });
                 });
         }, 500);
         return () => clearTimeout(id);
@@ -380,10 +307,10 @@ const FormEditProduct: React.FC<FormEditProductProps> = ({productId, handleClose
         const id = setTimeout(() => {
             GetCategoriesByName(category)
                 .then((data) => {
-                    setCategories(data.map((size) => ({value: size.id, label: size.name})));
+                    setCategories(data.map((size) => ({ value: size.id, label: size.name })));
                 })
                 .catch((error) => {
-                    dispatch({type: ActionTypeEnum.ERROR, message: error.message});
+                    dispatch({ type: ActionTypeEnum.ERROR, message: error.message });
                 });
         }, 500);
         return () => clearTimeout(id);
@@ -393,10 +320,10 @@ const FormEditProduct: React.FC<FormEditProductProps> = ({productId, handleClose
         const id = setTimeout(() => {
             GetSuppliersByName(supplier)
                 .then((data) => {
-                    setSuppliers(data.map((size) => ({value: size.id, label: size.name})));
+                    setSuppliers(data.map((size) => ({ value: size.id, label: size.name })));
                 })
                 .catch((error) => {
-                    dispatch({type: ActionTypeEnum.ERROR, message: error.message});
+                    dispatch({ type: ActionTypeEnum.ERROR, message: error.message });
                 });
         }, 500);
         return () => clearTimeout(id);
@@ -462,13 +389,13 @@ const FormEditProduct: React.FC<FormEditProductProps> = ({productId, handleClose
         if (!productId) {
             CreateProduct(formatDataCreate())
                 .then(() => {
-                    dispatch({type: ActionTypeEnum.SUCCESS, message: "Create product success"});
+                    dispatch({ type: ActionTypeEnum.SUCCESS, message: "Create product success" });
                     setTimeout(() => {
                         handleClose();
                     }, 1000);
                 })
                 .catch((error) => {
-                    dispatch({type: ActionTypeEnum.ERROR, message: error.message});
+                    dispatch({ type: ActionTypeEnum.ERROR, message: error.message });
                 })
                 .finally(() => {
                     setLoading(false);
@@ -476,18 +403,18 @@ const FormEditProduct: React.FC<FormEditProductProps> = ({productId, handleClose
         } else {
             const dataUpdate = formatDataUpdate();
             if (Object.keys(dataUpdate).length === 0) {
-                dispatch({type: ActionTypeEnum.ERROR, message: "No data change"});
+                dispatch({ type: ActionTypeEnum.ERROR, message: "No data change" });
                 setLoading(false);
             } else {
                 UpdateProductByProductId(productId, dataUpdate)
                     .then((response) => {
                         setFormData(FormatDataGet(response));
                         setDataDefault(FormatDataGet(response));
-                        dispatch({type: ActionTypeEnum.SUCCESS, message: "Update product success"});
+                        dispatch({ type: ActionTypeEnum.SUCCESS, message: "Update product success" });
                         setIsEdit(false);
                     })
                     .catch((error) => {
-                        dispatch({type: ActionTypeEnum.ERROR, message: error.message});
+                        dispatch({ type: ActionTypeEnum.ERROR, message: error.message });
                     })
                     .finally(() => {
                         setLoading(false);
@@ -502,7 +429,7 @@ const FormEditProduct: React.FC<FormEditProductProps> = ({productId, handleClose
         if (files !== null) {
             for (let i = 0; i < files.length; i++) {
                 if (files[i].size > maxFileSize) {
-                    dispatch({type: ActionTypeEnum.ERROR, message: "Your file is more than 10MB"});
+                    dispatch({ type: ActionTypeEnum.ERROR, message: "Your file is more than 10MB" });
                     break;
                 } else {
                     const keyRandom = crypto.randomUUID().toString();
@@ -511,7 +438,7 @@ const FormEditProduct: React.FC<FormEditProductProps> = ({productId, handleClose
                         url: URL.createObjectURL(files[i])
                     });
                     setImages((preState) => {
-                        return [...preState, {key: keyRandom, file: files[i]}];
+                        return [...preState, { key: keyRandom, file: files[i] }];
                     });
                 }
             }
@@ -530,13 +457,13 @@ const FormEditProduct: React.FC<FormEditProductProps> = ({productId, handleClose
                         setImagePreviewsDefault(newPreviews);
                     })
                     .catch((error) => {
-                        dispatch({type: ActionTypeEnum.ERROR, message: error.message});
+                        dispatch({ type: ActionTypeEnum.ERROR, message: error.message });
 
                     }).finally(() => {
-                    setLoading(false);
-                })
+                        setLoading(false);
+                    })
             } else {
-                dispatch({type: ActionTypeEnum.ERROR, message: "Image not found"});
+                dispatch({ type: ActionTypeEnum.ERROR, message: "Image not found" });
             }
         } else {
             const newImages = images.filter((image) => image.key !== key);
@@ -573,16 +500,16 @@ const FormEditProduct: React.FC<FormEditProductProps> = ({productId, handleClose
                 .then(() => {
                     setReload(!reload);
                     setImages([]);
-                    dispatch({type: ActionTypeEnum.SUCCESS, message: "Add image success"});
+                    dispatch({ type: ActionTypeEnum.SUCCESS, message: "Add image success" });
                 })
                 .catch((error) => {
-                    dispatch({type: ActionTypeEnum.ERROR, message: error.message});
+                    dispatch({ type: ActionTypeEnum.ERROR, message: error.message });
                 })
                 .finally(() => {
                     setLoading(false);
                 });
         } else {
-            dispatch({type: ActionTypeEnum.ERROR, message: "No image to add"});
+            dispatch({ type: ActionTypeEnum.ERROR, message: "No image to add" });
         }
     };
 
@@ -595,7 +522,7 @@ const FormEditProduct: React.FC<FormEditProductProps> = ({productId, handleClose
                             onClick={() => handleClose()}
                             className="btn fs-3 px-3 text-primary"
                         >
-                            <FontAwesomeIcon icon={faChevronLeft}/>
+                            <FontAwesomeIcon icon={faChevronLeft} />
                         </button>
                         <h2 className="fw-bold mb-0">{`${productId ? "Edit Product" : "New Product"}`}</h2>
                     </div>
@@ -630,7 +557,7 @@ const FormEditProduct: React.FC<FormEditProductProps> = ({productId, handleClose
                                     className="fw-semibold"
                                     onClick={() => setIsEdit(true)}
                                 >
-                                    <FontAwesomeIcon icon={faEdit} className={"me-2"}/>
+                                    <FontAwesomeIcon icon={faEdit} className={"me-2"} />
                                     Edit
                                 </Button>
                             :
@@ -656,7 +583,6 @@ const FormEditProduct: React.FC<FormEditProductProps> = ({productId, handleClose
                                 disabled={productId !== "" && !isEdit}
                                 value={formData.name}
                             />
-                            <Form.Text className="text-danger">{formError.name}</Form.Text>
                         </Form.Group>
                         <Form.Group className="mb-3">
                             <div className="d-flex flex-column">
@@ -672,7 +598,6 @@ const FormEditProduct: React.FC<FormEditProductProps> = ({productId, handleClose
                                     value={formData.description}
                                 />
                             </div>
-                            <Form.Text className="text-danger">{formError.description}</Form.Text>
                         </Form.Group>
                         <Row>
                             <Col md={6}>
@@ -691,7 +616,6 @@ const FormEditProduct: React.FC<FormEditProductProps> = ({productId, handleClose
                                             <option key={unit} value={unit}>{unit}</option>
                                         ))}
                                     </Form.Select>
-                                    <Form.Text className="text-danger">{formError.unit}</Form.Text>
                                 </Form.Group>
                             </Col>
                             <Col md={6}>
@@ -707,7 +631,6 @@ const FormEditProduct: React.FC<FormEditProductProps> = ({productId, handleClose
                                         required
                                         disabled={productId !== "" && !isEdit}
                                     />
-                                    <Form.Text className="text-danger">{formError.weight}</Form.Text>
                                 </Form.Group>
                             </Col>
                         </Row>
@@ -723,7 +646,6 @@ const FormEditProduct: React.FC<FormEditProductProps> = ({productId, handleClose
                                 value={formData.productCode}
                                 disabled={productId !== "" && !isEdit}
                             />
-                            <Form.Text className="text-danger">{formError.productCode}</Form.Text>
                         </Form.Group>
                         <Form.Group className="mb-3">
                             <Form.Label>Demension</Form.Label>
@@ -761,7 +683,6 @@ const FormEditProduct: React.FC<FormEditProductProps> = ({productId, handleClose
                                     disabled={productId !== "" && !isEdit}
                                 />
                             </div>
-                            <Form.Text className="text-danger">{formError.dimension}</Form.Text>
                         </Form.Group>
                     </Col>
                     <Col md={6}>
@@ -781,12 +702,11 @@ const FormEditProduct: React.FC<FormEditProductProps> = ({productId, handleClose
                                         }}
                                         onInputChange={setColor}
                                         value={formData.color}
-                                        onChange={(value) => setFormData({...formData, color: value})}
+                                        onChange={(value) => setFormData({ ...formData, color: value })}
                                         options={colors}
                                         required
                                         isDisabled={productId !== "" && !isEdit}
                                     />
-                                    <Form.Text className="text-danger">{formError.color}</Form.Text>
                                 </Form.Group>
                                 <Form.Group className="mb-3">
                                     <Form.Label>Model</Form.Label>
@@ -801,12 +721,11 @@ const FormEditProduct: React.FC<FormEditProductProps> = ({productId, handleClose
                                         }}
                                         onInputChange={setModel}
                                         value={formData.model}
-                                        onChange={(value) => setFormData({...formData, model: value})}
+                                        onChange={(value) => setFormData({ ...formData, model: value })}
                                         options={models}
                                         required
                                         isDisabled={productId !== "" && !isEdit}
                                     />
-                                    <Form.Text className="text-danger">{formError.model}</Form.Text>
                                 </Form.Group>
                             </Col>
                             <Col md={6}>
@@ -823,12 +742,11 @@ const FormEditProduct: React.FC<FormEditProductProps> = ({productId, handleClose
                                         }}
                                         onInputChange={setBranch}
                                         value={formData.branch}
-                                        onChange={(value) => setFormData({...formData, branch: value})}
+                                        onChange={(value) => setFormData({ ...formData, branch: value })}
                                         options={branches}
                                         required
                                         isDisabled={productId !== "" && !isEdit}
                                     />
-                                    <Form.Text className="text-danger">{formError.branch}</Form.Text>
                                 </Form.Group>
                                 <Form.Group className="mb-3">
                                     <Form.Label>Size</Form.Label>
@@ -843,12 +761,11 @@ const FormEditProduct: React.FC<FormEditProductProps> = ({productId, handleClose
                                         }}
                                         onInputChange={setSize}
                                         value={formData.size}
-                                        onChange={(value) => setFormData({...formData, size: value})}
+                                        onChange={(value) => setFormData({ ...formData, size: value })}
                                         options={sizes}
                                         required
                                         isDisabled={productId !== "" && !isEdit}
                                     />
-                                    <Form.Text className="text-danger">{formError.size}</Form.Text>
                                 </Form.Group>
                             </Col>
                         </Row>
@@ -868,12 +785,11 @@ const FormEditProduct: React.FC<FormEditProductProps> = ({productId, handleClose
                                         }}
                                         onInputChange={setCategory}
                                         value={formData.category}
-                                        onChange={(value) => setFormData({...formData, category: value})}
+                                        onChange={(value) => setFormData({ ...formData, category: value })}
                                         options={categories}
                                         required
                                         isDisabled={productId !== "" && !isEdit}
                                     />
-                                    <Form.Text className="text-danger">{formError.category}</Form.Text>
                                 </Form.Group>
                             </Col>
                             <Col md={6}>
@@ -890,12 +806,11 @@ const FormEditProduct: React.FC<FormEditProductProps> = ({productId, handleClose
                                         }}
                                         onInputChange={setSupplier}
                                         value={formData.supplier}
-                                        onChange={(value) => setFormData({...formData, supplier: value})}
+                                        onChange={(value) => setFormData({ ...formData, supplier: value })}
                                         options={suppliers}
                                         required
                                         isDisabled={productId !== "" && !isEdit}
                                     />
-                                    <Form.Text className="text-danger">{formError.supplier}</Form.Text>
                                 </Form.Group>
                             </Col>
                         </Row>
@@ -904,7 +819,7 @@ const FormEditProduct: React.FC<FormEditProductProps> = ({productId, handleClose
                 <Row className="p-3">
                     <div className="border-bottom pb-2 mb-3 d-flex justify-content-between">
                         <h5 className="fw-semibold d-flex align-items-center">
-                            <FontAwesomeIcon icon={faImages} className="me-2"/>
+                            <FontAwesomeIcon icon={faImages} className="me-2" />
                             Images
                         </h5>
                         <Button
@@ -953,7 +868,7 @@ const FormEditProduct: React.FC<FormEditProductProps> = ({productId, handleClose
                                             }
                                         }
                                     }}
-                                    style={{top: "0.5rem", right: "0.5rem"}}
+                                    style={{ top: "0.5rem", right: "0.5rem" }}
                                     disabled={productId !== "" && !isEdit}
                                 />
                                 {
@@ -967,7 +882,7 @@ const FormEditProduct: React.FC<FormEditProductProps> = ({productId, handleClose
                         imagePreviews.length === 0 &&
                         <div
                             className="d-flex flex-column align-items-center justify-content-center gap-2 text-secondary">
-                            <FontAwesomeIcon icon={faImage} size="3x"/>
+                            <FontAwesomeIcon icon={faImage} size="3x" />
                             <span>No images</span>
                         </div>
                     }
@@ -996,7 +911,7 @@ const FormEditProduct: React.FC<FormEditProductProps> = ({productId, handleClose
                 </Row>
             </Container>
             {
-                loading && <SpinnerLoadingOverLay/>
+                loading && <SpinnerLoadingOverLay />
             }
             {
                 showModelConfirmDeleteImage &&

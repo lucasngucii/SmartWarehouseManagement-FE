@@ -1,16 +1,16 @@
-import {Button, FormControl, FormSelect, Table} from "react-bootstrap";
+import { Button, FormControl, FormSelect, Table } from "react-bootstrap";
 import React from "react";
 import Pagination from "../../compoments/Pagination/Pagination";
-import {NoData} from "../../compoments/NoData/NoData";
+import { NoData } from "../../compoments/NoData/NoData";
 import SpinnerLoading from "../../compoments/Loading/SpinnerLoading";
 import PaginationType from "../../interface/Pagination";
 import ReceiveHeader from "../../interface/Entity/ReceiveHeader";
 import GetStockEntries from "../../services/StockEntry/GetStockEntries";
-import {useDispatchMessage} from "../../Context/ContextMessage";
+import { useDispatchMessage } from "../../Context/ContextMessage";
 import ActionTypeEnum from "../../enum/ActionTypeEnum";
 import FormEditStockEntry from "./compoments/FormEditStockEntry";
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faUndo} from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faUndo } from "@fortawesome/free-solid-svg-icons";
 
 const TypeFind = ["Receive Code", "Receive By"];
 
@@ -39,10 +39,10 @@ const StockEntry: React.FC = () => {
                     totalElementOfPage: res.totalElementOfPage
                 });
             }).catch((err) => {
-                dispatch({type: ActionTypeEnum.ERROR, message: err.message});
+                dispatch({ type: ActionTypeEnum.ERROR, message: err.message });
             }).finally(() => {
                 setIsLoading(false);
-        })
+            })
     }, [dispatch]);
 
     React.useEffect(() => {
@@ -50,7 +50,7 @@ const StockEntry: React.FC = () => {
     }, [pagination.offset])
 
     const handleChangePage = (page: number) => {
-        setPagination({...pagination, offset: page});
+        setPagination({ ...pagination, offset: page });
     }
 
     return (
@@ -68,7 +68,7 @@ const StockEntry: React.FC = () => {
             </div>
             <div className={"d-flex flex-row gap-5 mb-3 justify-content-end"}>
                 <div className={"d-flex flex-row gap-2"}>
-                    <div style={{width: "150px"}}>
+                    <div style={{ width: "150px" }}>
                         <FormSelect>
                             {
                                 TypeFind.map((type, index) => {
@@ -77,24 +77,24 @@ const StockEntry: React.FC = () => {
                             }
                         </FormSelect>
                     </div>
-                    <FormControl type="text" placeholder="Search name..." style={{width: "350px"}}/>
+                    <FormControl type="text" placeholder="Search name..." style={{ width: "350px" }} />
                     <Button onClick={() => {
                     }}>
-                        <FontAwesomeIcon icon={faUndo}/>
+                        <FontAwesomeIcon icon={faUndo} />
                     </Button>
                 </div>
             </div>
             <Table striped bordered hover>
                 <thead>
-                <tr>
-                    <th>#</th>
-                    <th>Receive Code</th>
-                    <th>Receive Date</th>
-                    <th>Receive By</th>
-                    <th>Status</th>
-                    <th>Description</th>
-                    <th>Total Amount</th>
-                </tr>
+                    <tr>
+                        <th>#</th>
+                        <th>Receive Code</th>
+                        <th>Receive Date</th>
+                        <th>Receive By</th>
+                        <th>Status</th>
+                        <th>Description</th>
+                        <th>Total Amount</th>
+                    </tr>
                 </thead>
                 <tbody>
 
@@ -102,13 +102,13 @@ const StockEntry: React.FC = () => {
             </Table>
             {
                 stockEntry.length > 0 && <Pagination currentPage={pagination?.offset} totalPages={pagination?.totalPage}
-                                                     onPageChange={handleChangePage}/>
+                    onPageChange={handleChangePage} />
             }
             {
-                (stockEntry.length === 0) && !isLoading && <NoData/>
+                (stockEntry.length === 0) && !isLoading && <NoData />
             }
             {
-                isLoading && <SpinnerLoading/>
+                isLoading && <SpinnerLoading />
             }
             {
                 showFormEdit &&

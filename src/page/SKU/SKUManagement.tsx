@@ -1,20 +1,14 @@
 import React from "react";
 import "./SKUManagement.css";
-import {Button, FormControl, FormSelect, Table} from "react-bootstrap";
+import { Table } from "react-bootstrap";
 import SKU from "../../interface/Entity/SKU";
 import GetSKUs from "../../services/SKU/GetSKUs";
 import PaginationType from "../../interface/Pagination";
-import {useDispatchMessage} from "../../Context/ContextMessage";
+import { useDispatchMessage } from "../../Context/ContextMessage";
 import ActionTypeEnum from "../../enum/ActionTypeEnum";
 import Pagination from "../../compoments/Pagination/Pagination";
-import {NoData} from "../../compoments/NoData/NoData";
+import { NoData } from "../../compoments/NoData/NoData";
 import SpinnerLoading from "../../compoments/Loading/SpinnerLoading";
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faUndo} from "@fortawesome/free-solid-svg-icons";
-
-const TypeFind = [
-    "batch code"
-]
 
 export const SKUManagement: React.FC = () => {
 
@@ -40,15 +34,15 @@ export const SKUManagement: React.FC = () => {
                     totalElementOfPage: data.totalElementOfPage
                 })
             }).catch((error) => {
-            dispatch({type: ActionTypeEnum.ERROR, message: error.message});
-        }).finally(() => {
-            setIsLoading(false);
-        });
+                dispatch({ type: ActionTypeEnum.ERROR, message: error.message });
+            }).finally(() => {
+                setIsLoading(false);
+            });
     }, [dispatch]);
 
     React.useEffect(() => {
         setIsLoading(true);
-        GetSKUs({offset: pagination.offset})
+        GetSKUs({ offset: pagination.offset })
             .then((data) => {
                 setSkuData(data.data);
                 setPagination({
@@ -58,14 +52,14 @@ export const SKUManagement: React.FC = () => {
                     totalElementOfPage: data.totalElementOfPage
                 })
             }).catch((error) => {
-            dispatch({type: ActionTypeEnum.ERROR, message: error.message});
-        }).finally(() => {
-            setIsLoading(false);
-        });
+                dispatch({ type: ActionTypeEnum.ERROR, message: error.message });
+            }).finally(() => {
+                setIsLoading(false);
+            });
     }, [pagination.offset, dispatch]);
 
     const handleChangePage = (page: number) => {
-        setPagination({...pagination, offset: page});
+        setPagination({ ...pagination, offset: page });
     }
 
     const listSku = skuData.map((sku, index) => {
@@ -89,17 +83,17 @@ export const SKUManagement: React.FC = () => {
             </div>
             <Table hover bordered striped>
                 <thead>
-                <tr>
-                    <th>#</th>
-                    <th>SKU Code</th>
-                    <th>Batch Code</th>
-                    <th>Weight</th>
-                    <th>Dimension</th>
-                    <th>Description</th>
-                </tr>
+                    <tr>
+                        <th>#</th>
+                        <th>SKU Code</th>
+                        <th>Batch Code</th>
+                        <th>Weight</th>
+                        <th>Dimension</th>
+                        <th>Description</th>
+                    </tr>
                 </thead>
                 <tbody>
-                {listSku}
+                    {listSku}
                 </tbody>
             </Table>
             {
@@ -111,10 +105,10 @@ export const SKUManagement: React.FC = () => {
                 />
             }
             {
-                (skuData.length === 0) && !isLoading && <NoData/>
+                (skuData.length === 0) && !isLoading && <NoData />
             }
             {
-                isLoading && <SpinnerLoading/>
+                isLoading && <SpinnerLoading />
             }
         </div>
 
