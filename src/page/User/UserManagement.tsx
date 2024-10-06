@@ -1,15 +1,15 @@
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faPencilAlt, faTrash, faUndo} from "@fortawesome/free-solid-svg-icons";
-import {EditUserComponent} from "./compoments/EditUserComponent";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faPencilAlt, faTrash, faUndo } from "@fortawesome/free-solid-svg-icons";
+import { EditUserComponent } from "./compoments/EditUserComponent";
 import React from "react";
-import {NoData} from "../../compoments/NoData/NoData";
+import { NoData } from "../../compoments/NoData/NoData";
 import GetAccountsAPI from "../../services/Authen/GetAccountsAPI";
 import Pagination from "../../compoments/Pagination/Pagination";
 import PaginationType from "../../interface/Pagination";
-import {Button, FormControl, FormLabel, FormSelect, Table} from "react-bootstrap";
-import {Account} from "../../interface/Account";
+import { Button, FormControl, FormSelect, Table } from "react-bootstrap";
+import { Account } from "../../interface/Account";
 import SpinnerLoading from "../../compoments/Loading/SpinnerLoading";
-import {useDispatchMessage} from "../../Context/ContextMessage";
+import { useDispatchMessage } from "../../Context/ContextMessage";
 import ActionTypeEnum from "../../enum/ActionTypeEnum";
 import ModelConfirmDelete from "../../compoments/ModelConfirm/ModelConfirmDelete";
 import DeleteAccountAPI from "../../services/Authen/DeleteAccountAPI";
@@ -47,17 +47,17 @@ export const UserManagement: React.FC = () => {
                     totalElementOfPage: response.totalElementOfPage
                 });
             }).catch((error) => {
-            console.error(error);
-            dispatch({type: ActionTypeEnum.ERROR, message: error.message});
-        }).finally(() => {
-            setIsLoading(false);
-        });
+                console.error(error);
+                dispatch({ type: ActionTypeEnum.ERROR, message: error.message });
+            }).finally(() => {
+                setIsLoading(false);
+            });
     }, [dispatch]);
 
     React.useEffect(() => {
         const id = setTimeout(() => {
             setIsLoading(true);
-            GetAccountsAPI({offset: pagination.offset})
+            GetAccountsAPI({ offset: pagination.offset })
                 .then((response) => {
                     setUsers(response.data);
                     setPagination({
@@ -67,11 +67,11 @@ export const UserManagement: React.FC = () => {
                         totalElementOfPage: response.totalElementOfPage
                     });
                 }).catch((error) => {
-                console.error(error);
-                dispatch({type: ActionTypeEnum.ERROR, message: error.message});
-            }).finally(() => {
-                setIsLoading(false);
-            });
+                    console.error(error);
+                    dispatch({ type: ActionTypeEnum.ERROR, message: error.message });
+                }).finally(() => {
+                    setIsLoading(false);
+                });
         }, 500);
         return () => clearTimeout(id);
     }, [pagination.offset, dispatch]);
@@ -83,23 +83,23 @@ export const UserManagement: React.FC = () => {
                 .then(() => {
                     return GetAccountsAPI();
                 }).then((response) => {
-                setUsers(response.data);
-                updatePagination({
-                    totalPage: response.totalPage,
-                    limit: response.limit,
-                    offset: response.offset,
-                    totalElementOfPage: response.totalElementOfPage
-                });
-                dispatch({type: ActionTypeEnum.SUCCESS, message: "Delete user successfully"});
-                handleHideOverlayModelDelete();
-            }).catch((error) => {
-                console.error(error);
-                dispatch({type: ActionTypeEnum.ERROR, message: error.message});
-            }).finally(() => {
-                setIsLoadingDelete(false);
-            })
+                    setUsers(response.data);
+                    updatePagination({
+                        totalPage: response.totalPage,
+                        limit: response.limit,
+                        offset: response.offset,
+                        totalElementOfPage: response.totalElementOfPage
+                    });
+                    dispatch({ type: ActionTypeEnum.SUCCESS, message: "Delete user successfully" });
+                    handleHideOverlayModelDelete();
+                }).catch((error) => {
+                    console.error(error);
+                    dispatch({ type: ActionTypeEnum.ERROR, message: error.message });
+                }).finally(() => {
+                    setIsLoadingDelete(false);
+                })
         } else {
-            dispatch({type: ActionTypeEnum.ERROR, message: "User delete failed"});
+            dispatch({ type: ActionTypeEnum.ERROR, message: "User delete failed" });
         }
     }
 
@@ -134,36 +134,36 @@ export const UserManagement: React.FC = () => {
     }
 
     const listUser = users.map((user, index) => {
-            return (
-                <tr key={user.id}>
-                    <td>{index + 1}</td>
-                    <td>{user.username}</td>
-                    <td>{user.fullName}</td>
-                    <td>{user.email}</td>
-                    <td>{user.phoneNumber}</td>
-                    <td>{user.role.name}</td>
-                    <td>
-                        <div className="d-flex flex-row gap-2">
-                            <Button
-                                onClick={() => {
-                                    setUserId(user.id)
-                                    setShowOverlayModelUser(true);
-                                }}
-                                variant="primary"
-                            >
-                                <FontAwesomeIcon icon={faPencilAlt}/>
-                            </Button>
-                            <Button
-                                onClick={() => handleShowOverlayModelDelete(user.id)}
-                                variant="danger"
-                            >
-                                <FontAwesomeIcon icon={faTrash}/>
-                            </Button>
-                        </div>
-                    </td>
-                </tr>
-            )
-        }
+        return (
+            <tr key={user.id}>
+                <td>{index + 1}</td>
+                <td>{user.username}</td>
+                <td>{user.fullName}</td>
+                <td>{user.email}</td>
+                <td>{user.phoneNumber}</td>
+                <td>{user.role.name}</td>
+                <td>
+                    <div className="d-flex flex-row gap-2">
+                        <Button
+                            onClick={() => {
+                                setUserId(user.id)
+                                setShowOverlayModelUser(true);
+                            }}
+                            variant="primary"
+                        >
+                            <FontAwesomeIcon icon={faPencilAlt} />
+                        </Button>
+                        <Button
+                            onClick={() => handleShowOverlayModelDelete(user.id)}
+                            variant="danger"
+                        >
+                            <FontAwesomeIcon icon={faTrash} />
+                        </Button>
+                    </div>
+                </td>
+            </tr>
+        )
+    }
     );
 
     return (
@@ -181,7 +181,7 @@ export const UserManagement: React.FC = () => {
             </div>
             <div className={"d-flex flex-row gap-5 mb-3 justify-content-end"}>
                 <div className={"d-flex flex-row gap-2"}>
-                    <div style={{width: "150px"}}>
+                    <div style={{ width: "150px" }}>
                         <FormSelect>
                             {
                                 TypeFind.map((type, index) => {
@@ -190,38 +190,38 @@ export const UserManagement: React.FC = () => {
                             }
                         </FormSelect>
                     </div>
-                    <FormControl type="text" placeholder="Search name..." style={{width: "350px"}}/>
+                    <FormControl type="text" placeholder="Search name..." style={{ width: "350px" }} />
                     <Button onClick={() => {
                     }}>
-                        <FontAwesomeIcon icon={faUndo}/>
+                        <FontAwesomeIcon icon={faUndo} />
                     </Button>
                 </div>
             </div>
             <Table striped bordered hover>
                 <thead>
-                <tr>
-                    <th>#</th>
-                    <th>Username</th>
-                    <th>FullName</th>
-                    <th>Email</th>
-                    <th>Phone</th>
-                    <th>Role</th>
-                    <th>Actions</th>
-                </tr>
+                    <tr>
+                        <th>#</th>
+                        <th>Username</th>
+                        <th>FullName</th>
+                        <th>Email</th>
+                        <th>Phone</th>
+                        <th>Role</th>
+                        <th>Actions</th>
+                    </tr>
                 </thead>
                 <tbody>
-                {users.length > 0 && listUser}
+                    {users.length > 0 && listUser}
                 </tbody>
             </Table>
             {
                 users.length > 0 && <Pagination currentPage={pagination?.offset} totalPages={pagination?.totalPage}
-                                                onPageChange={handleChangePage}/>
+                    onPageChange={handleChangePage} />
             }
             {
-                (users.length === 0) && !isLoading && <NoData/>
+                (users.length === 0) && !isLoading && <NoData />
             }
             {
-                isLoading && <SpinnerLoading/>
+                isLoading && <SpinnerLoading />
             }
             {
                 showOverlayModelUser &&

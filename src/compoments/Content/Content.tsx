@@ -7,7 +7,7 @@ import { DropDownMenu } from "./compoments/DropDownMenu";
 import { ModelClose } from "./compoments/ModelClose";
 import GetProfile from "../../util/GetProfile";
 import LogoutAPI from "../../services/Authen/LogoutAPI";
-import ContextMessage, { useDispatchMessage, useMessage } from "../../Context/ContextMessage";
+import { useDispatchMessage, useMessage } from "../../Context/ContextMessage";
 import ToastMessage from "../Toast/ToastMessage";
 import ToastContainerMessage from "../Toast/ToastContainerMessage";
 import ActionTypeEnum from "../../enum/ActionTypeEnum";

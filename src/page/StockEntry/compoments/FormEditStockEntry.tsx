@@ -1,7 +1,7 @@
 import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faChevronLeft, faPlus, faTrash } from "@fortawesome/free-solid-svg-icons";
-import { Button, Col, Container, Form, FormGroup, Nav, Row, Table } from "react-bootstrap";
+import { faChevronLeft, faPlus, faSave, faTrash } from "@fortawesome/free-solid-svg-icons";
+import { Button, Col, Container, Form, FormGroup, Row, Table } from "react-bootstrap";
 import { OverLay } from "../../../compoments/OverLay/OverLay";
 import Select from "react-select";
 import GetProfile from "../../../util/GetProfile";
@@ -16,19 +16,29 @@ import { NoData } from "../../../compoments/NoData/NoData";
 import SpinnerLoading from "../../../compoments/Loading/SpinnerLoading";
 import CreateStockEntry from "../../../services/StockEntry/CreateStockEntry";
 import SpinnerLoadingOverLayer from "../../../compoments/Loading/SpinnerLoadingOverLay";
+import GetStockEntryById from "../../../services/StockEntry/GetStockEntryById";
+import deepEqual from "../../../util/DeepEqual";
+import UpdateStockEntryById from "../../../services/StockEntry/UpdateStockEntryById";
+import PaginationType from "../../../interface/Pagination";
+import ReceiveHeader from "../../../interface/Entity/ReceiveHeader";
+import GetStockEntries from "../../../services/StockEntry/GetStockEntries";
 
 interface FormEditStockEntryProps {
     handleClose: () => void;
+    stockEntryId: string;
+    updateStockEntry: (stockEntries: ReceiveHeader[]) => void;
+    updatePagination: (pagination: PaginationType) => void;
 }
 
 interface ProductItem {
+    id?: string;
     productId: string;
     name: string;
     quantity: number;
     price: number;
 }
 
-const FormEditStockEntry: React.FC<FormEditStockEntryProps> = ({ handleClose }) => {
+const FormEditStockEntry: React.FC<FormEditStockEntryProps> = ({ handleClose, stockEntryId, updatePagination, updateStockEntry }) => {
 
     const profile = GetProfile();
     const dispatch = useDispatchMessage();
@@ -40,15 +50,46 @@ const FormEditStockEntry: React.FC<FormEditStockEntryProps> = ({ handleClose }) 
 
     const [address, setAddress] = React.useState("");
     const [phoneNumber, setPhoneNumber] = React.useState("");
+    const [descriptionDefault, setDescriptionDefault] = React.useState("");
     const [description, setDescription] = React.useState("");
 
     const [products, setProducts] = React.useState<ProductHeader[]>([]);
+    const [productItemsDefault, setProductItemsDefault] = React.useState<ProductItem[]>([]);
     const [productItems, setProductItems] = React.useState<ProductItem[]>([]);
     const [loadingProducts, setLoadingProducts] = React.useState(false);
     const [showProductList, setShowProductList] = React.useState(true);
 
     const [loadingSubmit, setLoadingSubmit] = React.useState(false);
 
+    React.useEffect(() => {
+        if (stockEntryId) {
+            GetStockEntryById(stockEntryId)
+                .then((res) => {
+                    setDescription(res.description);
+                    setDescriptionDefault(res.description);
+                    setSupplierSelected({
+                        value: res.supplier.id,
+                        label: res.supplier.name
+                    });
+                    setProductItems(res.receiveItems.map((item) => ({
+                        id: item.id,
+                        productId: item.product.id,
+                        name: item.product.name,
+                        quantity: item.quantity,
+                        price: parseFloat(item.price)
+                    })));
+                    setProductItemsDefault(res.receiveItems.map((item) => ({
+                        id: item.id,
+                        productId: item.product.id,
+                        name: item.product.name,
+                        quantity: item.quantity,
+                        price: parseFloat(item.price)
+                    })));
+                }).catch((err) => {
+                    dispatch({ type: ActionTypeEnum.ERROR, message: err.message });
+                })
+        }
+    }, [stockEntryId, dispatch])
 
     React.useEffect(() => {
         const id = setTimeout(() => {
@@ -74,7 +115,6 @@ const FormEditStockEntry: React.FC<FormEditStockEntryProps> = ({ handleClose }) 
             setLoadingProducts(true);
             GetProductsBySupplier(supplierSelected.value)
                 .then((res) => {
-                    console.log(res);
                     setProducts(res.data);
                 }).catch((err) => {
                     dispatch({ type: ActionTypeEnum.ERROR, message: err.message });
@@ -85,7 +125,7 @@ const FormEditStockEntry: React.FC<FormEditStockEntryProps> = ({ handleClose }) 
     }, [supplierSelected, dispatch])
 
     React.useEffect(() => {
-        if (supplierSelected) {
+        if (supplierSelected && stockEntryId === "") {
             GetSupplierById(supplierSelected.value)
                 .then((res) => {
                     setAddress(res.address);
@@ -95,7 +135,7 @@ const FormEditStockEntry: React.FC<FormEditStockEntryProps> = ({ handleClose }) 
                     dispatch({ type: ActionTypeEnum.ERROR, message: err.message });
                 })
         }
-    }, [supplierSelected, dispatch])
+    }, [supplierSelected, dispatch, stockEntryId])
 
     const handleAddItem = (productId: string) => {
         const product = products.find((product) => product.id === productId);
@@ -236,26 +276,101 @@ const FormEditStockEntry: React.FC<FormEditStockEntryProps> = ({ handleClose }) 
             return;
         }
 
-        setLoadingSubmit(true);
-        CreateStockEntry({
-            receiveDate: new Date().toISOString().split("T")[0],
-            receiveBy: profile?.fullName || "",
-            description: description,
-            supplierId: supplierSelected.value,
-            receiveItems: productItems.map((item) => ({
-                productId: item.productId,
-                quantity: item.quantity,
-                price: item.price
-            }))
-        }).then(() => {
-            dispatch({ type: ActionTypeEnum.SUCCESS, message: "Create stock entry successfully." });
-            handleClose();
-        }).catch((err) => {
-            dispatch({ type: ActionTypeEnum.ERROR, message: err.message });
-        }).finally(() => {
-            setLoadingSubmit(false);
-        })
+        if (stockEntryId === "") {
+            setLoadingSubmit(true);
+            CreateStockEntry({
+                receiveDate: new Date().toISOString().split("T")[0],
+                receiveBy: profile?.fullName || "",
+                description: description,
+                supplierId: supplierSelected.value,
+                receiveItems: productItems.map((item) => ({
+                    productId: item.productId,
+                    quantity: item.quantity,
+                    price: parseFloat(item.price.toFixed(2))
+                }))
+            }).then(() => {
+                dispatch({ type: ActionTypeEnum.SUCCESS, message: "Create stock entry successfully." });
+                handleClose();
+                return GetStockEntries()
+            }).then((res) => {
+                updateStockEntry(res.data);
+                updatePagination({
+                    totalPage: res.totalPage,
+                    limit: res.limit,
+                    offset: res.offset,
+                    totalElementOfPage: res.totalElementOfPage
+                });
+            }).catch((err) => {
+                dispatch({ type: ActionTypeEnum.ERROR, message: err.message });
+            }).finally(() => {
+                setLoadingSubmit(false);
+            })
+        } else {
+            setLoadingSubmit(true);
+            UpdateStockEntryById(stockEntryId, {
+                description: description,
+                receiveItems: productItems.map((item) => ({
+                    id: item.id || "",
+                    productId: item.productId,
+                    quantity: parseInt(item.quantity.toFixed(0)),
+                    price: parseFloat(item.price.toFixed(2))
+                }))
+            }).then((res) => {
+                setDescription(res.description);
+                setDescriptionDefault(res.description);
+                setSupplierSelected({
+                    value: res.supplier.id,
+                    label: res.supplier.name
+                });
+                setProductItems(res.receiveItems.map((item) => ({
+                    id: item.id,
+                    productId: item.product.id,
+                    name: item.product.name,
+                    quantity: item.quantity,
+                    price: parseFloat(item.price)
+                })));
+                setProductItemsDefault(res.receiveItems.map((item) => ({
+                    id: item.id,
+                    productId: item.product.id,
+                    name: item.product.name,
+                    quantity: item.quantity,
+                    price: parseFloat(item.price)
+                })));
+                dispatch({ type: ActionTypeEnum.SUCCESS, message: "Update stock entry successfully." });
+                handleClose();
+                return GetStockEntries()
+            }).then((res) => {
+                updateStockEntry(res.data);
+                updatePagination({
+                    totalPage: res.totalPage,
+                    limit: res.limit,
+                    offset: res.offset,
+                    totalElementOfPage: res.totalElementOfPage
+                });
+            }).catch((err) => {
+                dispatch({ type: ActionTypeEnum.ERROR, message: err.message });
+            }).finally(() => {
+                setLoadingSubmit(false);
+            })
+        }
 
+    }
+
+    const handleCheckChangeData = (): boolean => {
+        if (descriptionDefault !== description) {
+            return true;
+        }
+        if (productItemsDefault.length !== productItems.length) {
+            return true;
+        }
+
+        for (let i = 0; i < productItemsDefault.length; i++) {
+            if (!deepEqual(productItemsDefault[i], productItems[i])) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     return (
@@ -274,15 +389,41 @@ const FormEditStockEntry: React.FC<FormEditStockEntryProps> = ({ handleClose }) 
                         <h2 className="fw-bold mb-0">New Stock Entry</h2>
                     </div>
                     <div>
-                        <Button
-                            onClick={() => {
-                                handleSubmit();
-                            }}
-                            variant="primary"
-                            className="px-4"
-                        >
-                            Create
-                        </Button>
+                        {
+                            stockEntryId === "" ? (
+                                <Button
+                                    onClick={() => {
+                                        handleSubmit();
+                                    }}
+                                    variant="primary"
+                                    className="px-4"
+                                >
+                                    Create
+                                </Button>
+                            ) : (
+                                <div>
+                                    <Button
+                                        onClick={() => {
+                                            handleSubmit();
+                                        }}
+                                        variant="primary"
+                                        className="px-4"
+                                        disabled={!handleCheckChangeData()}
+                                    >
+                                        <FontAwesomeIcon icon={faSave} className="me-2" /> Save
+                                    </Button>
+                                    <Button
+                                        onClick={() => {
+                                            handleClose();
+                                        }}
+                                        variant="secondary"
+                                        className="px-4 ms-2"
+                                    >
+                                        Cancel
+                                    </Button>
+                                </div>
+                            )
+                        }
                     </div>
                 </div>
                 <Row className={"p-3"}>
@@ -329,6 +470,7 @@ const FormEditStockEntry: React.FC<FormEditStockEntryProps> = ({ handleClose }) 
                                 options={suppliers}
                                 required
                                 isLoading={loadingSuppliers}
+                                isDisabled={stockEntryId !== ""}
                             />
                         </FormGroup>
                     </Col>

@@ -1,11 +1,26 @@
-import axios from "axios"
-import { Product } from "../../interface/Entity/Product";
+import axios from "axios";
 import { checkTokenExpired } from "../../util/DecodeJWT";
+import StockEntry from "../../interface/Entity/StockEntry";
 
-const GetProductById = async (productId: string): Promise<Product> => {
+interface ReceiveItem {
+    id: string;
+    productId: string;
+    quantity: number;
+    price: number;
+}
+
+interface UpdateStockEntryByIdTypeDataUpdate {
+    receiveBy?: string;
+    status?: string;
+    description?: string;
+    supplierId?: string;
+    receiveItems?: ReceiveItem[];
+}
+
+const UpdateStockEntryById = async (id: string, data: UpdateStockEntryByIdTypeDataUpdate): Promise<StockEntry> => {
     try {
-        const HOST = process.env.REACT_APP_HOST_BE
-        const token = localStorage.getItem('token')
+        const HOST = process.env.REACT_APP_HOST_BE;
+        const token = localStorage.getItem('token');
 
         if (!token) {
             window.location.href = "/login";
@@ -15,14 +30,15 @@ const GetProductById = async (productId: string): Promise<Product> => {
             window.location.href = "/session-expired";
         }
 
-        const response = await axios.get(`${HOST}/products/${productId}`, {
+        const response = await axios.put(`${HOST}/receives/${id}`, data, {
             headers: {
                 Authorization: `Bearer ${token}`
             }
-        })
+        });
 
         return response.data.data;
     } catch (error) {
+        console.error(error);
         if (axios.isAxiosError(error) && error.response) {
             if (error.response.status === 401) {
                 localStorage.removeItem('token');
@@ -37,4 +53,4 @@ const GetProductById = async (productId: string): Promise<Product> => {
     }
 }
 
-export default GetProductById
+export default UpdateStockEntryById;

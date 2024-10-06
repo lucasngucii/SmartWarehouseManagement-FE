@@ -86,7 +86,8 @@ const StockEntry: React.FC = () => {
                 <td>
                     <div className="d-flex gap-2">
                         <Button onClick={() => {
-
+                            setStockEntryId(item.id);
+                            setShowFormEdit(true);
                         }} variant="primary text-light fw-bold">
                             <FontAwesomeIcon icon={faPencilAlt} />
                         </Button>
@@ -102,6 +103,14 @@ const StockEntry: React.FC = () => {
             </tr>
         );
     });
+
+    const updateStockEntry = (response: ReceiveHeader[]) => {
+        setStockEntry(response);
+    }
+
+    const updatePagination = (response: PaginationType) => {
+        setPagination(response);
+    }
 
     return (
         <div className={"w-100 h-100"}>
@@ -166,7 +175,11 @@ const StockEntry: React.FC = () => {
                 <FormEditStockEntry
                     handleClose={() => {
                         setShowFormEdit(false)
+                        setStockEntryId("");
                     }}
+                    stockEntryId={stockEntryId}
+                    updateStockEntry={updateStockEntry}
+                    updatePagination={updatePagination}
                 />
             }
             {
