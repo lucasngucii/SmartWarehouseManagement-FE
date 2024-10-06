@@ -73,14 +73,27 @@ const StockEntry: React.FC = () => {
             });
     }
 
+    const renderTypeStatus = (status: string) => {
+        switch (status) {
+            case "PENDING":
+                return <span className="badge text-bg-warning">{status}</span>;
+            case "COMPLETED":
+                return <span className="badge text-bg-success">{status}</span>;
+            case "CANCELLED":
+                return <span className="badge text-bg-danger">{status}</span>;
+            default:
+                return <span className="badge text-bg-primary">{status}</span>;
+        }
+    }
+
     const listStockEntry = stockEntry.map((item, index) => {
         return (
-            <tr key={index}>
+            <tr key={index} style={{ textAlign: "center" }}>
                 <td>{index + 1}</td>
                 <td>{item.receiveCode}</td>
                 <td>{item.receiveDate}</td>
                 <td>{item.receiveBy}</td>
-                <td>{item.status}</td>
+                <td>{renderTypeStatus(item.status)}</td>
                 <td>{item.description}</td>
                 <td>{item.totalAmount}$</td>
                 <td>
@@ -145,7 +158,7 @@ const StockEntry: React.FC = () => {
             </div>
             <Table striped bordered hover>
                 <thead>
-                    <tr>
+                    <tr style={{ textAlign: "center" }}>
                         <th>#</th>
                         <th>Receive Code</th>
                         <th>Receive Date</th>
