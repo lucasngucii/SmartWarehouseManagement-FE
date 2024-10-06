@@ -10,7 +10,9 @@ import { useDispatchMessage } from "../../Context/ContextMessage";
 import ActionTypeEnum from "../../enum/ActionTypeEnum";
 import FormEditStockEntry from "./compoments/FormEditStockEntry";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faUndo } from "@fortawesome/free-solid-svg-icons";
+import { faPencilAlt, faTrash, faUndo } from "@fortawesome/free-solid-svg-icons";
+import RemoveStockEntry from "../../services/StockEntry/RemoveStockEntry";
+import ModelConfirmDelete from "../../compoments/ModelConfirm/ModelConfirmDelete";
 
 const TypeFind = ["Receive Code", "Receive By"];
 
@@ -19,6 +21,8 @@ const StockEntry: React.FC = () => {
     const dispatch = useDispatchMessage();
     const [isLoading, setIsLoading] = React.useState<boolean>(false);
     const [stockEntry, setStockEntry] = React.useState<ReceiveHeader[]>([]);
+    const [stockEntryId, setStockEntryId] = React.useState<string>("");
+    const [showModelConfirmDelete, setShowModelConfirmDelete] = React.useState<boolean>(false);
     const [pagination, setPagination] = React.useState<PaginationType>({
         totalPage: 0,
         limit: 0,
@@ -26,11 +30,13 @@ const StockEntry: React.FC = () => {
         totalElementOfPage: 0
     });
     const [showFormEdit, setShowFormEdit] = React.useState<boolean>(false);
+    const [loadingDelete, setLoadingDelete] = React.useState<boolean>(false);
 
     React.useEffect(() => {
         setIsLoading(true);
         GetStockEntries()
             .then((res) => {
+                console.log(res);
                 setStockEntry(res.data);
                 setPagination({
                     totalPage: res.totalPage,
@@ -52,6 +58,50 @@ const StockEntry: React.FC = () => {
     const handleChangePage = (page: number) => {
         setPagination({ ...pagination, offset: page });
     }
+
+    const handleDeleteStockEntry = (id: string) => {
+        setLoadingDelete(true);
+        RemoveStockEntry(id)
+            .then(() => {
+                dispatch({ type: ActionTypeEnum.SUCCESS, message: "Delete stock entry successfully" });
+                setStockEntry(stockEntry.filter(item => item.id !== id));
+                setStockEntryId("");
+            }).catch((err) => {
+                dispatch({ type: ActionTypeEnum.ERROR, message: err.message });
+            }).finally(() => {
+                setLoadingDelete(false);
+            });
+    }
+
+    const listStockEntry = stockEntry.map((item, index) => {
+        return (
+            <tr key={index}>
+                <td>{index + 1}</td>
+                <td>{item.receiveCode}</td>
+                <td>{item.receiveDate}</td>
+                <td>{item.receiveBy}</td>
+                <td>{item.status}</td>
+                <td>{item.description}</td>
+                <td>{item.totalAmount}$</td>
+                <td>
+                    <div className="d-flex gap-2">
+                        <Button onClick={() => {
+
+                        }} variant="primary text-light fw-bold">
+                            <FontAwesomeIcon icon={faPencilAlt} />
+                        </Button>
+
+                        <Button onClick={() => {
+                            setStockEntryId(item.id);
+                            setShowModelConfirmDelete(true);
+                        }} variant="danger text-light fw-bold">
+                            <FontAwesomeIcon icon={faTrash} />
+                        </Button>
+                    </div>
+                </td>
+            </tr>
+        );
+    });
 
     return (
         <div className={"w-100 h-100"}>
@@ -94,10 +144,11 @@ const StockEntry: React.FC = () => {
                         <th>Status</th>
                         <th>Description</th>
                         <th>Total Amount</th>
+                        <th>Action</th>
                     </tr>
                 </thead>
                 <tbody>
-
+                    {listStockEntry}
                 </tbody>
             </Table>
             {
@@ -116,6 +167,21 @@ const StockEntry: React.FC = () => {
                     handleClose={() => {
                         setShowFormEdit(false)
                     }}
+                />
+            }
+            {
+                showModelConfirmDelete &&
+                <ModelConfirmDelete
+                    message="Are you sure want to delete this stock entry?"
+                    onClose={() => {
+                        setShowModelConfirmDelete(false)
+                        setStockEntryId("");
+                    }}
+                    onConfirm={() => {
+                        handleDeleteStockEntry(stockEntryId);
+                        setShowModelConfirmDelete(false);
+                    }}
+                    loading={loadingDelete}
                 />
             }
         </div>

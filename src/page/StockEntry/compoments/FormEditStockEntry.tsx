@@ -14,6 +14,8 @@ import ProductHeader from "../../../interface/Entity/ProductHeader";
 import GetProductsBySupplier from "../../../services/Product/GetProductsBySupplier";
 import { NoData } from "../../../compoments/NoData/NoData";
 import SpinnerLoading from "../../../compoments/Loading/SpinnerLoading";
+import CreateStockEntry from "../../../services/StockEntry/CreateStockEntry";
+import SpinnerLoadingOverLayer from "../../../compoments/Loading/SpinnerLoadingOverLay";
 
 interface FormEditStockEntryProps {
     handleClose: () => void;
@@ -38,11 +40,14 @@ const FormEditStockEntry: React.FC<FormEditStockEntryProps> = ({ handleClose }) 
 
     const [address, setAddress] = React.useState("");
     const [phoneNumber, setPhoneNumber] = React.useState("");
+    const [description, setDescription] = React.useState("");
 
     const [products, setProducts] = React.useState<ProductHeader[]>([]);
     const [productItems, setProductItems] = React.useState<ProductItem[]>([]);
     const [loadingProducts, setLoadingProducts] = React.useState(false);
     const [showProductList, setShowProductList] = React.useState(true);
+
+    const [loadingSubmit, setLoadingSubmit] = React.useState(false);
 
 
     React.useEffect(() => {
@@ -127,7 +132,7 @@ const FormEditStockEntry: React.FC<FormEditStockEntryProps> = ({ handleClose }) 
             <tr className={"text-center"}>
                 <td>{index + 1}</td>
                 <td>{product.name}</td>
-                <td style={{ verticalAlign: "middle" }}> {/* Căn giữa theo chiều dọc */}
+                <td style={{ verticalAlign: "middle" }}>
                     <Form.Control
                         type="number"
                         value={product.quantity}
@@ -230,6 +235,26 @@ const FormEditStockEntry: React.FC<FormEditStockEntryProps> = ({ handleClose }) 
             dispatch({ type: ActionTypeEnum.ERROR, message: "Quantity and price must be greater than 0." });
             return;
         }
+
+        setLoadingSubmit(true);
+        CreateStockEntry({
+            receiveDate: new Date().toISOString().split("T")[0],
+            receiveBy: profile?.fullName || "",
+            description: description,
+            supplierId: supplierSelected.value,
+            receiveItems: productItems.map((item) => ({
+                productId: item.productId,
+                quantity: item.quantity,
+                price: item.price
+            }))
+        }).then(() => {
+            dispatch({ type: ActionTypeEnum.SUCCESS, message: "Create stock entry successfully." });
+            handleClose();
+        }).catch((err) => {
+            dispatch({ type: ActionTypeEnum.ERROR, message: err.message });
+        }).finally(() => {
+            setLoadingSubmit(false);
+        })
 
     }
 
@@ -335,6 +360,8 @@ const FormEditStockEntry: React.FC<FormEditStockEntryProps> = ({ handleClose }) 
                             className={"form-control py-3"}
                             placeholder="Enter description..."
                             rows={4}
+                            value={description}
+                            onChange={(e) => setDescription(e.target.value)}
                         />
                     </FormGroup>
                 </Row>
@@ -348,14 +375,14 @@ const FormEditStockEntry: React.FC<FormEditStockEntryProps> = ({ handleClose }) 
                                 <div className="d-flex justify-content-around gap-2">
                                     <Button
                                         onClick={() => setShowProductList(true)}
-                                        variant="outline-primary"
+                                        variant={`${showProductList ? "primary" : "outline-primary"}`}
                                         className={"w-100 p-2"}
                                     >
                                         Supplier Product List
                                     </Button>
                                     <Button
                                         onClick={() => setShowProductList(false)}
-                                        variant="outline-primary"
+                                        variant={`${!showProductList ? "primary" : "outline-primary"}`}
                                         className={"w-100 p-2"}
                                     >
                                         Stock Entry Items
@@ -417,6 +444,10 @@ const FormEditStockEntry: React.FC<FormEditStockEntryProps> = ({ handleClose }) 
                         </div>
                     </div>
                 </Row>
+                {
+                    loadingSubmit &&
+                    <SpinnerLoadingOverLayer />
+                }
             </Container>
         </OverLay>
     );

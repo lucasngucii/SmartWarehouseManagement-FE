@@ -8,6 +8,7 @@ interface ReceiveHeader {
     description: string;
     totalAmount: string;
     receiveCode: string;
+    receiveBy: string;
 }
 
 export default ReceiveHeader;
