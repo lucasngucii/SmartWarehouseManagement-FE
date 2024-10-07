@@ -182,9 +182,6 @@ const FormEditStockEntry: React.FC<FormEditStockEntryProps> = ({ handleClose, st
                         style={{ width: "150px", margin: "0 auto" }}
                         onChange={(e) => {
                             let value = parseFloat(e.target.value);
-                            if (e.target.value === "" || isNaN(value)) {
-                                value = 0;
-                            }
                             setProductItems(productItems.map((item) => {
                                 if (item.productId === product.productId) {
                                     return {
@@ -207,9 +204,6 @@ const FormEditStockEntry: React.FC<FormEditStockEntryProps> = ({ handleClose, st
                         defaultValue={0}
                         onChange={(e) => {
                             let value = parseFloat(e.target.value);
-                            if (e.target.value === "" || isNaN(value)) {
-                                value = 0;
-                            }
                             setProductItems(productItems.map((item) => {
                                 if (item.productId === product.productId) {
                                     return {
@@ -223,7 +217,7 @@ const FormEditStockEntry: React.FC<FormEditStockEntryProps> = ({ handleClose, st
                     />
                 </td>
                 <td style={{ minWidth: "150px" }}>
-                    ${(product.price * product.quantity).toFixed(2) || 0}
+                    ${isNaN(product.quantity * product.price) ? 0 : (product.quantity * product.price).toFixed(2)}
                 </td>
                 <td>
                     <button onClick={() => { handleDeleteItem(product.productId) }} className={"btn btn-danger"}>
@@ -271,7 +265,7 @@ const FormEditStockEntry: React.FC<FormEditStockEntryProps> = ({ handleClose, st
             return;
         }
 
-        if (productItems.some((item) => item.quantity === 0 || item.price === 0)) {
+        if (productItems.some((item) => item.quantity === 0 || item.price === 0 || isNaN(item.quantity) || isNaN(item.price))) {
             dispatch({ type: ActionTypeEnum.ERROR, message: "Quantity and price must be greater than 0." });
             return;
         }
