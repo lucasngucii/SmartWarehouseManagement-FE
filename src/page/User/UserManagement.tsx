@@ -3,7 +3,7 @@ import { faPencilAlt, faTrash, faUndo } from "@fortawesome/free-solid-svg-icons"
 import { EditUserComponent } from "./compoments/EditUserComponent";
 import React from "react";
 import { NoData } from "../../compoments/NoData/NoData";
-import GetAccountsAPI from "../../services/Authen/GetAccountsAPI";
+import GetAccountsAPI from "../../services/User/GetAccountsAPI";
 import Pagination from "../../compoments/Pagination/Pagination";
 import PaginationType from "../../interface/Pagination";
 import { Button, FormControl, FormSelect, Table } from "react-bootstrap";
@@ -12,7 +12,7 @@ import SpinnerLoading from "../../compoments/Loading/SpinnerLoading";
 import { useDispatchMessage } from "../../Context/ContextMessage";
 import ActionTypeEnum from "../../enum/ActionTypeEnum";
 import ModelConfirmDelete from "../../compoments/ModelConfirm/ModelConfirmDelete";
-import DeleteAccountAPI from "../../services/Authen/DeleteAccountAPI";
+import DeleteAccountAPI from "../../services/User/DeleteAccountAPI";
 
 
 const TypeFind = [

@@ -1,21 +1,73 @@
 import React from "react";
 import { Col, FloatingLabel, FormControl, FormSelect, Image, Row } from "react-bootstrap";
 import { Profile } from "../../interface/Profile";
-import GetProfileByTokenAPI from "../../services/Authen/GetProfileByTokenAPI";
+import GetProfileByTokenAPI from "../../services/User/GetProfileByTokenAPI";
 import { useDispatchMessage } from "../../Context/ContextMessage";
 import ActionTypeEnum from "../../enum/ActionTypeEnum";
+import FormChangePassword from "./compoments/FormChangePassword";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faEdit } from "@fortawesome/free-solid-svg-icons";
+import UpdateProfileUser from "../../services/Profile/UpdateProfileUser";
+import SpinnerLoadingOverLayer from "../../compoments/Loading/SpinnerLoadingOverLay";
+
+interface FormDataType extends Omit<Profile, 'role'> {
+    role: string;
+}
 
 const ProfilePage: React.FC = () => {
-
     const dispatch = useDispatchMessage();
-    const [profile, setProfile] = React.useState<Profile>();
+    const [profileDefault, setProfileDefault] = React.useState<FormDataType>({
+        id: "",
+        create_at: "",
+        update_at: "",
+        isDeleted: false,
+        username: "",
+        fullName: "",
+        email: "",
+        address: "",
+        avatar: "",
+        dateOfBirth: "",
+        gender: "",
+        phoneNumber: "",
+        position: "",
+        status: false,
+        role: "",
+    });
+    const [profile, setProfile] = React.useState<FormDataType>({
+        id: "",
+        create_at: "",
+        update_at: "",
+        isDeleted: false,
+        username: "",
+        fullName: "",
+        email: "",
+        address: "",
+        avatar: "",
+        dateOfBirth: "",
+        gender: "",
+        phoneNumber: "",
+        position: "",
+        status: false,
+        role: "",
+    });
+    const [showChangePassword, setShowChangePassword] = React.useState(false);
+    const [showEditProfile, setShowEditProfile] = React.useState(false);
+    const [loading, setloading] = React.useState(false);
 
     React.useEffect(() => {
         const token = localStorage.getItem("token");
         if (token) {
             GetProfileByTokenAPI(token)
                 .then((responseProfile) => {
-                    setProfile(responseProfile);
+                    setProfile({
+                        ...responseProfile,
+                        role: responseProfile.role.name
+                    });
+                    setProfileDefault({
+                        ...responseProfile,
+                        role: responseProfile.role.name
+                    });
+                    localStorage.setItem("profile", JSON.stringify(responseProfile));
                 })
                 .catch((error) => {
                     dispatch({ message: error.message, type: ActionTypeEnum.ERROR });
@@ -24,6 +76,69 @@ const ProfilePage: React.FC = () => {
             dispatch({ message: "Token not found", type: ActionTypeEnum.ERROR });
         }
     }, [dispatch]);
+
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
+        setProfile({
+            ...profile,
+            [e.target.name]: e.target.value
+        });
+    };
+
+    const checkDataChange = () => {
+        if (profileDefault.fullName !== profile.fullName) return true;
+        if (profileDefault.dateOfBirth !== profile.dateOfBirth) return true;
+        if (profileDefault.gender !== profile.gender) return true;
+        if (profileDefault.email !== profile.email) return true;
+        if (profileDefault.phoneNumber !== profile.phoneNumber) return true;
+        if (profileDefault.address !== profile.address) return true;
+
+        return false;
+    }
+
+    const handleSubmit = () => {
+
+        const dataUpdate: {
+            fullName?: string;
+            dateOfBirth?: string;
+            gender?: string;
+            email?: string;
+            phoneNumber?: string;
+            address?: string;
+        } = {
+            fullName: profile?.fullName,
+            dateOfBirth: profile.dateOfBirth,
+            gender: profile.gender,
+            email: profile.email,
+            phoneNumber: profile.phoneNumber,
+            address: profile.address,
+        };
+
+        if (profileDefault?.fullName === profile?.fullName) delete dataUpdate.fullName;
+        if (profileDefault?.dateOfBirth === profile?.dateOfBirth) delete dataUpdate.dateOfBirth;
+        if (profileDefault?.gender === profile?.gender) delete dataUpdate.gender;
+        if (profileDefault?.email === profile?.email) delete dataUpdate.email;
+        if (profileDefault?.phoneNumber === profile?.phoneNumber) delete dataUpdate.phoneNumber;
+        if (profileDefault?.address === profile?.address) delete dataUpdate.address;
+
+        setloading(true);
+        UpdateProfileUser(dataUpdate)
+            .then((responseProfile) => {
+                setProfile({
+                    ...responseProfile,
+                    role: responseProfile.role.name
+                });
+                setProfileDefault({
+                    ...responseProfile,
+                    role: responseProfile.role.name
+                });
+                localStorage.setItem("profile", JSON.stringify(responseProfile));
+                dispatch({ message: "Update profile successfully!", type: ActionTypeEnum.SUCCESS });
+            }).catch((error) => {
+                dispatch({ message: error.message, type: ActionTypeEnum.ERROR });
+            }).finally(() => {
+                setloading(false);
+            });
+    }
 
     return (
         <div className="d-flex justify-content-center mt-5">
@@ -34,11 +149,45 @@ const ProfilePage: React.FC = () => {
                         <div className="d-flex flex-column">
                             <span className="fw-bold h5">{profile?.fullName}</span>
                             <span>{profile?.position}</span>
-                            <span>{profile?.role.name}</span>
+                            <span>{profile?.role}</span>
                         </div>
                     </div>
-                    <div>
-                        <button className="btn btn-link">Change Password</button>
+                    <div className="d-flex flex-column gap-2">
+                        {
+                            !showEditProfile ? (
+                                <button
+                                    onClick={() => setShowEditProfile(true)}
+                                    className="btn btn-danger"
+                                >
+                                    <FontAwesomeIcon icon={faEdit} /> Edit
+                                </button>
+                            ) : (
+                                <div className="d-flex flex-row gap-2">
+                                    <button
+                                        onClick={() => handleSubmit()}
+                                        className="btn btn-primary"
+                                        disabled={checkDataChange() === false}
+                                    >
+                                        <FontAwesomeIcon icon={faEdit} /> Save
+                                    </button>
+                                    <button
+                                        onClick={() => {
+                                            setProfile({ ...profileDefault });
+                                            setShowEditProfile(false);
+                                        }}
+                                        className="btn btn-secondary"
+                                    >
+                                        Cancel
+                                    </button>
+                                </div>
+                            )
+                        }
+                        <button
+                            className="btn btn-link"
+                            onClick={() => setShowChangePassword(true)}
+                        >
+                            Change Password
+                        </button>
                     </div>
                 </div>
                 <div className="d-flex flex-column justify-content-center p-3">
@@ -52,7 +201,13 @@ const ProfilePage: React.FC = () => {
                         label="FullName"
                         className="mb-3"
                     >
-                        <FormControl type="text" value={profile?.fullName} />
+                        <FormControl
+                            type="text"
+                            value={profile?.fullName}
+                            disabled={!showEditProfile}
+                            name="fullName"
+                            onChange={handleChange}
+                        />
                     </FloatingLabel>
                     <div>
                         <Row>
@@ -61,14 +216,25 @@ const ProfilePage: React.FC = () => {
                                     label="Birthday"
                                     className="mb-3"
                                 >
-                                    <FormControl type="date" value={profile?.dateOfBirth} />
+                                    <FormControl
+                                        type="date"
+                                        value={profile?.dateOfBirth}
+                                        disabled={!showEditProfile}
+                                        name="dateOfBirth"
+                                        onChange={handleChange}
+                                    />
                                 </FloatingLabel>
                             </Col>
                             <Col>
                                 <FloatingLabel
                                     label="Gender"
                                 >
-                                    <FormSelect value={profile?.gender}>
+                                    <FormSelect
+                                        value={profile?.gender}
+                                        disabled={!showEditProfile}
+                                        name="gender"
+                                        onChange={handleChange}
+                                    >
                                         <option>-- Select a gender --</option>
                                         <option value="Male">Male</option>
                                         <option value="Female">Female</option>
@@ -85,7 +251,13 @@ const ProfilePage: React.FC = () => {
                                     label="Email"
                                     className="mb-3"
                                 >
-                                    <FormControl type="email" value={profile?.email} />
+                                    <FormControl
+                                        type="email"
+                                        value={profile?.email}
+                                        disabled={!showEditProfile}
+                                        name="email"
+                                        onChange={handleChange}
+                                    />
                                 </FloatingLabel>
                             </Col>
                             <Col>
@@ -93,7 +265,13 @@ const ProfilePage: React.FC = () => {
                                     label="PhoneNumber"
                                     className="mb-3"
                                 >
-                                    <FormControl type="phone" value={profile?.phoneNumber} />
+                                    <FormControl
+                                        type="phone"
+                                        value={profile?.phoneNumber}
+                                        disabled={!showEditProfile}
+                                        name="phoneNumber"
+                                        onChange={handleChange}
+                                    />
                                 </FloatingLabel>
                             </Col>
                         </Row>
@@ -102,10 +280,22 @@ const ProfilePage: React.FC = () => {
                         label="Address"
                         className="mb-3"
                     >
-                        <FormControl type="text" value={profile?.address} />
+                        <FormControl
+                            type="text"
+                            value={profile?.address}
+                            disabled={!showEditProfile}
+                            name="address"
+                            onChange={handleChange}
+                        />
                     </FloatingLabel>
                 </div>
             </div>
+            {
+                showChangePassword && <FormChangePassword closeModel={() => setShowChangePassword(false)} />
+            }
+            {
+                loading && <SpinnerLoadingOverLayer />
+            }
         </div>
     )
 }

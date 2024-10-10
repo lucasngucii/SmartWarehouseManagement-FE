@@ -2,7 +2,7 @@ import axios from "axios";
 import { ResponseError } from "../../interface/ResponseError";
 import DataTypeUpdateUserAdmin from "../../interface/PageUser/DataTypeUpdateUserAdmin";
 import User from "../../interface/Entity/User";
-import {checkTokenExpired} from "../../util/DecodeJWT";
+import { checkTokenExpired } from "../../util/DecodeJWT";
 
 const UpdateAccountAPI = async (userId: string, dataUpdateUser: DataTypeUpdateUserAdmin): Promise<User> => {
     try {
@@ -33,7 +33,7 @@ const UpdateAccountAPI = async (userId: string, dataUpdateUser: DataTypeUpdateUs
     } catch (error) {
         console.error(error);
         if (axios.isAxiosError(error) && error.response) {
-            if(error.response.status === 401) {
+            if (error.response.status === 401) {
                 localStorage.removeItem('token');
                 localStorage.removeItem('profile');
                 window.location.href = "/session-expired";

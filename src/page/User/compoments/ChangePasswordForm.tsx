@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Form, Button, Container, CloseButton } from 'react-bootstrap';
 import ValidatePassword from '../../../util/Validate/ValidatePassword';
-import UpdateAccountAPI from '../../../services/Authen/UpdateAccountAPI';
+import UpdateAccountAPI from '../../../services/User/UpdateAccountAPI';
 import { OverLay } from '../../../compoments/OverLay/OverLay';
 import { useDispatchMessage } from '../../../Context/ContextMessage';
 import ActionTypeEnum from '../../../enum/ActionTypeEnum';

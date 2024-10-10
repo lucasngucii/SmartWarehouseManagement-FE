@@ -1,9 +1,9 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import LoginAPI from "../../services/Authen/LoginAPI";
-import GetProfileByTokenAPI from "../../services/Authen/GetProfileByTokenAPI";
+import GetProfileByTokenAPI from "../../services/User/GetProfileByTokenAPI";
 import { Button, Col, Container, Form, Row } from "react-bootstrap";
-import {checkTokenExpired} from "../../util/DecodeJWT";
+import { checkTokenExpired } from "../../util/DecodeJWT";
 
 interface formDataType {
     username: string;
@@ -33,11 +33,11 @@ const Login: React.FC = () => {
     React.useEffect(() => {
         const token = localStorage.getItem("token");
         if (token) {
-            if(checkTokenExpired(token)){
+            if (checkTokenExpired(token)) {
                 localStorage.removeItem("token");
                 localStorage.removeItem("profile");
                 navigate("/session-expired");
-            }else {
+            } else {
                 navigate("/");
             }
         } else {
