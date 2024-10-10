@@ -1,4 +1,4 @@
-import { faCogs, faSignOutAlt, faUserCircle } from "@fortawesome/free-solid-svg-icons";
+import { faSignOutAlt, faUserCircle } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Link } from "react-router-dom";
 
@@ -13,10 +13,6 @@ export const DropDownMenu: React.FC<DropDownMenuProps> = ({ openModelLogout }) =
             <Link to="/profile">
                 <FontAwesomeIcon icon={faUserCircle} className="dropdown-icon" />
                 Profile
-            </Link>
-            <Link to="/settings">
-                <FontAwesomeIcon icon={faCogs} className="dropdown-icon" />
-                Settings
             </Link>
             <Link to="/" onClick={openModelLogout}>
                 <FontAwesomeIcon icon={faSignOutAlt} className="dropdown-icon" />

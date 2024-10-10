@@ -2,6 +2,10 @@ import { Button, CloseButton, Container, FormControl, FormGroup, FormLabel } fro
 import { OverLay } from "../../../compoments/OverLay/OverLay";
 import { Form } from "react-router-dom";
 import React from "react";
+import UpdatePasswordUser from "../../../services/Profile/UpdatePasswordUser";
+import { useDispatchMessage } from "../../../Context/ContextMessage";
+import ActionTypeEnum from "../../../enum/ActionTypeEnum";
+import ValidatePassword from "../../../util/Validate/ValidatePassword";
 
 interface FormChangePasswordProps {
     closeModel: () => void;
@@ -9,6 +13,7 @@ interface FormChangePasswordProps {
 
 const FormChangePassword: React.FC<FormChangePasswordProps> = (props) => {
 
+    const dispatch = useDispatchMessage();
     const [password, setPassword] = React.useState<string>('');
     const [newPassword, setNewPassword] = React.useState<string>('');
     const [confirmPassword, setConfirmPassword] = React.useState<string>('');
@@ -16,14 +21,30 @@ const FormChangePassword: React.FC<FormChangePasswordProps> = (props) => {
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        setIsLoading(true);
-        try {
-            // Call API here
-        } catch (error) {
-            console.error(error);
-        } finally {
-            setIsLoading(false);
+        const checkPassword = ValidatePassword(password);
+        const checkNewPassword = ValidatePassword(newPassword);
+
+        if (newPassword !== confirmPassword) {
+            dispatch({ message: 'Confirm password not match', type: ActionTypeEnum.ERROR });
+            return;
         }
+
+        if (checkPassword || checkNewPassword) {
+            dispatch({ message: checkPassword || checkNewPassword, type: ActionTypeEnum.ERROR })
+            return;
+        }
+
+        setIsLoading(true);
+        UpdatePasswordUser({ oldPassword: password, password: newPassword })
+            .then(() => {
+                dispatch({ message: 'Change password successfully', type: ActionTypeEnum.SUCCESS });
+                props.closeModel();
+            })
+            .catch((error) => {
+                dispatch({ message: error.message, type: ActionTypeEnum.ERROR });
+            }).finally(() => {
+                setIsLoading(false);
+            })
     }
 
     return (
@@ -35,7 +56,7 @@ const FormChangePassword: React.FC<FormChangePasswordProps> = (props) => {
                     style={{ top: "20px", right: "20px", cursor: 'pointer' }}
                 />
                 <h2 className="text-center fw-bold">Change Password</h2>
-                <Form onSubmit={() => { }}>
+                <Form onSubmit={handleSubmit}>
                     <FormGroup controlId="formNewPassword" className="mb-3">
                         <FormLabel>Password</FormLabel>
                         <FormControl
