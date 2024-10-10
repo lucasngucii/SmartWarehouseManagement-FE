@@ -36,7 +36,6 @@ const StockEntry: React.FC = () => {
         setIsLoading(true);
         GetStockEntries()
             .then((res) => {
-                console.log(res);
                 setStockEntry(res.data);
                 setPagination({
                     totalPage: res.totalPage,

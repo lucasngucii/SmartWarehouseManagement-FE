@@ -17,6 +17,7 @@ import { SupplierManagement } from './page/Supplier/SupplierManagement';
 import ErrorPage from "./page/Error/ErrorPage";
 import SessionExpiredPage from "./page/SessionExpired/SessionExpiredPage";
 import StockEntry from "./page/StockEntry/StockEntry";
+import ProfilePage from './page/Profile/ProfilePage';
 
 const router = createBrowserRouter([
     {
@@ -54,6 +55,10 @@ const router = createBrowserRouter([
             {
                 path: "stock-entry",
                 element: <StockEntry />,
+            },
+            {
+                path: "/profile",
+                element: <ProfilePage />,
             }
         ]
     },

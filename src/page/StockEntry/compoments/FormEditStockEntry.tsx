@@ -169,7 +169,7 @@ const FormEditStockEntry: React.FC<FormEditStockEntryProps> = ({ handleClose, st
 
     const listProductItems = () => {
         return productItems.map((product, index) => (
-            <tr className={"text-center"}>
+            <tr key={product.id} className={"text-center"}>
                 <td>{index + 1}</td>
                 <td>{product.name}</td>
                 <td style={{ verticalAlign: "middle" }}>
@@ -178,7 +178,6 @@ const FormEditStockEntry: React.FC<FormEditStockEntryProps> = ({ handleClose, st
                         value={product.quantity}
                         step={0.01}
                         min={0}
-                        defaultValue={0}
                         style={{ width: "150px", margin: "0 auto" }}
                         onChange={(e) => {
                             let value = parseFloat(e.target.value);
@@ -201,7 +200,6 @@ const FormEditStockEntry: React.FC<FormEditStockEntryProps> = ({ handleClose, st
                         style={{ width: "150px", margin: "0 auto" }}
                         step={0.01}
                         min={0}
-                        defaultValue={0}
                         onChange={(e) => {
                             let value = parseFloat(e.target.value);
                             setProductItems(productItems.map((item) => {

@@ -653,10 +653,6 @@ export const EditUserComponent: React.FC<EditUserComponentProps> = ({
                     <ChangePasswordForm userId={userId} hideOver={() => setChangePassword(false)} />
                 }
                 {(isLoading || isLoadingSubmit) && <SpinnerLoadingOverLayer />}
-                {/*<ToastContainerMessage>*/}
-                {/*    <ToastMessage message={globalSuccess} type={"success"} setMessage={() => {setGlobalSuccess("")}} />*/}
-                {/*    <ToastMessage message={globalError} type={"danger"} setMessage={() => {setGlobalError("")}} />*/}
-                {/*</ToastContainerMessage>*/}
             </Container>
         </OverLay>
     );
