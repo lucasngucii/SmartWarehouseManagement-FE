@@ -9,6 +9,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEdit } from "@fortawesome/free-solid-svg-icons";
 import UpdateProfileUser from "../../services/Profile/UpdateProfileUser";
 import SpinnerLoadingOverLayer from "../../compoments/Loading/SpinnerLoadingOverLay";
+import ChangeAvatarModel from "./compoments/ChangeAvatarModel";
 
 interface FormDataType extends Omit<Profile, 'role'> {
     role: string;
@@ -52,6 +53,7 @@ const ProfilePage: React.FC = () => {
     });
     const [showChangePassword, setShowChangePassword] = React.useState(false);
     const [showEditProfile, setShowEditProfile] = React.useState(false);
+    const [showEditAvatar, setShowEditAvatar] = React.useState(false);
     const [loading, setloading] = React.useState(false);
 
     React.useEffect(() => {
@@ -145,7 +147,18 @@ const ProfilePage: React.FC = () => {
             <div className="bg-white rounded shadow p-4" style={{ width: "1000px", minHeight: "500px" }}>
                 <div className="d-flex flex-row justify-content-between border-bottom p-3">
                     <div className="d-flex flex-row justify-content-start align-items-center gap-4">
-                        <Image src={profile?.avatar || "/images/default-avt.png"} roundedCircle width={100} height={100} />
+                        <div className="position-relative">
+                            <Image src={profile?.avatar || "/images/default-avt.png"} roundedCircle width={100} height={100} />
+                            <div className="position-absolute bottom-0 end-0">
+                                <button
+                                    onClick={() => setShowEditAvatar(true)}
+                                    className="btn btn-light btn-sm shadow-sm rounded-circle d-flex align-items-center justify-content-center text-primary"
+                                    style={{ width: "35px", height: "35px" }}
+                                >
+                                    <FontAwesomeIcon icon={faEdit} />
+                                </button>
+                            </div>
+                        </div>
                         <div className="d-flex flex-column">
                             <span className="fw-bold h5">{profile?.fullName}</span>
                             <span>{profile?.position}</span>
@@ -295,6 +308,9 @@ const ProfilePage: React.FC = () => {
             }
             {
                 loading && <SpinnerLoadingOverLayer />
+            }
+            {
+                showEditAvatar && <ChangeAvatarModel onClose={() => setShowEditAvatar(false)} avatar={profile.avatar} />
             }
         </div>
     )
