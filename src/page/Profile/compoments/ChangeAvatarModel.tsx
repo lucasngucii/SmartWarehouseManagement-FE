@@ -50,6 +50,7 @@ const ChangeAvatarModel: React.FC<ChangeAvatarModelProps> = (props) => {
                         roundedCircle
                         width={150}
                         height={150}
+                        className="object-fit-cover"
                     />
                     <FormControl
                         ref={fileRef}

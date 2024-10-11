@@ -148,7 +148,13 @@ const ProfilePage: React.FC = () => {
                 <div className="d-flex flex-row justify-content-between border-bottom p-3">
                     <div className="d-flex flex-row justify-content-start align-items-center gap-4">
                         <div className="position-relative">
-                            <Image src={profile?.avatar || "/images/default-avt.png"} roundedCircle width={100} height={100} />
+                            <Image
+                                src={profile?.avatar || "/images/default-avt.png"}
+                                roundedCircle
+                                width={100}
+                                height={100}
+                                className="object-fit-cover"
+                            />
                             <div className="position-absolute bottom-0 end-0">
                                 <button
                                     onClick={() => setShowEditAvatar(true)}
