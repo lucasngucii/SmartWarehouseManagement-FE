@@ -12,6 +12,8 @@ import CreateSupplier from '../../../services/Supplier/CreateSupplier';
 import FormDataTypes from '../../../interface/FormDataSupplier';
 import { useDispatchMessage } from "../../../Context/ContextMessage";
 import ActionTypeEnum from "../../../enum/ActionTypeEnum";
+import validatePhone from '../../../util/Validate/ValidatePhone';
+import validateEmail from '../../../util/Validate/ValidateEmail';
 
 interface SupplierDetailProps {
     supplierId: string;
@@ -104,7 +106,20 @@ const FormEditSupplier: React.FC<SupplierDetailProps> = ({ supplierId, hideOverl
             dispatch({ type: ActionTypeEnum.ERROR, message: "Description is required" });
             return true;
         }
+        return false;
+    }
 
+    const valdiate2 = () => {
+        const checkPhone = validatePhone(formData.phone);
+        const checkEmail = validateEmail(formData.email);
+        if (checkPhone) {
+            dispatch({ type: ActionTypeEnum.ERROR, message: checkPhone });
+            return true;
+        }
+        if (checkEmail) {
+            dispatch({ type: ActionTypeEnum.ERROR, message: checkEmail });
+            return true;
+        }
         return false;
     }
 
@@ -150,7 +165,7 @@ const FormEditSupplier: React.FC<SupplierDetailProps> = ({ supplierId, hideOverl
     }
 
     const handleSubmit = () => {
-        if (!validate1()) {
+        if (!validate1() && !valdiate2()) {
             setIsSaving(true);
             if (supplierId) {
                 UpdateSupplierById(supplierId, formData)

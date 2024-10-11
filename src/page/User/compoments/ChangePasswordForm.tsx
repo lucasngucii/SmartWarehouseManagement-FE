@@ -20,7 +20,8 @@ const ChangePasswordForm: React.FC<ChangePasswordFormProps> = ({ userId, hideOve
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-
+    const checkPassword = ValidatePassword(newPassword);
+    if (checkPassword) dispatch({ type: ActionTypeEnum.ERROR, message: checkPassword })
     if (newPassword !== confirmPassword) {
       dispatch({ type: ActionTypeEnum.ERROR, message: 'Password and confirm password do not match!' });
     } else if (ValidatePassword(newPassword)) {
