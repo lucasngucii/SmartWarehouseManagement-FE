@@ -15,9 +15,9 @@ import {
     faTag,
     faTrash, faUndo
 } from "@fortawesome/free-solid-svg-icons";
-import {Button, FormControl, FormSelect, Table} from "react-bootstrap";
+import { Button, FormControl, FormSelect, Table } from "react-bootstrap";
 import SpinnerLoading from "../../../compoments/Loading/SpinnerLoading";
-import {useDispatchMessage} from "../../../Context/ContextMessage";
+import { useDispatchMessage } from "../../../Context/ContextMessage";
 import ActionTypeEnum from "../../../enum/ActionTypeEnum";
 import DeleteAttributeValue from "../../../services/Attribute/DeleteAttributeValue";
 import ModelConfirmDelete from "../../../compoments/ModelConfirm/ModelConfirmDelete";
@@ -58,37 +58,37 @@ export const AttributeValueManagement: React.FC<AttributeValueManagementProps> =
                 });
             }).catch((error) => {
                 console.error(error);
-                dispatch({type: ActionTypeEnum.ERROR, message: error.message});
+                dispatch({ type: ActionTypeEnum.ERROR, message: error.message });
             }).finally(() => {
                 setIsLoading(false);
             })
     }, [attributeId, pagination.offset, dispatch]);
 
     const handelDeleteAttributeValue = () => {
-        if(attributeValueId) {
+        if (attributeValueId) {
             setIsLoadingDelete(true);
             DeleteAttributeValue(attributeId, attributeValueId)
                 .then(() => {
                     return GetAttributeDetail({ id: attributeId });
                 }).then((response) => {
-                updateAttributeValues(response.data);
-                updatePagination({
-                    totalPage: response.totalPage,
-                    limit: response.limit,
-                    offset: response.offset,
-                    totalElementOfPage: response.totalElementOfPage
-                });
-                setAttributeValueId("");
-                setShowModelConfirmDelete(false);
-                dispatch({type: ActionTypeEnum.SUCCESS, message: "Delete attribute value successfully"});
-            }).catch((error) => {
-                console.error(error);
-                dispatch({type: ActionTypeEnum.ERROR, message: error.message});
-            }).finally(() => {
-                setIsLoadingDelete(false);
-            })
-        }else {
-            dispatch({type: ActionTypeEnum.ERROR, message: "Attribute value delete failed"});
+                    updateAttributeValues(response.data);
+                    updatePagination({
+                        totalPage: response.totalPage,
+                        limit: response.limit,
+                        offset: response.offset,
+                        totalElementOfPage: response.totalElementOfPage
+                    });
+                    setAttributeValueId("");
+                    setShowModelConfirmDelete(false);
+                    dispatch({ type: ActionTypeEnum.SUCCESS, message: "Delete attribute value successfully" });
+                }).catch((error) => {
+                    console.error(error);
+                    dispatch({ type: ActionTypeEnum.ERROR, message: error.message });
+                }).finally(() => {
+                    setIsLoadingDelete(false);
+                })
+        } else {
+            dispatch({ type: ActionTypeEnum.ERROR, message: "Attribute value delete failed" });
         }
     }
 
@@ -136,35 +136,35 @@ export const AttributeValueManagement: React.FC<AttributeValueManagementProps> =
             case 1:
                 return (
                     <div className={"d-flex flex-row align-items-center gap-3"}>
-                        <FontAwesomeIcon icon={faPalette}/>
+                        <FontAwesomeIcon icon={faPalette} />
                         <span className="d-block">Color</span>
                     </div>
                 )
             case 2:
                 return (
                     <div className={"d-flex flex-row align-items-center gap-3"}>
-                        <FontAwesomeIcon icon={faCubes}/>
+                        <FontAwesomeIcon icon={faCubes} />
                         <span className="d-block">Model</span>
                     </div>
                 )
             case 3:
                 return (
                     <div className={"d-flex flex-row align-items-center gap-3"}>
-                        <FontAwesomeIcon icon={faTag}/>
+                        <FontAwesomeIcon icon={faTag} />
                         <span className="d-block">Brand</span>
                     </div>
                 )
             case 4:
                 return (
                     <div className={"d-flex flex-row align-items-center gap-3"}>
-                        <FontAwesomeIcon icon={faRuler}/>
+                        <FontAwesomeIcon icon={faRuler} />
                         <span className="d-block">Size</span>
                     </div>
                 )
             case 5:
                 return (
                     <div className={"d-flex flex-row align-items-center gap-3"}>
-                        <FontAwesomeIcon icon={faList}/>
+                        <FontAwesomeIcon icon={faList} />
                         <span className="d-block">Category</span>
                     </div>
                 )
@@ -177,9 +177,9 @@ export const AttributeValueManagement: React.FC<AttributeValueManagementProps> =
         return (
             <tr key={attributeValue.id}>
                 <td>{index + 1}</td>
+                <td>{attributeValue.sizeCode || attributeValue.brandCode || attributeValue.categoryCode || attributeValue.colorCode || attributeValue.materialCode}</td>
                 <td>{attributeValue.name}</td>
                 <td>{attributeValue.description}</td>
-                <td>{attributeValue.sizeCode || attributeValue.brandCode || attributeValue.categoryCode || attributeValue.colorCode || attributeValue.materialCode}</td>
                 <td>
                     <div className="d-flex flex-row gap-2">
                         <Button
@@ -211,7 +211,7 @@ export const AttributeValueManagement: React.FC<AttributeValueManagementProps> =
                             onClick={handleCancelEditAttribute}
                             className="btn fs-3 px-3 text-primary"
                         >
-                            <FontAwesomeIcon icon={faChevronLeft}/>
+                            <FontAwesomeIcon icon={faChevronLeft} />
                         </button>
                         <h2 className="mb-0 fw-bold">{getAttributeName(attributeId)}</h2>
                     </div>
@@ -221,7 +221,7 @@ export const AttributeValueManagement: React.FC<AttributeValueManagementProps> =
                 </div>
                 <div className={"d-flex flex-row gap-5 mb-3 justify-content-end"}>
                     <div className={"d-flex flex-row gap-2"}>
-                        <div style={{width: "150px"}}>
+                        <div style={{ width: "150px" }}>
                             <FormSelect>
                                 {
                                     TypeFind.map((type, index) => {
@@ -230,37 +230,37 @@ export const AttributeValueManagement: React.FC<AttributeValueManagementProps> =
                                 }
                             </FormSelect>
                         </div>
-                        <FormControl type="text" placeholder="Search name..." style={{width: "350px"}}/>
+                        <FormControl type="text" placeholder="Search name..." style={{ width: "350px" }} />
                         <Button onClick={() => {
                         }}>
-                            <FontAwesomeIcon icon={faUndo}/>
+                            <FontAwesomeIcon icon={faUndo} />
                         </Button>
                     </div>
                 </div>
                 <Table hover striped bordered>
                     <thead>
-                    <tr>
-                        <th>#</th>
-                        <th>Name</th>
-                        <th>Description</th>
-                        <th>Size Code</th>
-                        <th>Action</th>
-                    </tr>
+                        <tr>
+                            <th>#</th>
+                            <th>Code</th>
+                            <th>Name</th>
+                            <th>Description</th>
+                            <th>Action</th>
+                        </tr>
                     </thead>
                     <tbody>
-                    {renderAttributeValues}
+                        {renderAttributeValues}
                     </tbody>
                 </Table>
                 {
                     attributeValues.length > 0 &&
                     <Pagination currentPage={pagination?.offset} totalPages={pagination?.totalPage}
-                                onPageChange={handleChangePage}/>
+                        onPageChange={handleChangePage} />
                 }
                 {
-                    (attributeValues.length === 0) && !isLoading && <NoData/>
+                    (attributeValues.length === 0) && !isLoading && <NoData />
                 }
                 {
-                    isLoading && <SpinnerLoading/>
+                    isLoading && <SpinnerLoading />
                 }
                 {
                     showEditAttributeValue &&
@@ -279,7 +279,7 @@ export const AttributeValueManagement: React.FC<AttributeValueManagementProps> =
                     message={"Are you sure delete this value ?"}
                     onConfirm={handelDeleteAttributeValue}
                     onClose={handleCancelModelConfirmDelete}
-                    loading={isLoadingDelete}/>
+                    loading={isLoadingDelete} />
             }
         </OverLay>
     );

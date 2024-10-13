@@ -125,10 +125,10 @@ export const SupplierManagement: React.FC = () => {
         return (
             <tr key={supplier.id}>
                 <td>{index + 1}</td>
+                <td>{supplier.supplierCode}</td>
                 <td>{supplier.name}</td>
                 <td>{supplier.description}</td>
                 <td>{supplier.phone}</td>
-                <td>{supplier.supplierCode}</td>
                 <td>{supplier.address}</td>
                 <td>{supplier.email}</td>
                 <td>
@@ -190,10 +190,10 @@ export const SupplierManagement: React.FC = () => {
                 <thead>
                     <tr>
                         <th>#</th>
+                        <th>Code</th>
                         <th>Name</th>
                         <th>Description</th>
                         <th>Phone</th>
-                        <th>Supplier Code</th>
                         <th>Address</th>
                         <th>Email</th>
                         <th>Action</th>

@@ -1,14 +1,14 @@
 import React from 'react'
-import {Product} from '../../interface/Entity/Product'
-import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
-import {faPencilAlt, faTrash, faUndo} from '@fortawesome/free-solid-svg-icons';
-import {Button, FormControl, FormSelect, Table} from 'react-bootstrap';
+import { Product } from '../../interface/Entity/Product'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faPencilAlt, faTrash, faUndo } from '@fortawesome/free-solid-svg-icons';
+import { Button, FormControl, FormSelect, Table } from 'react-bootstrap';
 import GetProducts from '../../services/Product/GetProducts';
 import PaginationType from '../../interface/Pagination';
 import Pagination from '../../compoments/Pagination/Pagination';
 import FormEditProduct from './compoments/FormEditProduct';
-import {NoData} from "../../compoments/NoData/NoData";
-import {useDispatchMessage} from "../../Context/ContextMessage";
+import { NoData } from "../../compoments/NoData/NoData";
+import { useDispatchMessage } from "../../Context/ContextMessage";
 import ActionTypeEnum from "../../enum/ActionTypeEnum";
 import DeleteProductById from "../../services/Product/DeleteProductById";
 import ModelConfirmDelete from "../../compoments/ModelConfirm/ModelConfirmDelete";
@@ -42,7 +42,7 @@ export const ProductManagement: React.FC = () => {
 
     const handleChangePage = (page: number) => {
         setIsLoading(true)
-        GetProducts({offset: page})
+        GetProducts({ offset: page })
             .then((response) => {
                 setProducts(response.data)
                 setPagination({
@@ -52,11 +52,11 @@ export const ProductManagement: React.FC = () => {
                     totalElementOfPage: response.totalElementOfPage
                 })
             }).catch((error) => {
-            console.error(error)
-            dispatch({type: ActionTypeEnum.ERROR, message: error.message})
-        }).finally(() => {
-            setIsLoading(false)
-        })
+                console.error(error)
+                dispatch({ type: ActionTypeEnum.ERROR, message: error.message })
+            }).finally(() => {
+                setIsLoading(false)
+            })
     }
 
     React.useEffect(() => {
@@ -71,11 +71,11 @@ export const ProductManagement: React.FC = () => {
                     totalElementOfPage: response.totalElementOfPage
                 })
             }).catch((error) => {
-            console.error(error)
-            dispatch({type: ActionTypeEnum.ERROR, message: error.message})
-        }).finally(() => {
-            setIsLoading(false)
-        })
+                console.error(error)
+                dispatch({ type: ActionTypeEnum.ERROR, message: error.message })
+            }).finally(() => {
+                setIsLoading(false)
+            })
     }, [dispatch])
 
     const handleDeleteAccount = () => {
@@ -85,24 +85,24 @@ export const ProductManagement: React.FC = () => {
                 .then(() => {
                     return GetProducts();
                 }).then((response) => {
-                updateProducts(response.data);
-                updatePagination({
-                    totalPage: response.totalPage,
-                    limit: response.limit,
-                    offset: response.offset,
-                    totalElementOfPage: response.totalElementOfPage
-                });
-                setShowModelConfirmDelete(false);
-                setProductId("");
-                dispatch({type: ActionTypeEnum.SUCCESS, message: "Delete product successfully"});
-            }).catch((error) => {
-                console.error(error);
-                dispatch({type: ActionTypeEnum.ERROR, message: error.message});
-            }).finally(() => {
-                setIsLoadingDelete(false);
-            })
+                    updateProducts(response.data);
+                    updatePagination({
+                        totalPage: response.totalPage,
+                        limit: response.limit,
+                        offset: response.offset,
+                        totalElementOfPage: response.totalElementOfPage
+                    });
+                    setShowModelConfirmDelete(false);
+                    setProductId("");
+                    dispatch({ type: ActionTypeEnum.SUCCESS, message: "Delete product successfully" });
+                }).catch((error) => {
+                    console.error(error);
+                    dispatch({ type: ActionTypeEnum.ERROR, message: error.message });
+                }).finally(() => {
+                    setIsLoadingDelete(false);
+                })
         } else {
-            dispatch({type: ActionTypeEnum.ERROR, message: "Product delete failed"});
+            dispatch({ type: ActionTypeEnum.ERROR, message: "Product delete failed" });
         }
     }
 
@@ -110,9 +110,9 @@ export const ProductManagement: React.FC = () => {
         return (
             <tr key={index}>
                 <td>{index + 1}</td>
+                <td>{product.productCode}</td>
                 <td>{product.name}</td>
                 <td>{product.description}</td>
-                <td>{product.productCode}</td>
                 <td>{product.unit}</td>
                 <td>
                     <div className='d-flex gap-2'>
@@ -123,7 +123,7 @@ export const ProductManagement: React.FC = () => {
                             }}
                             variant="primary"
                         >
-                            <FontAwesomeIcon icon={faPencilAlt}/>
+                            <FontAwesomeIcon icon={faPencilAlt} />
                         </Button>
                         <Button
                             onClick={() => {
@@ -132,7 +132,7 @@ export const ProductManagement: React.FC = () => {
                             }}
                             variant="danger"
                         >
-                            <FontAwesomeIcon icon={faTrash}/>
+                            <FontAwesomeIcon icon={faTrash} />
                         </Button>
                     </div>
                 </td>
@@ -153,7 +153,7 @@ export const ProductManagement: React.FC = () => {
             </div>
             <div className={"d-flex flex-row gap-5 mb-3 justify-content-end"}>
                 <div className={"d-flex flex-row gap-2"}>
-                    <div style={{width: "150px"}}>
+                    <div style={{ width: "150px" }}>
                         <FormSelect>
                             {
                                 TypeFind.map((type, index) => {
@@ -162,30 +162,30 @@ export const ProductManagement: React.FC = () => {
                             }
                         </FormSelect>
                     </div>
-                    <FormControl type="text" placeholder="Search name..." style={{width: "350px"}}/>
+                    <FormControl type="text" placeholder="Search name..." style={{ width: "350px" }} />
                     <Button onClick={() => {
                     }}>
-                        <FontAwesomeIcon icon={faUndo}/>
+                        <FontAwesomeIcon icon={faUndo} />
                     </Button>
                 </div>
             </div>
             <Table striped bordered hover>
                 <thead>
-                <tr>
-                    <th>#</th>
-                    <th>Product Name</th>
-                    <th>Description</th>
-                    <th>Code</th>
-                    <th>Unit</th>
-                    <th>Actions</th>
-                </tr>
+                    <tr>
+                        <th>#</th>
+                        <th>Code</th>
+                        <th>Product Name</th>
+                        <th>Description</th>
+                        <th>Unit</th>
+                        <th>Actions</th>
+                    </tr>
                 </thead>
                 <tbody>
-                {renderProducts}
+                    {renderProducts}
                 </tbody>
             </Table>
             {
-                isLoading && <SpinnerLoading/>
+                isLoading && <SpinnerLoading />
             }
             {
                 (products.length > 0) ?
@@ -195,7 +195,7 @@ export const ProductManagement: React.FC = () => {
                         onPageChange={handleChangePage}
                     />
                     :
-                    (!isLoading && <NoData/>) || null
+                    (!isLoading && <NoData />) || null
             }
             {
                 showFormEdit &&

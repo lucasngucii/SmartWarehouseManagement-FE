@@ -98,8 +98,8 @@ body {
     border-collapse: collapse;
 }
 
-.table th,
-.table td {
+.table th:first-child,
+.table td:first-child {
     vertical-align: middle;
     text-align: center;
 }
