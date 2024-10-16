@@ -1,0 +1,19 @@
+.shelf-details-container {
+    width: 100%;
+    height: 100%;
+    display: grid;
+    grid-template-columns: repeat(20, 200px);
+    grid-template-rows: repeat(5, 200px);
+    grid-gap: 50px;
+    align-items: center;
+    padding: 25px;
+    overflow: auto;
+}
+
+.shelf-details-container::-webkit-scrollbar {
+    display: none;
+}
+
+.shelf-details-container .shelf-item {
+    height: 200px;
+}

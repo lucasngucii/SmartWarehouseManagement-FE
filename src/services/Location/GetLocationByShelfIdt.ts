@@ -1,16 +1,12 @@
 import axios from "axios";
-import { ResponseError } from "../../interface/ResponseError";
-import DataTypeCreateUserAdmin from "../../interface/PageUser/DataTypeCreateUserAdmin";
 import { checkTokenExpired } from "../../util/DecodeJWT";
+import { ResponseError } from "../../interface/ResponseError";
+import Location from "../../interface/Entity/Location";
 
-const RegisterAPI = async (data: DataTypeCreateUserAdmin | null): Promise<void> => {
-
+const GetLocationByShelfIdt = async (shelfIdt: string): Promise<Location[]> => {
     try {
-
-        if (!data) throw new Error("Data is empty.");
-
-        const HOST = process.env.REACT_APP_HOST_BE;
-        const token = localStorage.getItem("token");
+        const HOST = process.env.REACT_APP_HOST_BE
+        const token = localStorage.getItem('token');
 
         if (!token) {
             window.location.href = "/login";
@@ -20,13 +16,13 @@ const RegisterAPI = async (data: DataTypeCreateUserAdmin | null): Promise<void> 
             window.location.href = "/session-expired";
         }
 
-        const response = await axios.post(`${HOST}/auth/register`, data, {
+        const response = await axios.get(`${HOST}/locations/shelf/${shelfIdt}`, {
             headers: {
-                "Authorization": `Bearer ${token}`
+                Authorization: `Bearer ${token}`
             }
-        });
-        return response.data.data;
+        })
 
+        return response.data.data;
     } catch (error) {
         console.error(error);
         if (axios.isAxiosError(error) && error.response) {
@@ -43,4 +39,4 @@ const RegisterAPI = async (data: DataTypeCreateUserAdmin | null): Promise<void> 
     }
 }
 
-export default RegisterAPI;
+export default GetLocationByShelfIdt;

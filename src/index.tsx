@@ -18,6 +18,7 @@ import ErrorPage from "./page/Error/ErrorPage";
 import SessionExpiredPage from "./page/SessionExpired/SessionExpiredPage";
 import StockEntry from "./page/StockEntry/StockEntry";
 import ProfilePage from './page/Profile/ProfilePage';
+import LocationPage from './page/Location/StorageManagementPage';
 
 const router = createBrowserRouter([
     {
@@ -59,6 +60,10 @@ const router = createBrowserRouter([
             {
                 path: "/profile",
                 element: <ProfilePage />,
+            },
+            {
+                path: "/location",
+                element: <LocationPage />,
             }
         ]
     },

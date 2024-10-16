@@ -1,16 +1,28 @@
 import axios from "axios";
-import { ResponseError } from "../../interface/ResponseError";
-import DataTypeCreateUserAdmin from "../../interface/PageUser/DataTypeCreateUserAdmin";
 import { checkTokenExpired } from "../../util/DecodeJWT";
+import Shelf from "../../interface/Entity/Shelf";
+import { ResponseError } from "../../interface/ResponseError";
+import Order from "../../enum/Order";
 
-const RegisterAPI = async (data: DataTypeCreateUserAdmin | null): Promise<void> => {
+interface GetShelfsResponse {
+    data: Shelf[];
+    totalPage: number;
+    limit: number;
+    offset: number;
+    totalElementOfPage: number;
+}
 
+interface GetShelfsProps {
+    limit?: number;
+    offset?: number;
+    order?: Order;
+    orderBy?: string;
+}
+
+const GetShelfs = async (data?: GetShelfsProps): Promise<GetShelfsResponse> => {
     try {
-
-        if (!data) throw new Error("Data is empty.");
-
         const HOST = process.env.REACT_APP_HOST_BE;
-        const token = localStorage.getItem("token");
+        const token = localStorage.getItem('token');
 
         if (!token) {
             window.location.href = "/login";
@@ -20,13 +32,13 @@ const RegisterAPI = async (data: DataTypeCreateUserAdmin | null): Promise<void> 
             window.location.href = "/session-expired";
         }
 
-        const response = await axios.post(`${HOST}/auth/register`, data, {
+        const response = await axios.get(`${HOST}/shelf?limit=${data?.limit || 10}&offset=${data?.offset || 1}&order=${data?.order || Order.ASC}&orderBy=name`, {
             headers: {
-                "Authorization": `Bearer ${token}`
+                Authorization: `Bearer ${token}`
             }
-        });
-        return response.data.data;
+        })
 
+        return response.data.data;
     } catch (error) {
         console.error(error);
         if (axios.isAxiosError(error) && error.response) {
@@ -43,4 +55,4 @@ const RegisterAPI = async (data: DataTypeCreateUserAdmin | null): Promise<void> 
     }
 }
 
-export default RegisterAPI;
+export default GetShelfs;

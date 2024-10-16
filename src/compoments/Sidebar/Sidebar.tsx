@@ -1,7 +1,7 @@
 import React from "react";
 import "./Sidebar.css";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {faTachometerAlt, faWarehouse, faBox, faUser, faBarcode, faTruck} from '@fortawesome/free-solid-svg-icons';
+import { faTachometerAlt, faWarehouse, faBox, faUser, faBarcode, faTruck, faLocationArrow } from '@fortawesome/free-solid-svg-icons';
 import { SidebarItem } from "./compoments/SidebarItem";
 import { SidebarNav } from "./compoments/SidebarNav";
 import { SidebarLogo } from "./compoments/SidebarLogo";
@@ -26,6 +26,11 @@ export const Sidebar: React.FC = () => {
                             { href: "/stock-entry", lable: "Stock Entry" },
                         ]
                     }
+                />
+                <SidebarItem
+                    icon={<FontAwesomeIcon icon={faLocationArrow} />}
+                    label={"Location"}
+                    href={"/location"}
                 />
                 <SidebarItem
                     icon={<FontAwesomeIcon icon={faBox} />}
