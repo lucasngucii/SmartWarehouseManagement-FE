@@ -1,4 +1,4 @@
-import { Button, FormControl, FormSelect, Table } from "react-bootstrap";
+import { Button, Card, Col, Row } from "react-bootstrap";
 import React from "react";
 import Pagination from "../../compoments/Pagination/Pagination";
 import { NoData } from "../../compoments/NoData/NoData";
@@ -10,11 +10,11 @@ import { useDispatchMessage } from "../../Context/ContextMessage";
 import ActionTypeEnum from "../../enum/ActionTypeEnum";
 import FormEditStockEntry from "./compoments/FormEditStockEntry";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPencilAlt, faTrash, faUndo } from "@fortawesome/free-solid-svg-icons";
+import { faCogs, faPencilAlt, faTrash } from "@fortawesome/free-solid-svg-icons";
 import RemoveStockEntry from "../../services/StockEntry/RemoveStockEntry";
 import ModelConfirmDelete from "../../compoments/ModelConfirm/ModelConfirmDelete";
-
-const TypeFind = ["Receive Code", "Receive By"];
+import './css/StockEntry.css';
+import GoodsQualityInspectionPage from "./compoments/GoodsQualityInspectionPage";
 
 const StockEntry: React.FC = () => {
 
@@ -30,6 +30,7 @@ const StockEntry: React.FC = () => {
         totalElementOfPage: 0
     });
     const [showFormEdit, setShowFormEdit] = React.useState<boolean>(false);
+    const [ShowHandleStockEntry, setShowHandleStockEntry] = React.useState<boolean>(false);
     const [loadingDelete, setLoadingDelete] = React.useState<boolean>(false);
 
     React.useEffect(() => {
@@ -85,34 +86,51 @@ const StockEntry: React.FC = () => {
         }
     }
 
-    const listStockEntry = stockEntry.map((item, index) => {
+    const listStockEntry = stockEntry.map((stockEntry) => {
         return (
-            <tr key={index} style={{ textAlign: "center" }}>
-                <td>{index + 1}</td>
-                <td>{item.receiveCode}</td>
-                <td>{item.receiveDate}</td>
-                <td>{item.receiveBy}</td>
-                <td>{renderTypeStatus(item.status)}</td>
-                <td>{item.description}</td>
-                <td>{item.totalAmount}$</td>
-                <td>
-                    <div className="d-flex gap-2">
-                        <Button onClick={() => {
-                            setStockEntryId(item.id);
-                            setShowFormEdit(true);
-                        }} variant="primary text-light fw-bold">
-                            <FontAwesomeIcon icon={faPencilAlt} />
-                        </Button>
+            <Card className="mb-3 shadow">
+                <Card.Body>
+                    <Row>
+                        <Col md={10}>
+                            <h5>{stockEntry.receiveCode} - {stockEntry.receiveBy}</h5>
+                            <p><strong>Received Date:</strong> {stockEntry.receiveDate}</p>
+                            <p><strong>Status:</strong> {renderTypeStatus(stockEntry.status)}</p>
+                            <p><strong>Description:</strong> {stockEntry.description}</p>
+                            <p><strong>Total Amount:</strong> {stockEntry.totalAmount}$</p>
+                        </Col>
+                        <Col md={2} className="d-flex align-items-center justify-content-center gap-2">
+                            <Button
+                                onClick={() => {
+                                    setStockEntryId(stockEntry.id);
+                                    setShowFormEdit(true);
+                                }}
+                                variant="primary"
+                                className="text-light fw-bold">
+                                <FontAwesomeIcon icon={faPencilAlt} />
+                            </Button>
 
-                        <Button onClick={() => {
-                            setStockEntryId(item.id);
-                            setShowModelConfirmDelete(true);
-                        }} variant="danger text-light fw-bold">
-                            <FontAwesomeIcon icon={faTrash} />
-                        </Button>
-                    </div>
-                </td>
-            </tr>
+                            <Button
+                                onClick={() => {
+                                    setStockEntryId(stockEntry.id);
+                                    setShowModelConfirmDelete(true);
+                                }}
+                                variant="danger"
+                                className="text-light fw-bold">
+                                <FontAwesomeIcon icon={faTrash} />
+                            </Button>
+                            <Button
+                                onClick={() => {
+                                    setShowHandleStockEntry(true);
+                                    setStockEntryId(stockEntry.id);
+                                }}
+                                variant="success"
+                                className="text-light fw-bold">
+                                <FontAwesomeIcon icon={faCogs} />
+                            </Button>
+                        </Col>
+                    </Row>
+                </Card.Body>
+            </Card>
         );
     });
 
@@ -137,41 +155,19 @@ const StockEntry: React.FC = () => {
                     }} variant="info text-light fw-bold">+ NEW</Button>
                 </div>
             </div>
-            <div className={"d-flex flex-row gap-5 mb-3 justify-content-end"}>
-                <div className={"d-flex flex-row gap-2"}>
-                    <div style={{ width: "150px" }}>
-                        <FormSelect>
-                            {
-                                TypeFind.map((type, index) => {
-                                    return <option key={index} value={type}>{type}</option>
-                                })
-                            }
-                        </FormSelect>
-                    </div>
-                    <FormControl type="text" placeholder="Search name..." style={{ width: "350px" }} />
-                    <Button onClick={() => {
-                    }}>
-                        <FontAwesomeIcon icon={faUndo} />
+            <div className="stock-entry-content-container">
+                <div className="px-3 d-flex flex-column gap-2">
+                    <Button variant="primary" className="w-100">
+                        Pending
+                    </Button>
+                    <Button variant="outline-primary" className="w-100">
+                        Success
                     </Button>
                 </div>
-            </div>
-            <Table striped bordered hover>
-                <thead>
-                    <tr style={{ textAlign: "center" }}>
-                        <th>#</th>
-                        <th>Receive Code</th>
-                        <th>Receive Date</th>
-                        <th>Receive By</th>
-                        <th>Status</th>
-                        <th>Description</th>
-                        <th>Total Amount</th>
-                        <th>Action</th>
-                    </tr>
-                </thead>
-                <tbody>
+                <div className="border p-3 rounded" style={{ height: "700px", overflowY: "auto" }}>
                     {listStockEntry}
-                </tbody>
-            </Table>
+                </div>
+            </div>
             {
                 stockEntry.length > 0 && <Pagination currentPage={pagination?.offset} totalPages={pagination?.totalPage}
                     onPageChange={handleChangePage} />
@@ -208,6 +204,13 @@ const StockEntry: React.FC = () => {
                     }}
                     loading={loadingDelete}
                 />
+            }
+            {
+                ShowHandleStockEntry &&
+                <GoodsQualityInspectionPage close={() => {
+                    setShowHandleStockEntry(false);
+                    setStockEntryId("");
+                }} />
             }
         </div>
     );

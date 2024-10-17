@@ -48,6 +48,7 @@ const FormEditStockEntry: React.FC<FormEditStockEntryProps> = ({ handleClose, st
     const [supplierSelected, setSupplierSelected] = React.useState<OptionType | null>(null);
     const [loadingSuppliers, setLoadingSuppliers] = React.useState(false);
 
+    const [createDate, setCreateDate] = React.useState(new Date().toISOString().split("T")[0]);
     const [address, setAddress] = React.useState("");
     const [phoneNumber, setPhoneNumber] = React.useState("");
     const [descriptionDefault, setDescriptionDefault] = React.useState("");
@@ -271,7 +272,7 @@ const FormEditStockEntry: React.FC<FormEditStockEntryProps> = ({ handleClose, st
         if (stockEntryId === "") {
             setLoadingSubmit(true);
             CreateStockEntry({
-                receiveDate: new Date().toISOString().split("T")[0],
+                receiveDate: createDate,
                 receiveBy: profile?.fullName || "",
                 description: description,
                 supplierId: supplierSelected.value,
@@ -378,7 +379,7 @@ const FormEditStockEntry: React.FC<FormEditStockEntryProps> = ({ handleClose, st
                         >
                             <FontAwesomeIcon icon={faChevronLeft} />
                         </button>
-                        <h2 className="fw-bold mb-0">New Stock Entry</h2>
+                        <h2 className="fw-bold mb-0">{stockEntryId ? "Edit" : "New"} Stock Entry</h2>
                     </div>
                     <div>
                         {
@@ -436,9 +437,9 @@ const FormEditStockEntry: React.FC<FormEditStockEntryProps> = ({ handleClose, st
                             <Form.Label>Create Date</Form.Label>
                             <Form.Control
                                 type="date"
-                                value={new Date().toISOString().split("T")[0]}
+                                value={createDate}
                                 className={"form-control py-3"}
-                                disabled
+                                onChange={(e) => setCreateDate(e.target.value)}
                             />
                         </FormGroup>
                     </Col>
