@@ -14,7 +14,7 @@ import { faCogs, faPencilAlt, faTrash } from "@fortawesome/free-solid-svg-icons"
 import RemoveStockEntry from "../../services/StockEntry/RemoveStockEntry";
 import ModelConfirmDelete from "../../compoments/ModelConfirm/ModelConfirmDelete";
 import './css/StockEntry.css';
-import GoodsQualityInspectionPage from "./compoments/GoodsQualityInspectionPage";
+import GoodsQualityInspectionPage from "./compoments/ProcessStockEntry";
 
 const StockEntry: React.FC = () => {
 
@@ -207,10 +207,13 @@ const StockEntry: React.FC = () => {
             }
             {
                 ShowHandleStockEntry &&
-                <GoodsQualityInspectionPage close={() => {
-                    setShowHandleStockEntry(false);
-                    setStockEntryId("");
-                }} />
+                <GoodsQualityInspectionPage
+                    close={() => {
+                        setShowHandleStockEntry(false);
+                        setStockEntryId("");
+                    }}
+                    stockEntryId={stockEntryId}
+                />
             }
         </div>
     );

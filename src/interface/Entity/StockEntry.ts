@@ -1,7 +1,7 @@
 import ProductHeader from "./ProductHeader";
 import Supplier from "./Supplier";
 
-interface ReceiveItem {
+export interface ReceiveItem {
     id: string;
     create_at: string;
     update_at: string;

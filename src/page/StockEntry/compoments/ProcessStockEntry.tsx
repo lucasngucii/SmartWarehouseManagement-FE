@@ -1,16 +1,29 @@
 import React from "react";
 import { OverLay } from "../../../compoments/OverLay/OverLay";
 import { CloseButton } from "react-bootstrap";
+import AssignLocationPage from "./AssignLocationPage";
+import ConfirmProcessStockEntryPage from "./ConfirmProcessStockEntryPage";
+import CheckGoodsPage from "./CheckGoodsPage";
 
-interface GoodsQualityInspectionPageProps {
+interface ProcessStockEntryPagePageProps {
     close: () => void;
+    stockEntryId: string;
 }
 
-const GoodsQualityInspectionPage: React.FC<GoodsQualityInspectionPageProps> = (props) => {
+const ProcessStockEntryPage: React.FC<ProcessStockEntryPagePageProps> = (props) => {
     const [currentStep, setCurrentStep] = React.useState<number>(1);
     const getStepClass = (step: number): string => {
         return step <= currentStep ? 'bg-primary text-white' : 'bg-secondary text-white';
     };
+
+    const nextCurrentStep = () => {
+        setCurrentStep((prev) => Math.min(prev + 1, 3))
+    }
+
+    const backCurrentStep = () => {
+        setCurrentStep((prev) => Math.max(prev - 1, 1))
+    }
+
     return (
         <OverLay className="bg-light p-5">
             <div className="w-100 h-100">
@@ -64,25 +77,25 @@ const GoodsQualityInspectionPage: React.FC<GoodsQualityInspectionPageProps> = (p
                         </div>
                     </div>
                 </div>
-                <div className="d-flex justify-content-between mt-4">
-                    <button
-                        className="btn btn-secondary"
-                        onClick={() => setCurrentStep((prev) => Math.max(prev - 1, 1))}
-                        disabled={currentStep === 1}
-                    >
-                        Back
-                    </button>
-                    <button
-                        className="btn btn-primary"
-                        onClick={() => setCurrentStep((prev) => Math.min(prev + 1, 3))}
-                        disabled={currentStep === 3}
-                    >
-                        Next
-                    </button>
+                <div className="mt-4">
+                    {currentStep === 1 && (
+                        <CheckGoodsPage
+                            stockEntryId={props.stockEntryId}
+                            currentStep={currentStep}
+                            nextCurrentStep={nextCurrentStep}
+                            backCurrentStep={backCurrentStep}
+                        />
+                    )}
+                    {currentStep === 2 && (
+                        <AssignLocationPage />
+                    )}
+                    {currentStep === 3 && (
+                        <ConfirmProcessStockEntryPage />
+                    )}
                 </div>
             </div>
         </OverLay>
     );
 }
 
-export default GoodsQualityInspectionPage;
+export default ProcessStockEntryPage;
