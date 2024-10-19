@@ -12,7 +12,7 @@ import './css/StorageManagementPage.css'
 import ShelfDetails from "./Compoments/ShelfDetails";
 import { Button, Table } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPencilAlt, faTrash } from "@fortawesome/free-solid-svg-icons";
+import { faEye, faPencilAlt, faTrash } from "@fortawesome/free-solid-svg-icons";
 import ModelCreateShelf from "./Compoments/ModelCreateShelf";
 
 const LocationPage: React.FC = () => {
@@ -77,7 +77,7 @@ const LocationPage: React.FC = () => {
         setPagination({ ...pagination, offset: page })
     }
 
-    const handleUpdatePage = (page: PaginationType)=> {
+    const handleUpdatePage = (page: PaginationType) => {
         setPagination(page)
     }
 
@@ -94,17 +94,28 @@ const LocationPage: React.FC = () => {
                 <td>{shelf.maxLevels}</td>
                 <td>{shelf.typeShelf}</td>
                 <td>
-                <div className="d-flex flex-row gap-2">
+                    <div className="d-flex flex-row gap-2">
                         <Button
                             onClick={() => {
-                                
+                                setShelfId(shelf.id)
+                                setShowShelfDetails(true)
+                            }}
+                            variant="info"
+                        >
+                            <FontAwesomeIcon icon={faEye} />
+                        </Button>
+                        <Button
+                            onClick={() => {
+                                // Add your edit functionality here
                             }}
                             variant="primary"
                         >
                             <FontAwesomeIcon icon={faPencilAlt} />
                         </Button>
                         <Button
-                            onClick={() => {}}
+                            onClick={() => {
+                                // Add your delete functionality here
+                            }}
                             variant="danger"
                         >
                             <FontAwesomeIcon icon={faTrash} />
@@ -118,11 +129,11 @@ const LocationPage: React.FC = () => {
     return (
         <div className={"position-relative h-100 w-100"}>
             <div className="d-flex justify-content-between align-items-center mb-3">
-                <div>  
+                <div>
                     <h2 className={"h2 fw-bold"}>Shelf Management</h2>
                     <p className={"h6"}>Manager your shelf here</p>
                 </div>
-                <div> 
+                <div>
                     <Button onClick={() => {
                         setShowModelCreateShelf(true)
                     }} variant="info text-light fw-bold">+ NEW</Button>
@@ -170,7 +181,7 @@ const LocationPage: React.FC = () => {
             }
             {
                 showModelCreateShelf &&
-                <ModelCreateShelf 
+                <ModelCreateShelf
                     onClose={() => {
                         setShowModelCreateShelf(false)
                     }}
